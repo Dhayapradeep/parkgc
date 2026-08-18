@@ -7,18 +7,15 @@ import {
     remove
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
-
 import {
     getAuth,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-
 import {
     app,
     database
 } from "../firebase.js";
-
 
 import {
     questions
@@ -29,8 +26,7 @@ import {
    FIREBASE
 ========================= */
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
 
 /* =========================
@@ -38,165 +34,71 @@ const auth =
 ========================= */
 
 const MIN_PLAYERS = 2;
-
 const MAX_PLAYERS = 15;
-
 const TOTAL_ROUNDS = 30;
-
-const ROUND_DURATION =
-    15 * 1000;
+const ROUND_DURATION = 15 * 1000;
 
 
 /* =========================
    ELEMENTS
 ========================= */
 
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
+const backButton = document.getElementById("backButton");
+const createRoomButton = document.getElementById("createRoomButton");
+const joinRoomButton = document.getElementById("joinRoomButton");
+const roomCodeInput = document.getElementById("roomCodeInput");
 
+const setupCard = document.getElementById("setupCard");
+const roomCard = document.getElementById("roomCard");
 
-const createRoomButton =
-    document.getElementById(
-        "createRoomButton"
-    );
+const setupStatus = document.getElementById("setupStatus");
 
+const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+const copyRoomButton = document.getElementById("copyRoomButton");
 
-const joinRoomButton =
-    document.getElementById(
-        "joinRoomButton"
-    );
+const roomStatus = document.getElementById("roomStatus");
+const roomStatusText = document.getElementById("roomStatusText");
 
+const playersList = document.getElementById("playersList");
+const playerCount = document.getElementById("playerCount");
 
-const roomCodeInput =
-    document.getElementById(
-        "roomCodeInput"
-    );
+const hostControls = document.getElementById("hostControls");
+const startGameButton = document.getElementById("startGameButton");
 
-
-const setupCard =
-    document.getElementById(
-        "setupCard"
-    );
-
-
-const roomCard =
-    document.getElementById(
-        "roomCard"
-    );
-
-
-const setupStatus =
-    document.getElementById(
-        "setupStatus"
-    );
-
-
-const roomCodeDisplay =
-    document.getElementById(
-        "roomCodeDisplay"
-    );
-
-
-const copyRoomButton =
-    document.getElementById(
-        "copyRoomButton"
-    );
-
-
-const roomStatus =
-    document.getElementById(
-        "roomStatus"
-    );
-
-
-const roomStatusText =
-    document.getElementById(
-        "roomStatusText"
-    );
-
-
-const playersList =
-    document.getElementById(
-        "playersList"
-    );
-
-
-const playerCount =
-    document.getElementById(
-        "playerCount"
-    );
-
-
-const hostControls =
-    document.getElementById(
-        "hostControls"
-    );
-
-
-const startGameButton =
-    document.getElementById(
-        "startGameButton"
-    );
-
-
-const leaveRoomButton =
-    document.getElementById(
-        "leaveRoomButton"
-    );
+const leaveRoomButton = document.getElementById("leaveRoomButton");
 
 
 /* =========================
    VARIABLES
 ========================= */
 
-let currentUser =
-    null;
+let currentUser = null;
+let currentUsername = "Player";
 
+let currentRoomCode = null;
+let currentRoomData = null;
 
-let currentUsername =
-    "Player";
-
-
-let currentRoomCode =
-    null;
-
-
-let currentRoomData =
-    null;
-
-
-let roomListenerStarted =
-    false;
+let roomListenerStarted = false;
 
 
 /* =========================
    AUTH
 ========================= */
 
-onAuthStateChanged(
-    auth,
-    async function (user) {
+onAuthStateChanged(auth, async function (user) {
 
-        if (!user) {
+    if (!user) {
 
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        currentUser =
-            user;
-
-
-        await loadUserProfile();
+        window.location.href = "login.html";
+        return;
 
     }
-);
+
+    currentUser = user;
+
+    await loadUserProfile();
+
+});
 
 
 /* =========================
@@ -207,26 +109,16 @@ async function loadUserProfile() {
 
     try {
 
-        const userRef =
-            ref(
-                database,
-                `users/${currentUser.uid}`
-            );
+        const userRef = ref(
+            database,
+            `users/${currentUser.uid}`
+        );
 
+        const snapshot = await get(userRef);
 
-        const snapshot =
-            await get(
-                userRef
-            );
+        if (snapshot.exists()) {
 
-
-        if (
-            snapshot.exists()
-        ) {
-
-            const data =
-                snapshot.val();
-
+            const data = snapshot.val();
 
             currentUsername =
                 data.username ||
@@ -235,7 +127,6 @@ async function loadUserProfile() {
         }
 
     }
-
     catch (error) {
 
         console.error(
@@ -258,14 +149,11 @@ if (backButton) {
         "click",
         async function () {
 
-            if (
-                currentRoomCode
-            ) {
+            if (currentRoomCode) {
 
                 await leaveRoom();
 
             }
-
             else {
 
                 window.location.href =
@@ -295,18 +183,17 @@ if (createRoomButton) {
 
 async function createRoom() {
 
-    if (
-        !currentUser
-    ) {
+    if (!currentUser) {
+
+        setupStatus.textContent =
+            "PLEASE WAIT FOR LOGIN.";
 
         return;
 
     }
 
 
-    createRoomButton.disabled =
-        true;
-
+    createRoomButton.disabled = true;
 
     setupStatus.textContent =
         "CREATING ROOM...";
@@ -315,9 +202,7 @@ async function createRoom() {
     try {
 
         let roomCode;
-
-        let exists =
-            true;
+        let exists = true;
 
 
         while (exists) {
@@ -325,19 +210,13 @@ async function createRoom() {
             roomCode =
                 generateRoomCode();
 
-
-            const testRef =
-                ref(
-                    database,
-                    `lastWordRooms/${roomCode}`
-                );
-
+            const roomCheckRef = ref(
+                database,
+                `lastWordRooms/${roomCode}`
+            );
 
             const snapshot =
-                await get(
-                    testRef
-                );
-
+                await get(roomCheckRef);
 
             exists =
                 snapshot.exists();
@@ -345,15 +224,13 @@ async function createRoom() {
         }
 
 
-        const roomRef =
-            ref(
-                database,
-                `lastWordRooms/${roomCode}`
-            );
+        const roomRef = ref(
+            database,
+            `lastWordRooms/${roomCode}`
+        );
 
 
-        const now =
-            Date.now();
+        const now = Date.now();
 
 
         await set(
@@ -392,20 +269,16 @@ async function createRoom() {
                     TOTAL_ROUNDS,
 
 
-                currentQuestion:
-                    null,
-
-
                 questions:
                     [],
 
 
-                usedQuestionIds:
-                    {},
-
-
                 usedAnswers:
                     {},
+
+
+                roundResultAt:
+                    null,
 
 
                 finishedAt:
@@ -427,37 +300,29 @@ async function createRoom() {
                         username:
                             currentUsername,
 
-
                         joinedAt:
                             now,
-
 
                         isHost:
                             true,
 
-
                         leftGame:
                             false,
-
 
                         score:
                             0,
 
-
-                        currentAnswer:
-                            null,
-
-
-                        answered:
-                            false,
-
-
                         lastAnsweredRound:
                             null,
 
-
                         lastAnswer:
-                            null
+                            null,
+
+                        finalRank:
+                            null,
+
+                        finalReward:
+                            0
 
                     }
 
@@ -475,7 +340,6 @@ async function createRoom() {
             "hidden"
         );
 
-
         roomCard.classList.remove(
             "hidden"
         );
@@ -483,8 +347,8 @@ async function createRoom() {
 
         listenToRoom();
 
-    }
 
+    }
     catch (error) {
 
         console.error(
@@ -492,10 +356,8 @@ async function createRoom() {
             error
         );
 
-
         setupStatus.textContent =
             "FAILED TO CREATE ROOM.";
-
 
         createRoomButton.disabled =
             false;
@@ -521,9 +383,10 @@ if (joinRoomButton) {
 
 async function joinRoom() {
 
-    if (
-        !currentUser
-    ) {
+    if (!currentUser) {
+
+        setupStatus.textContent =
+            "PLEASE WAIT FOR LOGIN.";
 
         return;
 
@@ -536,9 +399,7 @@ async function joinRoom() {
             .toUpperCase();
 
 
-    if (
-        !roomCode
-    ) {
+    if (!roomCode) {
 
         setupStatus.textContent =
             "ENTER A ROOM CODE.";
@@ -551,29 +412,23 @@ async function joinRoom() {
     joinRoomButton.disabled =
         true;
 
-
     setupStatus.textContent =
-        "CHECKING ROOM...";
+        "JOINING ROOM...";
 
 
     try {
 
-        const roomRef =
-            ref(
-                database,
-                `lastWordRooms/${roomCode}`
-            );
+        const roomRef = ref(
+            database,
+            `lastWordRooms/${roomCode}`
+        );
 
 
         const snapshot =
-            await get(
-                roomRef
-            );
+            await get(roomRef);
 
 
-        if (
-            !snapshot.exists()
-        ) {
+        if (!snapshot.exists()) {
 
             setupStatus.textContent =
                 "ROOM DOES NOT EXIST.";
@@ -588,12 +443,11 @@ async function joinRoom() {
 
 
         if (
-            room.status !==
-            "waiting"
+            room.status !== "waiting"
         ) {
 
             setupStatus.textContent =
-                "THIS GAME HAS ALREADY STARTED.";
+                "GAME HAS ALREADY STARTED.";
 
             return;
 
@@ -601,18 +455,11 @@ async function joinRoom() {
 
 
         const players =
-            room.players ||
-            {};
-
-
-        const playerIds =
-            Object.keys(
-                players
-            );
+            room.players || {};
 
 
         if (
-            playerIds.length >=
+            Object.keys(players).length >=
             MAX_PLAYERS
         ) {
 
@@ -624,15 +471,13 @@ async function joinRoom() {
         }
 
 
-        const playerRef =
-            ref(
-                database,
-                `lastWordRooms/${roomCode}/players/${currentUser.uid}`
-            );
+        const now = Date.now();
 
 
-        const now =
-            Date.now();
+        const playerRef = ref(
+            database,
+            `lastWordRooms/${roomCode}/players/${currentUser.uid}`
+        );
 
 
         await set(
@@ -642,37 +487,29 @@ async function joinRoom() {
                 username:
                     currentUsername,
 
-
                 joinedAt:
                     now,
-
 
                 isHost:
                     false,
 
-
                 leftGame:
                     false,
-
 
                 score:
                     0,
 
-
-                currentAnswer:
-                    null,
-
-
-                answered:
-                    false,
-
-
                 lastAnsweredRound:
                     null,
 
-
                 lastAnswer:
-                    null
+                    null,
+
+                finalRank:
+                    null,
+
+                finalReward:
+                    0
 
             }
         );
@@ -686,7 +523,6 @@ async function joinRoom() {
             "hidden"
         );
 
-
         roomCard.classList.remove(
             "hidden"
         );
@@ -694,8 +530,8 @@ async function joinRoom() {
 
         listenToRoom();
 
-    }
 
+    }
     catch (error) {
 
         console.error(
@@ -703,12 +539,10 @@ async function joinRoom() {
             error
         );
 
-
         setupStatus.textContent =
             "FAILED TO JOIN ROOM.";
 
     }
-
     finally {
 
         joinRoomButton.disabled =
@@ -739,35 +573,20 @@ function listenToRoom() {
         true;
 
 
-    const roomRef =
-        ref(
-            database,
-            `lastWordRooms/${currentRoomCode}`
-        );
+    const roomRef = ref(
+        database,
+        `lastWordRooms/${currentRoomCode}`
+    );
 
 
     onValue(
         roomRef,
         function (snapshot) {
 
-            if (
-                !snapshot.exists()
-            ) {
+            if (!snapshot.exists()) {
 
                 roomStatusText.textContent =
                     "ROOM NO LONGER EXISTS.";
-
-
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            "dashboard.html";
-
-                    },
-                    1200
-                );
-
 
                 return;
 
@@ -783,13 +602,19 @@ function listenToRoom() {
             );
 
 
+            /*
+               IMPORTANT:
+               BOTH HOST AND PLAYERS
+               GO TO GAME PAGE
+            */
+
             if (
                 currentRoomData.status ===
                 "playing"
             ) {
 
                 window.location.href =
-                    `lw.html?room=${currentRoomCode}`;
+                    `lw.html?room=${encodeURIComponent(currentRoomCode)}`;
 
             }
 
@@ -806,14 +631,11 @@ function listenToRoom() {
 function renderRoom(room) {
 
     const players =
-        room.players ||
-        {};
+        room.players || {};
 
 
     const playerEntries =
-        Object.entries(
-            players
-        );
+        Object.entries(players);
 
 
     roomCodeDisplay.textContent =
@@ -825,19 +647,23 @@ function renderRoom(room) {
 
 
     if (
-        room.status ===
-        "waiting"
+        room.status === "waiting"
     ) {
 
         roomStatus.textContent =
             "WAITING FOR PLAYERS";
 
-    }
+        roomStatusText.textContent =
+            "WAITING FOR PLAYERS";
 
+    }
     else {
 
         roomStatus.textContent =
             "GAME STARTING";
+
+        roomStatusText.textContent =
+            "GAME STARTING...";
 
     }
 
@@ -846,52 +672,19 @@ function renderRoom(room) {
         "";
 
 
-    if (
-        playerEntries.length === 0
-    ) {
-
-        playersList.innerHTML =
-            `
-            <div class="empty-player">
-                Waiting for players...
-            </div>
-            `;
-
-
-        return;
-
-    }
-
-
     playerEntries.forEach(
         function ([uid, player]) {
 
             const playerElement =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             playerElement.className =
                 "player";
 
 
-            if (
-                uid ===
-                room.hostUid
-            ) {
-
-                playerElement.classList.add(
-                    "host"
-                );
-
-            }
-
-
             const name =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
 
             name.textContent =
@@ -905,14 +698,11 @@ function renderRoom(room) {
 
 
             if (
-                uid ===
-                room.hostUid
+                uid === room.hostUid
             ) {
 
                 const hostBadge =
-                    document.createElement(
-                        "span"
-                    );
+                    document.createElement("span");
 
 
                 hostBadge.className =
@@ -938,10 +728,13 @@ function renderRoom(room) {
     );
 
 
+    /*
+       HOST CONTROLS
+    */
+
     if (
         currentUser &&
-        room.hostUid ===
-        currentUser.uid
+        room.hostUid === currentUser.uid
     ) {
 
         hostControls.classList.remove(
@@ -964,14 +757,9 @@ function renderRoom(room) {
 
 
             startGameButton.textContent =
-                `📝 NEED ${needed} MORE PLAYER${
-                    needed === 1
-                        ? ""
-                        : "S"
-                }`;
+                `📝 NEED ${needed} MORE PLAYER${needed === 1 ? "" : "S"}`;
 
         }
-
         else {
 
             startGameButton.disabled =
@@ -984,7 +772,6 @@ function renderRoom(room) {
         }
 
     }
-
     else {
 
         hostControls.classList.add(
@@ -1034,14 +821,11 @@ async function startGame() {
 
 
     const players =
-        currentRoomData.players ||
-        {};
+        currentRoomData.players || {};
 
 
     const playerIds =
-        Object.keys(
-            players
-        );
+        Object.keys(players);
 
 
     if (
@@ -1072,40 +856,32 @@ async function startGame() {
 
 
     roomStatusText.textContent =
-        "PREPARING GAME...";
+        "STARTING GAME...";
 
 
     try {
 
         /*
-           RANDOMLY SELECT
+           RANDOMLY PICK
            30 QUESTIONS
         */
 
-        const shuffledQuestions =
+        const shuffled =
             [...questions]
-            .sort(
-                function () {
-
-                    return (
-                        Math.random() -
-                        0.5
-                    );
-
-                }
-            );
-
-
-        const selectedQuestions =
-            shuffledQuestions
-                .slice(
-                    0,
-                    TOTAL_ROUNDS
+                .sort(
+                    () =>
+                        Math.random() - 0.5
                 );
 
 
-        const updates =
-            {};
+        const selectedQuestions =
+            shuffled.slice(
+                0,
+                TOTAL_ROUNDS
+            );
+
+
+        const updates = {};
 
 
         playerIds.forEach(
@@ -1113,50 +889,27 @@ async function startGame() {
 
                 updates[
                     `players/${uid}/score`
-                ] =
-                    0;
-
-
-                updates[
-                    `players/${uid}/currentAnswer`
-                ] =
-                    null;
-
-
-                updates[
-                    `players/${uid}/answered`
-                ] =
-                    false;
-
-
-                updates[
-                    `players/${uid}/leftGame`
-                ] =
-                    false;
+                ] = 0;
 
 
                 updates[
                     `players/${uid}/lastAnsweredRound`
-                ] =
-                    null;
+                ] = null;
 
 
                 updates[
                     `players/${uid}/lastAnswer`
-                ] =
-                    null;
+                ] = null;
 
 
                 updates[
                     `players/${uid}/finalRank`
-                ] =
-                    null;
+                ] = null;
 
 
                 updates[
                     `players/${uid}/finalReward`
-                ] =
-                    0;
+                ] = 0;
 
             }
         );
@@ -1172,6 +925,11 @@ async function startGame() {
                 `lastWordRooms/${currentRoomCode}`
             );
 
+
+        /*
+           EVERYTHING IS SAVED
+           BEFORE REDIRECTING
+        */
 
         await update(
             roomRef,
@@ -1192,8 +950,12 @@ async function startGame() {
                     0,
 
 
+                /*
+                   START IMMEDIATELY
+                */
+
                 roundStartAt:
-                    now + 3000,
+                    now,
 
 
                 roundDuration:
@@ -1204,16 +966,12 @@ async function startGame() {
                     TOTAL_ROUNDS,
 
 
-                currentQuestion:
-                    selectedQuestions[0],
-
-
                 questions:
                     selectedQuestions,
 
 
-                usedQuestionIds:
-                    {},
+                currentQuestion:
+                    selectedQuestions[0],
 
 
                 usedAnswers:
@@ -1239,7 +997,6 @@ async function startGame() {
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -1247,10 +1004,8 @@ async function startGame() {
             error
         );
 
-
         roomStatusText.textContent =
             "FAILED TO START GAME.";
-
 
         startGameButton.disabled =
             false;
@@ -1270,9 +1025,7 @@ if (copyRoomButton) {
         "click",
         async function () {
 
-            if (
-                !currentRoomCode
-            ) {
+            if (!currentRoomCode) {
 
                 return;
 
@@ -1301,11 +1054,10 @@ if (copyRoomButton) {
                 );
 
             }
-
             catch (error) {
 
                 console.error(
-                    "COPY FAILED:",
+                    "COPY ERROR:",
                     error
                 );
 
@@ -1348,52 +1100,40 @@ async function leaveRoom() {
 
     try {
 
-        const playerRef =
-            ref(
-                database,
-                `lastWordRooms/${currentRoomCode}/players/${currentUser.uid}`
-            );
-
-
-        await remove(
-            playerRef
+        const playerRef = ref(
+            database,
+            `lastWordRooms/${currentRoomCode}/players/${currentUser.uid}`
         );
 
 
-        const roomRef =
-            ref(
-                database,
-                `lastWordRooms/${currentRoomCode}`
-            );
+        await remove(playerRef);
+
+
+        const roomRef = ref(
+            database,
+            `lastWordRooms/${currentRoomCode}`
+        );
 
 
         const snapshot =
-            await get(
-                roomRef
-            );
+            await get(roomRef);
 
 
-        if (
-            snapshot.exists()
-        ) {
+        if (snapshot.exists()) {
 
             const room =
                 snapshot.val();
 
 
             const players =
-                room.players ||
-                {};
+                room.players || {};
 
 
             if (
-                Object.keys(players).length ===
-                0
+                Object.keys(players).length === 0
             ) {
 
-                await remove(
-                    roomRef
-                );
+                await remove(roomRef);
 
             }
 
@@ -1408,7 +1148,6 @@ async function leaveRoom() {
             "dashboard.html";
 
     }
-
     catch (error) {
 
         console.error(
@@ -1431,8 +1170,7 @@ function generateRoomCode() {
         "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 
-    let code =
-        "";
+    let code = "";
 
 
     for (
