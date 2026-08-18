@@ -1,4 +1,4 @@
-export const questionBank = [
+export const questions = [
 
     /* =========================
        ANIMALS
