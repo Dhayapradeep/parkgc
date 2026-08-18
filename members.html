@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Members | Abusement Park</title>
+
+    <link
+        rel="stylesheet"
+        href="members.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="back">
+        ← DASHBOARD
+    </a>
+
+</header>
+
+
+<main>
+
+    <section class="page-header">
+
+        <p class="small-title">
+            ABUSEMENT PARK
+        </p>
+
+        <h1>
+            MEMBERS
+        </h1>
+
+        <p class="description">
+            Everyone who's part of the chaos.
+        </p>
+
+    </section>
+
+
+    <!-- TOTAL MEMBERS -->
+
+    <section class="member-summary">
+
+        <div class="summary-card">
+
+            <span class="summary-icon">
+                👥
+            </span>
+
+            <div>
+
+                <strong id="memberCount">
+                    0
+                </strong>
+
+                <p>
+                    TOTAL MEMBERS
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MEMBERS -->
+
+    <section class="members-section">
+
+        <div class="section-heading">
+
+            <h2>
+                👥 ALL MEMBERS
+            </h2>
+
+            <span id="statusText">
+                LOADING...
+            </span>
+
+        </div>
+
+
+        <div
+            id="membersList"
+            class="members-list">
+
+            <div class="loading">
+                Loading members...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================
+     PFP PREVIEW
+========================= -->
+
+<div
+    id="pfpModal"
+    class="pfp-modal">
+
+    <div class="pfp-modal-content">
+
+        <button
+            id="closePfp"
+            class="close-pfp">
+
+            ✕
+
+        </button>
+
+
+        <img
+            id="pfpModalImage"
+            src=""
+            alt="Profile Picture">
+
+
+        <p
+            id="pfpModalName"
+            class="pfp-modal-name">
+        </p>
+
+    </div>
+
+</div>
+
+
+<script
+    type="module"
+    src="js/members.js">
+</script>
+
+</body>
+
+</html>

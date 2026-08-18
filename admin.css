@@ -1,0 +1,710 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(216, 173, 75, 0.08),
+            transparent 35%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid
+        rgba(216, 173, 75, 0.2);
+}
+
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.back {
+    padding: 8px 13px;
+    background: transparent;
+    color:
+        rgba(255, 255, 255, 0.6);
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+
+.back:hover {
+    color: #d8ad4b;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+main {
+    padding: 40px 18px 60px;
+}
+
+
+.admin-page {
+    width: 100%;
+
+    max-width: 800px;
+
+    margin: auto;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.admin-heading {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.crown {
+    display: block;
+
+    font-size: 34px;
+
+    margin-bottom: 10px;
+}
+
+
+.admin-heading p {
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 7px;
+}
+
+
+.admin-heading h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 31px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+}
+
+
+.line {
+    display: block;
+
+    width: 60px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 13px auto;
+}
+
+
+.admin-heading small {
+    color: #555;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.admin-card {
+    padding: 20px;
+
+    margin-bottom: 12px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+}
+
+
+.card-heading {
+    margin-bottom: 18px;
+}
+
+
+.card-heading > div {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+}
+
+
+.card-icon {
+    font-size: 24px;
+}
+
+
+.card-heading h2 {
+    color: #eee;
+
+    font-size: 12px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 6px;
+}
+
+
+.card-heading p {
+    color: #666;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   GENERATE BUTTON
+========================= */
+
+.generate-button {
+    width: 100%;
+
+    padding: 14px;
+
+    background: #d8ad4b;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.generate-button:hover {
+    background: #f3d487;
+
+    box-shadow:
+        0 0 20px
+        rgba(216,173,75,0.2);
+}
+
+
+/* =========================
+   INVITATION RESULT
+========================= */
+
+.invite-result {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 15px;
+
+    background:
+        rgba(216,173,75,0.06);
+
+    border: 1px solid
+        rgba(216,173,75,0.25);
+
+    border-radius: 6px;
+
+    text-align: center;
+}
+
+
+.invite-result.active {
+    display: block;
+}
+
+
+.invite-result p {
+    color: #666;
+
+    font-size: 9px;
+
+    margin-bottom: 8px;
+}
+
+
+.invite-code {
+    color: #f3d487;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+}
+
+
+.copy-button {
+    padding: 9px 18px;
+
+    background: transparent;
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216,173,75,0.4);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+
+.copy-button:hover {
+    background:
+        rgba(216,173,75,0.08);
+}
+
+
+/* =========================
+   ADMIN MEMBERS
+========================= */
+
+.admin-members-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.admin-member {
+    padding: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border: 1px solid
+        rgba(255,255,255,0.07);
+
+    border-radius: 7px;
+}
+
+
+.admin-member-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+}
+
+
+.admin-member-info {
+    min-width: 0;
+}
+
+
+.admin-member-name {
+    color: #eee;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+}
+
+
+.admin-member-role {
+    color: #666;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+.admin-member-badge {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* Member controls */
+
+.member-controls {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 13px;
+
+    flex-wrap: wrap;
+}
+
+
+.badge-select {
+    flex: 1;
+
+    min-width: 150px;
+
+    padding: 9px;
+
+    background: #0b0b0b;
+
+    color: #ddd;
+
+    border: 1px solid
+        rgba(216,173,75,0.25);
+
+    border-radius: 4px;
+
+    outline: none;
+
+    font-size: 10px;
+}
+
+
+.badge-select:focus {
+    border-color: #d8ad4b;
+}
+
+
+.save-badge-button {
+    padding: 9px 13px;
+
+    background: transparent;
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216,173,75,0.4);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+
+.save-badge-button:hover {
+    background:
+        rgba(216,173,75,0.08);
+}
+
+
+.kick-button {
+    padding: 9px 13px;
+
+    background: transparent;
+
+    color: #c96a6a;
+
+    border: 1px solid
+        rgba(201,106,106,0.35);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+
+.kick-button:hover {
+    background:
+        rgba(201,106,106,0.08);
+}
+
+
+/* =========================
+   MEMBER MESSAGE
+========================= */
+
+.member-action-message {
+    width: 100%;
+
+    margin-top: 8px;
+
+    min-height: 16px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.members-loading {
+    padding: 20px;
+
+    text-align: center;
+
+    color: #555;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+/* =========================
+   ADMIN SECTION BUTTON
+========================= */
+
+.admin-section-button {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 7px;
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: 0.2s;
+}
+
+
+.admin-section-button:hover {
+    background:
+        rgba(216,173,75,0.05);
+
+    border-color:
+        rgba(216,173,75,0.35);
+}
+
+
+.admin-section-button > span:first-child {
+    font-size: 23px;
+}
+
+
+.admin-section-button div {
+    flex: 1;
+
+    text-align: left;
+}
+
+
+.admin-section-button strong {
+    display: block;
+
+    color: #eee;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 5px;
+}
+
+
+.admin-section-button small {
+    display: block;
+
+    color: #666;
+
+    font-size: 9px;
+}
+
+
+.admin-section-button .arrow {
+    color: #d8ad4b;
+
+    font-size: 18px;
+}
+
+
+/* =========================
+   COMING SOON
+========================= */
+
+.coming-soon {
+    padding: 12px;
+
+    text-align: center;
+
+    color: #444;
+
+    background:
+        rgba(255,255,255,0.015);
+
+    border: 1px dashed
+        rgba(255,255,255,0.07);
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 16px;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.3px;
+    }
+
+
+    main {
+        padding: 30px 15px 45px;
+    }
+
+
+    .admin-heading h1 {
+        font-size: 27px;
+    }
+
+
+    .admin-card {
+        padding: 17px;
+    }
+
+
+    .admin-member-top {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .member-controls {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .badge-select,
+    .save-badge-button,
+    .kick-button {
+        width: 100%;
+    }
+
+}
+

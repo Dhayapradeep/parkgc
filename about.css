@@ -1,0 +1,319 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(216, 173, 75, 0.08),
+            transparent 35%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    padding-bottom: 60px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    width: 100%;
+
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid
+        rgba(216, 173, 75, 0.15);
+}
+
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.back {
+    padding: 8px 13px;
+    background: transparent;
+    color:
+        rgba(255, 255, 255, 0.6);
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+
+.back:hover {
+    color: #d8ad4b;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: min(800px, 92%);
+
+    margin: auto;
+}
+
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.page-heading {
+    text-align: center;
+
+    padding: 55px 0 35px;
+}
+
+
+.small-title {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 12px;
+}
+
+
+.page-heading h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 34px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+}
+
+
+.line {
+    display: block;
+
+    width: 60px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 15px auto;
+}
+
+
+.description {
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   ABOUT CARDS
+========================= */
+
+.about-card {
+    padding: 28px;
+
+    margin-bottom: 14px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+    transition: 0.2s;
+}
+
+
+.about-card:hover {
+    border-color:
+        rgba(216, 173, 75, 0.25);
+
+    background:
+        rgba(216, 173, 75, 0.025);
+}
+
+
+.card-icon {
+    font-size: 27px;
+
+    margin-bottom: 14px;
+}
+
+
+.about-card h2 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 13px;
+}
+
+
+.about-card p {
+    min-height: 20px;
+
+    color:
+        rgba(255, 255, 255, 0.5);
+
+    font-size: 12px;
+
+    line-height: 1.8;
+
+    max-width: 600px;
+
+    margin: auto;
+}
+
+
+/* =========================
+   FINAL MESSAGE
+========================= */
+
+.final-message {
+    text-align: center;
+
+    padding: 35px 10px 10px;
+}
+
+
+.final-message p {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+}
+
+
+.final-message span {
+    color:
+        rgba(255, 255, 255, 0.25);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 16px;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.3px;
+    }
+
+
+    main {
+        width: 92%;
+    }
+
+
+    .page-heading {
+        padding: 40px 0 28px;
+    }
+
+
+    .page-heading h1 {
+        font-size: 28px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .about-card {
+        padding: 24px 18px;
+    }
+
+
+    .about-card p {
+        font-size: 11px;
+
+        line-height: 1.7;
+    }
+
+}

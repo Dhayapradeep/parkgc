@@ -1,0 +1,467 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(216, 173, 75, 0.08),
+            transparent 35%
+        ),
+        #050505;
+
+    color: #fff;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid
+        rgba(216, 173, 75, 0.2);
+}
+
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.back {
+    padding: 8px 13px;
+    background: transparent;
+    color:
+        rgba(255, 255, 255, 0.6);
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+
+.back:hover {
+    color: #d8ad4b;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: 100%;
+
+    padding: 45px 20px 60px;
+}
+
+
+.rules-page {
+    width: 100%;
+
+    max-width: 800px;
+
+    margin: auto;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.rules-heading {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+
+.rules-icon {
+    display: block;
+
+    font-size: 38px;
+
+    margin-bottom: 12px;
+}
+
+
+.rules-heading p {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 8px;
+}
+
+
+.rules-heading h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 36px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+}
+
+
+.line {
+    display: block;
+
+    width: 65px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 15px auto 0;
+}
+
+
+/* =========================
+   RULES LIST
+========================= */
+
+.rules-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.rule {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    padding: 19px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.012)
+        );
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 9px;
+
+    transition: 0.2s;
+}
+
+
+.rule:hover {
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+    transform: translateY(-1px);
+}
+
+
+.number {
+    min-width: 34px;
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    padding-top: 1px;
+}
+
+
+.rule-content {
+    flex: 1;
+}
+
+
+.rule-content h3 {
+    color: #eee;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.3px;
+
+    margin-bottom: 7px;
+}
+
+
+.rule-content p {
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   SUSPENSION
+========================= */
+
+.suspension {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+    padding: 17px 19px;
+
+    background:
+        rgba(216, 173, 75, 0.07);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.28);
+
+    border-radius: 9px;
+}
+
+
+.suspension-icon {
+    font-size: 24px;
+}
+
+
+.suspension h3 {
+    color: #d8ad4b;
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 5px;
+}
+
+
+.suspension p {
+    color: #888;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.rules-footer {
+    text-align: center;
+
+    margin-top: 35px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid
+        rgba(216, 173, 75, 0.12);
+}
+
+
+.rules-footer span {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+}
+
+
+.rules-footer p {
+    color: #444;
+
+    font-size: 8px;
+
+    margin-top: 7px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   MOBILE — 412 × 915
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        height: 60px;
+
+        padding: 0 16px;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.3px;
+    }
+
+
+    main {
+        padding: 30px 15px 45px;
+    }
+
+
+    .rules-icon {
+        font-size: 32px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .rules-heading {
+        margin-bottom: 25px;
+    }
+
+
+    .rules-heading p {
+        font-size: 8px;
+
+        letter-spacing: 3px;
+    }
+
+
+    .rules-heading h1 {
+        font-size: 29px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .line {
+        margin-top: 12px;
+    }
+
+
+    .rules-list {
+        gap: 8px;
+    }
+
+
+    .rule {
+        gap: 12px;
+
+        padding: 15px;
+    }
+
+
+    .number {
+        min-width: 27px;
+
+        font-size: 11px;
+    }
+
+
+    .rule-content h3 {
+        font-size: 10px;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .rule-content p {
+        font-size: 10px;
+
+        line-height: 1.55;
+    }
+
+
+    .suspension {
+        gap: 12px;
+
+        padding: 15px;
+    }
+
+
+    .suspension-icon {
+        font-size: 21px;
+    }
+
+
+    .suspension h3 {
+        font-size: 10px;
+    }
+
+
+    .suspension p {
+        font-size: 9px;
+    }
+
+
+    .rules-footer {
+        margin-top: 28px;
+    }
+
+}

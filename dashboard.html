@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Abusement Park</title>
+
+    <link
+        rel="stylesheet"
+        href="dashboard.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <div class="user-menu">
+
+        <span>👤</span>
+
+        <span id="username">
+
+            Loading...
+
+        </span>
+
+
+        <button
+            class="settings"
+            id="settingsButton"
+        >
+
+            ⚙️
+
+        </button>
+
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+
+            LOG OUT
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         WELCOME
+    ========================== -->
+
+    <section class="welcome">
+
+
+        <div class="welcome-row">
+
+
+            <!-- STREAK BUTTON -->
+
+            <button
+                class="streak-button"
+                id="streakButton"
+            >
+
+                <span class="streak-icon">
+
+                    🔥
+
+                </span>
+
+
+                <span
+                    class="streak-text"
+                    id="streakText"
+                >
+
+                    CLAIM STREAK
+
+                </span>
+
+            </button>
+
+
+
+            <!-- USER WELCOME -->
+
+            <div class="welcome-center">
+
+
+                <p class="small-title">
+
+                    WELCOME BACK
+
+                </p>
+
+
+                <h1 id="welcomeName">
+
+                    Loading...
+
+                </h1>
+
+
+                <div class="status">
+
+                    <span
+                        class="member-title"
+                        id="memberBadge"
+                    >
+
+                        Loading...
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- CHAOS POINTS -->
+
+            <div class="chaos-points">
+
+
+                <span class="chaos-label">
+
+                    CHAOS
+
+                </span>
+
+
+                <strong id="chaosPoints">
+
+                    0
+
+                </strong>
+
+
+                <span class="chaos-cp">
+
+                    CP
+
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         ACTIVE MEMBERS
+    ========================== -->
+
+    <section class="online">
+
+
+        <div class="section-heading">
+
+            <h2>
+
+                🔥 ACTIVE MEMBERS
+
+            </h2>
+
+
+            <span>
+
+                GC FAVOURITES
+
+            </span>
+
+        </div>
+
+
+
+        <div
+            class="members-online"
+            id="activeMembersList"
+        >
+
+            <span>
+
+                Loading...
+
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         CHAOS MODES
+    ========================== -->
+
+    <section class="games">
+
+
+        <div class="section-heading">
+
+            <h2>
+
+                💀 CHAOS MODES
+
+            </h2>
+
+
+            <span>
+
+                EARN • RISK • SURVIVE
+
+            </span>
+
+        </div>
+
+
+
+        <div class="game-grid">
+
+
+            <!-- GHOST MODE -->
+
+            <div
+                class="game-card"
+                id="ghostModeButton"
+            >
+
+
+                <div class="game-icon">
+
+                    👻
+
+                </div>
+
+
+                <div>
+
+
+                    <h3>
+
+                        GHOST HUNTER
+
+                    </h3>
+
+
+                    <p>
+
+                        An anonymous member is hiding in plain sight.
+                        Find them before they escape with the Chaos Points.
+
+                    </p>
+
+
+                    <small>
+
+                        🗳️ FIND THE GHOST
+
+                    </small>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- LAST WORD -->
+
+            <div 
+                class="game-card" 
+                id="lastWordButton" >
+
+                <div class="game-icon">
+
+                    🔤
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+
+                        ZAP
+
+                    </h3>
+
+
+                    <p>
+
+                        Think fast. Find a word before
+                        everyone else does.
+
+                    </p>
+
+
+                    <small>
+
+                        ⚡ QUICK THINKING GAME
+
+                    </small>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CHAOS GAMBLING -->
+
+            <div
+                class="game-card"
+                id="chaosGamblingButton"
+            >
+
+
+                <div class="game-icon">
+
+                    🎲
+
+                </div>
+
+
+                <div>
+
+
+                    <h3>
+
+                        GAMBLING
+
+                    </h3>
+
+
+                    <p>
+
+                        Risk your Chaos Points.
+                        Double them, gain bonuses, or lose everything.
+
+                    </p>
+
+
+                    <small>
+
+                        💀 UNLIMITED RISK
+
+                    </small>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- HALL OF SHAME -->
+
+            <div
+                class="game-card leaderboard-card"
+                id="leaderboardButton"
+            >
+
+
+                <div class="game-icon">
+
+                    🏆
+
+                </div>
+
+
+                <div>
+
+
+                    <h3>
+
+                        HALL OF SHAME
+
+                    </h3>
+
+
+                    <p>
+
+                        See who is ruling the chaos
+                        and who is getting absolutely destroyed.
+
+                    </p>
+
+
+                    <small>
+
+                        👑 CHAOS LEADERBOARD
+
+                    </small>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         COMMUNITY
+    ========================== -->
+
+    <section class="community">
+
+
+        <a
+            href="members.html"
+            class="community-card"
+        >
+
+            👥
+
+            <span>
+
+                Members
+
+            </span>
+
+        </a>
+
+
+
+        <div class="community-card">
+
+            🔒
+
+            <span>
+
+                Confession Box
+
+            </span>
+
+        </div>
+
+
+
+        <a
+            href="rules.html"
+            class="community-card"
+        >
+
+            📜
+
+            <span>
+
+                GC Rules
+
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="about.html"
+            class="community-card"
+        >
+
+            ℹ️
+
+            <span>
+
+                About
+
+            </span>
+
+        </a>
+
+
+
+        <!-- ADMIN PANEL -->
+
+        <div
+            class="community-card"
+            id="adminPanelButton"
+        >
+
+            👑
+
+            <span>
+
+                Admin Panel
+
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/dashboard.js"
+></script>
+
+
+</body>
+
+</html>

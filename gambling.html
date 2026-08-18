@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chaos Roulette</title>
+
+    <link
+        rel="stylesheet"
+        href="gambling.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <button
+            id="howToPlayButton"
+            class="how-to-play-button"
+        >
+
+            ? HOW TO PLAY
+
+        </button>
+
+
+        <button
+            id="backButton"
+            class="back-button"
+        >
+
+            ← DASHBOARD
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         TITLE
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="dice">
+
+            🎲
+
+        </div>
+
+
+        <p class="small-title">
+
+            GAMBLING
+
+        </p>
+
+
+        <h1>
+
+            CHAOS ROULETTE
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Fortune doesn't care about you.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         BALANCE
+    ========================== -->
+
+    <section class="balance-card">
+
+        <span>
+
+            YOUR CHAOS POINTS
+
+        </span>
+
+
+        <strong id="chaosPoints">
+
+            0
+
+        </strong>
+
+
+        <small>
+
+            CP
+
+        </small>
+
+    </section>
+
+
+
+    <!-- =========================
+         ROLL AREA
+    ========================== -->
+
+    <section class="roulette">
+
+
+        <div
+            class="roulette-display"
+            id="rouletteDisplay"
+        >
+
+            🎲
+
+        </div>
+
+
+        <p
+            class="result-text"
+            id="resultText"
+        >
+
+            READY TO RISK IT?
+
+        </p>
+
+
+        <p
+            class="result-description"
+            id="resultDescription"
+        >
+
+            Every roll costs 500 CP.
+
+        </p>
+
+
+        <button
+            id="rollButton"
+            class="roll-button"
+        >
+
+            ROLL — 500 CP
+
+        </button>
+
+
+        <p
+            class="status-text"
+            id="statusText"
+        >
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         LAST RESULT
+    ========================== -->
+
+    <section class="history-section">
+
+        <div class="section-heading">
+
+            <h2>
+
+                🎰 LAST RESULT
+
+            </h2>
+
+        </div>
+
+
+        <div
+            class="history-card"
+            id="historyCard"
+        >
+
+            No rolls yet.
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     HOW TO PLAY MODAL
+========================= -->
+
+<div
+    class="modal-overlay"
+    id="rulesModal"
+>
+
+
+    <div class="rules-modal">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <p class="small-title">
+
+                    READ BEFORE GAMBLING
+
+                </p>
+
+
+                <h2>
+
+                    🎲 HOW TO PLAY
+
+                </h2>
+
+            </div>
+
+
+            <button
+                class="close-modal"
+                id="closeRulesButton"
+            >
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+
+        <div class="modal-content">
+
+
+            <div class="rule">
+
+                <span>1</span>
+
+                <p>
+
+                    Every roll costs
+                    <strong>500 CP</strong>.
+
+                </p>
+
+            </div>
+
+
+            <div class="rule">
+
+                <span>2</span>
+
+                <p>
+
+                    You must have at least
+                    <strong>500 CP</strong>
+                    before rolling.
+
+                </p>
+
+            </div>
+
+
+            <div class="rule">
+
+                <span>3</span>
+
+                <p>
+
+                    The
+                    <strong>500 CP entry fee</strong>
+                    is deducted first.
+
+                    Your outcome is then applied to
+                    your remaining balance.
+
+                </p>
+
+            </div>
+
+
+            <div class="rule">
+
+                <span>4</span>
+
+                <p>
+
+                    You can roll
+                    <strong>unlimited times</strong>
+                    as long as you have enough CP.
+
+                </p>
+
+            </div>
+
+
+            <div class="rule">
+
+                <span>5</span>
+
+                <p>
+
+                    Some outcomes can make you rich.
+
+                    Others can leave you with
+                    <strong>0 CP.</strong>
+
+                </p>
+
+            </div>
+
+
+
+            <div class="outcomes-title">
+
+                ☠️ POSSIBLE OUTCOMES
+
+            </div>
+
+
+
+            <div class="outcome-list">
+
+
+                <div>💰 +500 CP</div>
+
+                <div>💰 +750 CP</div>
+
+                <div>💰 +1,000 CP</div>
+
+                <div>💰 +1,500 CP</div>
+
+                <div>🔥 DOUBLE YOUR CP</div>
+
+                <div>🔥 +50% CP</div>
+
+                <div>🔥 +25% CP</div>
+
+                <div>😐 BREAK EVEN</div>
+
+                <div>📉 -25% CP</div>
+
+                <div>💀 -50% CP</div>
+
+                <div>💀 -75% CP</div>
+
+                <div>☠️ LOSE EVERYTHING</div>
+
+                <div>👑 JACKPOT +5,000 CP</div>
+
+                <div>⚡ TRIPLE BONUS</div>
+
+                <div>🃏 CHAOS FLIP</div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script
+    type="module"
+    src="js/gambling.js"
+></script>
+
+
+</body>
+
+</html>

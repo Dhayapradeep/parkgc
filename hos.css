@@ -1,0 +1,682 @@
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(216, 173, 75, 0.12),
+            transparent 30%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    padding-bottom: 60px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 22px 5%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.06);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    letter-spacing: 3px;
+
+    font-weight: bold;
+
+}
+
+
+.back-button {
+
+    padding: 8px 13px;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.6);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+
+.back-button:hover {
+
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+    background:
+        rgba(216, 173, 75, 0.05);
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width: min(850px, 92%);
+
+    margin: auto;
+
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+    text-align: center;
+
+    padding:
+        55px 0
+        35px;
+
+}
+
+
+.trophy {
+
+    font-size: 48px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.small-title {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.hero h1 {
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    color: #f3d487;
+
+    font-size: 42px;
+
+    font-weight: 500;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.subtitle {
+
+    color:
+        rgba(255, 255, 255, 0.45);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   YOUR RANK
+========================= */
+
+.your-rank {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    margin-bottom: 35px;
+
+    background:
+        rgba(216, 173, 75, 0.06);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.3);
+
+    border-radius: 12px;
+
+}
+
+
+.your-rank-left,
+.your-rank-right {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.your-rank-right {
+
+    text-align: right;
+
+}
+
+
+.your-rank-label,
+.your-cp-label {
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+#yourRank {
+
+    color: #f3d487;
+
+    font-size: 28px;
+
+}
+
+
+.your-rank-right strong {
+
+    color: #d8ad4b;
+
+    font-size: 18px;
+
+}
+
+
+/* =========================
+   LEADERBOARD
+========================= */
+
+.leaderboard {
+
+    margin-top: 20px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+}
+
+
+.section-heading h2 {
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.section-heading span {
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.leaderboard-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+/* =========================
+   LEADERBOARD ITEM
+========================= */
+
+.leaderboard-item {
+
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 16px 20px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+    transition: 0.2s;
+
+}
+
+
+.leaderboard-item:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+}
+
+
+.rank-number {
+
+    min-width: 42px;
+
+    text-align: center;
+
+    color:
+        rgba(255, 255, 255, 0.5);
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   USER INFO
+========================= */
+
+.player-info {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.player-name {
+
+    color:
+        rgba(255, 255, 255, 0.9);
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+.player-badge {
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   POINTS
+========================= */
+
+.player-points {
+
+    color: #d8ad4b;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    text-align: right;
+
+}
+
+
+.player-points span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   TOP 3
+========================= */
+
+.rank-1 {
+
+    border-color:
+        rgba(255, 215, 0, 0.45);
+
+    background:
+        rgba(255, 215, 0, 0.06);
+
+}
+
+
+.rank-1 .rank-number {
+
+    color: #f3d487;
+
+    font-size: 23px;
+
+}
+
+
+.rank-2 {
+
+    border-color:
+        rgba(200, 200, 200, 0.25);
+
+}
+
+
+.rank-2 .rank-number {
+
+    color: #d5d5d5;
+
+}
+
+
+.rank-3 {
+
+    border-color:
+        rgba(205, 127, 50, 0.3);
+
+}
+
+
+.rank-3 .rank-number {
+
+    color: #cd7f32;
+
+}
+
+
+/* =========================
+   CURRENT USER
+========================= */
+
+.current-user {
+
+    border-color: #d8ad4b;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+}
+
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.loading,
+.empty-message {
+
+    padding: 35px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 10px;
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding:
+            18px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 12px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .back-button {
+
+        padding: 7px 9px;
+
+        font-size: 8px;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+    }
+
+
+    .hero {
+
+        padding:
+            40px 0
+            30px;
+
+    }
+
+
+    .trophy {
+
+        font-size: 40px;
+
+        margin-bottom: 12px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size: 30px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .subtitle {
+
+        font-size: 11px;
+
+    }
+
+
+    .your-rank {
+
+        padding: 18px 20px;
+
+        margin-bottom: 28px;
+
+    }
+
+
+    #yourRank {
+
+        font-size: 24px;
+
+    }
+
+
+    .leaderboard-item {
+
+        min-height: 65px;
+
+        padding: 14px 12px;
+
+        gap: 10px;
+
+    }
+
+
+    .rank-number {
+
+        min-width: 35px;
+
+        font-size: 14px;
+
+    }
+
+
+    .player-name {
+
+        font-size: 12px;
+
+    }
+
+
+    .player-points {
+
+        font-size: 11px;
+
+    }
+
+}
