@@ -20,6 +20,11 @@ import {
 } from "../firebase.js";
 
 
+import {
+    questions
+} from "./lwq.js";
+
+
 /* =========================
    FIREBASE
 ========================= */
@@ -315,10 +320,6 @@ async function createRoom() {
             true;
 
 
-        /* =========================
-           GENERATE UNIQUE CODE
-        ========================= */
-
         while (exists) {
 
             roomCode =
@@ -395,6 +396,10 @@ async function createRoom() {
                     null,
 
 
+                questions:
+                    [],
+
+
                 usedQuestionIds:
                     {},
 
@@ -405,6 +410,10 @@ async function createRoom() {
 
                 finishedAt:
                     null,
+
+
+                rewardsCalculated:
+                    false,
 
 
                 rewardsDistributed:
@@ -440,7 +449,15 @@ async function createRoom() {
 
 
                         answered:
-                            false
+                            false,
+
+
+                        lastAnsweredRound:
+                            null,
+
+
+                        lastAnswer:
+                            null
 
                     }
 
@@ -647,7 +664,15 @@ async function joinRoom() {
 
 
                 answered:
-                    false
+                    false,
+
+
+                lastAnsweredRound:
+                    null,
+
+
+                lastAnswer:
+                    null
 
             }
         );
@@ -760,7 +785,7 @@ function listenToRoom() {
 
             if (
                 currentRoomData.status ===
-                "starting"
+                "playing"
             ) {
 
                 window.location.href =
@@ -828,9 +853,7 @@ function renderRoom(room) {
         playersList.innerHTML =
             `
             <div class="empty-player">
-
                 Waiting for players...
-
             </div>
             `;
 
@@ -914,10 +937,6 @@ function renderRoom(room) {
         }
     );
 
-
-    /* =========================
-       HOST CONTROLS
-    ========================= */
 
     if (
         currentUser &&
@@ -1035,6 +1054,19 @@ async function startGame() {
     }
 
 
+    if (
+        questions.length <
+        TOTAL_ROUNDS
+    ) {
+
+        roomStatusText.textContent =
+            "NOT ENOUGH QUESTIONS.";
+
+        return;
+
+    }
+
+
     startGameButton.disabled =
         true;
 
@@ -1045,13 +1077,36 @@ async function startGame() {
 
     try {
 
+        /*
+           RANDOMLY SELECT
+           30 QUESTIONS
+        */
+
+        const shuffledQuestions =
+            [...questions]
+            .sort(
+                function () {
+
+                    return (
+                        Math.random() -
+                        0.5
+                    );
+
+                }
+            );
+
+
+        const selectedQuestions =
+            shuffledQuestions
+                .slice(
+                    0,
+                    TOTAL_ROUNDS
+                );
+
+
         const updates =
             {};
 
-
-        /* =========================
-           RESET ALL PLAYERS
-        ========================= */
 
         playerIds.forEach(
             function (uid) {
@@ -1079,6 +1134,30 @@ async function startGame() {
                 ] =
                     false;
 
+
+                updates[
+                    `players/${uid}/lastAnsweredRound`
+                ] =
+                    null;
+
+
+                updates[
+                    `players/${uid}/lastAnswer`
+                ] =
+                    null;
+
+
+                updates[
+                    `players/${uid}/finalRank`
+                ] =
+                    null;
+
+
+                updates[
+                    `players/${uid}/finalReward`
+                ] =
+                    0;
+
             }
         );
 
@@ -1102,11 +1181,11 @@ async function startGame() {
 
 
                 status:
-                    "starting",
+                    "playing",
 
 
                 gameStartAt:
-                    now + 3000,
+                    now,
 
 
                 currentRound:
@@ -1114,11 +1193,23 @@ async function startGame() {
 
 
                 roundStartAt:
-                    null,
+                    now + 3000,
+
+
+                roundDuration:
+                    ROUND_DURATION,
+
+
+                totalRounds:
+                    TOTAL_ROUNDS,
 
 
                 currentQuestion:
-                    null,
+                    selectedQuestions[0],
+
+
+                questions:
+                    selectedQuestions,
 
 
                 usedQuestionIds:
@@ -1129,8 +1220,16 @@ async function startGame() {
                     {},
 
 
+                roundResultAt:
+                    null,
+
+
                 finishedAt:
                     null,
+
+
+                rewardsCalculated:
+                    false,
 
 
                 rewardsDistributed:
