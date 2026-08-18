@@ -5,191 +5,1562 @@ export const questions = [
     ========================= */
 
     {
-        category: "Animals",
-        letter: "A",
-        answers: [
-            "ant",
-            "alligator",
-            "alpaca",
-            "anteater",
-            "armadillo"
-        ]
-    },
+    category: "ANIMALS",
+    letter: "C",
+    answers: [
+        "caiman",
+        "camel",
+        "capybara",
+        "caracal",
+        "cardinal",
+        "caribou",
+        "carp",
+        "cassowary",
+        "cat",
+        "catfish",
+        "caterpillar",
+        "centipede",
+        "chameleon",
+        "cheetah",
+        "chicken",
+        "chimpanzee",
+        "chinchilla",
+        "chipmunk",
+        "cicada",
+        "clam",
+        "clownfish",
+        "cobra",
+        "cockatoo",
+        "cockroach",
+        "cod",
+        "coelacanth",
+        "collie",
+        "condor",
+        "coral snake",
+        "cormorant",
+        "cougar",
+        "cow",
+        "coyote",
+        "crab",
+        "crane",
+        "crayfish",
+        "cricket",
+        "crocodile",
+        "crow",
+        "cuckoo",
+        "cuscus",
+        "cuttlefish"
+    ]
+},
+
+{
+    category: "ANIMALS",
+    letter: "S",
+    answers: [
+        "sable",
+        "salamander",
+        "salmon",
+        "sandpiper",
+        "scorpion",
+        "seahorse",
+        "seal",
+        "shark",
+        "sheep",
+        "shrew",
+        "shrimp",
+        "siamang",
+        "skink",
+        "skunk",
+        "sloth",
+        "slug",
+        "snail",
+        "snake",
+        "snow leopard",
+        "sparrow",
+        "spider",
+        "spiny lobster",
+        "sponge",
+        "squid",
+        "squirrel",
+        "starfish",
+        "stick insect",
+        "stingray",
+        "stoat",
+        "stork",
+        "sugar glider",
+        "sunfish",
+        "swan",
+        "swordfish"
+    ]
+},
+
+{
+    category: "ANIMALS",
+    letter: "B",
+    answers: [
+        "baboon",
+        "badger",
+        "bandicoot",
+        "barn owl",
+        "barracuda",
+        "basilisk",
+        "bat",
+        "beagle",
+        "bear",
+        "beaver",
+        "bedbug",
+        "bee",
+        "beetle",
+        "beluga",
+        "bengal tiger",
+        "bighorn sheep",
+        "binturong",
+        "bison",
+        "black bear",
+        "blackbird",
+        "blackbuck",
+        "blue jay",
+        "blue whale",
+        "boa",
+        "bobcat",
+        "bonobo",
+        "booby",
+        "buffalo",
+        "bull",
+        "bullfrog",
+        "bumblebee",
+        "bushbaby",
+        "butterfly"
+    ]
+},
+
+/* =========================
+       FLOWERS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "B",
-        answers: [
-            "bear",
-            "beaver",
-            "buffalo",
-            "bat",
-            "bison"
-        ]
-    },
+    category: "Flowers",
+    letter: "A",
+    answers: [
+        "acacia",
+        "aconite",
+        "agapanthus",
+        "ageratum",
+        "allium",
+        "alstroemeria",
+        "alyssum",
+        "amaryllis",
+        "anemone",
+        "angelica",
+        "angel's trumpet",
+        "anthurium",
+        "aster",
+        "azalea",
+        "arum",
+        "arbutus",
+        "armeria",
+        "astilbe",
+        "aubrieta",
+        "auricula"
+    ]
+},
+
+{
+    category: "Flowers",
+    letter: "C",
+    answers: [
+        "calendula",
+        "calla lily",
+        "camellia",
+        "campanula",
+        "carnation",
+        "celosia",
+        "chamomile",
+        "chrysanthemum",
+        "clematis",
+        "clover",
+        "columbine",
+        "coneflower",
+        "coreopsis",
+        "cosmos",
+        "crocus",
+        "cyclamen",
+        "crown imperial",
+        "candytuft",
+        "canna lily",
+        "cattleya"
+    ]
+},
+
+{
+    category: "D",
+    letter: "D",
+    answers: [
+        "daffodil",
+        "dahlia",
+        "daisy",
+        "dandelion",
+        "delphinium",
+        "dianthus",
+        "digitalis",
+        "dogwood",
+        "datura",
+        "daylily",
+        "deadnettle",
+        "desert rose",
+        "dianella",
+        "diascia",
+        "dittany",
+        "dove orchid",
+        "dragon flower",
+        "drumstick allium",
+        "dutch iris",
+        "dwarf iris"
+    ]
+},
+
+/* =========================
+       DISNEY CHARACTERS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "C",
-        answers: [
-            "cat",
-            "cow",
-            "camel",
-            "cheetah",
-            "chimpanzee",
-            "crocodile"
-        ]
-    },
+    category: "Disney Characters",
+    letter: "A",
+    answers: [
+        "aladdin",
+        "alice",
+        "ariel",
+        "anna",
+        "arendelle",
+        "abu",
+        "alice in wonderland",
+        "anastasia tremaine",
+        "anton ego",
+        "angry",
+        "archimedes",
+        "atlantis",
+        "audrey ramirez",
+        "andrina",
+        "attina",
+        "adella",
+        "aquata",
+        "arista",
+        "alfred",
+        "aristocats"
+    ]
+},
+
+{
+    category: "Disney Characters",
+    letter: "B",
+    answers: [
+        "belle",
+        "buzz lightyear",
+        "baloo",
+        "bambi",
+        "baymax",
+        "beast",
+        "bolt",
+        "boo",
+        "belle",
+        "berlioz",
+        "bianca",
+        "bing bong",
+        "bruno",
+        "bambi",
+        "bagheera",
+        "basil",
+        "bernard",
+        "big hero 6",
+        "black widow",
+        "brer rabbit"
+    ]
+},
+
+{
+    category: "Disney Characters",
+    letter: "M",
+    answers: [
+        "mickey mouse",
+        "minnie mouse",
+        "moana",
+        "mulan",
+        "mufasa",
+        "mater",
+        "mike wazowski",
+        "merida",
+        "mowgli",
+        "maleficent",
+        "megara",
+        "miguel",
+        "mirabel",
+        "mushu",
+        "mr incredible",
+        "mrs incredible",
+        "mad hatter",
+        "marie",
+        "marlin",
+        "maui"
+    ]
+},
+
+/* =========================
+       POKEMON
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "D",
-        answers: [
-            "dog",
-            "deer",
-            "dolphin",
-            "donkey",
-            "duck"
-        ]
-    },
+    category: "Pokemon",
+    letter: "C",
+    answers: [
+        "caterpie",
+        "charizard",
+        "charmander",
+        "charmeleon",
+        "chikorita",
+        "chimchar",
+        "chingling",
+        "chinchou",
+        "cinccino",
+        "clauncher",
+        "clawitzer",
+        "clefable",
+        "clefairy",
+        "cleffa",
+        "clobbopus",
+        "clodsire",
+        "cloyster",
+        "cobalion",
+        "cofagrigus",
+        "combee",
+        "combusken",
+        "comfey",
+        "conkeldurr",
+        "copperajah",
+        "corphish",
+        "corsola",
+        "corviknight",
+        "corvisquire",
+        "cosmoem",
+        "cosmog",
+        "cottonee",
+        "crabominable",
+        "crabrawler",
+        "cradily",
+        "cramorant",
+        "cranidos",
+        "crawdaunt",
+        "cresselia",
+        "croagunk",
+        "crobat",
+        "crocalor",
+        "croconaw",
+        "crustle",
+        "cryogonal",
+        "cubchoo",
+        "cubone",
+        "cutiefly",
+        "cyclizar"
+    ]
+},
+
+{
+    category: "Pokemon",
+    letter: "M",
+    answers: [
+        "machamp",
+        "machoke",
+        "machop",
+        "magby",
+        "magcargo",
+        "magearna",
+        "magikarp",
+        "magmar",
+        "magmortar",
+        "magnemite",
+        "magneton",
+        "magnezone",
+        "makuhita",
+        "malamar",
+        "mamoswine",
+        "manaphy",
+        "mandibuzz",
+        "manectric",
+        "mankey",
+        "mantine",
+        "mantyke",
+        "maractus",
+        "mareanie",
+        "mareep",
+        "marill",
+        "marowak",
+        "marshadow",
+        "marshtomp",
+        "maschiff",
+        "masquerain",
+        "maushold",
+        "mawile",
+        "medicham",
+        "meditite",
+        "meganium",
+        "melmetal",
+        "meloetta",
+        "meltan",
+        "meowth",
+        "meowscarada",
+        "mesprit",
+        "metagross",
+        "metang",
+        "metapod",
+        "mew",
+        "mewtwo",
+        "mienfoo",
+        "mienshao",
+        "mightyena",
+        "milcery",
+        "milotic",
+        "mimikyu",
+        "minccino",
+        "minior",
+        "minun",
+        "misdreavus",
+        "mismagius",
+        "moltres",
+        "monferno",
+        "morelull",
+        "morgrem",
+        "morpeko",
+        "mothim",
+        "mr mime",
+        "mudbray",
+        "mudkip",
+        "mudsdale",
+        "muk",
+        "munchlax",
+        "munna",
+        "musharna"
+    ]
+},
+
+{
+    category: "Pokemon",
+    letter: "S",
+    answers: [
+        "sableye",
+        "salamence",
+        "salandit",
+        "salazzle",
+        "samurott",
+        "sandaconda",
+        "sandile",
+        "sandshrew",
+        "sandslash",
+        "sandygast",
+        "sandy shocks",
+        "sawk",
+        "sawsbuck",
+        "scatterbug",
+        "sceptile",
+        "scizor",
+        "scolipede",
+        "scorbunny",
+        "scovillain",
+        "scrafty",
+        "scraggy",
+        "scream tail",
+        "scyther",
+        "seadra",
+        "seaking",
+        "sealeo",
+        "seedot",
+        "seel",
+        "seismitoad",
+        "sentret",
+        "serperior",
+        "servine",
+        "seviper",
+        "sewaddle",
+        "sharpedo",
+        "shaymin",
+        "shedinja",
+        "shelgon",
+        "shellder",
+        "shellos",
+        "shelmet",
+        "shieldon",
+        "shiftry",
+        "shiinotic",
+        "shinx",
+        "shroodle",
+        "shuckle",
+        "shuppet",
+        "sigilyph",
+        "silcoon",
+        "silicobra",
+        "silvally",
+        "simipour",
+        "simisage",
+        "simisear",
+        "sinistcha",
+        "sinistea",
+        "sirfetch'd",
+        "sizzlipede",
+        "skarmory",
+        "skelidirge",
+        "skiddo",
+        "skiploom",
+        "skitty",
+        "skorupi",
+        "skrelp",
+        "skuntank",
+        "skwovet",
+        "slaking",
+        "slakoth",
+        "sliggoo",
+        "slither wing",
+        "slowbro",
+        "slowking",
+        "slowpoke",
+        "slugma",
+        "slurpuff",
+        "smeargle",
+        "smoliv",
+        "sneasel",
+        "sneasler",
+        "snivy",
+        "snom",
+        "snorlax",
+        "snorunt",
+        "snover",
+        "snubbull",
+        "sobble",
+        "solgaleo",
+        "solosis",
+        "solrock",
+        "spearow",
+        "spectrier",
+        "spewpa",
+        "spheal",
+        "spidops",
+        "spinarak",
+        "spinda",
+        "spiritomb",
+        "spoink",
+        "sprigatito",
+        "spritzee",
+        "squawkabilly",
+        "squirtle",
+        "stantler",
+        "staraptor",
+        "staravia",
+        "starly",
+        "starmie",
+        "staryu",
+        "steenee",
+        "stakataka",
+        "steelix",
+        "steenee",
+        "stonjourner",
+        "stoutland",
+        "stufful",
+        "stunfisk",
+        "stunky",
+        "sudowoodo",
+        "suicune",
+        "sunflora",
+        "sunkern",
+        "surskit",
+        "swablu",
+        "swadloon",
+        "swalot",
+        "swampert",
+        "swanna",
+        "swellow",
+        "swinub",
+        "swirlix",
+        "swoobat",
+        "sylveon"
+    ]
+},
+
+/* =========================
+       FOOD BRANDS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "E",
-        answers: [
-            "elephant",
-            "eagle",
-            "emu",
-            "eel"
-        ]
-    },
+    category: "Food Brands",
+    letter: "K",
+    answers: [
+        "kfc",
+        "kellogg's",
+        "kitkat",
+        "knorr",
+        "kinder",
+        "kraft",
+        "krispy kreme",
+        "kewpie",
+        "kikkoman",
+        "kettle",
+        "kinder bueno",
+        "kinder joy",
+        "kinder surprise",
+        "kinder chocolate",
+        "kashi",
+        "karo",
+        "keebler",
+        "king's hawaiian",
+        "kozy shack",
+        "kool-aid"
+    ]
+},
+
+{
+    category: "Food Brands",
+    letter: "M",
+    answers: [
+        "mcdonald's",
+        "maggi",
+        "mars",
+        "m&m's",
+        "mountain dew",
+        "milka",
+        "milo",
+        "monster",
+        "marmite",
+        "mccain",
+        "minute maid",
+        "maybelline",
+        "maltesers",
+        "mentos",
+        "mccormick",
+        "mirinda",
+        "milky way",
+        "maruchan",
+        "mott's",
+        "mcvitie's"
+    ]
+},
+
+{
+    category: "Food Brands",
+    letter: "N",
+    answers: [
+        "nestle",
+        "nescafe",
+        "nutella",
+        "nandos",
+        "nature valley",
+        "nissin",
+        "nabisco",
+        "nesquik",
+        "nature's path",
+        "newman's own",
+        "noosa",
+        "nuttzo",
+        "nutri-grain",
+        "nutter butter",
+        "national foods",
+        "nandos peri-peri",
+        "nordic naturals",
+        "naked juice",
+        "nature's bakery",
+        "necco"
+    ]
+},
+
+/* =========================
+       CAR BRANDS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "F",
-        answers: [
-            "fox",
-            "frog",
-            "falcon",
-            "ferret",
-            "flamingo"
-        ]
-    },
+    category: "Car Brands",
+    letter: "A",
+    answers: [
+        "audi",
+        "acura",
+        "aston martin",
+        "alfа romeo",
+        "abarth",
+        "ariel",
+        "apollo",
+        "aixam",
+        "alpine",
+        "aro",
+        "austin",
+        "autobianchi",
+        "arrinera",
+        "aspark",
+        "artega",
+        "arcfox",
+        "avatr",
+        "aiways",
+        "anadol",
+        "ashok leyland"
+    ]
+},
+
+{
+    category: "Car Brands",
+    letter: "B",
+    answers: [
+        "bmw",
+        "bentley",
+        "bugatti",
+        "buick",
+        "byd",
+        "bajaj",
+        "brabus",
+        "bizzarrini",
+        "borgward",
+        "brilliance",
+        "bristol",
+        "brooklands",
+        "bitter",
+        "baic",
+        "bestune",
+        "baojun",
+        "berkley",
+        "buffalo electric",
+        "b engineering",
+        "bollinger"
+    ]
+},
+
+{
+    category: "Car Brands",
+    letter: "C",
+    answers: [
+        "cadillac",
+        "chevrolet",
+        "chrysler",
+        "citroen",
+        "cupra",
+        "changan",
+        "chery",
+        "changan mazda",
+        "caterham",
+        "cizeta",
+        "cole",
+        "cord",
+        "cunningham",
+        "coda",
+        "canoo",
+        "coupé",
+        "casalini",
+        "corvette",
+        "caparo",
+        "can-am"
+    ]
+},
+
+/* =========================
+       OBJECTS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "G",
-        answers: [
-            "goat",
-            "giraffe",
-            "gorilla",
-            "gecko",
-            "guinea pig"
-        ]
-    },
+    category: "OBJECTS",
+    letter: "C",
+    answers: [
+        "cable",
+        "calculator",
+        "calendar",
+        "camera",
+        "candle",
+        "can",
+        "can opener",
+        "cane",
+        "canvas",
+        "cap",
+        "carpet",
+        "cart",
+        "case",
+        "cassette",
+        "ceiling fan",
+        "cell phone",
+        "chain",
+        "chair",
+        "chalk",
+        "charger",
+        "chest",
+        "chopsticks",
+        "clock",
+        "cloth",
+        "clothes hanger",
+        "coat hanger",
+        "coffee maker",
+        "coin",
+        "comb",
+        "computer",
+        "container",
+        "cooker",
+        "cooler",
+        "cork",
+        "corkscrew",
+        "couch",
+        "counter",
+        "crayon",
+        "credit card",
+        "cup",
+        "cupboard",
+        "curtain",
+        "cushion"
+    ]
+},
+
+{
+    category: "OBJECTS",
+    letter: "S",
+    answers: [
+        "safe",
+        "safety pin",
+        "saucepan",
+        "saw",
+        "scale",
+        "scanner",
+        "scissors",
+        "scoop",
+        "screw",
+        "screwdriver",
+        "screen",
+        "seat",
+        "sewing machine",
+        "shelf",
+        "shield",
+        "shoe",
+        "shoebox",
+        "shopping bag",
+        "shovel",
+        "sink",
+        "skateboard",
+        "sketchbook",
+        "slipper",
+        "smartphone",
+        "soap dish",
+        "socket",
+        "sofa",
+        "spatula",
+        "speaker",
+        "spoon",
+        "spray bottle",
+        "stapler",
+        "staple",
+        "statue",
+        "sticker",
+        "stool",
+        "storage box",
+        "stove",
+        "straw",
+        "suitcase",
+        "sunglasses",
+        "switch",
+        "sword"
+    ]
+},
+
+{
+    category: "OBJECTS",
+    letter: "B",
+    answers: [
+        "backpack",
+        "bag",
+        "ball",
+        "balloon",
+        "basket",
+        "battery",
+        "bed",
+        "bell",
+        "belt",
+        "bench",
+        "bicycle",
+        "bin",
+        "binder",
+        "blanket",
+        "blender",
+        "block",
+        "board",
+        "boat",
+        "bottle",
+        "bowl",
+        "box",
+        "bracelet",
+        "brush",
+        "bucket",
+        "bulb",
+        "button"
+    ]
+},
+
+ /* =========================
+    VIDEO GAMES
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "H",
-        answers: [
-            "horse",
-            "hippopotamus",
-            "hamster",
-            "hyena",
-            "hawk"
-        ]
-    },
+    category: "VIDEO GAMES",
+    letter: "C",
+    answers: [
+        "chess",
+        "checkers",
+        "cricket",
+        "carrom",
+        "chutes and ladders",
+        "candy crush",
+        "clash royale",
+        "clash of clans",
+        "call of duty",
+        "counter-strike",
+        "cyberpunk 2077",
+        "cuphead",
+        "catan",
+        "civilization",
+        "control",
+        "contra",
+        "candy land",
+        "chess boxing"
+    ]
+},
+
+{
+    category: "VIDEO GAMES",
+    letter: "M",
+    answers: [
+        "minecraft",
+        "monopoly",
+        "mario kart",
+        "mortal kombat",
+        "minecraft dungeons",
+        "minesweeper",
+        "mahjong",
+        "magic: the gathering",
+        "metal gear solid",
+        "metroid",
+        "megaman",
+        "mario party",
+        "madden nfl",
+        "monopoly go",
+        "mobile legends",
+        "medal of honor"
+    ]
+},
+
+{
+    category: "VIDEO GAMES",
+    letter: "S",
+    answers: [
+        "soccer",
+        "scrabble",
+        "skyrim",
+        "super mario",
+        "super smash bros",
+        "street fighter",
+        "sonic the hedgehog",
+        "sims",
+        "subway surfers",
+        "stardew valley",
+        "starcraft",
+        "splatoon",
+        "spider-man",
+        "snake",
+        "sudoku",
+        "space invaders",
+        "silent hill",
+        "star wars jedi",
+        "slither.io",
+        "sackboy"
+    ]
+},
+
+ /* =========================
+       FRUITS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "K",
-        answers: [
-            "kangaroo",
-            "koala",
-            "kingfisher"
-        ]
-    },
+    category: "Famous People",
+    letter: "M",
+    answers: [
+        "michael jackson",
+        "muhammad ali",
+        "messi",
+        "michael jordan",
+        "marilyn monroe",
+        "mark zuckerberg",
+        "martin luther king jr",
+        "mahatma gandhi",
+        "morgan freeman",
+        "meryl streep",
+        "madonna",
+        "mia khalifa",
+        "mike tyson",
+        "mila kunis",
+        "miley cyrus",
+        "matt damon",
+        "matthew mcconaughey",
+        "mark wahlberg",
+        "morgan wallen",
+        "manny pacquiao",
+        "malala yousafzai"
+    ]
+},
+
+{
+    category: "Famous People",
+    letter: "S",
+    answers: [
+        "shah rukh khan",
+        "scarlett johansson",
+        "stephen hawking",
+        "selena gomez",
+        "sachin tendulkar",
+        "snoop dogg",
+        "sylvester stallone",
+        "serena williams",
+        "sandra bullock",
+        "steve jobs",
+        "stephen curry",
+        "shakira",
+        "samuel l jackson",
+        "simon cowell",
+        "spider-man",
+        "sri sri ravi shankar",
+        "sunny leone",
+        "son heung-min",
+        "salman khan",
+        "sanjay dutt"
+    ]
+},
+
+{
+    category: "Famous People",
+    letter: "J",
+    answers: [
+        "justin bieber",
+        "jackie chan",
+        "johnny depp",
+        "jennifer lopez",
+        "jason statham",
+        "jim carrey",
+        "julia roberts",
+        "jennifer aniston",
+        "jennifer lawrence",
+        "john cena",
+        "james bond",
+        "j k rowling",
+        "jimi hendrix",
+        "john lennon",
+        "jason momoa",
+        "jake gyllenhaal",
+        "jensen ackles",
+        "jamie foxx",
+        "jude bellingham",
+        "jude law"
+    ]
+},
+
+/* =========================
+       TV SHOWS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "L",
-        answers: [
-            "lion",
-            "leopard",
-            "lemur",
-            "llama",
-            "lizard"
-        ]
-    },
+    category: "TV Shows",
+    letter: "S",
+    answers: [
+        "stranger things",
+        "squid game",
+        "suits",
+        "sherlock",
+        "supernatural",
+        "seinfeld",
+        "succession",
+        "shameless",
+        "smallville",
+        "spartacus",
+        "sex education",
+        "sweet home",
+        "silo",
+        "slow horses",
+        "sandman",
+        "survivor",
+        "spongebob squarepants",
+        "south park",
+        "superstore",
+        "silicon valley"
+    ]
+},
+
+{
+    category: "TV Shows",
+    letter: "T",
+    answers: [
+        "the boys",
+        "the office",
+        "the walking dead",
+        "the last of us",
+        "the witcher",
+        "the big bang theory",
+        "the sopranos",
+        "the wire",
+        "the bear",
+        "the blacklist",
+        "the umbrella academy",
+        "the flash",
+        "the mandalorian",
+        "the crown",
+        "the vampire diaries",
+        "the family man",
+        "the night agent",
+        "true detective",
+        "teen wolf",
+        "tulsa king"
+    ]
+},
+
+{
+    category: "TV Shows",
+    letter: "B",
+    answers: [
+        "breaking bad",
+        "black mirror",
+        "better call saul",
+        "brooklyn nine-nine",
+        "band of brothers",
+        "bodyguard",
+        "barry",
+        "billions",
+        "banshee",
+        "blue eye samurai",
+        "black bird",
+        "big little lies",
+        "bridgerton",
+        "bel-air",
+        "boardwalk empire",
+        "beef",
+        "bob's burgers",
+        "batman beyond",
+        "bates motel",
+        "babylon berlin"
+    ]
+},
+
+/* =========================
+       CARTOON CHARACTERS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "M",
-        answers: [
-            "monkey",
-            "mouse",
-            "moose",
-            "meerkat"
-        ]
-    },
+    category: "Cartoon Characters",
+    letter: "S",
+    answers: [
+        "spongebob squarepants",
+        "scooby-doo",
+        "superman",
+        "spider-man",
+        "sonic the hedgehog",
+        "stewie griffin",
+        "shaggy rogers",
+        "sandy cheeks",
+        "squidward",
+        "snoopy",
+        "smurfette",
+        "popeye",
+        "stitch",
+        "simba",
+        "snow white",
+        "speed racer",
+        "samurai jack",
+        "she-ra",
+        "starfire",
+        "steven universe"
+    ]
+},
+
+{
+    category: "Cartoon Characters",
+    letter: "M",
+    answers: [
+        "mickey mouse",
+        "minnie mouse",
+        "mario",
+        "marge simpson",
+        "maggie simpson",
+        "moana",
+        "mulan",
+        "mufasa",
+        "meg griffin",
+        "morty smith",
+        "mr bean",
+        "master shake",
+        "mordecai",
+        "mojo jojo",
+        "mike wazowski",
+        "mater",
+        "merida",
+        "mulan",
+        "mowgli",
+        "mickey mouse clubhouse"
+    ]
+},
+
+{
+    category: "Cartoon Characters",
+    letter: "B",
+    answers: [
+        "bugs bunny",
+        "bart simpson",
+        "batman",
+        "bender",
+        "bambi",
+        "baloo",
+        "buzz lightyear",
+        "bojack horseman",
+        "bubbles",
+        "blossom",
+        "buttercup",
+        "ben 10",
+        "billy",
+        "benson",
+        "beavis",
+        "butt-head",
+        "blue",
+        "betty boop",
+        "bobby hill",
+        "baymax"
+    ]
+},
+
+/* =========================
+       BRANDS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "P",
-        answers: [
-            "panda",
-            "parrot",
-            "penguin",
-            "pig",
-            "panther"
-        ]
-    },
+    category: "Brands",
+    letter: "A",
+    answers: [
+        "apple",
+        "adidas",
+        "amazon",
+        "audi",
+        "airbnb",
+        "acer",
+        "asus",
+        "armani",
+        "american express",
+        "alibaba",
+        "amd",
+        "adobe",
+        "airtel",
+        "amazon prime",
+        "aston martin",
+        "alexander mcqueen",
+        "ajio",
+        "ariel",
+        "aquafina",
+        "axe"
+    ]
+},
+
+{
+    category: "Brands",
+    letter: "N",
+    answers: [
+        "nike",
+        "nissan",
+        "netflix",
+        "nintendo",
+        "nestle",
+        "nokia",
+        "nvidia",
+        "new balance",
+        "nescafe",
+        "nutella",
+        "north face",
+        "national geographic",
+        "neutrogena",
+        "nike air jordan",
+        "nykaa",
+        "noise",
+        "nat geo",
+        "nikon",
+        "nivea",
+        "nintendo switch"
+    ]
+},
+
+{
+    category: "Brands",
+    letter: "S",
+    answers: [
+        "samsung",
+        "sony",
+        "starbucks",
+        "spotify",
+        "shell",
+        "samsung galaxy",
+        "skoda",
+        "subway",
+        "swarovski",
+        "swiggy",
+        "snapchat",
+        "suzuki",
+        "skechers",
+        "sennheiser",
+        "sprite",
+        "samsung electronics",
+        "supreme",
+        "safari",
+        "safari bags",
+        "sunsilk"
+    ]
+},
+
+/* =========================
+       MYTHOLOGICAL CHARACTERS
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "R",
-        answers: [
-            "rabbit",
-            "raccoon",
-            "rat",
-            "rhinoceros"
-        ]
-    },
+    category: "Mythological Characters",
+    letter: "A",
+    answers: [
+        "achilles",
+        "adonis",
+        "aphrodite",
+        "apollo",
+        "ares",
+        "artemis",
+        "athena",
+        "atlas",
+        "anubis",
+        "amaterasu",
+        "arjuna",
+        "agni",
+        "asura",
+        "ahura mazda",
+        "ares",
+        "ajax",
+        "andromeda",
+        "atlantis",
+        "apsara",
+        "angrboda"
+    ]
+},
+
+{
+    category: "Mythological Characters",
+    letter: "H",
+    answers: [
+        "hades",
+        "hera",
+        "hercules",
+        "hermes",
+        "hephaestus",
+        "hel",
+        "heimdall",
+        "hestia",
+        "horus",
+        "hydra",
+        "hanuman",
+        "hiranyakashipu",
+        "hiranyaksha",
+        "humbaba",
+        "hypnos",
+        "hyperion",
+        "hermaphroditus",
+        "heracles",
+        "harpy",
+        "hydra"
+    ]
+},
+
+{
+    category: "Mythological Characters",
+    letter: "K",
+    answers: [
+        "krishna",
+        "karna",
+        "kali",
+        "kumbhakarna",
+        "kubera",
+        "kalki",
+        "kaikeyi",
+        "kansa",
+        "kronos",
+        "khepri",
+        "khonsu",
+        "kali ma",
+        "king arthur",
+        "kerberos",
+        "kraken",
+        "kumbhakarna",
+        "kadru",
+        "kashyapa",
+        "kumari",
+        "kinnara"
+    ]
+},
+
+/* =========================
+       HISTORICAL FIGURES
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "S",
-        answers: [
-            "snake",
-            "sheep",
-            "shark",
-            "squirrel",
-            "seal"
-        ]
-    },
+    category: "Historical Figures",
+    letter: "A",
+    answers: [
+        "abraham lincoln",
+        "albert einstein",
+        "alexander the great",
+        "aristotle",
+        "archimedes",
+        "augustus",
+        "akbar",
+        "ashoka",
+        "anne frank",
+        "ada lovelace",
+        "alan turing",
+        "amelia earhart",
+        "abraham",
+        "antonio gramsci",
+        "adam smith",
+        "alfred the great",
+        "alexander hamilton",
+        "andrew jackson",
+        "attila the hun",
+        "aristophanes"
+    ]
+},
+
+{
+    category: "Historical Figures",
+    letter: "J",
+    answers: [
+        "julius caesar",
+        "joan of arc",
+        "joseph stalin",
+        "john f kennedy",
+        "john f kennedy",
+        "john locke",
+        "john calvin",
+        "john adams",
+        "james madison",
+        "james watt",
+        "johannes gutenberg",
+        "joseph haydn",
+        "john maynard keynes",
+        "jane austen",
+        "jean-jacques rousseau",
+        "justinian i",
+        "james cook",
+        "john brown",
+        "james monroe",
+        "james clerk maxwell"
+    ]
+},
+
+{
+    category: "Historical Figures",
+    letter: "M",
+    answers: [
+        "mahatma gandhi",
+        "martin luther king jr",
+        "marie curie",
+        "marco polo",
+        "marcus aurelius",
+        "muhammad",
+        "mozart",
+        "michelangelo",
+        "martin luther",
+        "mary queen of scots",
+        "mary shelley",
+        "mansa musa",
+        "mao zedong",
+        "marie antoinette",
+        "maximilien robespierre",
+        "montesquieu",
+        "michael faraday",
+        "mary wollstonecraft",
+        "mikhail gorbachev",
+        "marco antonio"
+    ]
+},
+
+/* =========================
+       LANGUAGES
+    ========================= */
 
     {
-        category: "Animals",
-        letter: "T",
-        answers: [
-            "tiger",
-            "turtle",
-            "tortoise",
-            "toucan",
-            "turkey"
-        ]
-    },
+    category: "Languages",
+    letter: "S",
+    answers: [
+        "spanish",
+        "swedish",
+        "swahili",
+        "serbian",
+        "slovak",
+        "slovenian",
+        "sinhala",
+        "somali",
+        "samoan",
+        "sanskrit",
+        "sindhi",
+        "sundanese",
+        "shona",
+        "sotho",
+        "scots",
+        "scottish gaelic",
+        "syriac",
+        "sardinian",
+        "sundanese",
+        "silesian"
+    ]
+},
 
-    {
-        category: "Animals",
-        letter: "W",
-        answers: [
-            "wolf",
-            "whale",
-            "walrus",
-            "wombat"
-        ]
-    },
+{
+    category: "Languages",
+    letter: "C",
+    answers: [
+        "chinese",
+        "cantonese",
+        "catalan",
+        "croatian",
+        "czech",
+        "czech sign language",
+        "cornish",
+        "corsican",
+        "cree",
+        "cherokee",
+        "chechen",
+        "chichewa",
+        "chuvash",
+        "chamorro",
+        "coptic",
+        "crimean tatar",
+        "central kurdish",
+        "cimbrian"
+    ]
+},
+
+{
+    category: "Languages",
+    letter: "A",
+    answers: [
+        "arabic",
+        "afrikaans",
+        "albanian",
+        "amharic",
+        "armenian",
+        "assamese",
+        "azerbaijani",
+        "akan",
+        "aramaic",
+        "asturian",
+        "aymara",
+        "awadhi",
+        "avar",
+        "adyghe",
+        "acehnese",
+        "aragonese",
+        "akan",
+        "abkhaz",
+        "akkadian",
+        "australian sign language"
+    ]
+},
 
 
     /* =========================
@@ -197,120 +1568,181 @@ export const questions = [
     ========================= */
 
     {
-        category: "Fruits",
-        letter: "A",
-        answers: [
-            "apple",
-            "apricot",
-            "avocado"
-        ]
-    },
+    category: "FRUITS",
+    letter: "A",
+    answers: [
+        "apple",
+        "apricot",
+        "avocado",
+        "ackee",
+        "acai",
+        "acerola",
+        "ambarella",
+        "amla",
+        "american persimmon",
+        "araça",
+        "arbutus berry"
+    ]
+},
+
+{
+    category: "FRUITS",
+    letter: "P",
+    answers: [
+        "papaya",
+        "passion fruit",
+        "peach",
+        "pear",
+        "persimmon",
+        "pineapple",
+        "plum",
+        "pomegranate",
+        "pomelo",
+        "prickly pear",
+        "plantain",
+        "pitaya",
+        "pitanga",
+        "pineberry",
+        "physalis"
+    ]
+},
+
+{
+    category: "FRUITS",
+    letter: "M",
+    answers: [
+        "mango",
+        "mangosteen",
+        "mandarin",
+        "mulberry",
+        "melon",
+        "muskmelon",
+        "miracle fruit",
+        "monstera deliciosa",
+        "mammee apple",
+        "marang",
+        "mayapple"
+    ]
+},
+
+    /* =========================
+       CITIES
+    ========================= */
 
     {
-        category: "Fruits",
-        letter: "B",
-        answers: [
-            "banana",
-            "blueberry",
-            "blackberry"
-        ]
-    },
+    category: "CITIES",
+    letter: "S",
+    answers: [
+        "sydney",
+        "singapore",
+        "seoul",
+        "shanghai",
+        "shenzhen",
+        "stockholm",
+        "stuttgart",
+        "seville",
+        "salzburg",
+        "san francisco",
+        "san diego",
+        "san jose",
+        "sacramento",
+        "seattle",
+        "st louis",
+        "salt lake city",
+        "santa barbara",
+        "sao paulo",
+        "santiago",
+        "san antonio",
+        "surat",
+        "surabaya",
+        "surat",
+        "srinagar",
+        "shimla",
+        "siliguri",
+        "sambalpur",
+        "solapur",
+        "sangli",
+        "sapporo",
+        "sendai",
+        "suzhou"
+    ]
+},
 
-    {
-        category: "Fruits",
-        letter: "C",
-        answers: [
-            "cherry",
-            "coconut",
-            "cranberry"
-        ]
-    },
+{
+    category: "CITIES",
+    letter: "M",
+    answers: [
+        "mumbai",
+        "mumbai",
+        "moscow",
+        "madrid",
+        "manchester",
+        "melbourne",
+        "miami",
+        "mexico city",
+        "montreal",
+        "munich",
+        "milan",
+        "manila",
+        "marrakech",
+        "marseille",
+        "minneapolis",
+        "memphis",
+        "milwaukee",
+        "monterrey",
+        "medellin",
+        "maputo",
+        "mombasa",
+        "mombasa",
+        "mysore",
+        "madurai",
+        "meerut",
+        "mangalore",
+        "moradabad",
+        "muzaffarpur",
+        "mumbai",
+        "matsuyama",
+        "makassar",
+        "malmo"
+    ]
+},
 
-    {
-        category: "Fruits",
-        letter: "D",
-        answers: [
-            "date",
-            "dragon fruit",
-            "durian"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "G",
-        answers: [
-            "grape",
-            "guava",
-            "grapefruit"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "K",
-        answers: [
-            "kiwi"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "L",
-        answers: [
-            "lemon",
-            "lime",
-            "lychee"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "M",
-        answers: [
-            "mango",
-            "melon",
-            "mandarin"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "O",
-        answers: [
-            "orange"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "P",
-        answers: [
-            "papaya",
-            "peach",
-            "pear",
-            "pineapple",
-            "plum",
-            "pomegranate"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "R",
-        answers: [
-            "raspberry"
-        ]
-    },
-
-    {
-        category: "Fruits",
-        letter: "S",
-        answers: [
-            "strawberry",
-            "starfruit"
-        ]
-    },
+{
+    category: "CITIES",
+    letter: "B",
+    answers: [
+        "bangkok",
+        "beijing",
+        "berlin",
+        "barcelona",
+        "boston",
+        "budapest",
+        "birmingham",
+        "bristol",
+        "brussels",
+        "bucharest",
+        "belgrade",
+        "buenos aires",
+        "bengaluru",
+        "bhopal",
+        "bhubaneswar",
+        "bareilly",
+        "belgaum",
+        "bokaro",
+        "bilaspur",
+        "bikaner",
+        "bordeaux",
+        "bremen",
+        "basel",
+        "brighton",
+        "buffalo",
+        "baltimore",
+        "bakersfield",
+        "bangalore",
+        "bandung",
+        "busan"
+    ]
+},
 
 
     /* =========================
@@ -318,385 +1750,360 @@ export const questions = [
     ========================= */
 
     {
-        category: "Countries",
-        letter: "A",
-        answers: [
-            "argentina",
-            "australia",
-            "austria",
-            "afghanistan",
-            "algeria"
-        ]
-    },
+    category: "COUNTRIES",
+    letter: "S",
+    answers: [
+        "samoa",
+        "san marino",
+        "sao tome and principe",
+        "saudi arabia",
+        "senegal",
+        "serbia",
+        "seychelles",
+        "sierra leone",
+        "singapore",
+        "slovakia",
+        "slovenia",
+        "solomon islands",
+        "somalia",
+        "south africa",
+        "south korea",
+        "south sudan",
+        "spain",
+        "sri lanka",
+        "sudan",
+        "suriname",
+        "sweden",
+        "switzerland",
+        "syria"
+    ]
+},
 
-    {
-        category: "Countries",
-        letter: "B",
-        answers: [
-            "brazil",
-            "belgium",
-            "bangladesh",
-            "bolivia",
-            "bulgaria"
-        ]
-    },
+{
+    category: "COUNTRIES",
+    letter: "M",
+    answers: [
+        "madagascar",
+        "malawi",
+        "malaysia",
+        "maldives",
+        "mali",
+        "malta",
+        "marshall islands",
+        "mauritania",
+        "mauritius",
+        "mexico",
+        "micronesia",
+        "moldova",
+        "monaco",
+        "mongolia",
+        "montenegro",
+        "morocco",
+        "mozambique",
+        "myanmar"
+    ]
+},
 
-    {
-        category: "Countries",
-        letter: "C",
-        answers: [
-            "canada",
-            "china",
-            "chile",
-            "colombia",
-            "croatia"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "D",
-        answers: [
-            "denmark",
-            "dominica"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "E",
-        answers: [
-            "egypt",
-            "ecuador",
-            "eritrea",
-            "estonia"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "F",
-        answers: [
-            "france",
-            "finland",
-            "fiji"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "G",
-        answers: [
-            "germany",
-            "ghana",
-            "greece",
-            "guatemala"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "I",
-        answers: [
-            "india",
-            "indonesia",
-            "ireland",
-            "italy",
-            "iceland"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "J",
-        answers: [
-            "japan",
-            "jamaica",
-            "jordan"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "M",
-        answers: [
-            "mexico",
-            "malaysia",
-            "maldives",
-            "morocco",
-            "mongolia"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "N",
-        answers: [
-            "nepal",
-            "netherlands",
-            "nigeria",
-            "norway"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "P",
-        answers: [
-            "pakistan",
-            "peru",
-            "portugal",
-            "philippines",
-            "poland"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "S",
-        answers: [
-            "spain",
-            "sweden",
-            "switzerland",
-            "singapore",
-            "south africa"
-        ]
-    },
-
-    {
-        category: "Countries",
-        letter: "T",
-        answers: [
-            "thailand",
-            "turkey",
-            "tunisia",
-            "tanzania"
-        ]
-    },
-
+{
+    category: "COUNTRIES",
+    letter: "B",
+    answers: [
+        "bahamas",
+        "bahrain",
+        "bangladesh",
+        "barbados",
+        "belarus",
+        "belgium",
+        "belize",
+        "benin",
+        "bhutan",
+        "bolivia",
+        "bosnia and herzegovina",
+        "botswana",
+        "brazil",
+        "brunei",
+        "bulgaria",
+        "burkina faso",
+        "burundi"
+    ]
+},
 
     /* =========================
-       MOVIES
+       HOLLYWOOD MOVIES
     ========================= */
 
     {
-        category: "Movies",
-        letter: "A",
-        answers: [
-            "avatar",
-            "alien",
-            "aladdin",
-            "avengers"
-        ]
-    },
+    category: "HOLLYWOOD MOVIES",
+    letter: "S",
+    answers: [
+        "superman",
+        "spider-man",
+        "shrek",
+        "star wars",
+        "star trek",
+        "star wars a new hope",
+        "star wars the empire strikes back",
+        "star wars return of the jedi",
+        "star wars the force awakens",
+        "star wars the last jedi",
+        "star wars the rise of skywalker",
+        "skyfall",
+        "spectre",
+        "scream",
+        "scream 2",
+        "scream 3",
+        "scream 4",
+        "scream 5",
+        "scream vi",
+        "speed",
+        "split",
+        "seven",
+        "se7en",
+        "salt",
+        "saw",
+        "saw ii",
+        "saw iii",
+        "saw iv",
+        "saw v",
+        "saw vi",
+        "saw x",
+        "shutter island",
+        "saving private ryan",
+        "scarface",
+        "schindler's list",
+        "slumdog millionaire",
+        "sing",
+        "sing 2",
+        "sonic the hedgehog",
+        "sonic the hedgehog 2",
+        "soul",
+        "sully",
+        "sherlock holmes",
+        "smile",
+        "smile 2",
+        "superbad",
+        "suicide squad",
+        "suicide squad 2"
+    ]
+},
 
-    {
-        category: "Movies",
-        letter: "B",
-        answers: [
-            "batman",
-            "barbie",
-            "brave",
-            "black panther"
-        ]
-    },
+{
+    category: "HOLLYWOOD MOVIES",
+    letter: "M",
+    answers: [
+        "mad max",
+        "mad max fury road",
+        "mamma mia",
+        "man of steel",
+        "marley and me",
+        "matrix",
+        "the matrix",
+        "matrix reloaded",
+        "matrix revolutions",
+        "matrix resurrections",
+        "mean girls",
+        "megamind",
+        "memento",
+        "men in black",
+        "men in black 2",
+        "men in black 3",
+        "minions",
+        "minions the rise of gru",
+        "mission impossible",
+        "mission impossible 2",
+        "mission impossible 3",
+        "mission impossible ghost protocol",
+        "mission impossible rogue nation",
+        "mission impossible fallout",
+        "mission impossible dead reckoning",
+        "moana",
+        "moana 2",
+        "mortal kombat",
+        "moulin rouge",
+        "monsters inc",
+        "monsters university",
+        "monster house",
+        "moonlight",
+        "mr and mrs smith",
+        "mulholland drive",
+        "mulan",
+        "murder on the orient express",
+        "my neighbor totoro"
+    ]
+},
 
-    {
-        category: "Movies",
-        letter: "C",
-        answers: [
-            "cars",
-            "coco",
-            "casino royale",
-            "captain america"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "D",
-        answers: [
-            "dune",
-            "deadpool",
-            "dumbo",
-            "django unchained"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "F",
-        answers: [
-            "frozen",
-            "fight club",
-            "fantastic four"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "G",
-        answers: [
-            "gladiator",
-            "gravity",
-            "godzilla"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "H",
-        answers: [
-            "harry potter",
-            "hulk",
-            "home alone"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "I",
-        answers: [
-            "inception",
-            "interstellar",
-            "iron man"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "J",
-        answers: [
-            "joker",
-            "jaws",
-            "john wick"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "M",
-        answers: [
-            "matrix",
-            "moana",
-            "memento"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "S",
-        answers: [
-            "spider man",
-            "shrek",
-            "superman",
-            "star wars"
-        ]
-    },
-
-    {
-        category: "Movies",
-        letter: "T",
-        answers: [
-            "titanic",
-            "terminator",
-            "toy story"
-        ]
-    },
+{
+    category: "HOLLYWOOD MOVIES",
+    letter: "T",
+    answers: [
+        "titanic",
+        "the avengers",
+        "the dark knight",
+        "the dark knight rises",
+        "the batman",
+        "the godfather",
+        "the godfather part ii",
+        "the godfather part iii",
+        "the matrix",
+        "the lord of the rings",
+        "the fellowship of the ring",
+        "the two towers",
+        "the return of the king",
+        "the hobbit",
+        "the hangover",
+        "the hangover part ii",
+        "the hangover part iii",
+        "the lion king",
+        "the jungle book",
+        "the revenant",
+        "the prestige",
+        "the departed",
+        "the wolf of wall street",
+        "the social network",
+        "the shawshank redemption",
+        "the shining",
+        "the sixth sense",
+        "the silence of the lambs",
+        "the exorcist",
+        "the conjuring",
+        "the conjuring 2",
+        "the nun",
+        "the purge",
+        "the notebook",
+        "the terminator",
+        "terminator 2",
+        "top gun",
+        "top gun maverick",
+        "toy story",
+        "toy story 2",
+        "toy story 3",
+        "toy story 4",
+        "tangled",
+        "tarzan",
+        "ted",
+        "tenet",
+        "the truman show",
+        "troy",
+        "twilight"
+    ]
+},
 
     /* =========================
        FOOD
     ========================= */
 
     {
-        category: "Food",
-        letter: "B",
-        answers: [
-            "burger",
-            "biryani",
-            "burrito",
-            "bread"
-        ]
-    },
+    category: "FOOD",
+    letter: "C",
+    answers: [
+        "cake",
+        "candy",
+        "carrot cake",
+        "casserole",
+        "caesar salad",
+        "calzone",
+        "cannelloni",
+        "cannoli",
+        "cappuccino",
+        "carbonara",
+        "cereal",
+        "cheeseburger",
+        "cheesecake",
+        "chicken curry",
+        "chicken nuggets",
+        "chicken rice",
+        "chicken wings",
+        "chili",
+        "chow mein",
+        "chocolate",
+        "chocolate cake",
+        "chocolate mousse",
+        "churros",
+        "clam chowder",
+        "club sandwich",
+        "cobb salad",
+        "coconut rice",
+        "cookies",
+        "corn dog",
+        "croissant",
+        "curry",
+        "custard"
+    ]
+},
 
-    {
-        category: "Food",
-        letter: "C",
-        answers: [
-            "curry",
-            "cake",
-            "cookie",
-            "chicken"
-        ]
-    },
+{
+    category: "FOOD",
+    letter: "S",
+    answers: [
+        "salad",
+        "salami",
+        "samosa",
+        "sandwich",
+        "sausage",
+        "scrambled eggs",
+        "shawarma",
+        "shepherd's pie",
+        "shrimp curry",
+        "soup",
+        "spaghetti",
+        "spring rolls",
+        "steak",
+        "stew",
+        "stir fry",
+        "sushi",
+        "sweet potato",
+        "sweet and sour chicken",
+        "schnitzel",
+        "scone",
+        "seafood pasta",
+        "sesame chicken",
+        "shish kebab",
+        "sliders",
+        "spaghetti bolognese",
+        "spanakopita",
+        "spring roll",
+        "stuffed peppers",
+        "sub sandwich",
+        "sundae"
+    ]
+},
 
-    {
-        category: "Food",
-        letter: "D",
-        answers: [
-            "dosa",
-            "dumplings",
-            "donut"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "F",
-        answers: [
-            "fries",
-            "fried rice"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "I",
-        answers: [
-            "idli",
-            "ice cream"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "N",
-        answers: [
-            "noodles",
-            "nachos"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "P",
-        answers: [
-            "pizza",
-            "pasta",
-            "pancake",
-            "popcorn"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "S",
-        answers: [
-            "sandwich",
-            "sushi",
-            "samosa",
-            "spaghetti"
-        ]
-    },
-
-    {
-        category: "Food",
-        letter: "T",
-        answers: [
-            "taco",
-            "toast"
-        ]
-    },
+{
+    category: "FOOD",
+    letter: "P",
+    answers: [
+        "pancakes",
+        "pasta",
+        "paella",
+        "pakora",
+        "paratha",
+        "pav bhaji",
+        "peking duck",
+        "pepperoni pizza",
+        "pie",
+        "pilaf",
+        "pizza",
+        "poha",
+        "popcorn",
+        "potato chips",
+        "potato curry",
+        "potato salad",
+        "poutine",
+        "pudding",
+        "pulav",
+        "pumpkin pie",
+        "paneer butter masala",
+        "paneer tikka",
+        "pani puri",
+        "pasta salad",
+        "peanut butter sandwich",
+        "pho",
+        "pierogi",
+        "pizza margherita",
+        "pork chops",
+        "pot roast"
+    ]
+},
 
 
     /* =========================
@@ -704,102 +2111,99 @@ export const questions = [
     ========================= */
 
     {
-        category: "Professions",
-        letter: "A",
-        answers: [
-            "actor",
-            "architect",
-            "artist",
-            "astronaut"
-        ]
-    },
+    category: "PROFESSIONS",
+    letter: "C",
+    answers: [
+        "cab driver",
+        "camera operator",
+        "carpenter",
+        "cartographer",
+        "cashier",
+        "chef",
+        "chemist",
+        "chief executive officer",
+        "chiropractor",
+        "civil engineer",
+        "cleaner",
+        "clerk",
+        "coach",
+        "comedian",
+        "computer programmer",
+        "construction worker",
+        "consultant",
+        "content creator",
+        "cook",
+        "copywriter",
+        "counselor",
+        "courier",
+        "craftsman",
+        "creative director",
+        "criminologist",
+        "customer service representative"
+    ]
+},
 
-    {
-        category: "Professions",
-        letter: "B",
-        answers: [
-            "baker",
-            "barber",
-            "banker"
-        ]
-    },
+{
+    category: "PROFESSIONS",
+    letter: "M",
+    answers: [
+        "machine operator",
+        "magician",
+        "mail carrier",
+        "manager",
+        "manicurist",
+        "manufacturing engineer",
+        "marine engineer",
+        "marketing manager",
+        "mason",
+        "mathematician",
+        "mechanic",
+        "mechanical engineer",
+        "medical assistant",
+        "medical laboratory technician",
+        "meteorologist",
+        "midwife",
+        "military officer",
+        "miner",
+        "model",
+        "mortician",
+        "motor mechanic",
+        "movie director",
+        "musician"
+    ]
+},
 
-    {
-        category: "Professions",
-        letter: "D",
-        answers: [
-            "doctor",
-            "dentist",
-            "designer"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "E",
-        answers: [
-            "engineer",
-            "electrician"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "F",
-        answers: [
-            "farmer",
-            "firefighter"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "L",
-        answers: [
-            "lawyer",
-            "librarian"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "N",
-        answers: [
-            "nurse"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "P",
-        answers: [
-            "pilot",
-            "police officer",
-            "programmer",
-            "photographer"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "S",
-        answers: [
-            "scientist",
-            "singer",
-            "soldier",
-            "surgeon"
-        ]
-    },
-
-    {
-        category: "Professions",
-        letter: "T",
-        answers: [
-            "teacher",
-            "tailor",
-            "technician"
-        ]
-    },
+{
+    category: "PROFESSIONS",
+    letter: "S",
+    answers: [
+        "sailor",
+        "sales manager",
+        "salesperson",
+        "scientist",
+        "sculptor",
+        "security guard",
+        "server",
+        "ship captain",
+        "shopkeeper",
+        "singer",
+        "social worker",
+        "software developer",
+        "software engineer",
+        "soldier",
+        "sound engineer",
+        "sports coach",
+        "sports commentator",
+        "sports journalist",
+        "statistician",
+        "stockbroker",
+        "store manager",
+        "stylist",
+        "surgeon",
+        "surveyor",
+        "systems analyst"
+    ]
+},
 
 
     /* =========================
@@ -807,132 +2211,171 @@ export const questions = [
     ========================= */
 
     {
-        category: "Sports",
-        letter: "B",
-        answers: [
-            "badminton",
-            "baseball",
-            "basketball",
-            "boxing"
-        ]
-    },
+    category: "SPORTS",
+    letter: "B",
+    answers: [
+        "badminton",
+        "baseball",
+        "basketball",
+        "beach volleyball",
+        "beach soccer",
+        "biathlon",
+        "billiards",
+        "bmx racing",
+        "bobsleigh",
+        "bodybuilding",
+        "boxing",
+        "bowling",
+        "brazilian jiu jitsu",
+        "breakdancing",
+        "bull riding",
+        "boxing"
+    ]
+},
 
-    {
-        category: "Sports",
-        letter: "C",
-        answers: [
-            "cricket",
-            "cycling",
-            "curling"
-        ]
-    },
+{
+    category: "SPORTS",
+    letter: "C",
+    answers: [
+        "canoeing",
+        "car racing",
+        "carrom",
+        "cheerleading",
+        "chess",
+        "climbing",
+        "cricket",
+        "cross country",
+        "crossfit",
+        "curling",
+        "cycling",
+        "cycling track",
+        "cycling road",
+        "canoe sprint",
+        "canoe slalom",
+        "combat sports"
+    ]
+},
 
-    {
-        category: "Sports",
-        letter: "F",
-        answers: [
-            "football",
-            "fencing"
-        ]
-    },
-
-    {
-        category: "Sports",
-        letter: "G",
-        answers: [
-            "golf",
-            "gymnastics"
-        ]
-    },
-
-    {
-        category: "Sports",
-        letter: "H",
-        answers: [
-            "hockey",
-            "handball"
-        ]
-    },
-
-    {
-        category: "Sports",
-        letter: "S",
-        answers: [
-            "swimming",
-            "surfing",
-            "skating",
-            "squash"
-        ]
-    },
-
-    {
-        category: "Sports",
-        letter: "T",
-        answers: [
-            "tennis",
-            "table tennis",
-            "taekwondo"
-        ]
-    },
+{
+    category: "SPORTS",
+    letter: "S",
+    answers: [
+        "sailing",
+        "sambo",
+        "shooting",
+        "short track speed skating",
+        "skateboarding",
+        "ski jumping",
+        "skiing",
+        "skeleton",
+        "snooker",
+        "snowboarding",
+        "soccer",
+        "softball",
+        "speed skating",
+        "squash",
+        "sumo",
+        "surfing",
+        "swimming",
+        "synchronized swimming"
+    ]
+},
 
 
     /* =========================
-       COLORS
+       NATURE
     ========================= */
 
     {
-        category: "Colors",
-        letter: "B",
-        answers: [
-            "black",
-            "blue",
-            "brown",
-            "beige"
-        ]
-    },
+    category: "NATURE",
+    letter: "S",
+    answers: [
+        "sand",
+        "sand dune",
+        "sea",
+        "seaweed",
+        "seed",
+        "sky",
+        "snow",
+        "snowflake",
+        "soil",
+        "star",
+        "stone",
+        "sun",
+        "sunlight",
+        "sunrise",
+        "sunset",
+        "stream",
+        "swamp",
+        "spring",
+        "storm",
+        "storm cloud",
+        "shore",
+        "shell",
+        "shrub",
+        "savanna",
+        "sinkhole",
+        "solar eclipse",
+        "shooting star",
+        "stalactite",
+        "stalagmite",
+        "salt lake"
+    ]
+},
 
-    {
-        category: "Colors",
-        letter: "G",
-        answers: [
-            "green",
-            "gold",
-            "gray"
-        ]
-    },
+{
+    category: "NATURE",
+    letter: "M",
+    answers: [
+        "mountain",
+        "mountain range",
+        "meadow",
+        "moon",
+        "moonlight",
+        "mist",
+        "mud",
+        "mudslide",
+        "mushroom",
+        "moss",
+        "mangrove",
+        "marsh",
+        "meteor",
+        "meteorite",
+        "milky way",
+        "monsoon",
+        "morning dew",
+        "mud volcano",
+        "mountain peak",
+        "mountain valley"
+    ]
+},
 
-    {
-        category: "Colors",
-        letter: "O",
-        answers: [
-            "orange"
-        ]
-    },
-
-    {
-        category: "Colors",
-        letter: "P",
-        answers: [
-            "pink",
-            "purple"
-        ]
-    },
-
-    {
-        category: "Colors",
-        letter: "R",
-        answers: [
-            "red"
-        ]
-    },
-
-    {
-        category: "Colors",
-        letter: "W",
-        answers: [
-            "white"
-        ]
-    },
+{
+    category: "NATURE",
+    letter: "C",
+    answers: [
+        "canyon",
+        "cave",
+        "cliff",
+        "cloud",
+        "coast",
+        "coral",
+        "coral reef",
+        "creek",
+        "crater",
+        "crystal",
+        "cyclone",
+        "cave system",
+        "cloudburst",
+        "cloud forest",
+        "constellation",
+        "comet",
+        "cove",
+        "coastal dune",
+        "cold spring",
+        "canyon river"
+    ]
+},
 
 
     /* =========================
@@ -940,81 +2383,574 @@ export const questions = [
     ========================= */
 
     {
-        category: "Body Parts",
-        letter: "A",
-        answers: [
-            "arm",
-            "ankle"
-        ]
-    },
+    category: "BODY PARTS",
+    letter: "C",
+    answers: [
+        "calf",
+        "cheek",
+        "cheekbone",
+        "chest",
+        "chin",
+        "chin bone",
+        "collarbone",
+        "colon",
+        "coccyx",
+        "cerebellum",
+        "cerebrum",
+        "cornea",
+        "cranium",
+        "cartilage",
+        "capillary"
+    ]
+},
+
+{
+    category: "BODY PARTS",
+    letter: "H",
+    answers: [
+        "hair",
+        "hand",
+        "head",
+        "heel",
+        "hip",
+        "hip bone",
+        "heart",
+        "heart muscle",
+        "heel bone",
+        "hindbrain",
+        "hip joint",
+        "humerus",
+        "hypothalamus"
+    ]
+},
+
+{
+    category: "BODY PARTS",
+    letter: "S",
+    answers: [
+        "sacrum",
+        "scalp",
+        "scapula",
+        "shin",
+        "shoulder",
+        "shoulder blade",
+        "skin",
+        "skull",
+        "small intestine",
+        "spinal cord",
+        "spine",
+        "spleen",
+        "sternum",
+        "stomach",
+        "subclavian vein",
+        "synovial joint"
+    ]
+},
+
+ /* =========================
+       SCIENCE
+    ========================= */
 
     {
-        category: "Body Parts",
-        letter: "B",
-        answers: [
-            "back",
-            "brain",
-            "belly"
-        ]
-    },
+    category: "SCIENCE",
+    letter: "P",
+    answers: [
+        "physics",
+        "paleontology",
+        "pathology",
+        "pharmacology",
+        "philosophy of science",
+        "photonics",
+        "physiology",
+        "planetary science",
+        "plasma physics",
+        "polymer science",
+        "population genetics",
+        "primatology",
+        "psychology",
+        "psychobiology",
+        "psychophysics",
+        "pseudoscience",
+        "parasitology",
+        "petrology",
+        "phycology",
+        "paleobotany",
+        "paleoclimatology",
+        "paleoecology",
+        "paleontology",
+        "particle physics",
+        "physical chemistry"
+    ]
+},
+
+{
+    category: "SCIENCE",
+    letter: "C",
+    answers: [
+        "chemistry",
+        "cosmology",
+        "climatology",
+        "cytology",
+        "crystallography",
+        "computer science",
+        "cognitive science",
+        "cell biology",
+        "chemical engineering",
+        "chemical physics",
+        "computational biology",
+        "computational chemistry",
+        "computational physics",
+        "conservation biology",
+        "corpus linguistics",
+        "cryogenics",
+        "cryobiology",
+        "cartography",
+        "chronobiology",
+        "clinical research",
+        "clinical psychology",
+        "cancer biology",
+        "comparative anatomy",
+        "condensed matter physics"
+    ]
+},
+
+{
+    category: "SCIENCE",
+    letter: "M",
+    answers: [
+        "mathematics",
+        "microbiology",
+        "meteorology",
+        "marine biology",
+        "molecular biology",
+        "molecular physics",
+        "materials science",
+        "mechanics",
+        "medical science",
+        "metallurgy",
+        "mineralogy",
+        "mycology",
+        "mammalogy",
+        "marine science",
+        "mathematical biology",
+        "mathematical physics",
+        "mechanical engineering",
+        "medicine",
+        "metrology",
+        "microelectronics",
+        "microphysics",
+        "molecular chemistry",
+        "morphology"
+    ]
+},
+
+/* =========================
+       ACTORS
+    ========================= */
 
     {
-        category: "Body Parts",
-        letter: "E",
-        answers: [
-            "ear",
-            "elbow",
-            "eye"
-        ]
-    },
+    category: "Actors",
+    letter: "A",
+    answers: [
+        "aamir khan",
+        "aaron eckhart",
+        "aaron paul",
+        "aaron taylor johnson",
+        "abhay deol",
+        "abhimanyu dassani",
+        "abhishek bachchan",
+        "aditya roy kapur",
+        "aditya seal",
+        "adrien brody",
+        "al pacino",
+        "alan rickman",
+        "alan tudyk",
+        "alden ehrenreich",
+        "alec baldwin",
+        "alexander skarsgard",
+        "alfred molina",
+        "amitabh bachchan",
+        "amrish puri",
+        "andrew garfield",
+        "andrew lincoln",
+        "andy serkis",
+        "anil kapoor",
+        "ankur rathee",
+        "anthony hopkins",
+        "antonio banderas",
+        "anupam kher",
+        "arbaaz khan",
+        "arjun kapoor",
+        "arjun rampal",
+        "arjun sarja",
+        "arman khan",
+        "arnold schwarzenegger",
+        "asa butterfield",
+        "ashish vidyarthi",
+        "ashton kutcher",
+        "ayushmann khurrana",
+        "aziz ansari"
+    ]
+},
+{
+    category: "Actors",
+    letter: "R",
+    answers: [
+        "r madhavan",
+        "raaj kumar",
+        "raj babbar",
+        "raj kundra",
+        "rajat kapoor",
+        "rajat bedi",
+        "rajendra kumar",
+        "rajendra prasad",
+        "rajkummar rao",
+        "rajesh khanna",
+        "rajesh sharma",
+        "rajinikanth",
+        "raju srivastav",
+        "rakesh roshan",
+        "ram charan",
+        "ram kapoor",
+        "ram pothineni",
+        "rama naidu",
+        "ranbir kapoor",
+        "randeep hooda",
+        "randeep rai",
+        "randy orton",
+        "ranveer singh",
+        "rana daggubati",
+        "ranvir shorey",
+        "ravi dubey",
+        "ravi kishan",
+        "ravi teja",
+        "ray liotta",
+        "ray romano",
+        "regina king",
+        "reese witherspoon",
+        "rebel wilson",
+        "reese alexander",
+        "rege jean page",
+        "richard gere",
+        "richard madden",
+        "richard armitage",
+        "richard attenborough",
+        "richard dreyfuss",
+        "richard e grant",
+        "richard harris",
+        "richard roundtree",
+        "richard roxburgh",
+        "rick moranis",
+        "ricky gervais",
+        "rishi kapoor",
+        "ritesh deshmukh",
+        "ritu shivpuri",
+        "rithvik dhanajani",
+        "ritik roshan",
+        "river phoenix",
+        "robert de niro",
+        "robert downey jr",
+        "robert pattinson",
+        "robert redford",
+        "robert duvall",
+        "robert forster",
+        "robert knepper",
+        "robert sean leonard",
+        "robin williams",
+        "robin wright",
+        "rock hudson",
+        "roger moore",
+        "roland emmerich",
+        "ron perlman",
+        "ron weasley",
+        "ronit roy",
+        "ronnie coleman",
+        "roshan mathew",
+        "ross lynch",
+        "rowan atkinson",
+        "roy scheider",
+        "rudy pankow",
+        "rupert friend",
+        "rupert grint",
+        "russell crowe",
+        "russell brand",
+        "ryan gosling",
+        "ryan reynolds",
+        "ryan o'neal",
+        "ryan phillippe"
+    ]
+},
+{
+    category: "Actors",
+    letter: "S",
+    answers: [
+        "saif ali khan",
+        "salman khan",
+        "sam claflin",
+        "sam elliott",
+        "sam neill",
+        "sam rockwell",
+        "sam worthington",
+        "samuel l jackson",
+        "sanjay dutt",
+        "sanjay kapoor",
+        "sanjay mishra",
+        "sanjay narvekar",
+        "sanjay suri",
+        "sanjay khan",
+        "sanjay sood",
+        "sanjay gadhvi",
+        "sanjay narvekar",
+        "sanjay leela bhansali",
+        "sanjay dutt",
+        "sanjay mishra",
+        "sanjay kapoor",
+        "sanjay suri",
+        "sanjay narvekar",
+        "sanjay khan",
+        "sanjay moone",
+        "sanjay shetty",
+        "sanjay saini",
+        "sanjay singh",
+        "sanjay desai",
+        "sanjay patil",
+        "sanjay verma",
+        "sanjay sharma",
+        "sanjay yadav",
+        "sanjay gupta",
+        "sanjay roy",
+        "sanjay jha",
+        "sanjay kumar",
+        "sanjay pandey",
+        "sanjay saxena",
+        "sanjay tripathi",
+        "sanjay tiwari",
+        "sanjay chaudhary",
+        "sanjay shukla",
+        "sanjay joshi",
+        "sanjay thakur",
+        "sanjay rao",
+        "sanjay nair",
+        "sanjay reddy",
+        "sanjay menon",
+        "sanjay pillai",
+        "sanjay babu",
+        "sanjay george",
+        "sanjay paul",
+        "sanjay thomas",
+        "sanjay joseph",
+        "sanjay mathew",
+        "sanjay francis",
+        "sanjay peter",
+        "sanjay david",
+        "sanjay daniel",
+        "sanjay john",
+        "sanjay mark",
+        "sanjay jose",
+        "sanjay alex",
+        "sanjay vincent",
+        "sanjay martin",
+        "sanjay victor",
+        "sanjay wilson",
+        "sanjay raj",
+        "sanjay rajan",
+        "sanjay ramesh",
+        "sanjay suresh",
+        "sanjay ganesh",
+        "sanjay prakash",
+        "sanjay krishnan",
+        "sanjay murugan",
+        "sanjay karthik",
+        "sanjay arun",
+        "sanjay hari",
+        "sanjay bala",
+        "sanjay mohan",
+        "sanjay vijay",
+        "sanjay ajith",
+        "sanjay surya",
+        "sanjay prabhu",
+        "sanjay selvan",
+        "sanjay kumar",
+        "sanjay rajan",
+        "sanjay krish",
+        "sanjay ram",
+        "sanjay dhanush",
+        "sanjay vijayakumar",
+        "sanjay vishal",
+        "sanjay samuthirakani",
+        "sanjay siddharth",
+        "sanjay pradeep",
+        "sanjay narayan",
+        "sanjay balaji",
+        "sanjay bharath",
+        "sanjay vikram",
+        "sanjay madhavan",
+        "sanjay sathyaraj",
+        "sanjay vishnu",
+        "sanjay jai",
+        "sanjay arjun",
+        "sanjay aravind",
+        "sanjay kishore",
+        "sanjay gopi",
+        "sanjay ravi",
+        "sanjay raghav",
+        "sanjay deepak",
+        "sanjay nathan",
+        "sanjay karan",
+        "sanjay vivek",
+        "sanjay bharathiraja",
+        "sanjay gautham",
+        "sanjay akash",
+        "sanjay manoj",
+        "sanjay rohit",
+        "sanjay harsh",
+        "sanjay varun",
+        "sanjay siddharth",
+        "sanjay nikhil",
+        "sanjay amit",
+        "sanjay ankit",
+        "sanjay gaurav",
+        "sanjay prashant",
+        "sanjay aman",
+        "sanjay aditya",
+        "sanjay abhishek",
+        "sanjay ashish",
+        "sanjay sachin",
+        "sanjay rahul",
+        "sanjay varma",
+        "sanjay shekhar",
+        "sanjay kapil",
+        "sanjay pankaj",
+        "sanjay manish",
+        "sanjay sunil",
+        "sanjay anil",
+        "sanjay ajay",
+        "sanjay amitabh",
+        "sanjay akshay",
+        "sanjay aamir",
+        "sanjay ranbir",
+        "sanjay ranveer",
+        "sanjay shahid",
+        "sanjay sidharth",
+        "sanjay shahrukh",
+        "sanjay sushant",
+        "sanjay sonu",
+        "sanjay suniel",
+        "sanjay sharad",
+        "sanjay shreyas",
+        "sanjay sohail",
+        "sanjay salim",
+        "sanjay shakti",
+        "sanjay sanjay",
+        "sanjay"
+    ]
+},
+
+/* =========================
+       HOUSEHOLD ITEMS
+    ========================= */
 
     {
-        category: "Body Parts",
-        letter: "F",
-        answers: [
-            "face",
-            "finger",
-            "foot"
-        ]
-    },
+    category: "HOUSEHOLD ITEMS",
+    letter: "C",
+    answers: [
+        "cabinet",
+        "candle",
+        "candlestick",
+        "can opener",
+        "carpet",
+        "ceiling fan",
+        "chair",
+        "chandelier",
+        "charger",
+        "chest",
+        "clock",
+        "clothes hanger",
+        "clothes rack",
+        "coaster",
+        "coffee maker",
+        "coffee table",
+        "colander",
+        "comb",
+        "computer",
+        "container",
+        "cooking pot",
+        "corkscrew",
+        "couch",
+        "cup",
+        "cupboard",
+        "curtain",
+        "curtain rod",
+        "cushion",
+        "cutlery"
+    ]
+},
 
-    {
-        category: "Body Parts",
-        letter: "H",
-        answers: [
-            "hand",
-            "head",
-            "heart",
-            "heel"
-        ]
-    },
+{
+    category: "HOUSEHOLD ITEMS",
+    letter: "S",
+    answers: [
+        "salt shaker",
+        "saucepan",
+        "scale",
+        "scissors",
+        "scoop",
+        "scrubber",
+        "seat",
+        "sewing machine",
+        "shelf",
+        "shoe rack",
+        "shower",
+        "shower curtain",
+        "side table",
+        "sink",
+        "soap",
+        "soap dispenser",
+        "soap dish",
+        "spatula",
+        "spice rack",
+        "sponge",
+        "spoon",
+        "spray bottle",
+        "stool",
+        "storage box",
+        "storage basket",
+        "stove",
+        "strainer",
+        "sugar bowl",
+        "suitcase",
+        "switch"
+    ]
+},
 
-    {
-        category: "Body Parts",
-        letter: "K",
-        answers: [
-            "knee"
-        ]
-    },
-
-    {
-        category: "Body Parts",
-        letter: "L",
-        answers: [
-            "leg",
-            "lips",
-            "lung"
-        ]
-    },
-
-    {
-        category: "Body Parts",
-        letter: "N",
-        answers: [
-            "neck",
-            "nose"
-        ]
-    },
+{
+    category: "HOUSEHOLD ITEMS",
+    letter: "B",
+    answers: [
+        "baking tray",
+        "basket",
+        "bath mat",
+        "bath towel",
+        "bathtub",
+        "bed",
+        "bed sheet",
+        "bedside table",
+        "bench",
+        "bin",
+        "blanket",
+        "blender",
+        "bottle",
+        "bottle opener",
+        "bowl",
+        "box",
+        "bread bin",
+        "broom",
+        "brush",
+        "bucket",
+        "bulletin board",
+        "butter dish"
+    ]
+},
 
 
     /* =========================
@@ -1022,68 +2958,80 @@ export const questions = [
     ========================= */
 
     {
-        category: "Vehicles",
-        letter: "B",
-        answers: [
-            "bike",
-            "bus",
-            "boat"
-        ]
-    },
+    category: "VEHICLES",
+    letter: "C",
+    answers: [
+        "car",
+        "cab",
+        "camper",
+        "campervan",
+        "cargo van",
+        "caravan",
+        "cargo truck",
+        "cement mixer",
+        "city bus",
+        "convertible",
+        "coupe",
+        "crane truck",
+        "cruiser",
+        "cable car",
+        "canoe",
+        "catamaran",
+        "cargo ship",
+        "cruise ship",
+        "cargo plane",
+        "cargo helicopter"
+    ]
+},
 
-    {
-        category: "Vehicles",
-        letter: "C",
-        answers: [
-            "car",
-            "cab",
-            "canoe"
-        ]
-    },
+{
+    category: "VEHICLES",
+    letter: "M",
+    answers: [
+        "motorcycle",
+        "motorbike",
+        "moped",
+        "minibus",
+        "minivan",
+        "motorhome",
+        "monster truck",
+        "milk truck",
+        "moving truck",
+        "mining truck",
+        "metro",
+        "monorail",
+        "motorboat",
+        "motor yacht",
+        "minibus",
+        "military truck",
+        "mobile crane"
+    ]
+},
 
-    {
-        category: "Vehicles",
-        letter: "H",
-        answers: [
-            "helicopter"
-        ]
-    },
-
-    {
-        category: "Vehicles",
-        letter: "M",
-        answers: [
-            "motorcycle",
-            "metro"
-        ]
-    },
-
-    {
-        category: "Vehicles",
-        letter: "P",
-        answers: [
-            "plane"
-        ]
-    },
-
-    {
-        category: "Vehicles",
-        letter: "S",
-        answers: [
-            "ship",
-            "scooter",
-            "submarine"
-        ]
-    },
-
-    {
-        category: "Vehicles",
-        letter: "T",
-        answers: [
-            "train",
-            "truck",
-            "tractor"
-        ]
-    }
+{
+    category: "VEHICLES",
+    letter: "S",
+    answers: [
+        "scooter",
+        "sedan",
+        "semi truck",
+        "school bus",
+        "shuttle bus",
+        "sports car",
+        "station wagon",
+        "snowmobile",
+        "sidecar",
+        "suv",
+        "subway",
+        "steam train",
+        "speedboat",
+        "sailboat",
+        "sailing ship",
+        "submarine",
+        "space shuttle",
+        "seaplane",
+        "sleigh"
+    ]
+}
 
 ];
