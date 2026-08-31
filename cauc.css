@@ -1,3 +1,7 @@
+/* =====================================================
+   RESET
+===================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,29 +9,31 @@
 }
 
 
-body {
+html {
+    scroll-behavior: smooth;
+}
 
+
+body {
     min-height: 100vh;
 
     background:
         radial-gradient(
-            circle at 50% 10%,
-            rgba(216,173,75,0.12),
-            transparent 28%
-        ),
-        radial-gradient(
-            circle at 10% 60%,
-            rgba(120,80,180,0.06),
-            transparent 25%
-        ),
-        #050505;
+            circle at top,
+            #252525 0%,
+            #151515 45%,
+            #0b0b0b 100%
+        );
 
-    color: white;
+    color: #f4f1e8;
 
-    font-family: Arial, sans-serif;
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 
-    padding-bottom: 70px;
-
+    line-height: 1.5;
 }
 
 
@@ -36,169 +42,1024 @@ button {
 }
 
 
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+
+/* =====================================================
+   UTILITIES
+===================================================== */
+
 .hidden {
     display: none !important;
 }
 
 
-/* =========================
-   HEADER
-========================= */
+.eyebrow {
+    color: #a6a6a6;
 
-header {
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.top-header {
 
     width: 100%;
 
-    padding: 20px 5%;
+    min-height: 82px;
 
-    display: grid;
+    padding:
+        16px
+        34px;
 
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
 
     align-items: center;
 
-    border-bottom: 1px solid
-        rgba(255,255,255,0.07);
+    justify-content: space-between;
 
+    gap: 25px;
+
+    background:
+        rgba(15, 15, 15, 0.95);
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    backdrop-filter:
+        blur(14px);
 }
 
 
 .brand {
 
-    color: #d8ad4b;
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.brand-main {
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+
+.brand-sub {
+
+    color: #888;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+}
+
+
+.room-display {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    color: #8e8e8e;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.room-display strong {
+
+    padding:
+        7px
+        13px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.18);
+
+    border-radius: 7px;
+
+    color: #ffffff;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    font-size: 14px;
+
+    letter-spacing: 3px;
+}
+
+
+.back-button {
+
+    padding:
+        10px
+        16px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 7px;
+
+    background:
+        transparent;
+
+    color: #c7c7c7;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+
+.back-button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    color: white;
+}
+
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.auction-container {
+
+    width: min(
+        1100px,
+        calc(100% - 36px)
+    );
+
+    margin:
+        30px
+        auto
+        80px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+
+/* =====================================================
+   PLAYER HUD
+===================================================== */
+
+.player-hud {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        1fr;
+
+    min-height: 92px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #242424,
+            #171717
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+.hud-player,
+.hud-stat {
+
+    padding:
+        18px
+        22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    border-right:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+}
+
+
+.hud-stat {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    gap: 2px;
+}
+
+
+.hud-player {
+
+    flex-direction: row;
+}
+
+
+.hud-player:last-child,
+.hud-stat:last-child {
+    border-right: none;
+}
+
+
+.hud-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    font-size: 21px;
+}
+
+
+.hud-label {
+
+    display: block;
+
+    color: #777;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.hud-player strong {
+
+    display: block;
+
+    color: white;
+
+    font-size: 17px;
+}
+
+
+.hud-stat strong {
+
+    color: #f2f0e9;
+
+    font-size: 21px;
+
+    font-weight: 900;
+}
+
+
+.hud-stat strong small {
+
+    color: #777;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    margin-left: 4px;
+}
+
+
+/* =====================================================
+   AUCTION STATUS
+===================================================== */
+
+.auction-status-card {
+
+    overflow: hidden;
+
+    padding:
+        24px
+        30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #292929,
+            #1b1b1b
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-shadow:
+        0 18px 50px
+        rgba(0, 0, 0, 0.28);
+}
+
+
+.status-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+
+.round-badge {
+
+    padding:
+        8px
+        13px;
+
+    border-radius: 6px;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    color: #858585;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.round-badge strong {
+
+    margin-left: 5px;
+
+    color: white;
+
+    font-size: 12px;
+}
+
+
+.live-indicator {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #999;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.live-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #c9c9c9;
+
+    box-shadow:
+        0 0 10px
+        rgba(255, 255, 255, 0.6);
+}
+
+
+.status-content {
+
+    max-width: 700px;
+
+    margin: auto;
+}
+
+
+.status-content h1 {
+
+    margin:
+        6px
+        0;
+
+    color: #f4f1e8;
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: 17px;
+    font-size: clamp(
+        28px,
+        4vw,
+        43px
+    );
 
-    letter-spacing: 3px;
+    line-height: 1.1;
 
-    font-weight: bold;
-
+    letter-spacing: 1px;
 }
 
 
-.room-info {
+.status-content p:last-child {
 
-    text-align: center;
+    color: #a5a5a5;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   STORAGE CARD
+===================================================== */
+
+.storage-card {
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #292929,
+            #1b1b1b
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 18px 50px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+.storage-header {
+
+    padding:
+        25px
+        28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+}
+
+
+.storage-header h2 {
+
+    margin-top: 2px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 29px;
+}
+
+
+.unit-number {
+
+    width: 46px;
+
+    height: 46px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    color: #ddd;
+
+    font-weight: 900;
+}
+
+
+/* =====================================================
+   STORAGE VISUAL
+===================================================== */
+
+.storage-visual {
+
+    min-height: 310px;
+
+    padding: 28px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #383838,
+            #1b1b1b 70%
+        );
+}
+
+
+.storage-background {
+
+    width: min(
+        650px,
+        85%
+    );
+
+    height: 235px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        4px
+        solid
+        #555;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #202020,
+            #3a3a3a,
+            #202020
+        );
+
+    box-shadow:
+        inset 0 0 45px
+        rgba(0, 0, 0, 0.75),
+
+        0 20px 35px
+        rgba(0, 0, 0, 0.45);
+}
+
+
+.storage-background::before,
+.storage-background::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    bottom: 0;
+
+    width: 4px;
+
+    background:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+.storage-background::before {
+    left: 25%;
+}
+
+
+.storage-background::after {
+    right: 25%;
+}
+
+
+.storage-door-lines {
+
+    position: absolute;
+
+    inset: 15px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 3px;
+}
+
+
+.storage-lock {
+
+    width: 58px;
+
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.2);
+
+    border-radius: 10px;
+
+    background:
+        rgba(0, 0, 0, 0.45);
+
+    font-size: 24px;
+
+    z-index: 2;
+}
+
+
+.storage-question {
+
+    position: absolute;
 
     color:
-        rgba(255,255,255,0.35);
+        rgba(255, 255, 255, 0.035);
 
-    font-size: 8px;
+    font-size: 180px;
 
-    letter-spacing: 2px;
+    font-weight: 900;
 
+    line-height: 1;
 }
 
 
-.room-info strong {
+.mystery-items {
 
-    color: #f3d487;
+    position: absolute;
+
+    inset: 20px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    pointer-events: none;
+}
+
+
+.mystery-item {
+
+    width: 90px;
+
+    min-height: 72px;
+
+    padding: 8px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 2px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 9px;
+
+    background:
+        rgba(0, 0, 0, 0.35);
+
+    filter:
+        grayscale(0.7);
+
+    opacity: 0.55;
+
+    font-size: 24px;
+}
+
+
+.mystery-item span {
+
+    color: #777;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   STORAGE INFORMATION
+===================================================== */
+
+.storage-info {
+
+    padding:
+        24px
+        28px
+        30px;
+}
+
+
+.sealed-message {
+
+    margin-bottom: 20px;
+
+    padding:
+        12px
+        15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 7px;
+
+    background:
+        rgba(0, 0, 0, 0.18);
+
+    color: #777;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+.value-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 14px;
+}
+
+
+.value-box {
+
+    padding:
+        17px
+        19px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+}
+
+
+.value-box span {
 
     display: block;
 
-    font-size: 14px;
+    margin-bottom: 5px;
 
-    letter-spacing: 4px;
+    color: #777;
 
-    margin-top: 3px;
+    font-size: 8px;
 
+    font-weight: 800;
+
+    letter-spacing: 2px;
 }
 
 
-.back-button {
+.value-box strong {
 
-    justify-self: end;
+    color: #eee;
 
-    padding: 8px 13px;
+    font-size: 21px;
 
-    background: transparent;
-
-    color:
-        rgba(255,255,255,0.6);
-
-    border: 1px solid
-        rgba(255,255,255,0.15);
-
-    border-radius: 5px;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 1px;
-
-    cursor: pointer;
-
+    font-weight: 900;
 }
 
 
-.back-button:hover {
+.possible-items {
 
-    color: #d8ad4b;
-
-    border-color: #d8ad4b;
-
+    margin-top: 20px;
 }
 
 
-/* =========================
-   MAIN
-========================= */
+.possible-label {
 
-main {
-
-    width: min(760px, 92%);
-
-    margin: auto;
-
-}
-
-
-/* =========================
-   HERO
-========================= */
-
-.hero {
-
-    text-align: center;
-
-    padding: 38px 0 24px;
-
-}
-
-
-.auction-icon {
-
-    font-size: 48px;
-
-    margin-bottom: 12px;
-
-}
-
-
-.small-title {
-
-    color: #d8ad4b;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 4px;
+    display: block;
 
     margin-bottom: 9px;
 
+    color: #777;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
 }
 
 
-.hero h1 {
+.item-tags {
 
-    color: #f3d487;
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+.item-tags span {
+
+    padding:
+        7px
+        10px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 5px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color: #999;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+
+/* =====================================================
+   BID CARD
+===================================================== */
+
+.bid-card {
+
+    padding:
+        26px
+        28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #272727,
+            #191919
+        );
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+.bid-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+}
+
+
+.current-bid-value {
+
+    display: block;
+
+    margin-top: 4px;
 
     font-family:
         Georgia,
@@ -207,357 +1068,108 @@ main {
 
     font-size: 38px;
 
-    font-weight: 500;
-
-    letter-spacing: 4px;
-
-    margin-bottom: 9px;
-
+    line-height: 1;
 }
 
 
-.subtitle {
+.bidder-info {
 
-    color:
-        rgba(255,255,255,0.38);
+    min-width: 190px;
 
-    font-size: 11px;
+    padding-left: 20px;
 
+    border-left:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
 }
 
 
-/* =========================
-   WALLET
-========================= */
-
-.wallet-card {
-
-    display: grid;
-
-    grid-template-columns:
-        1.3fr
-        1fr
-        1fr
-        0.8fr;
-
-    gap: 1px;
-
-    background:
-        rgba(255,255,255,0.08);
-
-    border: 1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    margin-bottom: 18px;
-
-}
-
-
-.wallet-item {
-
-    padding: 15px;
-
-    background:
-        rgba(255,255,255,0.025);
-
-}
-
-
-.wallet-item span {
+.bidder-info span {
 
     display: block;
 
-    color:
-        rgba(255,255,255,0.35);
+    margin-bottom: 3px;
 
-    font-size: 7px;
-
-    letter-spacing: 1.5px;
-
-    margin-bottom: 6px;
-
-}
-
-
-.wallet-item strong {
-
-    color:
-        rgba(255,255,255,0.9);
-
-    font-size: 15px;
-
-}
-
-
-.wallet-item small {
-
-    color:
-        rgba(255,255,255,0.3);
-
-    font-size: 7px;
-
-    margin-left: 4px;
-
-}
-
-
-.cash-wallet strong {
-
-    color: #f3d487;
-
-}
-
-
-/* =========================
-   AUCTION CALL
-========================= */
-
-.auction-call-card {
-
-    text-align: center;
-
-    padding: 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(216,173,75,0.07),
-            rgba(255,255,255,0.025)
-        );
-
-    border: 1px solid
-        rgba(216,173,75,0.18);
-
-    border-radius: 12px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.unit-progress {
-
-    color:
-        rgba(255,255,255,0.3);
+    color: #777;
 
     font-size: 8px;
 
-    letter-spacing: 2px;
+    font-weight: 800;
 
-    margin-bottom: 8px;
-
+    letter-spacing: 1.5px;
 }
 
 
-.unit-progress strong {
+.bidder-info strong {
 
-    color: #d8ad4b;
-
-    font-size: 15px;
-
-    margin: 0 4px;
-
-}
-
-
-.auction-status {
-
-    color: #f3d487;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 24px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 7px;
-
-}
-
-
-.auction-message {
-
-    color:
-        rgba(255,255,255,0.4);
-
-    font-size: 10px;
-
-}
-
-
-.call-progress {
-
-    margin: 17px auto 0;
-
-    max-width: 340px;
-
-}
-
-
-.call-text {
-
-    color: #f3d487;
-
-    font-size: 12px;
-
-    font-weight: bold;
-
-    letter-spacing: 3px;
-
-    margin-bottom: 9px;
-
-}
-
-
-.call-bars {
-
-    display: flex;
-
-    gap: 5px;
-
-}
-
-
-.call-bars span {
-
-    height: 4px;
-
-    flex: 1;
-
-    border-radius: 5px;
-
-    background:
-        rgba(216,173,75,0.18);
-
-}
-
-
-.call-bars span.active {
-
-    background: #d8ad4b;
-
-}
-
-
-/* =========================
-   STORAGE
-========================= */
-
-.storage-card {
-
-    padding: 22px;
-
-    background:
-        rgba(255,255,255,0.025);
-
-    border: 1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 14px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.storage-top {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 17px;
-
-}
-
-
-.storage-label {
-
-    color:
-        rgba(255,255,255,0.3);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 5px;
-
-}
-
-
-.storage-top h2 {
-
-    color: #f3d487;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 23px;
-
-    font-weight: 500;
-
-}
-
-
-.storage-number {
-
-    width: 44px;
-
-    height: 44px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    border-radius: 50%;
-
-    background:
-        rgba(216,173,75,0.08);
-
-    border: 1px solid
-        rgba(216,173,75,0.25);
-
-    color: #d8ad4b;
+    color: #ddd;
 
     font-size: 13px;
-
 }
 
 
-/* =========================
-   STORAGE ITEMS
-========================= */
+.bid-controls {
 
-.storage-items {
+    width: min(
+        400px,
+        100%
+    );
+
+    margin:
+        23px
+        auto
+        15px;
 
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        55px
+        1fr
+        55px;
 
-    gap: 8px;
+    align-items: stretch;
 
-    margin-bottom: 16px;
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.1);
 
+    border-radius: 8px;
+
+    overflow: hidden;
 }
 
 
-.storage-item {
+.bid-adjust {
 
-    min-height: 95px;
+    border: none;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+
+.bid-adjust:hover {
+
+    background:
+        rgba(255, 255, 255, 0.12);
+}
+
+
+.bid-increase {
+
+    padding:
+        10px;
 
     display: flex;
 
@@ -567,291 +1179,167 @@ main {
 
     justify-content: center;
 
-    text-align: center;
+    gap: 1px;
 
-    padding: 10px;
+    border-left:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
 
-    background:
-        rgba(255,255,255,0.035);
-
-    border: 1px solid
-        rgba(255,255,255,0.07);
-
-    border-radius: 9px;
-
+    border-right:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
 }
 
 
-.storage-item-icon {
+.bid-increase span {
 
-    font-size: 31px;
-
-    margin-bottom: 7px;
-
-}
-
-
-.storage-item-name {
-
-    color:
-        rgba(255,255,255,0.65);
-
-    font-size: 8px;
-
-    letter-spacing: 0.5px;
-
-}
-
-
-/* =========================
-   ESTIMATE
-========================= */
-
-.estimate-card {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 10px;
-
-}
-
-
-.estimate-card > div {
-
-    padding: 13px;
-
-    background:
-        rgba(0,0,0,0.2);
-
-    border: 1px solid
-        rgba(255,255,255,0.06);
-
-    border-radius: 7px;
-
-}
-
-
-.estimate-card span {
-
-    display: block;
-
-    color:
-        rgba(255,255,255,0.3);
+    color: #777;
 
     font-size: 7px;
 
-    letter-spacing: 1px;
-
-    margin-bottom: 6px;
-
-}
-
-
-.estimate-card strong {
-
-    color:
-        rgba(255,255,255,0.8);
-
-    font-size: 14px;
-
-}
-
-
-.mystery-note {
-
-    margin-top: 12px;
-
-    padding: 10px;
-
-    text-align: center;
-
-    color:
-        rgba(255,255,255,0.35);
-
-    font-size: 8px;
-
-    border: 1px dashed
-        rgba(255,255,255,0.08);
-
-    border-radius: 6px;
-
-}
-
-
-/* =========================
-   BID
-========================= */
-
-.bid-card {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 12px;
-
-    padding: 22px;
-
-    background:
-        rgba(216,173,75,0.045);
-
-    border: 1px solid
-        rgba(216,173,75,0.16);
-
-    border-radius: 14px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.bid-main,
-.bid-next {
-
-    padding: 14px;
-
-    background:
-        rgba(0,0,0,0.18);
-
-    border-radius: 8px;
-
-    text-align: center;
-
-}
-
-
-.bid-main span,
-.bid-next span {
-
-    display: block;
-
-    color:
-        rgba(255,255,255,0.35);
-
-    font-size: 7px;
+    font-weight: 800;
 
     letter-spacing: 1.5px;
-
-    margin-bottom: 7px;
-
 }
 
 
-.bid-main strong {
+.bid-increase strong {
 
-    display: block;
+    color: #ddd;
 
-    color: #f3d487;
-
-    font-size: 28px;
-
-}
-
-
-.bid-main small {
-
-    display: block;
-
-    color:
-        rgba(255,255,255,0.35);
-
-    font-size: 8px;
-
-    margin-top: 6px;
-
-}
-
-
-.bid-next strong {
-
-    color:
-        rgba(255,255,255,0.8);
-
-    font-size: 21px;
-
+    font-size: 13px;
 }
 
 
 .bid-button {
 
-    grid-column: 1 / -1;
+    width: 100%;
 
-    padding: 16px;
+    min-height: 58px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.2);
+
+    border-radius: 8px;
 
     background:
-        rgba(216,173,75,0.13);
+        linear-gradient(
+            135deg,
+            #eeeeee,
+            #bdbdbd
+        );
 
-    border: 1px solid #d8ad4b;
+    color: #111;
 
-    color: #f3d487;
+    font-size: 13px;
 
-    border-radius: 7px;
+    font-weight: 900;
 
-    font-size: 11px;
-
-    font-weight: bold;
-
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 
     cursor: pointer;
 
+    transition:
+        0.2s ease;
 }
 
 
 .bid-button:hover:not(:disabled) {
 
-    background:
-        rgba(216,173,75,0.22);
+    transform:
+        translateY(-1px);
 
+    filter:
+        brightness(1.08);
 }
 
 
-.bid-button:disabled {
+.cancel-call-button {
 
-    opacity: 0.3;
+    width: 100%;
 
-    cursor: not-allowed;
+    margin-top: 9px;
 
+    padding: 10px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 6px;
+
+    background:
+        transparent;
+
+    color: #777;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+
+.cancel-call-button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    color: #bbb;
 }
 
 
 .bid-status {
 
-    grid-column: 1 / -1;
+    min-height: 20px;
 
-    min-height: 16px;
+    margin-top: 12px;
+
+    color: #bbb;
 
     text-align: center;
 
-    color:
-        rgba(255,255,255,0.45);
+    font-size: 12px;
 
-    font-size: 9px;
-
+    font-weight: 700;
 }
 
 
-/* =========================
-   COMMON CARDS
-========================= */
+/* =====================================================
+   LIVE BIDDERS
+===================================================== */
 
 .players-card,
 .log-card {
 
-    padding: 20px;
+    padding:
+        25px
+        27px;
 
     background:
-        rgba(255,255,255,0.025);
+        linear-gradient(
+            145deg,
+            #242424,
+            #181818
+        );
 
-    border: 1px solid
-        rgba(255,255,255,0.08);
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
 
-    border-radius: 12px;
-
-    margin-bottom: 18px;
-
+    border-radius: 14px;
 }
 
 
@@ -859,39 +1347,69 @@ main {
 
     display: flex;
 
-    justify-content: space-between;
-
     align-items: center;
 
-    margin-bottom: 12px;
+    justify-content: space-between;
 
+    gap: 15px;
+
+    margin-bottom: 18px;
 }
 
 
 .section-heading h2 {
 
-    color:
-        rgba(255,255,255,0.75);
+    margin-top: 3px;
 
-    font-size: 10px;
+    font-size: 18px;
 
-    letter-spacing: 2px;
-
+    font-weight: 850;
 }
 
 
-.section-heading > span {
+.bidder-count {
 
-    color: #d8ad4b;
+    min-width: 65px;
 
-    font-size: 11px;
+    padding:
+        7px
+        11px;
 
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
 }
 
 
-/* =========================
-   BIDDERS
-========================= */
+.bidder-count strong {
+
+    font-size: 16px;
+}
+
+
+.bidder-count span {
+
+    color: #666;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
 
 .bidders-list {
 
@@ -899,653 +1417,1004 @@ main {
 
     flex-direction: column;
 
-    gap: 6px;
-
+    gap: 7px;
 }
 
 
 .bidder {
 
-    display: flex;
+    padding:
+        12px
+        15px;
 
-    justify-content: space-between;
+    display: flex;
 
     align-items: center;
 
-    padding: 11px 13px;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 7px;
 
     background:
-        rgba(255,255,255,0.035);
-
-    border-radius: 6px;
-
+        rgba(255, 255, 255, 0.025);
 }
 
 
 .bidder-name {
 
-    color:
-        rgba(255,255,255,0.7);
+    color: #ddd;
 
-    font-size: 10px;
+    font-size: 12px;
 
+    font-weight: 700;
 }
 
 
 .bidder-amount {
 
-    color: #d8ad4b;
+    color: #aaa;
 
-    font-size: 10px;
+    font-size: 11px;
 
-    font-weight: bold;
-
+    font-weight: 900;
 }
 
 
 .empty-bidders {
 
-    padding: 18px;
+    padding:
+        30px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    border:
+        1px
+        dashed
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 8px;
+
+    color: #777;
+
+    font-size: 12px;
 
     text-align: center;
-
-    color:
-        rgba(255,255,255,0.25);
-
-    font-size: 9px;
-
 }
 
 
-/* =========================
-   LOG
-========================= */
+.empty-bidders span {
+
+    color: #555;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   AUCTION CALL
+===================================================== */
+
+.auction-call-card {
+
+    padding:
+        20px
+        24px;
+
+    display: grid;
+
+    grid-template-columns:
+        55px
+        1fr
+        auto;
+
+    align-items: center;
+
+    gap: 18px;
+
+    background:
+        #151515;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 12px;
+}
+
+
+.gavel-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    font-size: 25px;
+}
+
+
+.call-content h2 {
+
+    margin-top: 2px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 20px;
+}
+
+
+.call-content p {
+
+    color: #777;
+
+    font-size: 11px;
+}
+
+
+.call-status {
+
+    min-width: 95px;
+
+    padding-left: 18px;
+
+    border-left:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    text-align: right;
+}
+
+
+.call-label {
+
+    display: block;
+
+    color: #666;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.call-status strong {
+
+    color: #ddd;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   AUCTION LOG
+===================================================== */
 
 .auction-log {
+
+    max-height: 280px;
+
+    overflow-y: auto;
 
     display: flex;
 
     flex-direction: column;
 
     gap: 5px;
-
-    max-height: 230px;
-
-    overflow-y: auto;
-
 }
 
 
 .log-item {
 
-    padding: 9px 11px;
+    min-height: 42px;
+
+    padding:
+        10px
+        13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.05);
+
+    border-radius: 6px;
 
     background:
-        rgba(255,255,255,0.025);
+        rgba(255, 255, 255, 0.025);
 
-    border-left: 2px solid
-        rgba(216,173,75,0.3);
+    color: #999;
 
-    color:
-        rgba(255,255,255,0.45);
+    font-size: 11px;
+}
 
-    font-size: 9px;
 
+.log-icon {
+
+    width: 25px;
+
+    text-align: center;
 }
 
 
 .log-item strong {
 
-    color:
-        rgba(255,255,255,0.8);
-
+    color: #ddd;
 }
 
 
-/* =========================
-   SOLD
-========================= */
-
-.sold-reveal {
-
-    padding: 28px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(216,173,75,0.12),
-            rgba(255,255,255,0.025)
-        );
-
-    border: 1px solid
-        rgba(216,173,75,0.3);
-
-    border-radius: 14px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.sold-icon {
-
-    font-size: 42px;
-
-    margin-bottom: 8px;
-
-}
-
-
-.sold-reveal h2 {
-
-    color: #f3d487;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    margin-bottom: 16px;
-
-}
-
-
-.reveal-box {
-
-    padding: 17px;
-
-    background:
-        rgba(0,0,0,0.25);
-
-    border-radius: 9px;
-
-}
-
-
-.reveal-box span {
-
-    display: block;
-
-    color:
-        rgba(255,255,255,0.3);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 7px;
-
-}
-
-
-.reveal-box strong {
-
-    color: #f3d487;
-
-    font-size: 31px;
-
-}
-
-
-#soldProfit {
-
-    margin-top: 11px;
-
-    color:
-        rgba(255,255,255,0.5);
-
-    font-size: 10px;
-
-}
-
-
-/* =========================
+/* =====================================================
    RESULTS
-========================= */
+===================================================== */
 
 .results-card {
 
-    padding: 30px 22px;
-
-    text-align: center;
+    padding:
+        35px;
 
     background:
         linear-gradient(
-            135deg,
-            rgba(216,173,75,0.09),
-            rgba(255,255,255,0.025)
+            145deg,
+            #292929,
+            #171717
         );
 
-    border: 1px solid
-        rgba(216,173,75,0.2);
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.1);
 
-    border-radius: 15px;
+    border-radius: 17px;
 
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+.results-hero {
+
+    padding:
+        20px
+        0
+        35px;
+
+    text-align: center;
+
+    border-bottom:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
 }
 
 
 .results-icon {
 
-    font-size: 55px;
-
     margin-bottom: 10px;
 
+    font-size: 45px;
 }
 
 
-.results-card h1 {
+.results-hero h1 {
 
-    color: #f3d487;
+    margin:
+        4px
+        0;
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: 30px;
-
-    font-weight: 500;
-
-    letter-spacing: 3px;
-
+    font-size: 42px;
 }
 
 
 .results-subtitle {
 
-    color:
-        rgba(255,255,255,0.35);
+    color: #777;
 
-    font-size: 10px;
-
-    margin-top: 8px;
-
+    font-size: 12px;
 }
 
 
-.my-result {
+/* =====================================================
+   RESULT SUMMARY
+===================================================== */
 
-    margin: 25px 0;
+.results-summary {
 
-    padding: 20px;
-
-    background:
-        rgba(0,0,0,0.25);
-
-    border: 1px solid
-        rgba(216,173,75,0.15);
-
-    border-radius: 10px;
-
-}
-
-
-.my-result .result-cash {
-
-    color:
-        rgba(255,255,255,0.4);
-
-    font-size: 9px;
-
-}
-
-
-.my-result .result-cp {
-
-    display: block;
-
-    color: #f3d487;
-
-    font-size: 30px;
-
-    font-weight: bold;
-
-    margin: 7px 0;
-
-}
-
-
-.my-result .result-profit {
-
-    font-size: 11px;
-
-}
-
-
-.profit {
-
-    color: #83d99b;
-
-}
-
-
-.loss {
-
-    color: #ff8585;
-
-}
-
-
-.results-heading {
-
-    margin-top: 22px;
-
-    text-align: left;
-
-}
-
-
-.podium {
+    margin:
+        25px
+        0;
 
     display: grid;
 
     grid-template-columns:
         repeat(3, 1fr);
 
+    gap: 10px;
+}
+
+
+.summary-box {
+
+    padding:
+        15px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    text-align: center;
+}
+
+
+.summary-box span {
+
+    display: block;
+
+    color: #666;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.summary-box strong {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #ddd;
+
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   RESULT SECTIONS
+===================================================== */
+
+.result-section {
+
+    margin-top: 25px;
+}
+
+
+.result-section-title {
+
+    margin-bottom: 13px;
+
+    display: flex;
+
+    align-items: center;
+
     gap: 8px;
+}
 
-    align-items: end;
 
+.result-section-title span {
+
+    font-size: 18px;
+}
+
+
+.result-section-title h2 {
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   PODIUM
+===================================================== */
+
+.podium {
+
+    min-height: 180px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    padding:
+        20px
+        10px;
 }
 
 
 .podium-player {
 
-    padding: 16px 8px;
+    width: 31%;
 
-    background:
-        rgba(255,255,255,0.035);
+    min-height: 115px;
 
-    border: 1px solid
-        rgba(255,255,255,0.07);
-
-    border-radius: 8px;
-
-}
-
-
-.podium-player.first {
-
-    padding-top: 25px;
-
-    border-color:
-        rgba(216,173,75,0.4);
-
-}
-
-
-.podium-medal {
-
-    font-size: 25px;
-
-    margin-bottom: 7px;
-
-}
-
-
-.podium-name {
-
-    color:
-        rgba(255,255,255,0.75);
-
-    font-size: 9px;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-}
-
-
-.podium-profit {
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    margin-top: 6px;
-
-}
-
-
-.final-leaderboard {
+    padding:
+        15px
+        10px;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 5px;
+    align-items: center;
 
-    margin-bottom: 20px;
+    justify-content: center;
 
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 8px 8px 3px 3px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    text-align: center;
 }
 
 
-.final-player {
+.podium-player.first {
 
-    display: grid;
+    min-height: 160px;
 
-    grid-template-columns: 42px 1fr auto;
+    background:
+        rgba(255, 255, 255, 0.075);
+}
+
+
+.podium-player.second {
+
+    min-height: 135px;
+}
+
+
+.position {
+
+    margin-bottom: 5px;
+
+    font-size: 23px;
+}
+
+
+.result-name {
+
+    color: #ddd;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.result-profit {
+
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+.profit {
+
+    color: #d7d7d7;
+}
+
+
+.loss {
+
+    color: #888;
+}
+
+
+/* =====================================================
+   RESULT LIST
+===================================================== */
+
+.result-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.result-item {
+
+    min-height: 43px;
+
+    padding:
+        10px
+        14px;
+
+    display: flex;
 
     align-items: center;
 
-    gap: 8px;
+    justify-content: space-between;
 
-    padding: 12px;
-
-    background:
-        rgba(255,255,255,0.035);
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.06);
 
     border-radius: 6px;
 
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    color: #aaa;
+
+    font-size: 11px;
 }
 
 
-.final-rank {
+.result-item strong {
 
-    color: #d8ad4b;
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   RESULTS NOTE
+===================================================== */
+
+.results-note {
+
+    margin-top: 28px;
+
+    padding:
+        15px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    border:
+        1px
+        solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    color: #777;
 
     font-size: 10px;
-
-    font-weight: bold;
-
 }
 
 
-.final-name {
+.results-note span {
 
-    text-align: left;
-
-    color:
-        rgba(255,255,255,0.75);
-
-    font-size: 10px;
-
+    font-size: 16px;
 }
 
 
-.final-score {
+.results-note p {
 
-    font-size: 10px;
-
-    font-weight: bold;
-
+    line-height: 1.6;
 }
 
+
+/* =====================================================
+   PRIMARY BUTTON
+===================================================== */
 
 .primary-button {
 
     width: 100%;
 
-    padding: 14px;
+    min-height: 55px;
 
-    background:
-        rgba(216,173,75,0.12);
+    margin-top: 25px;
 
-    border: 1px solid #d8ad4b;
-
-    color: #f3d487;
+    border:
+        none;
 
     border-radius: 7px;
 
-    font-size: 10px;
+    background:
+        #e5e3dc;
 
-    font-weight: bold;
+    color: #111;
 
-    letter-spacing: 2px;
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
 
     cursor: pointer;
 
+    transition:
+        0.2s ease;
 }
 
 
 .primary-button:hover {
 
     background:
-        rgba(216,173,75,0.2);
+        white;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.auction-log::-webkit-scrollbar {
+
+    width: 5px;
+}
+
+
+.auction-log::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+}
+
+
+.auction-log::-webkit-scrollbar-thumb {
+
+    background:
+        #444;
+
+    border-radius: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .player-hud {
+
+        grid-template-columns:
+            1fr
+            1fr;
+
+    }
+
+
+    .hud-player,
+    .hud-stat {
+
+        border-bottom:
+            1px
+            solid
+            rgba(255, 255, 255, 0.07);
+
+    }
+
+
+    .hud-stat:nth-child(2) {
+
+        border-right: none;
+
+    }
+
+
+    .auction-call-card {
+
+        grid-template-columns:
+            50px
+            1fr;
+
+    }
+
+
+    .call-status {
+
+        grid-column:
+            2;
+
+        padding:
+            8px
+            0
+            0;
+
+        border-left: none;
+
+        text-align: left;
+    }
 
 }
 
 
-/* =========================
-   MOBILE
-========================= */
-
 @media (max-width: 650px) {
 
-    header {
+    .top-header {
+
+        padding:
+            13px
+            16px;
+
+    }
+
+
+    .brand-sub {
+
+        display: none;
+
+    }
+
+
+    .room-display {
+
+        display: none;
+
+    }
+
+
+    .auction-container {
+
+        width:
+            calc(100% - 22px);
+
+        margin-top: 15px;
+
+    }
+
+
+    .player-hud {
 
         grid-template-columns:
-            1fr auto;
-
-        gap: 10px;
-
-    }
-
-
-    .room-info {
-
-        grid-column: 2;
-
-        grid-row: 1;
+            1fr
+            1fr;
 
     }
 
 
-    .brand {
+    .hud-player {
 
-        font-size: 11px;
+        grid-column:
+            1 / -1;
 
-        letter-spacing: 2px;
-
-    }
-
-
-    .back-button {
-
-        grid-column: 1 / -1;
-
-        grid-row: 2;
-
-        justify-self: stretch;
+        border-right: none;
 
     }
 
 
-    .hero h1 {
+    .storage-visual {
 
-        font-size: 27px;
-
-        letter-spacing: 2px;
+        min-height: 245px;
 
     }
 
 
-    .wallet-card {
+    .storage-background {
+
+        height: 180px;
+
+    }
+
+
+    .mystery-item {
+
+        width: 55px;
+
+        min-height: 55px;
+
+        font-size: 17px;
+
+    }
+
+
+    .mystery-item span {
+
+        font-size: 5px;
+
+    }
+
+
+    .value-grid {
 
         grid-template-columns:
-            1fr 1fr;
+            1fr;
 
     }
 
 
-    .storage-items {
+    .bid-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .bidder-info {
+
+        width: 100%;
+
+        padding:
+            10px
+            0
+            0;
+
+        border-left: none;
+
+        border-top:
+            1px
+            solid
+            rgba(255, 255, 255, 0.08);
+
+    }
+
+
+    .results-card {
+
+        padding:
+            22px
+            15px;
+
+    }
+
+
+    .results-hero h1 {
+
+        font-size: 31px;
+
+    }
+
+
+    .results-summary {
 
         grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
-    .estimate-card,
-    .bid-card {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .bid-button {
-
-        grid-column: auto;
-
-    }
-
-
-    .bid-status {
-
-        grid-column: auto;
+            1fr;
 
     }
 
 
     .podium {
 
-        grid-template-columns: 1fr;
+        align-items: center;
+
+        flex-direction: column;
 
     }
 
 
-    .podium-player.first {
+    .podium-player,
+    .podium-player.first,
+    .podium-player.second {
 
-        order: -1;
+        width: 100%;
+
+        min-height: 90px;
 
     }
 
 }
 
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
 
-    main {
+    .status-top {
 
-        width: 94%;
+        align-items: flex-start;
 
-    }
+        flex-direction: column;
 
-
-    .storage-card,
-    .bid-card,
-    .players-card,
-    .log-card {
-
-        padding: 15px;
+        gap: 10px;
 
     }
 
 
-    .wallet-item {
+    .storage-header {
 
-        padding: 11px;
+        padding:
+            20px;
 
     }
 
 
-    .wallet-item strong {
+    .storage-info {
 
-        font-size: 12px;
+        padding:
+            18px;
+
+    }
+
+
+    .storage-visual {
+
+        padding:
+            15px;
+
+    }
+
+
+    .mystery-items {
+
+        gap: 3px;
+
+    }
+
+
+    .mystery-item {
+
+        width: 45px;
+
+        min-height: 50px;
+
+        padding: 3px;
+
+    }
+
+
+    .auction-call-card {
+
+        padding:
+            15px;
 
     }
 
