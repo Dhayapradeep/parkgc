@@ -1408,9 +1408,7 @@ function handleHostAuction() {
         !currentUser ||
         !currentRoom
     ) {
-
         return;
-
     }
 
 
@@ -1440,6 +1438,35 @@ function handleHostAuction() {
     }
 
 
+    /*
+        IMPORTANT:
+
+        Initialize the auction BEFORE trying
+        to get the current storage.
+
+        The previous version checked for the
+        storage first. Since storages did not
+        exist yet, the function returned and
+        initializeAuction() was never called.
+    */
+
+    if (
+        currentRoom.status ===
+        "starting" ||
+        (
+            currentRoom.status ===
+            "waiting" &&
+            !currentRoom.auctionInitialized
+        )
+    ) {
+
+        initializeAuction();
+
+        return;
+
+    }
+
+
     const storage =
         getCurrentStorage();
 
@@ -1457,42 +1484,19 @@ function handleHostAuction() {
 
 
     /*
-        If the room has just started,
-        initialize the first storage.
+        NORMAL BIDDING
+
+        Nothing happens automatically until
+        somebody has actually placed a bid.
+
+        Once a bid exists, the auctioneer waits
+        3 seconds before GOING ONCE.
     */
-
-    if (
-        currentRoom.status ===
-        "starting"
-        ||
-        currentRoom.status ===
-        "waiting"
-    ) {
-
-        initializeAuction();
-
-        return;
-
-    }
-
 
     if (
         state ===
         "bidding"
     ) {
-
-        clearHostTimer();
-
-        /*
-            We intentionally DO NOT automatically
-            start the call immediately.
-
-            The auctioneer waits 3 seconds after
-            the latest bid before saying "going once".
-
-            This gives players a reasonable amount
-            of time to react.
-        */
 
         scheduleGoingOnce();
 
@@ -1500,6 +1504,10 @@ function handleHostAuction() {
 
     }
 
+
+    /*
+        GOING ONCE
+    */
 
     if (
         state ===
@@ -1513,6 +1521,10 @@ function handleHostAuction() {
     }
 
 
+    /*
+        GOING TWICE
+    */
+
     if (
         state ===
         "going_twice"
@@ -1524,6 +1536,13 @@ function handleHostAuction() {
 
     }
 
+
+    /*
+        SOLD
+
+        Wait 2 seconds and move to the next
+        storage.
+    */
 
     if (
         state ===
