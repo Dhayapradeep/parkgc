@@ -30,9 +30,16 @@
     </div>
 
 
-    <div class="auction-room">
-        ROOM
-        <strong id="roomCodeDisplay">------</strong>
+    <div class="room-info">
+
+        <span>
+            ROOM
+        </span>
+
+        <strong id="roomCodeDisplay">
+            ------
+        </strong>
+
     </div>
 
 
@@ -50,7 +57,9 @@
 <main>
 
 
-    <!-- HERO -->
+    <!-- =========================
+         HERO
+    ========================== -->
 
     <section class="hero">
 
@@ -67,20 +76,24 @@
         </h1>
 
         <p class="subtitle">
-            Buy the unknown. Risk everything. Make a profit.
+            Bid carefully. Discover what you bought.
         </p>
 
     </section>
 
 
 
-    <!-- PLAYER BAR -->
+    <!-- =========================
+         PLAYER WALLET
+    ========================== -->
 
-    <section class="player-bar">
+    <section class="wallet-card">
 
-        <div class="player-stat">
+        <div class="wallet-item">
 
-            <span>PLAYER</span>
+            <span>
+                PLAYER
+            </span>
 
             <strong id="playerName">
                 Loading...
@@ -89,23 +102,48 @@
         </div>
 
 
-        <div class="player-stat">
+        <div class="wallet-item cash-wallet">
 
-            <span>CHAOS POINTS</span>
+            <span>
+                AVAILABLE CASH
+            </span>
 
-            <strong id="playerPoints">
-                0 CP
+            <strong id="playerCash">
+                1,000
             </strong>
+
+            <small>
+                CASH
+            </small>
 
         </div>
 
 
-        <div class="player-stat">
+        <div class="wallet-item">
 
-            <span>STORAGE</span>
+            <span>
+                CHAOS POINTS
+            </span>
+
+            <strong id="playerPoints">
+                0
+            </strong>
+
+            <small>
+                CP
+            </small>
+
+        </div>
+
+
+        <div class="wallet-item">
+
+            <span>
+                STORAGE
+            </span>
 
             <strong id="roundDisplay">
-                1 / 10
+                1 / 5
             </strong>
 
         </div>
@@ -114,109 +152,147 @@
 
 
 
-    <!-- AUCTION STATUS -->
+    <!-- =========================
+         AUCTION CALL
+    ========================== -->
 
     <section
-        class="auction-status-card"
-        id="auctionStatusCard"
+        class="auction-call-card"
+        id="auctionCallCard"
     >
 
-        <div class="round-label">
-            STORAGE UNIT
-            <span id="storageNumber">1</span>
-            / 10
+        <div class="unit-progress">
+
+            <span>
+                STORAGE UNIT
+            </span>
+
+            <strong id="storageNumber">
+                1
+            </strong>
+
+            <span>
+                / 5
+            </span>
+
         </div>
 
 
         <div
             id="auctionStatus"
-            class="auction-call"
+            class="auction-status"
         >
             PREPARING AUCTION...
         </div>
 
 
         <p id="auctionMessage">
-            Get ready for the first unit.
+            The auctioneer is preparing the next storage unit.
         </p>
+
+
+        <div
+            id="callProgress"
+            class="call-progress hidden"
+        >
+
+            <div
+                id="callText"
+                class="call-text"
+            >
+                GOING ONCE
+            </div>
+
+            <div class="call-bars">
+
+                <span id="callBar1"></span>
+                <span id="callBar2"></span>
+                <span id="callBar3"></span>
+
+            </div>
+
+        </div>
 
     </section>
 
 
 
-    <!-- ITEM DISPLAY -->
+    <!-- =========================
+         STORAGE UNIT
+    ========================== -->
 
     <section
         class="storage-card"
         id="storageCard"
     >
 
-        <div
-            id="itemVisual"
-            class="item-visual"
-        >
-            ⏳
-        </div>
+        <div class="storage-top">
 
+            <div>
 
-        <div class="storage-info">
+                <p class="storage-label">
+                    STORAGE UNIT
+                </p>
 
-            <p class="storage-label">
-                STORAGE UNIT
-            </p>
-
-
-            <h2 id="storageTitle">
-                UNIT #1
-            </h2>
-
-
-            <h3 id="itemName">
-                Mystery Storage
-            </h3>
-
-
-            <p
-                id="itemDescription"
-                class="item-description"
-            >
-                The contents of this unit are unknown.
-            </p>
-
-
-            <div class="value-grid">
-
-                <div class="value-box">
-
-                    <span>
-                        ESTIMATED VALUE
-                    </span>
-
-                    <strong id="estimatedValue">
-                        ??? CP
-                    </strong>
-
-                </div>
-
-
-                <div class="value-box">
-
-                    <span>
-                        STARTING PRICE
-                    </span>
-
-                    <strong id="basePrice">
-                        ??? CP
-                    </strong>
-
-                </div>
+                <h2 id="storageTitle">
+                    UNIT #1
+                </h2>
 
             </div>
 
 
-            <p class="warning">
-                ⚠️ The estimated value may be completely wrong.
-            </p>
+            <div class="storage-number">
+                #<span id="storageNumberLarge">1</span>
+            </div>
+
+        </div>
+
+
+
+        <!-- VISUAL ITEMS -->
+
+        <div
+            id="storageItems"
+            class="storage-items"
+        ></div>
+
+
+
+        <!-- ESTIMATE -->
+
+        <div class="estimate-card">
+
+            <div>
+
+                <span>
+                    AUCTIONEER'S ESTIMATE
+                </span>
+
+                <strong id="estimatedRange">
+                    UNKNOWN
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    STARTING BID
+                </span>
+
+                <strong id="basePrice">
+                    0 CASH
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="mystery-note">
+
+            🔒 The real CP value is hidden inside the storage.
 
         </div>
 
@@ -224,21 +300,21 @@
 
 
 
-    <!-- CURRENT BID -->
+    <!-- =========================
+         CURRENT BID
+    ========================== -->
 
     <section class="bid-card">
 
-        <div class="current-bid">
+        <div class="bid-main">
 
             <span>
                 CURRENT BID
             </span>
 
-
             <strong id="currentBid">
-                0 CP
+                0 CASH
             </strong>
-
 
             <small id="currentBidder">
                 NO BIDS YET
@@ -247,33 +323,15 @@
         </div>
 
 
-        <div class="bid-controls">
+        <div class="bid-next">
 
-            <button
-                id="bidMinusButton"
-                class="bid-adjust"
-            >
-                −
-            </button>
+            <span>
+                NEXT BID
+            </span>
 
-
-            <div class="bid-increase">
-
-                +
-                <span id="bidIncrement">
-                    10
-                </span>
-                CP
-
-            </div>
-
-
-            <button
-                id="bidPlusButton"
-                class="bid-adjust"
-            >
-                +
-            </button>
+            <strong id="nextBid">
+                0 CASH
+            </strong>
 
         </div>
 
@@ -282,7 +340,7 @@
             id="bidButton"
             class="bid-button"
         >
-            🔨 PLACE BID
+            🔨 BID +10 CASH
         </button>
 
 
@@ -295,7 +353,9 @@
 
 
 
-    <!-- LIVE BIDDERS -->
+    <!-- =========================
+         LIVE BIDDERS
+    ========================== -->
 
     <section class="players-card">
 
@@ -327,7 +387,9 @@
 
 
 
-    <!-- AUCTION LOG -->
+    <!-- =========================
+         AUCTION LOG
+    ========================== -->
 
     <section class="log-card">
 
@@ -355,31 +417,90 @@
 
 
 
-    <!-- RESULTS -->
+    <!-- =========================
+         SOLD REVEAL
+    ========================== -->
 
     <section
-        class="results-card hidden"
+        id="soldReveal"
+        class="sold-reveal hidden"
+    >
+
+        <div class="sold-icon">
+            🎉
+        </div>
+
+        <p class="small-title">
+            SOLD
+        </p>
+
+        <h2 id="soldWinner">
+            PLAYER
+        </h2>
+
+        <div class="reveal-box">
+
+            <span>
+                CONTENT REVEALED
+            </span>
+
+            <strong id="revealedCP">
+                0 CP
+            </strong>
+
+        </div>
+
+        <p id="soldProfit">
+            Profit: +0 CP
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         FINAL RESULTS
+    ========================== -->
+
+    <section
         id="resultsCard"
+        class="results-card hidden"
     >
 
         <div class="results-icon">
             🏆
         </div>
 
-
         <p class="small-title">
             AUCTION COMPLETE
         </p>
-
 
         <h1>
             FINAL RESULTS
         </h1>
 
-
         <p class="results-subtitle">
-            Ten storage units. One final ranking.
+            Five storage units. One final ranking.
         </p>
+
+
+        <!-- MY RESULT -->
+
+        <div
+            id="myResult"
+            class="my-result"
+        ></div>
+
+
+        <!-- PODIUM -->
+
+        <div class="section-heading results-heading">
+
+            <h2>
+                🏆 FINAL RANKING
+            </h2>
+
+        </div>
 
 
         <div
@@ -388,32 +509,21 @@
         ></div>
 
 
-        <div class="result-section">
+        <!-- ALL PLAYERS -->
+
+        <div class="section-heading results-heading">
 
             <h2>
-                OTHER BUYERS
+                ALL PLAYERS
             </h2>
-
-            <div
-                id="otherBuyers"
-                class="result-list"
-            ></div>
 
         </div>
 
 
-        <div class="result-section">
-
-            <h2>
-                NON-BUYERS
-            </h2>
-
-            <div
-                id="nonBuyers"
-                class="result-list"
-            ></div>
-
-        </div>
+        <div
+            id="finalLeaderboard"
+            class="final-leaderboard"
+        ></div>
 
 
         <button
@@ -424,6 +534,7 @@
         </button>
 
     </section>
+
 
 
 </main>
