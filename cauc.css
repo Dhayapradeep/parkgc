@@ -12,7 +12,7 @@ body {
     background:
         radial-gradient(
             circle at 50% 10%,
-            rgba(216,173,75,0.10),
+            rgba(216,173,75,0.12),
             transparent 30%
         ),
         #050505;
@@ -29,15 +29,6 @@ body {
 }
 
 
-button {
-    font-family: inherit;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
 header {
 
     width: 100%;
@@ -46,13 +37,12 @@ header {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
 
+    align-items: center;
+
     border-bottom:
-        1px solid
-        rgba(255,255,255,0.07);
+        1px solid rgba(255,255,255,0.07);
 
 }
 
@@ -77,16 +67,10 @@ header {
 
 .auction-room {
 
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
     color:
         rgba(255,255,255,0.35);
 
-    font-size: 8px;
+    font-size: 9px;
 
     letter-spacing: 2px;
 
@@ -97,9 +81,11 @@ header {
 
     color: #f3d487;
 
-    font-size: 13px;
+    font-size: 12px;
 
     letter-spacing: 3px;
+
+    margin-left: 5px;
 
 }
 
@@ -110,12 +96,11 @@ header {
 
     background: transparent;
 
+    border:
+        1px solid rgba(255,255,255,0.14);
+
     color:
         rgba(255,255,255,0.55);
-
-    border:
-        1px solid
-        rgba(255,255,255,0.15);
 
     border-radius: 5px;
 
@@ -139,31 +124,20 @@ header {
 }
 
 
-/* =========================
-   MAIN
-========================= */
-
 main {
 
-    width:
-        min(780px, 94%);
+    width: min(720px, 92%);
 
-    margin:
-        0 auto;
+    margin: auto;
 
 }
 
-
-/* =========================
-   HERO
-========================= */
 
 .hero {
 
     text-align: center;
 
-    padding:
-        35px 0 25px;
+    padding: 42px 0 25px;
 
 }
 
@@ -187,7 +161,7 @@ main {
 
     letter-spacing: 4px;
 
-    margin-bottom: 9px;
+    margin-bottom: 10px;
 
 }
 
@@ -207,7 +181,7 @@ main {
 
     letter-spacing: 4px;
 
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 
 }
 
@@ -222,25 +196,22 @@ main {
 }
 
 
-/* =========================
-   PLAYER BAR
-========================= */
+/* PLAYER BAR */
 
 .player-bar {
 
     display: grid;
 
     grid-template-columns:
-        1fr 1fr 1fr;
+        repeat(3, 1fr);
 
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 
     background:
         rgba(255,255,255,0.025);
 
     border:
-        1px solid
-        rgba(255,255,255,0.08);
+        1px solid rgba(255,255,255,0.08);
 
     border-radius: 10px;
 
@@ -256,16 +227,13 @@ main {
     text-align: center;
 
     border-right:
-        1px solid
-        rgba(255,255,255,0.07);
+        1px solid rgba(255,255,255,0.06);
 
 }
 
 
 .player-stat:last-child {
-
     border-right: none;
-
 }
 
 
@@ -295,39 +263,27 @@ main {
 }
 
 
-/* =========================
-   AUCTION STATUS
-========================= */
+/* STATUS */
 
 .auction-status-card {
 
-    padding: 20px 22px;
+    padding: 25px;
 
-    margin-bottom: 15px;
+    text-align: center;
 
     background:
         linear-gradient(
-            135deg,
-            rgba(216,173,75,0.09),
+            145deg,
+            rgba(216,173,75,0.08),
             rgba(255,255,255,0.025)
         );
 
     border:
-        1px solid
-        rgba(216,173,75,0.25);
+        1px solid rgba(216,173,75,0.22);
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-}
-
-
-.auctioneer-top {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
+    margin-bottom: 18px;
 
 }
 
@@ -335,13 +291,13 @@ main {
 .round-label {
 
     color:
-        rgba(255,255,255,0.35);
+        rgba(255,255,255,0.3);
 
-    font-size: 8px;
+    font-size: 9px;
 
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 
-    margin-bottom: 6px;
+    margin-bottom: 12px;
 
 }
 
@@ -350,10 +306,12 @@ main {
 
     color: #d8ad4b;
 
+    font-weight: bold;
+
 }
 
 
-.auction-status-card h2 {
+.auction-call {
 
     color: #f3d487;
 
@@ -362,85 +320,65 @@ main {
         "Times New Roman",
         serif;
 
-    font-size: 22px;
-
-    font-weight: normal;
+    font-size: 29px;
 
     letter-spacing: 2px;
 
-}
-
-
-.call-badge {
-
-    padding: 8px 13px;
-
-    color: #d8ad4b;
-
-    border:
-        1px solid
-        rgba(216,173,75,0.3);
-
-    border-radius: 5px;
-
-    font-size: 8px;
-
-    font-weight: bold;
-
-    letter-spacing: 2px;
+    min-height: 38px;
 
 }
 
 
 .auction-message {
 
-    margin-top: 12px;
-
     color:
-        rgba(255,255,255,0.55);
+        rgba(255,255,255,0.4);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 14px;
-
-    font-style: italic;
+    font-size: 11px;
 
 }
 
 
-/* =========================
-   ITEM CARD
-========================= */
+#auctionMessage {
+
+    color:
+        rgba(255,255,255,0.4);
+
+    font-size: 11px;
+
+    margin-top: 7px;
+
+}
+
+
+/* STORAGE */
 
 .storage-card {
 
     display: grid;
 
-    grid-template-columns:
-        190px 1fr;
+    grid-template-columns: 190px 1fr;
 
-    min-height: 250px;
+    gap: 25px;
 
-    margin-bottom: 15px;
+    padding: 24px;
 
     background:
         rgba(255,255,255,0.025);
 
     border:
-        1px solid
-        rgba(255,255,255,0.09);
+        1px solid rgba(255,255,255,0.08);
 
     border-radius: 12px;
 
-    overflow: hidden;
+    margin-bottom: 18px;
 
 }
 
 
-.storage-visual {
+.item-visual {
+
+    min-height: 210px;
 
     display: flex;
 
@@ -451,59 +389,30 @@ main {
     background:
         radial-gradient(
             circle,
-            rgba(216,173,75,0.12),
-            rgba(0,0,0,0.3)
+            rgba(216,173,75,0.15),
+            rgba(255,255,255,0.02)
         );
 
-    border-right:
-        1px solid
-        rgba(255,255,255,0.07);
-
-}
-
-
-.storage-icon {
-
-    width: 120px;
-
-    height: 120px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 65px;
-
-    background:
-        rgba(216,173,75,0.06);
-
     border:
-        1px solid
-        rgba(216,173,75,0.22);
+        1px solid rgba(216,173,75,0.15);
 
-    border-radius: 12px;
+    border-radius: 10px;
 
-}
-
-
-.storage-info {
-
-    padding: 25px;
+    font-size: 75px;
 
 }
 
 
 .storage-label {
 
-    color: #d8ad4b;
+    color:
+        rgba(255,255,255,0.3);
 
     font-size: 8px;
 
     letter-spacing: 3px;
 
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 
 }
 
@@ -517,25 +426,37 @@ main {
         "Times New Roman",
         serif;
 
-    font-size: 27px;
+    font-size: 24px;
 
     font-weight: normal;
 
-    letter-spacing: 2px;
+    margin-bottom: 5px;
 
 }
 
 
-.storage-description {
-
-    margin-top: 10px;
+.storage-info h3 {
 
     color:
-        rgba(255,255,255,0.43);
+        rgba(255,255,255,0.82);
+
+    font-size: 15px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.item-description {
+
+    color:
+        rgba(255,255,255,0.42);
 
     font-size: 11px;
 
     line-height: 1.6;
+
+    margin-bottom: 18px;
 
 }
 
@@ -547,9 +468,7 @@ main {
     grid-template-columns:
         1fr 1fr;
 
-    gap: 10px;
-
-    margin-top: 22px;
+    gap: 8px;
 
 }
 
@@ -561,11 +480,7 @@ main {
     background:
         rgba(255,255,255,0.035);
 
-    border:
-        1px solid
-        rgba(255,255,255,0.07);
-
-    border-radius: 6px;
+    border-radius: 7px;
 
 }
 
@@ -575,59 +490,55 @@ main {
     display: block;
 
     color:
-        rgba(255,255,255,0.3);
+        rgba(255,255,255,0.28);
 
     font-size: 7px;
 
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 
 }
 
 
 .value-box strong {
 
-    color:
-        rgba(255,255,255,0.82);
+    color: #d8ad4b;
 
-    font-size: 15px;
+    font-size: 14px;
 
 }
 
 
 .warning {
 
-    margin-top: 12px;
+    margin-top: 14px;
 
     color:
-        rgba(255,150,100,0.55);
+        rgba(255,190,90,0.55);
 
     font-size: 9px;
 
 }
 
 
-/* =========================
-   BID CARD
-========================= */
+/* BID */
 
 .bid-card {
 
-    padding: 22px;
+    padding: 24px;
 
-    margin-bottom: 15px;
+    text-align: center;
 
     background:
         rgba(255,255,255,0.025);
 
     border:
-        1px solid
-        rgba(255,255,255,0.08);
+        1px solid rgba(255,255,255,0.08);
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    text-align: center;
+    margin-bottom: 18px;
 
 }
 
@@ -641,7 +552,7 @@ main {
 
     font-size: 8px;
 
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 
 }
 
@@ -650,8 +561,6 @@ main {
 
     display: block;
 
-    margin-top: 5px;
-
     color: #f3d487;
 
     font-family:
@@ -659,19 +568,17 @@ main {
         "Times New Roman",
         serif;
 
-    font-size: 34px;
+    font-size: 35px;
+
+    margin: 7px 0;
 
 }
 
 
 .current-bid small {
 
-    display: block;
-
-    margin-top: 4px;
-
     color:
-        rgba(255,255,255,0.35);
+        rgba(255,255,255,0.4);
 
     font-size: 9px;
 
@@ -688,9 +595,9 @@ main {
 
     justify-content: center;
 
-    gap: 10px;
+    gap: 20px;
 
-    margin: 18px 0;
+    margin: 20px 0;
 
 }
 
@@ -701,17 +608,15 @@ main {
 
     height: 38px;
 
-    background:
-        rgba(255,255,255,0.04);
+    background: transparent;
 
     border:
-        1px solid
-        rgba(255,255,255,0.12);
+        1px solid rgba(255,255,255,0.15);
 
     color:
-        rgba(255,255,255,0.65);
+        rgba(255,255,255,0.7);
 
-    border-radius: 5px;
+    border-radius: 50%;
 
     font-size: 20px;
 
@@ -731,12 +636,10 @@ main {
 
 .bid-increase {
 
-    min-width: 100px;
-
     color:
         rgba(255,255,255,0.65);
 
-    font-size: 11px;
+    font-size: 12px;
 
     letter-spacing: 1px;
 
@@ -747,7 +650,7 @@ main {
 
     color: #d8ad4b;
 
-    font-weight: bold;
+    font-size: 18px;
 
 }
 
@@ -762,12 +665,11 @@ main {
         rgba(216,173,75,0.12);
 
     border:
-        1px solid
-        #d8ad4b;
+        1px solid #d8ad4b;
 
     color: #f3d487;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     font-size: 10px;
 
@@ -780,17 +682,17 @@ main {
 }
 
 
-.bid-button:hover {
+.bid-button:hover:not(:disabled) {
 
     background:
-        rgba(216,173,75,0.2);
+        rgba(216,173,75,0.22);
 
 }
 
 
 .bid-button:disabled {
 
-    opacity: 0.35;
+    opacity: 0.3;
 
     cursor: not-allowed;
 
@@ -803,33 +705,29 @@ main {
 
     margin-top: 10px;
 
-    color:
-        rgba(255,255,255,0.5);
+    color: #d8ad4b;
 
     font-size: 10px;
 
 }
 
 
-/* =========================
-   GENERIC CARDS
-========================= */
+/* SECTIONS */
 
 .players-card,
 .log-card {
 
-    padding: 20px;
-
-    margin-bottom: 15px;
+    padding: 22px;
 
     background:
         rgba(255,255,255,0.025);
 
     border:
-        1px solid
-        rgba(255,255,255,0.08);
+        1px solid rgba(255,255,255,0.08);
 
-    border-radius: 10px;
+    border-radius: 12px;
+
+    margin-bottom: 18px;
 
 }
 
@@ -838,11 +736,11 @@ main {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
 
-    margin-bottom: 12px;
+    align-items: center;
+
+    margin-bottom: 13px;
 
 }
 
@@ -863,16 +761,13 @@ main {
 
     color: #d8ad4b;
 
-    font-size: 10px;
+    font-size: 11px;
 
 }
 
 
-/* =========================
-   BIDDERS
-========================= */
-
-.bidders-list {
+.bidders-list,
+.auction-log {
 
     display: flex;
 
@@ -887,8 +782,6 @@ main {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
 
     padding: 11px 13px;
@@ -898,6 +791,8 @@ main {
 
     border-radius: 6px;
 
+    font-size: 10px;
+
 }
 
 
@@ -906,8 +801,6 @@ main {
     color:
         rgba(255,255,255,0.7);
 
-    font-size: 10px;
-
 }
 
 
@@ -915,61 +808,31 @@ main {
 
     color: #d8ad4b;
 
-    font-size: 10px;
-
     font-weight: bold;
 
 }
 
 
-.empty-bidders {
+.empty-bidders,
+.log-item {
 
-    padding: 18px;
-
-    text-align: center;
+    padding: 12px;
 
     color:
-        rgba(255,255,255,0.25);
+        rgba(255,255,255,0.32);
 
     font-size: 10px;
-
-}
-
-
-/* =========================
-   LOG
-========================= */
-
-.auction-log {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-    max-height: 220px;
-
-    overflow-y: auto;
 
 }
 
 
 .log-item {
 
-    padding: 9px 11px;
+    border-left:
+        2px solid rgba(216,173,75,0.25);
 
     background:
-        rgba(255,255,255,0.025);
-
-    border-left:
-        2px solid
-        rgba(216,173,75,0.35);
-
-    color:
-        rgba(255,255,255,0.45);
-
-    font-size: 9px;
+        rgba(255,255,255,0.02);
 
 }
 
@@ -977,14 +840,12 @@ main {
 .log-item strong {
 
     color:
-        rgba(255,255,255,0.75);
+        rgba(255,255,255,0.8);
 
 }
 
 
-/* =========================
-   RESULTS
-========================= */
+/* RESULTS */
 
 .hidden {
 
@@ -997,25 +858,22 @@ main {
 
     padding: 35px 25px;
 
-    margin-top: 20px;
+    text-align: center;
 
     background:
         rgba(255,255,255,0.025);
 
     border:
-        1px solid
-        rgba(216,173,75,0.25);
+        1px solid rgba(216,173,75,0.2);
 
-    border-radius: 12px;
-
-    text-align: center;
+    border-radius: 14px;
 
 }
 
 
 .results-icon {
 
-    font-size: 55px;
+    font-size: 60px;
 
     margin-bottom: 10px;
 
@@ -1043,18 +901,14 @@ main {
 .results-subtitle {
 
     color:
-        rgba(255,255,255,0.35);
+        rgba(255,255,255,0.4);
 
-    font-size: 10px;
+    font-size: 11px;
 
-    margin-top: 7px;
+    margin-top: 8px;
 
 }
 
-
-/* =========================
-   PODIUM
-========================= */
 
 .podium {
 
@@ -1064,7 +918,7 @@ main {
 
     justify-content: center;
 
-    gap: 10px;
+    gap: 8px;
 
     margin: 35px 0;
 
@@ -1073,18 +927,15 @@ main {
 
 .podium-player {
 
-    flex: 1;
+    width: 30%;
 
-    max-width: 180px;
-
-    padding: 20px 10px;
+    padding: 18px 8px;
 
     background:
-        rgba(255,255,255,0.035);
+        rgba(255,255,255,0.04);
 
     border:
-        1px solid
-        rgba(255,255,255,0.08);
+        1px solid rgba(255,255,255,0.08);
 
     border-radius: 8px;
 
@@ -1093,33 +944,30 @@ main {
 
 .podium-player.first {
 
-    min-height: 170px;
-
-    border-color:
-        rgba(216,173,75,0.45);
+    min-height: 160px;
 
 }
 
 
 .podium-player.second {
 
-    min-height: 140px;
+    min-height: 130px;
 
 }
 
 
 .podium-player.third {
 
-    min-height: 120px;
+    min-height: 110px;
 
 }
 
 
 .position {
 
-    font-size: 25px;
+    font-size: 27px;
 
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 
 }
 
@@ -1133,14 +981,16 @@ main {
 
     font-weight: bold;
 
+    overflow-wrap: anywhere;
+
 }
 
 
 .result-profit {
 
-    margin-top: 8px;
+    margin-top: 7px;
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: bold;
 
@@ -1148,42 +998,34 @@ main {
 
 
 .profit {
-
-    color: #8fd18f;
-
+    color: #75c98a;
 }
 
 
 .loss {
-
-    color: #df7777;
-
+    color: #d66f6f;
 }
 
 
-/* =========================
-   RESULT SECTIONS
-========================= */
-
 .result-section {
 
-    margin-top: 25px;
-
     text-align: left;
+
+    margin-top: 25px;
 
 }
 
 
 .result-section h2 {
 
-    margin-bottom: 8px;
-
     color:
-        rgba(255,255,255,0.35);
+        rgba(255,255,255,0.5);
 
-    font-size: 9px;
+    font-size: 10px;
 
     letter-spacing: 2px;
+
+    margin-bottom: 8px;
 
 }
 
@@ -1194,7 +1036,7 @@ main {
 
     flex-direction: column;
 
-    gap: 5px;
+    gap: 6px;
 
 }
 
@@ -1203,8 +1045,6 @@ main {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
 
     padding: 11px;
@@ -1212,25 +1052,21 @@ main {
     background:
         rgba(255,255,255,0.035);
 
-    border-radius: 5px;
+    border-radius: 6px;
 
     color:
-        rgba(255,255,255,0.6);
+        rgba(255,255,255,0.65);
 
     font-size: 10px;
 
 }
 
 
-/* =========================
-   PRIMARY BUTTON
-========================= */
-
 .primary-button {
 
     width: 100%;
 
-    margin-top: 25px;
+    margin-top: 28px;
 
     padding: 14px;
 
@@ -1238,12 +1074,11 @@ main {
         rgba(216,173,75,0.12);
 
     border:
-        1px solid
-        #d8ad4b;
+        1px solid #d8ad4b;
 
     color: #f3d487;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     font-size: 10px;
 
@@ -1256,143 +1091,84 @@ main {
 }
 
 
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 650px) {
+@media (max-width: 600px) {
 
     header {
-
         padding: 16px 4%;
-
     }
 
 
     .brand {
-
         font-size: 11px;
-
         letter-spacing: 2px;
-
     }
 
 
     .auction-room {
-
         display: none;
+    }
 
+
+    .back-button {
+        font-size: 7px;
+        padding: 7px 9px;
     }
 
 
     main {
-
         width: 92%;
-
     }
 
 
     .hero {
-
-        padding-top: 28px;
-
+        padding-top: 30px;
     }
 
 
     .hero h1 {
-
-        font-size: 28px;
-
+        font-size: 27px;
     }
 
 
     .player-bar {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
     .player-stat {
-
         border-right: none;
-
         border-bottom:
-            1px solid
-            rgba(255,255,255,0.07);
-
+            1px solid rgba(255,255,255,0.06);
     }
 
 
     .player-stat:last-child {
-
         border-bottom: none;
-
     }
 
 
     .storage-card {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
-    .storage-visual {
-
-        min-height: 180px;
-
-        border-right: none;
-
-        border-bottom:
-            1px solid
-            rgba(255,255,255,0.07);
-
+    .item-visual {
+        min-height: 160px;
     }
 
 
-    .storage-info {
-
-        padding: 20px;
-
-    }
-
-
-    .storage-info h2 {
-
-        font-size: 22px;
-
+    .auction-call {
+        font-size: 24px;
     }
 
 
     .value-grid {
-
-        grid-template-columns:
-            1fr;
-
+        grid-template-columns: 1fr;
     }
 
 
-    .podium {
-
-        align-items: stretch;
-
-        flex-direction: column;
-
-    }
-
-
-    .podium-player,
-    .podium-player.first,
-    .podium-player.second,
-    .podium-player.third {
-
-        max-width: none;
-
-        min-height: auto;
-
+    .podium-player {
+        padding: 12px 5px;
     }
 
 }
