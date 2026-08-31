@@ -1,0 +1,535 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(216,173,75,0.08),
+            transparent 35%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    padding-bottom: 50px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid
+        rgba(216,173,75,0.2);
+}
+
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.back {
+    padding: 8px 13px;
+    background: transparent;
+    color:
+        rgba(255, 255, 255, 0.6);
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+
+.back:hover {
+    color: #d8ad4b;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: min(800px, 92%);
+
+    margin: auto;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.page-heading {
+    text-align: center;
+
+    padding: 40px 0 30px;
+}
+
+
+.icon {
+    display: block;
+
+    font-size: 34px;
+
+    margin-bottom: 10px;
+}
+
+
+.page-heading p {
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 7px;
+}
+
+
+.page-heading h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 31px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+}
+
+
+.line {
+    display: block;
+
+    width: 60px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 13px auto;
+}
+
+
+.page-heading small {
+    color: #555;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   MEMBER COUNT
+========================= */
+
+.member-count {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 15px 18px;
+
+    margin-bottom: 12px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border: 1px solid
+        rgba(255,255,255,0.07);
+
+    border-radius: 7px;
+}
+
+
+.member-count span {
+    color: #666;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+}
+
+
+.member-count strong {
+    color: #f3d487;
+
+    font-family: Georgia, serif;
+
+    font-size: 22px;
+
+    font-weight: 500;
+}
+
+
+/* =========================
+   MEMBERS LIST
+========================= */
+
+.members-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+/* =========================
+   MEMBER CARD
+========================= */
+
+.member-card {
+    padding: 17px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+    transition: 0.2s;
+}
+
+
+.member-card:hover {
+    border-color:
+        rgba(216,173,75,0.25);
+}
+
+
+/* =========================
+   TOP
+========================= */
+
+.member-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.member-number {
+    color: #555;
+
+    font-size: 10px;
+
+    min-width: 25px;
+}
+
+
+.member-info {
+    flex: 1;
+}
+
+
+.member-name {
+    color: #eee;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+}
+
+
+.member-role {
+    color: #666;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   BADGE
+========================= */
+
+.member-badge {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    text-align: right;
+}
+
+
+/* =========================
+   ACTIVE STAR
+========================= */
+
+.active-star {
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: transparent;
+
+    border: 1px solid
+        rgba(255,255,255,0.1);
+
+    border-radius: 50%;
+
+    color: #555;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.active-star:hover {
+    color: #d8ad4b;
+
+    border-color:
+        rgba(216,173,75,0.4);
+
+    transform: scale(1.05);
+}
+
+
+.active-star.active {
+    color: #f3d487;
+
+    border-color:
+        rgba(216,173,75,0.5);
+
+    background:
+        rgba(216,173,75,0.08);
+
+    box-shadow:
+        0 0 15px
+        rgba(216,173,75,0.15);
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.member-controls {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid
+        rgba(255,255,255,0.05);
+}
+
+
+.badge-select {
+    flex: 1;
+
+    padding: 9px;
+
+    background: #0b0b0b;
+
+    color: #ddd;
+
+    border: 1px solid
+        rgba(216,173,75,0.25);
+
+    border-radius: 4px;
+
+    outline: none;
+
+    font-size: 10px;
+}
+
+
+.save-badge-button,
+.kick-button {
+    padding: 9px 13px;
+
+    background: transparent;
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+
+.save-badge-button {
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216,173,75,0.4);
+}
+
+
+.save-badge-button:hover {
+    background:
+        rgba(216,173,75,0.08);
+}
+
+
+.kick-button {
+    color: #c96a6a;
+
+    border: 1px solid
+        rgba(201,106,106,0.35);
+}
+
+
+.kick-button:hover {
+    background:
+        rgba(201,106,106,0.08);
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.member-action-message {
+    min-height: 15px;
+
+    margin-top: 7px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading {
+    padding: 40px;
+
+    text-align: center;
+
+    color: #555;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 16px;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.3px;
+    }
+
+
+    main {
+        width: 92%;
+    }
+
+
+    .member-top {
+        align-items: flex-start;
+    }
+
+
+    .member-controls {
+        flex-direction: column;
+    }
+
+
+    .badge-select,
+    .save-badge-button,
+    .kick-button {
+        width: 100%;
+    }
+
+
+    .active-star {
+        width: 35px;
+
+        height: 35px;
+
+        font-size: 18px;
+    }
+
+}

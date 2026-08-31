@@ -1,0 +1,915 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(216, 173, 75, 0.08),
+            transparent 35%
+        ),
+        #050505;
+
+    color: #fff;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    height: 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    border-bottom: 1px solid
+        rgba(216, 173, 75, 0.2);
+}
+
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.back-button {
+    padding: 8px 13px;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.6);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.back-button:hover {
+    color: #d8ad4b;
+
+    border-color:
+        rgba(216, 173, 75, 0.35);
+}
+
+
+.user-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #777;
+
+    font-size: 10px;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: 100%;
+
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 45px 20px 70px;
+}
+
+
+/* =========================
+   HUB HEADER
+========================= */
+
+.hub-header {
+    text-align: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    margin-bottom: 35px;
+}
+
+
+.hub-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 70px;
+
+    height: 70px;
+
+    margin-bottom: 14px;
+
+    font-size: 34px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 173, 75, 0.12),
+            rgba(255, 255, 255, 0.02)
+        );
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 50%;
+}
+
+
+.small-title {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 8px;
+}
+
+
+.hub-header h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 36px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 10px;
+}
+
+
+.hub-description {
+    color: #666;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    max-width: 500px;
+}
+
+
+.hub-header::after {
+    content: "";
+
+    display: block;
+
+    width: 65px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin-top: 16px;
+}
+
+
+/* =========================
+   HUB FEED
+========================= */
+
+.hub-feed {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* =========================
+   HUB CARD
+========================= */
+
+.hub-card {
+    padding: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.012)
+        );
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 9px;
+
+    transition: 0.2s;
+}
+
+
+.hub-card:hover {
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   CARD TOP
+========================= */
+
+.card-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 14px;
+}
+
+
+.card-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    font-size: 21px;
+
+    background:
+        rgba(216, 173, 75, 0.07);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.18);
+
+    border-radius: 8px;
+}
+
+
+.card-type {
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+}
+
+
+.card-title {
+    color: #eee;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.2px;
+}
+
+
+.card-message {
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   GIFT DROP
+========================= */
+
+.gift-info {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid
+        rgba(216, 173, 75, 0.12);
+}
+
+
+.gift-details {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.gift-reward {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+}
+
+
+.gift-remaining {
+    color: #666;
+
+    font-size: 9px;
+
+    letter-spacing: 0.5px;
+}
+
+
+.claim-button {
+    padding: 10px 16px;
+
+    background:
+        rgba(216, 173, 75, 0.1);
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.4);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.claim-button:hover {
+    background: #d8ad4b;
+
+    color: #050505;
+}
+
+
+.claim-button:disabled {
+    color: #555;
+
+    background: transparent;
+
+    border-color:
+        rgba(255, 255, 255, 0.1);
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   POLL
+========================= */
+
+.poll-options {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+
+.poll-option {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 13px 15px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    color: #aaa;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    text-align: left;
+}
+
+
+.poll-option:hover {
+    color: #eee;
+
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+    background:
+        rgba(216, 173, 75, 0.05);
+}
+
+
+.poll-option.selected {
+    color: #f3d487;
+
+    border-color:
+        rgba(216, 173, 75, 0.6);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+}
+
+
+.poll-option:disabled {
+    cursor: default;
+}
+
+
+.poll-option-text {
+    font-size: 11px;
+}
+
+
+.poll-votes {
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   GC INVITATION
+========================= */
+
+.gc-button {
+    display: inline-block;
+
+    margin-top: 18px;
+
+    padding: 10px 17px;
+
+    background:
+        rgba(216, 173, 75, 0.1);
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.4);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    transition: 0.2s;
+}
+
+
+.gc-button:hover {
+    background: #d8ad4b;
+
+    color: #050505;
+}
+
+
+/* =========================
+   LOADING / EMPTY
+========================= */
+
+.loading-card,
+.empty-card {
+    min-height: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.025),
+            rgba(255, 255, 255, 0.008)
+        );
+
+    border: 1px dashed
+        rgba(216, 173, 75, 0.2);
+
+    border-radius: 9px;
+
+    color: #555;
+
+    font-size: 11px;
+}
+
+
+.loading-icon {
+    font-size: 34px;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.82);
+
+    z-index: 1000;
+}
+
+
+.modal.show {
+    display: flex;
+}
+
+
+.modal-box {
+    width: 100%;
+
+    max-width: 390px;
+
+    position: relative;
+
+    text-align: center;
+
+    padding: 38px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #151515,
+            #090909
+        );
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.3);
+
+    border-radius: 10px;
+}
+
+
+.close-modal {
+    position: absolute;
+
+    top: 12px;
+
+    right: 15px;
+
+    background: transparent;
+
+    color: #666;
+
+    border: none;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.close-modal:hover {
+    color: #d8ad4b;
+}
+
+
+.modal-icon {
+    font-size: 48px;
+
+    margin-bottom: 15px;
+}
+
+
+.modal-box h2 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 22px;
+
+    font-weight: 500;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 10px;
+}
+
+
+.modal-box p {
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+.modal-button {
+    margin-top: 22px;
+
+    padding: 10px 25px;
+
+    background:
+        rgba(216, 173, 75, 0.1);
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.4);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.modal-button:hover {
+    background: #d8ad4b;
+
+    color: #050505;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        height: 60px;
+
+        padding: 0 16px;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.3px;
+    }
+
+
+    .user-info {
+        display: none;
+    }
+
+
+    main {
+        padding: 30px 15px 50px;
+    }
+
+
+    .hub-header {
+        margin-bottom: 27px;
+    }
+
+
+    .hub-icon {
+        width: 60px;
+
+        height: 60px;
+
+        font-size: 29px;
+
+        margin-bottom: 12px;
+    }
+
+
+    .small-title {
+        font-size: 8px;
+
+        letter-spacing: 3px;
+    }
+
+
+    .hub-header h1 {
+        font-size: 29px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .hub-description {
+        font-size: 10px;
+
+        padding: 0 10px;
+    }
+
+
+    .hub-feed {
+        gap: 9px;
+    }
+
+
+    .hub-card {
+        padding: 16px;
+    }
+
+
+    .card-top {
+        gap: 11px;
+
+        margin-bottom: 12px;
+    }
+
+
+    .card-icon {
+        width: 37px;
+
+        height: 37px;
+
+        font-size: 18px;
+    }
+
+
+    .card-type {
+        font-size: 7px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .card-title {
+        font-size: 10px;
+
+        letter-spacing: 1px;
+    }
+
+
+    .card-message {
+        font-size: 10px;
+
+        line-height: 1.6;
+    }
+
+
+    .gift-info {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 13px;
+    }
+
+
+    .gift-reward {
+        font-size: 14px;
+    }
+
+
+    .claim-button {
+        width: 100%;
+    }
+
+
+    .poll-option {
+        padding: 12px;
+    }
+
+
+    .poll-option-text {
+        font-size: 10px;
+    }
+
+
+    .gc-button {
+        width: 100%;
+
+        text-align: center;
+    }
+
+
+    .modal-box {
+        padding: 32px 22px;
+    }
+
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | Abusement Park</title>
+
+    <link
+        rel="stylesheet"
+        href="settings.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="back">
+        ← DASHBOARD
+    </a>
+
+</header>
+
+
+<main>
+
+    <!-- HEADING -->
+
+    <section class="page-heading">
+
+        <span class="settings-icon">
+            ⚙️
+        </span>
+
+        <p>
+            ACCOUNT
+        </p>
+
+        <h1>
+            SETTINGS
+        </h1>
+
+        <span class="line"></span>
+
+        <small>
+            Manage your profile
+        </small>
+
+    </section>
+
+
+    <!-- PROFILE PICTURE -->
+
+    <section class="settings-card">
+
+        <div class="card-heading">
+
+            <span class="card-icon">
+                👤
+            </span>
+
+            <div>
+
+                <h2>
+                    PROFILE PICTURE
+                </h2>
+
+                <p>
+                    Add or remove your profile picture.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-preview">
+
+            <img
+                id="profilePreview"
+                src=""
+                alt="Profile Picture">
+
+            <div
+                id="defaultAvatar"
+                class="default-avatar">
+
+                👤
+
+            </div>
+
+        </div>
+
+
+        <input
+            type="file"
+            id="profileInput"
+            accept="image/*"
+            hidden>
+
+
+        <button
+            id="addProfileButton"
+            class="primary-button">
+
+            ADD PROFILE PICTURE
+
+        </button>
+
+
+        <button
+            id="deleteProfileButton"
+            class="delete-button">
+
+            DELETE PROFILE PICTURE
+
+        </button>
+
+
+        <p
+            id="profileMessage"
+            class="message">
+        </p>
+
+    </section>
+
+
+    <!-- USERNAME -->
+
+    <section class="settings-card">
+
+        <div class="card-heading">
+
+            <span class="card-icon">
+                ✏️
+            </span>
+
+            <div>
+
+                <h2>
+                    CHANGE USERNAME
+                </h2>
+
+                <p>
+                    Choose a new username for your account.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <label for="newUsername">
+            NEW USERNAME
+        </label>
+
+
+        <input
+            type="text"
+            id="newUsername"
+            placeholder="Enter new username"
+            maxlength="20"
+            autocomplete="off">
+
+
+        <button
+            id="changeUsernameButton"
+            class="primary-button">
+
+            CHANGE USERNAME
+
+        </button>
+
+
+        <p
+            id="usernameMessage"
+            class="message">
+        </p>
+
+    </section>
+
+
+    <!-- BACK -->
+
+    <a
+        href="dashboard.html"
+        class="dashboard-link">
+
+        ← BACK TO DASHBOARD
+
+    </a>
+
+</main>
+
+
+<script
+    type="module"
+    src="js/settings.js">
+</script>
+
+</body>
+
+</html>

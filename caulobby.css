@@ -1,0 +1,884 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(216, 173, 75, 0.12),
+            transparent 30%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    padding-bottom: 60px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 22px 5%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    letter-spacing: 3px;
+
+    font-weight: bold;
+
+}
+
+
+.back-button {
+
+    padding: 8px 13px;
+
+    background: transparent;
+
+    color: rgba(255,255,255,0.6);
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.back-button:hover {
+
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width: min(650px, 92%);
+
+    margin: auto;
+
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+    text-align: center;
+
+    padding: 45px 0 25px;
+
+}
+
+
+.auction-icon {
+
+    font-size: 55px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.small-title {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.hero h1 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 40px;
+
+    font-weight: 500;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.subtitle {
+
+    color: rgba(255,255,255,0.4);
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.setup-card,
+.room-card,
+.rules-card {
+
+    padding: 25px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 14px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.setup-card h2,
+.rules-card h2 {
+
+    color: #f3d487;
+
+    font-size: 15px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.setup-card > p {
+
+    color: rgba(255,255,255,0.4);
+
+    font-size: 11px;
+
+    margin-bottom: 22px;
+
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-button,
+.secondary-button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+}
+
+
+.primary-button {
+
+    background:
+        rgba(216,173,75,0.12);
+
+    border:
+        1px solid #d8ad4b;
+
+    color: #f3d487;
+
+}
+
+
+.primary-button:hover {
+
+    background:
+        rgba(216,173,75,0.2);
+
+}
+
+
+.primary-button:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+}
+
+
+.secondary-button {
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+
+    color: rgba(255,255,255,0.75);
+
+}
+
+
+.secondary-button:hover {
+
+    border-color: #d8ad4b;
+
+    color: #d8ad4b;
+
+}
+
+
+.secondary-button:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 20px 0;
+
+    color: rgba(255,255,255,0.2);
+
+    font-size: 9px;
+
+}
+
+
+.divider::before,
+.divider::after {
+
+    content: "";
+
+    height: 1px;
+
+    flex: 1;
+
+    background:
+        rgba(255,255,255,0.08);
+
+}
+
+
+/* =========================
+   JOIN
+========================= */
+
+.join-area {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.join-area input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    border-radius: 6px;
+
+    color: white;
+
+    outline: none;
+
+    text-align: center;
+
+    letter-spacing: 3px;
+
+    font-weight: bold;
+
+}
+
+
+.join-area input:focus {
+
+    border-color:
+        rgba(216,173,75,0.6);
+
+}
+
+
+.join-area .secondary-button {
+
+    width: 130px;
+
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================
+   ROOM
+========================= */
+
+.room-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+}
+
+
+.room-label {
+
+    color: rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.room-code {
+
+    color: #f3d487;
+
+    font-size: 28px;
+
+    letter-spacing: 6px;
+
+}
+
+
+.copy-button {
+
+    padding: 8px 10px;
+
+    background: transparent;
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    color: rgba(255,255,255,0.6);
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    cursor: pointer;
+
+}
+
+
+.copy-button:hover {
+
+    border-color: #d8ad4b;
+
+    color: #d8ad4b;
+
+}
+
+
+.room-status {
+
+    padding: 10px;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    background:
+        rgba(216,173,75,0.05);
+
+    border:
+        1px solid rgba(216,173,75,0.12);
+
+    border-radius: 6px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+}
+
+
+.section-heading h2 {
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.section-heading span {
+
+    color: #d8ad4b;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================
+   PLAYERS
+========================= */
+
+.players-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.player {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px 14px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid rgba(255,255,255,0.07);
+
+    border-radius: 7px;
+
+    color: rgba(255,255,255,0.75);
+
+    font-size: 11px;
+
+}
+
+
+.player.host {
+
+    border-color:
+        rgba(216,173,75,0.3);
+
+}
+
+
+.player-name {
+
+    display: flex;
+
+    gap: 8px;
+
+    align-items: center;
+
+}
+
+
+.host-badge {
+
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.empty-player {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.3);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   HOST
+========================= */
+
+.host-controls {
+
+    margin-top: 20px;
+
+}
+
+
+.host-controls p {
+
+    text-align: center;
+
+    margin-top: 9px;
+
+    color: rgba(255,255,255,0.3);
+
+    font-size: 9px;
+
+}
+
+
+.status-text {
+
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.4);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   LEAVE
+========================= */
+
+.leave-button {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 11px;
+
+    background: transparent;
+
+    border:
+        1px solid rgba(255,80,80,0.2);
+
+    color: rgba(255,120,120,0.6);
+
+    border-radius: 6px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.leave-button:hover {
+
+    border-color:
+        rgba(255,80,80,0.6);
+
+    color: #ff8080;
+
+}
+
+
+/* =========================
+   RULES
+========================= */
+
+.rules-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.rules-card h2 {
+
+    margin-bottom: 8px;
+
+}
+
+
+.rule {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 11px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border-radius: 6px;
+
+}
+
+
+.rule span {
+
+    width: 21px;
+
+    height: 21px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(216,173,75,0.1);
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+}
+
+
+.rule p {
+
+    color: rgba(255,255,255,0.45);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+.rule strong {
+
+    color: rgba(255,255,255,0.85);
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding: 17px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .back-button {
+
+        padding: 7px 8px;
+
+        font-size: 7px;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+    }
+
+
+    .hero {
+
+        padding-top: 35px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size: 29px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .auction-icon {
+
+        font-size: 45px;
+
+    }
+
+
+    .setup-card,
+    .room-card,
+    .rules-card {
+
+        padding: 18px;
+
+    }
+
+
+    .join-area {
+
+        flex-direction: column;
+
+    }
+
+
+    .join-area .secondary-button {
+
+        width: 100%;
+
+    }
+
+
+    .room-code {
+
+        font-size: 23px;
+
+    }
+
+}

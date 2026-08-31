@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chaos Auction</title>
+
+    <link
+        rel="stylesheet"
+        href="cauc.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+
+    <div class="auction-room">
+
+        <span>ROOM</span>
+
+        <strong id="roomCodeDisplay">
+            ------
+        </strong>
+
+    </div>
+
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+        ← LOBBY
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="auction-icon">
+            🔨
+        </div>
+
+        <p class="small-title">
+            CHAOS MODE
+        </p>
+
+        <h1>
+            CHAOS AUCTION
+        </h1>
+
+        <p class="subtitle">
+            Buy the unknown. Risk everything. Make a profit.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         PLAYER INFORMATION
+    ========================== -->
+
+    <section class="player-bar">
+
+        <div class="player-stat">
+
+            <span>
+                PLAYER
+            </span>
+
+            <strong id="playerName">
+                Loading...
+            </strong>
+
+        </div>
+
+
+        <div class="player-stat">
+
+            <span>
+                CHAOS POINTS
+            </span>
+
+            <strong id="playerPoints">
+                0 CP
+            </strong>
+
+        </div>
+
+
+        <div class="player-stat">
+
+            <span>
+                LOT
+            </span>
+
+            <strong id="roundDisplay">
+                1 / 10
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AUCTIONEER
+    ========================== -->
+
+    <section
+        class="auction-status-card"
+        id="auctionStatusCard"
+    >
+
+        <div class="auctioneer-top">
+
+            <div>
+
+                <p class="round-label">
+                    STORAGE UNIT
+                    <span id="storageNumber">
+                        1
+                    </span>
+                    / 10
+                </p>
+
+                <h2 id="auctionStatus">
+                    AUCTION OPEN
+                </h2>
+
+            </div>
+
+            <div
+                id="callBadge"
+                class="call-badge"
+            >
+                OPEN
+            </div>
+
+        </div>
+
+
+        <p
+            id="auctionMessage"
+            class="auction-message"
+        >
+            Who wants to make the opening bid?
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         ITEM
+    ========================== -->
+
+    <section
+        class="storage-card"
+        id="storageCard"
+    >
+
+        <div class="storage-visual">
+
+            <div
+                id="storageIcon"
+                class="storage-icon"
+            >
+                💎
+            </div>
+
+        </div>
+
+
+        <div class="storage-info">
+
+            <p
+                id="storageCategory"
+                class="storage-label"
+            >
+                JEWELLERY
+            </p>
+
+
+            <h2 id="storageTitle">
+                DIAMOND NECKLACE
+            </h2>
+
+
+            <p
+                id="storageDescription"
+                class="storage-description"
+            >
+                A mysterious item waiting to be discovered.
+            </p>
+
+
+            <div class="value-grid">
+
+                <div class="value-box">
+
+                    <span>
+                        ESTIMATED VALUE
+                    </span>
+
+                    <strong id="estimatedValue">
+                        ??? CP
+                    </strong>
+
+                </div>
+
+
+                <div class="value-box">
+
+                    <span>
+                        OPENING BID
+                    </span>
+
+                    <strong id="basePrice">
+                        ??? CP
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <p class="warning">
+                ⚠ Estimated value may be completely wrong.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CURRENT BID
+    ========================== -->
+
+    <section class="bid-card">
+
+        <div class="current-bid">
+
+            <span>
+                CURRENT BID
+            </span>
+
+            <strong id="currentBid">
+                0 CP
+            </strong>
+
+            <small id="currentBidder">
+                NO BIDS YET
+            </small>
+
+        </div>
+
+
+        <div class="bid-controls">
+
+            <button
+                id="bidMinusButton"
+                class="bid-adjust"
+            >
+                −
+            </button>
+
+
+            <div class="bid-increase">
+
+                +<span id="bidIncrement">
+                    10
+                </span>
+
+                CP
+
+            </div>
+
+
+            <button
+                id="bidPlusButton"
+                class="bid-adjust"
+            >
+                +
+            </button>
+
+        </div>
+
+
+        <button
+            id="bidButton"
+            class="bid-button"
+        >
+            🔨 PLACE BID
+        </button>
+
+
+        <p
+            id="bidStatus"
+            class="bid-status"
+        ></p>
+
+    </section>
+
+
+
+    <!-- =========================
+         BIDDERS
+    ========================== -->
+
+    <section class="players-card">
+
+        <div class="section-heading">
+
+            <h2>
+                👥 LIVE BIDDERS
+            </h2>
+
+            <span id="bidderCount">
+                0
+            </span>
+
+        </div>
+
+
+        <div
+            id="biddersList"
+            class="bidders-list"
+        >
+
+            <div class="empty-bidders">
+                No bids yet.
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AUCTION LOG
+    ========================== -->
+
+    <section class="log-card">
+
+        <div class="section-heading">
+
+            <h2>
+                📜 AUCTION LOG
+            </h2>
+
+        </div>
+
+
+        <div
+            id="auctionLog"
+            class="auction-log"
+        >
+
+            <div class="log-item">
+                Auction is opening...
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         RESULTS
+    ========================== -->
+
+    <section
+        class="results-card hidden"
+        id="resultsCard"
+    >
+
+        <div class="results-icon">
+            🏆
+        </div>
+
+
+        <p class="small-title">
+            AUCTION COMPLETE
+        </p>
+
+
+        <h1>
+            FINAL RESULTS
+        </h1>
+
+
+        <p class="results-subtitle">
+            Ten lots. One final ranking.
+        </p>
+
+
+        <div
+            id="podium"
+            class="podium"
+        ></div>
+
+
+        <div class="result-section">
+
+            <h2>
+                OTHER BUYERS
+            </h2>
+
+            <div
+                id="otherBuyers"
+                class="result-list"
+            ></div>
+
+        </div>
+
+
+        <div class="result-section">
+
+            <h2>
+                NON-BUYERS
+            </h2>
+
+            <div
+                id="nonBuyers"
+                class="result-list"
+            ></div>
+
+        </div>
+
+
+        <button
+            id="returnLobbyButton"
+            class="primary-button"
+        >
+            RETURN TO LOBBY
+        </button>
+
+    </section>
+
+
+</main>
+
+
+<script
+    type="module"
+    src="js/cauc.js"
+></script>
+
+
+</body>
+
+</html>

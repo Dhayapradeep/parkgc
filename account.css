@@ -1,0 +1,351 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(216, 173, 75, 0.09),
+            transparent 35%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow-x: hidden;
+}
+
+
+/* Background logo */
+
+.background-logo {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: 850px;
+    height: 850px;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        url("images/logo.png")
+        center / contain
+        no-repeat;
+
+    opacity: 0.018;
+
+    filter: blur(3px);
+
+    pointer-events: none;
+}
+
+
+/* Main container */
+
+.account-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(500px, 90%);
+
+    text-align: center;
+
+    padding: 25px;
+}
+
+
+/* Logo */
+
+.logo {
+    width: 190px;
+
+    max-width: 70%;
+
+    margin-bottom: 20px;
+}
+
+
+/* Divider */
+
+.divider {
+    width: 70px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 0 auto 20px;
+
+    box-shadow:
+        0 0 8px
+        rgba(216, 173, 75, 0.4);
+}
+
+
+/* Private label */
+
+.private {
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 18px;
+}
+
+
+/* Heading */
+
+h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    color: #f3d487;
+
+    font-size: 30px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+}
+
+
+/* Description */
+
+.description {
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    margin-bottom: 28px;
+}
+
+
+/* Form */
+
+form {
+    width: 100%;
+
+    max-width: 350px;
+
+    margin: auto;
+
+    text-align: left;
+}
+
+
+/* Labels */
+
+label {
+    display: block;
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 8px;
+
+    margin-top: 18px;
+}
+
+
+/* Inputs */
+
+input {
+    width: 100%;
+
+    padding: 14px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    color: white;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.4);
+
+    border-radius: 4px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition: 0.3s;
+}
+
+
+input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.25);
+}
+
+
+input:focus {
+    border-color: #d8ad4b;
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.12);
+}
+
+
+/* Create button */
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 25px;
+
+    background: #d8ad4b;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 4px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+button:hover {
+    background: #f3d487;
+
+    box-shadow:
+        0 0 20px
+        rgba(216, 173, 75, 0.3);
+}
+
+
+/* Message */
+
+#message {
+    min-height: 20px;
+
+    margin-top: 15px;
+
+    color: #d8ad4b;
+
+    font-size: 13px;
+}
+
+
+/* Security note */
+
+.note {
+    max-width: 350px;
+
+    margin: 22px auto 0;
+
+    color:
+        rgba(255, 255, 255, 0.28);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* Back */
+
+.back {
+    display: inline-block;
+
+    margin-top: 20px;
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    transition: 0.3s;
+}
+
+
+.back:hover {
+    color: #d8ad4b;
+}
+
+
+/* Mobile */
+
+@media (max-width: 412px) {
+
+    body {
+        padding: 15px;
+    }
+
+
+    .account-container {
+        width: 100%;
+
+        padding: 15px;
+    }
+
+
+    .logo {
+        width: 170px;
+
+        margin-bottom: 16px;
+    }
+
+
+    h1 {
+        font-size: 26px;
+    }
+
+
+    .description {
+        font-size: 13px;
+
+        margin-bottom: 20px;
+    }
+
+
+    form {
+        max-width: 330px;
+    }
+
+}

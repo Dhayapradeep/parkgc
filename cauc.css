@@ -1,0 +1,1398 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(216,173,75,0.10),
+            transparent 30%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    padding-bottom: 70px;
+
+}
+
+
+button {
+    font-family: inherit;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 20px 5%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.07);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.auction-room {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.auction-room strong {
+
+    color: #f3d487;
+
+    font-size: 13px;
+
+    letter-spacing: 3px;
+
+}
+
+
+.back-button {
+
+    padding: 8px 13px;
+
+    background: transparent;
+
+    color:
+        rgba(255,255,255,0.55);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.back-button:hover {
+
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width:
+        min(780px, 94%);
+
+    margin:
+        0 auto;
+
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+    text-align: center;
+
+    padding:
+        35px 0 25px;
+
+}
+
+
+.auction-icon {
+
+    font-size: 52px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.small-title {
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 9px;
+
+}
+
+
+.hero h1 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 38px;
+
+    font-weight: normal;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.subtitle {
+
+    color:
+        rgba(255,255,255,0.38);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================
+   PLAYER BAR
+========================= */
+
+.player-bar {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    margin-bottom: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+
+.player-stat {
+
+    padding: 15px;
+
+    text-align: center;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,0.07);
+
+}
+
+
+.player-stat:last-child {
+
+    border-right: none;
+
+}
+
+
+.player-stat span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.player-stat strong {
+
+    color:
+        rgba(255,255,255,0.85);
+
+    font-size: 12px;
+
+}
+
+
+/* =========================
+   AUCTION STATUS
+========================= */
+
+.auction-status-card {
+
+    padding: 20px 22px;
+
+    margin-bottom: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216,173,75,0.09),
+            rgba(255,255,255,0.025)
+        );
+
+    border:
+        1px solid
+        rgba(216,173,75,0.25);
+
+    border-radius: 10px;
+
+}
+
+
+.auctioneer-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.round-label {
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.round-label span {
+
+    color: #d8ad4b;
+
+}
+
+
+.auction-status-card h2 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 22px;
+
+    font-weight: normal;
+
+    letter-spacing: 2px;
+
+}
+
+
+.call-badge {
+
+    padding: 8px 13px;
+
+    color: #d8ad4b;
+
+    border:
+        1px solid
+        rgba(216,173,75,0.3);
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.auction-message {
+
+    margin-top: 12px;
+
+    color:
+        rgba(255,255,255,0.55);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 14px;
+
+    font-style: italic;
+
+}
+
+
+/* =========================
+   ITEM CARD
+========================= */
+
+.storage-card {
+
+    display: grid;
+
+    grid-template-columns:
+        190px 1fr;
+
+    min-height: 250px;
+
+    margin-bottom: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.09);
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+}
+
+
+.storage-visual {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(216,173,75,0.12),
+            rgba(0,0,0,0.3)
+        );
+
+    border-right:
+        1px solid
+        rgba(255,255,255,0.07);
+
+}
+
+
+.storage-icon {
+
+    width: 120px;
+
+    height: 120px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 65px;
+
+    background:
+        rgba(216,173,75,0.06);
+
+    border:
+        1px solid
+        rgba(216,173,75,0.22);
+
+    border-radius: 12px;
+
+}
+
+
+.storage-info {
+
+    padding: 25px;
+
+}
+
+
+.storage-label {
+
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.storage-info h2 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 27px;
+
+    font-weight: normal;
+
+    letter-spacing: 2px;
+
+}
+
+
+.storage-description {
+
+    margin-top: 10px;
+
+    color:
+        rgba(255,255,255,0.43);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+.value-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+
+.value-box {
+
+    padding: 13px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.07);
+
+    border-radius: 6px;
+
+}
+
+
+.value-box span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.value-box strong {
+
+    color:
+        rgba(255,255,255,0.82);
+
+    font-size: 15px;
+
+}
+
+
+.warning {
+
+    margin-top: 12px;
+
+    color:
+        rgba(255,150,100,0.55);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================
+   BID CARD
+========================= */
+
+.bid-card {
+
+    padding: 22px;
+
+    margin-bottom: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+
+    text-align: center;
+
+}
+
+
+.current-bid span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.current-bid strong {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 34px;
+
+}
+
+
+.current-bid small {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.bid-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin: 18px 0;
+
+}
+
+
+.bid-adjust {
+
+    width: 38px;
+
+    height: 38px;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    border-radius: 5px;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+}
+
+
+.bid-adjust:hover {
+
+    border-color: #d8ad4b;
+
+    color: #d8ad4b;
+
+}
+
+
+.bid-increase {
+
+    min-width: 100px;
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.bid-increase span {
+
+    color: #d8ad4b;
+
+    font-weight: bold;
+
+}
+
+
+.bid-button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    background:
+        rgba(216,173,75,0.12);
+
+    border:
+        1px solid
+        #d8ad4b;
+
+    color: #f3d487;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+}
+
+
+.bid-button:hover {
+
+    background:
+        rgba(216,173,75,0.2);
+
+}
+
+
+.bid-button:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+}
+
+
+.bid-status {
+
+    min-height: 16px;
+
+    margin-top: 10px;
+
+    color:
+        rgba(255,255,255,0.5);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   GENERIC CARDS
+========================= */
+
+.players-card,
+.log-card {
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+}
+
+
+.section-heading h2 {
+
+    color:
+        rgba(255,255,255,0.75);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.section-heading span {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   BIDDERS
+========================= */
+
+.bidders-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.bidder {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border-radius: 6px;
+
+}
+
+
+.bidder-name {
+
+    color:
+        rgba(255,255,255,0.7);
+
+    font-size: 10px;
+
+}
+
+
+.bidder-amount {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.empty-bidders {
+
+    padding: 18px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.25);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   LOG
+========================= */
+
+.auction-log {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+}
+
+
+.log-item {
+
+    padding: 9px 11px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border-left:
+        2px solid
+        rgba(216,173,75,0.35);
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size: 9px;
+
+}
+
+
+.log-item strong {
+
+    color:
+        rgba(255,255,255,0.75);
+
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+.results-card {
+
+    padding: 35px 25px;
+
+    margin-top: 20px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(216,173,75,0.25);
+
+    border-radius: 12px;
+
+    text-align: center;
+
+}
+
+
+.results-icon {
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.results-card h1 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 31px;
+
+    font-weight: normal;
+
+    letter-spacing: 3px;
+
+}
+
+
+.results-subtitle {
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 10px;
+
+    margin-top: 7px;
+
+}
+
+
+/* =========================
+   PODIUM
+========================= */
+
+.podium {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin: 35px 0;
+
+}
+
+
+.podium-player {
+
+    flex: 1;
+
+    max-width: 180px;
+
+    padding: 20px 10px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 8px;
+
+}
+
+
+.podium-player.first {
+
+    min-height: 170px;
+
+    border-color:
+        rgba(216,173,75,0.45);
+
+}
+
+
+.podium-player.second {
+
+    min-height: 140px;
+
+}
+
+
+.podium-player.third {
+
+    min-height: 120px;
+
+}
+
+
+.position {
+
+    font-size: 25px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.result-name {
+
+    color:
+        rgba(255,255,255,0.8);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.result-profit {
+
+    margin-top: 8px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.profit {
+
+    color: #8fd18f;
+
+}
+
+
+.loss {
+
+    color: #df7777;
+
+}
+
+
+/* =========================
+   RESULT SECTIONS
+========================= */
+
+.result-section {
+
+    margin-top: 25px;
+
+    text-align: left;
+
+}
+
+
+.result-section h2 {
+
+    margin-bottom: 8px;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.result-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+
+.result-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 11px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border-radius: 5px;
+
+    color:
+        rgba(255,255,255,0.6);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.primary-button {
+
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 14px;
+
+    background:
+        rgba(216,173,75,0.12);
+
+    border:
+        1px solid
+        #d8ad4b;
+
+    color: #f3d487;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    header {
+
+        padding: 16px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .auction-room {
+
+        display: none;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+    }
+
+
+    .hero {
+
+        padding-top: 28px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size: 28px;
+
+    }
+
+
+    .player-bar {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .player-stat {
+
+        border-right: none;
+
+        border-bottom:
+            1px solid
+            rgba(255,255,255,0.07);
+
+    }
+
+
+    .player-stat:last-child {
+
+        border-bottom: none;
+
+    }
+
+
+    .storage-card {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .storage-visual {
+
+        min-height: 180px;
+
+        border-right: none;
+
+        border-bottom:
+            1px solid
+            rgba(255,255,255,0.07);
+
+    }
+
+
+    .storage-info {
+
+        padding: 20px;
+
+    }
+
+
+    .storage-info h2 {
+
+        font-size: 22px;
+
+    }
+
+
+    .value-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .podium {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .podium-player,
+    .podium-player.first,
+    .podium-player.second,
+    .podium-player.third {
+
+        max-width: none;
+
+        min-height: auto;
+
+    }
+
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Abusement Park</title>
+
+    <link rel="stylesheet" href="login.css">
+
+</head>
+
+<body>
+
+<main>
+
+    <section class="login-box">
+
+        <div class="logo">
+            ABUSEMENT PARK
+        </div>
+
+        <p class="tagline">
+            WHERE THE CHAOS NEVER ENDS
+        </p>
+
+
+        <div class="divider"></div>
+
+
+        <h1>
+            WELCOME BACK
+        </h1>
+
+        <p class="subtitle">
+            Enter the park.
+        </p>
+
+
+        <form id="loginForm">
+
+
+            <div class="field">
+
+                <label for="displayName">
+                    DISPLAY NAME
+                </label>
+
+                <input
+                    type="text"
+                    id="displayName"
+                    placeholder="Enter your name"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="password">
+                    PASSWORD
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit">
+                ENTER THE PARK
+            </button>
+
+
+            <p id="message"></p>
+
+        </form>
+
+
+        <!-- NEW MEMBER -->
+
+        <div class="invitation">
+
+            <span>
+                NEW MEMBER?
+            </span>
+
+            <p>
+                Have an invitation to join
+                Abusement Park?
+            </p>
+
+            <button
+                type="button"
+                id="invitationButton">
+
+                I HAVE AN INVITATION
+
+            </button>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<script
+    type="module"
+    src="js/login.js">
+</script>
+
+<script>
+
+    document
+        .getElementById("invitationButton")
+        .addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "invite.html";
+
+            }
+        );
+
+</script>
+
+</body>
+
+</html>

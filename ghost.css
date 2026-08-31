@@ -1,0 +1,1398 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   ROOT
+========================= */
+
+:root {
+    --background: #070707;
+
+    --surface:
+        rgba(255, 255, 255, 0.035);
+
+    --surface-light:
+        rgba(255, 255, 255, 0.06);
+
+    --border:
+        rgba(255, 255, 255, 0.09);
+
+    --gold: #d8ad4b;
+
+    --gold-light: #f3d487;
+
+    --text: #ffffff;
+
+    --muted:
+        rgba(255, 255, 255, 0.5);
+
+    --dim:
+        rgba(255, 255, 255, 0.3);
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(126, 75, 170, 0.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 0% 70%,
+            rgba(216, 173, 75, 0.06),
+            transparent 30%
+        ),
+        var(--background);
+
+    color: var(--text);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    padding-bottom: 60px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    width: 100%;
+
+    min-height: 72px;
+
+    padding:
+        0
+        6%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    background:
+        rgba(0, 0, 0, 0.2);
+}
+
+
+.brand {
+    color: var(--gold);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+
+.leave-button {
+    padding:
+        9px
+        14px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.leave-button:hover {
+    color: white;
+
+    border-color:
+        rgba(255, 255, 255, 0.3);
+
+    background:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width:
+        min(
+            850px,
+            92%
+        );
+
+    margin: auto;
+}
+
+
+/* =========================
+   GAME HERO
+========================= */
+
+.game-hero {
+    text-align: center;
+
+    padding:
+        42px 0
+        28px;
+}
+
+
+.ghost-icon {
+    font-size: 52px;
+
+    margin-bottom: 12px;
+
+    animation:
+        floatGhost
+        3s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes floatGhost {
+
+    0%,
+    100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(-8px);
+    }
+
+}
+
+
+.small-title {
+    color: var(--gold);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 10px;
+}
+
+
+.game-hero h1 {
+    color: var(--gold-light);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 38px;
+
+    font-weight: 500;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 10px;
+}
+
+
+.subtitle {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-card {
+    padding:
+        60px
+        25px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        var(--surface);
+}
+
+
+.loading-card h2 {
+    color: var(--gold-light);
+
+    font-size: 17px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+}
+
+
+.loading-card p {
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+.loading-icon {
+    font-size: 50px;
+
+    margin-bottom: 20px;
+
+    animation:
+        pulseGhost
+        1.5s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes pulseGhost {
+
+    0%,
+    100% {
+        opacity: 0.5;
+
+        transform:
+            scale(0.95);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform:
+            scale(1.08);
+    }
+
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+.timer-section {
+    padding:
+        22px
+        20px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 173, 75, 0.08),
+            rgba(255, 255, 255, 0.02)
+        );
+
+    margin-bottom: 16px;
+}
+
+
+.timer-section > span {
+    display: block;
+
+    color: var(--dim);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 7px;
+}
+
+
+.game-timer {
+    color: var(--gold-light);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 42px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 7px;
+}
+
+
+#gamePhase {
+    color: var(--gold);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   SECRET ROLE STRIP
+========================= */
+
+.role-strip {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding:
+        17px
+        20px;
+
+    margin-bottom: 16px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 12px;
+
+    background:
+        var(--surface);
+}
+
+
+.role-icon {
+    width: 52px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    font-size: 27px;
+}
+
+
+.role-strip span {
+    display: block;
+
+    color: var(--dim);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+}
+
+
+.role-strip strong {
+    display: block;
+
+    color: var(--gold-light);
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+}
+
+
+.role-strip p {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+
+.section-heading h2 {
+    color:
+        rgba(255, 255, 255, 0.9);
+
+    font-size: 16px;
+
+    letter-spacing: 1px;
+}
+
+
+.clue-status,
+.player-count {
+    padding:
+        6px
+        10px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.18);
+
+    color: var(--gold);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   CLUE SECTION
+========================= */
+
+.clue-section {
+    padding:
+        20px;
+
+    margin-bottom: 16px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 12px;
+
+    background:
+        var(--surface);
+}
+
+
+.clue-text {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    margin-bottom: 15px;
+}
+
+
+.letter-reveal {
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        12px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(0, 0, 0, 0.25);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    color: var(--gold-light);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    letter-spacing: 8px;
+
+    text-align: center;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+.chat-section {
+    padding:
+        20px;
+
+    margin-bottom: 16px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        var(--surface);
+}
+
+
+.chat-messages {
+    height: 380px;
+
+    overflow-y: auto;
+
+    padding:
+        12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    background:
+        rgba(0, 0, 0, 0.28);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.05);
+
+    border-radius: 10px;
+
+    scrollbar-width: thin;
+}
+
+
+.chat-messages:empty::before {
+    content:
+        "No messages yet. Start the investigation.";
+
+    margin: auto;
+
+    color:
+        rgba(255, 255, 255, 0.25);
+
+    font-size: 11px;
+}
+
+
+/* MESSAGE */
+
+.message {
+    max-width: 80%;
+
+    padding:
+        10px
+        13px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+
+.message-name {
+    color: var(--gold);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 5px;
+}
+
+
+.message-text {
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+/* =========================
+   CHAT INPUT
+========================= */
+
+.chat-input-area {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 13px;
+}
+
+
+#chatInput {
+    flex: 1;
+
+    min-width: 0;
+
+    padding:
+        14px
+        15px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    color: white;
+
+    font-size: 12px;
+
+    transition: 0.2s;
+}
+
+
+#chatInput:focus {
+    border-color:
+        rgba(216, 173, 75, 0.6);
+
+    background:
+        rgba(216, 173, 75, 0.04);
+}
+
+
+#chatInput::placeholder {
+    color:
+        rgba(255, 255, 255, 0.25);
+}
+
+
+#sendButton {
+    padding:
+        0
+        22px;
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.5);
+
+    border-radius: 8px;
+
+    background:
+        rgba(216, 173, 75, 0.13);
+
+    color: var(--gold-light);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+#sendButton:hover {
+    background:
+        rgba(216, 173, 75, 0.25);
+
+    transform:
+        translateY(-1px);
+}
+
+
+#sendButton:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================
+   VOTING
+========================= */
+
+.voting-section {
+    padding:
+        30px
+        24px;
+
+    margin-top: 15px;
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.3);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 173, 75, 0.07),
+            rgba(255, 255, 255, 0.02)
+        );
+}
+
+
+.voting-header {
+    margin-bottom: 15px;
+}
+
+
+.voting-header h2 {
+    color: var(--gold-light);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+}
+
+
+.voting-description {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+}
+
+
+.voting-players {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 10px;
+}
+
+
+.vote-option {
+    width: 100%;
+
+    min-height: 54px;
+
+    padding:
+        12px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color:
+        rgba(255, 255, 255, 0.8);
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.vote-option:hover:not(:disabled) {
+    color: var(--gold-light);
+
+    border-color:
+        rgba(216, 173, 75, 0.6);
+
+    background:
+        rgba(216, 173, 75, 0.1);
+}
+
+
+.vote-option.selected {
+    color: var(--gold-light);
+
+    border-color: var(--gold);
+
+    background:
+        rgba(216, 173, 75, 0.16);
+}
+
+
+.vote-option:disabled {
+    opacity: 0.35;
+
+    cursor: not-allowed;
+}
+
+
+.vote-status {
+    margin-top: 18px;
+
+    text-align: center;
+
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   WAITING RESULTS
+========================= */
+
+.waiting-results {
+    padding:
+        55px
+        25px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        var(--surface);
+}
+
+
+.waiting-results > div {
+    font-size: 45px;
+
+    margin-bottom: 15px;
+}
+
+
+.waiting-results h2 {
+    color: var(--gold-light);
+
+    font-size: 20px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+
+.waiting-results p {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-bottom: 15px;
+}
+
+
+.waiting-results span {
+    color: var(--gold);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+.result-section {
+    padding:
+        55px
+        25px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 173, 75, 0.07),
+            rgba(255, 255, 255, 0.02)
+        );
+}
+
+
+.result-icon {
+    font-size: 60px;
+
+    margin-bottom: 18px;
+}
+
+
+.result-section h2 {
+    color: var(--gold-light);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 30px;
+
+    font-weight: 500;
+
+    margin-bottom: 15px;
+}
+
+
+#resultDescription {
+    max-width: 500px;
+
+    margin:
+        auto
+        auto
+        25px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   RESULT CARDS
+========================= */
+
+.reveal-card,
+.reward-card {
+    max-width: 500px;
+
+    margin:
+        10px
+        auto;
+
+    padding:
+        16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 9px;
+
+    background:
+        rgba(0, 0, 0, 0.2);
+
+    text-align: left;
+}
+
+
+.reveal-card span,
+.reward-card span {
+    color: var(--dim);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+.reveal-card strong {
+    color: var(--gold-light);
+
+    font-size: 12px;
+
+    text-align: right;
+}
+
+
+.reward-card strong {
+    color: var(--gold);
+
+    font-size: 16px;
+
+    text-align: right;
+}
+
+
+.back-lobby-button {
+    margin-top: 25px;
+
+    padding:
+        14px
+        24px;
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.5);
+
+    border-radius: 8px;
+
+    background:
+        rgba(216, 173, 75, 0.13);
+
+    color: var(--gold-light);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.back-lobby-button:hover {
+    background:
+        rgba(216, 173, 75, 0.25);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 600px
+) {
+
+    body {
+        padding-bottom: 30px;
+    }
+
+
+    header {
+        min-height: 62px;
+
+        padding:
+            0
+            5%;
+    }
+
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .leave-button {
+        padding:
+            8px
+            10px;
+
+        font-size: 8px;
+    }
+
+
+    main {
+        width: 94%;
+    }
+
+
+    .game-hero {
+        padding:
+            30px 0
+            22px;
+    }
+
+
+    .ghost-icon {
+        font-size: 43px;
+    }
+
+
+    .game-hero h1 {
+        font-size: 29px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .subtitle {
+        font-size: 11px;
+    }
+
+
+    .timer-section {
+        padding:
+            18px
+            12px;
+    }
+
+
+    .game-timer {
+        font-size: 34px;
+    }
+
+
+    .role-strip {
+        padding:
+            14px;
+
+        gap: 12px;
+    }
+
+
+    .role-icon {
+        width: 45px;
+
+        height: 45px;
+
+        font-size: 23px;
+    }
+
+
+    .role-strip strong {
+        font-size: 13px;
+    }
+
+
+    .role-strip p {
+        font-size: 10px;
+    }
+
+
+    .clue-section,
+    .chat-section {
+        padding: 15px;
+    }
+
+
+    .section-heading h2 {
+        font-size: 14px;
+    }
+
+
+    .letter-reveal {
+        font-size: 16px;
+
+        letter-spacing: 5px;
+    }
+
+
+    .chat-messages {
+        height: 350px;
+
+        padding: 9px;
+    }
+
+
+    .message {
+        max-width: 92%;
+    }
+
+
+    .chat-input-area {
+        gap: 7px;
+    }
+
+
+    #chatInput {
+        padding:
+            13px
+            10px;
+
+        font-size: 11px;
+    }
+
+
+    #sendButton {
+        padding:
+            0
+            14px;
+
+        font-size: 9px;
+    }
+
+
+    .voting-section {
+        padding:
+            25px
+            15px;
+    }
+
+
+    .voting-header h2 {
+        font-size: 21px;
+    }
+
+
+    .voting-players {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .result-section {
+        padding:
+            40px
+            16px;
+    }
+
+
+    .result-section h2 {
+        font-size: 24px;
+    }
+
+
+    .reveal-card,
+    .reward-card {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .reveal-card strong,
+    .reward-card strong {
+        text-align: left;
+    }
+
+}
