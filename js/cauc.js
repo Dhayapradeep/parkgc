@@ -1,9 +1,11 @@
 import {
     ref,
+    get,
+    set,
+    update,
     onValue,
     runTransaction,
-    get,
-    update
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 import {
@@ -17,17 +19,16 @@ import {
 } from "../firebase.js";
 
 
-/* =========================
+/* =========================================================
    AUTH
-========================= */
+========================================================= */
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
 
-/* =========================
+/* =========================================================
    ELEMENTS
-========================= */
+========================================================= */
 
 const backButton =
     document.getElementById("backButton");
@@ -53,20 +54,17 @@ const auctionStatus =
 const auctionMessage =
     document.getElementById("auctionMessage");
 
-const callBadge =
-    document.getElementById("callBadge");
-
-const storageIcon =
-    document.getElementById("storageIcon");
-
-const storageCategory =
-    document.getElementById("storageCategory");
+const itemVisual =
+    document.getElementById("itemVisual");
 
 const storageTitle =
     document.getElementById("storageTitle");
 
-const storageDescription =
-    document.getElementById("storageDescription");
+const itemName =
+    document.getElementById("itemName");
+
+const itemDescription =
+    document.getElementById("itemDescription");
 
 const estimatedValue =
     document.getElementById("estimatedValue");
@@ -120,51 +118,65 @@ const returnLobbyButton =
     document.getElementById("returnLobbyButton");
 
 
-/* =========================
-   STATE
-========================= */
+/* =========================================================
+   CONSTANTS
+========================================================= */
 
-let currentUser = null;
+const AUCTION_PATH =
+    "chaosAuctions";
 
-let roomId = null;
+const LOBBY_PATH =
+    "chaosAuctionRooms";
 
-let roomData = null;
-
-let players = {};
-
-let currentRound = 1;
-
-let selectedBid = 10;
-
-let unsubscribeRoom = null;
-
-let auctioneerInterval = null;
-
-let lastRenderedLogSignature = "";
+const TOTAL_ROUNDS =
+    10;
 
 
 /*
-    There is deliberately NO visible timer.
+    Classical auction timing.
 
-    These values control the auctioneer calls internally.
+    3 seconds:
+    preparation -> going once
 
-    OPEN
-      ↓
-    1st CALL
-      ↓
-    2nd CALL
-      ↓
-    3rd CALL
-      ↓
-    SOLD
+    3 seconds:
+    going once -> going twice
+
+    3 seconds:
+    going twice -> final call
+
+    1.5 seconds:
+    final call -> SOLD
 */
 
-const CALL_DELAY = 4000;
+const CALL_DELAY =
+    3000;
+
+const SOLD_DELAY =
+    1500;
 
 
-/* =========================
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let currentUser = null;
+
+let currentUserData = null;
+
+let roomId = null;
+
+let auctionData = null;
+
+let unsubscribeAuction = null;
+
+let schedulerTimer = null;
+
+let selectedBid = 10;
+
+
+/* =========================================================
    ROOM ID
-========================= */
+========================================================= */
 
 const params =
     new URLSearchParams(
@@ -177,9 +189,7 @@ roomId =
 
 if (!roomId) {
 
-    alert(
-        "No auction room found."
-    );
+    alert("No auction room found.");
 
     window.location.href =
         "caulobby.html";
@@ -187,9 +197,9 @@ if (!roomId) {
 }
 
 
-/* =========================
-   BACK
-========================= */
+/* =========================================================
+   BACK BUTTON
+========================================================= */
 
 if (backButton) {
 
@@ -198,7 +208,8 @@ if (backButton) {
         function () {
 
             window.location.href =
-                `caulobby.html?room=${roomId}`;
+                "caulobby.html?room=" +
+                roomId;
 
         }
     );
@@ -206,9 +217,9 @@ if (backButton) {
 }
 
 
-/* =========================
+/* =========================================================
    AUTH
-========================= */
+========================================================= */
 
 onAuthStateChanged(
     auth,
@@ -228,15 +239,17 @@ onAuthStateChanged(
 
         await loadUser();
 
+        await initializeAuction();
+
         listenToAuction();
 
     }
 );
 
 
-/* =========================
+/* =========================================================
    LOAD USER
-========================= */
+========================================================= */
 
 async function loadUser() {
 
@@ -253,29 +266,16 @@ async function loadUser() {
 
         if (!snapshot.exists()) {
 
-            if (playerName) {
-
-                playerName.textContent =
-                    currentUser.displayName ||
-                    "Unknown";
-
-            }
+            currentUserData = {};
 
             return;
 
         }
 
-        const data =
+        currentUserData =
             snapshot.val();
 
-        if (playerName) {
-
-            playerName.textContent =
-                data.username ||
-                currentUser.displayName ||
-                "Unknown";
-
-        }
+        renderPlayerInfo();
 
     }
 
@@ -291,24 +291,469 @@ async function loadUser() {
 }
 
 
-/* =========================
+/* =========================================================
+   PLAYER INFO
+========================================================= */
+
+function renderPlayerInfo() {
+
+    const username =
+        currentUserData?.username ||
+        currentUser.displayName ||
+        "Unknown Player";
+
+    const points =
+        Number(
+            currentUserData?.chaosPoints
+        ) || 0;
+
+    if (playerName) {
+
+        playerName.textContent =
+            username;
+
+    }
+
+    if (playerPoints) {
+
+        playerPoints.textContent =
+            `${points} CP`;
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE AUCTION
+========================================================= */
+
+async function initializeAuction() {
+
+    const auctionRef =
+        ref(
+            database,
+            `${AUCTION_PATH}/${roomId}`
+        );
+
+    const existing =
+        await get(auctionRef);
+
+
+    /*
+        If the auction already exists,
+        DO NOT recreate it.
+    */
+
+    if (existing.exists()) {
+
+        return;
+
+    }
+
+
+    /*
+        Read the lobby room.
+    */
+
+    const lobbyRef =
+        ref(
+            database,
+            `${LOBBY_PATH}/${roomId}`
+        );
+
+    const lobbySnapshot =
+        await get(lobbyRef);
+
+
+    if (!lobbySnapshot.exists()) {
+
+        alert(
+            "The lobby room could not be found."
+        );
+
+        window.location.href =
+            "caulobby.html";
+
+        return;
+
+    }
+
+
+    const lobby =
+        lobbySnapshot.val();
+
+
+    /*
+        Make sure the player is actually
+        part of the lobby.
+    */
+
+    const lobbyPlayers =
+        lobby.players || {};
+
+    const playerIds =
+        Object.keys(lobbyPlayers);
+
+
+    if (
+        !lobbyPlayers[currentUser.uid]
+    ) {
+
+        alert(
+            "You are not a player in this auction."
+        );
+
+        window.location.href =
+            "caulobby.html";
+
+        return;
+
+    }
+
+
+    /*
+        Create the game players.
+    */
+
+    const gamePlayers = {};
+
+
+    for (
+        const uid of playerIds
+    ) {
+
+        const lobbyPlayer =
+            lobbyPlayers[uid] || {};
+
+        let points =
+            Number(
+                lobbyPlayer.chaosPoints
+            );
+
+
+        /*
+            If the lobby doesn't have CP,
+            read it from the user profile.
+        */
+
+        if (
+            !Number.isFinite(points)
+        ) {
+
+            try {
+
+                const userSnapshot =
+                    await get(
+                        ref(
+                            database,
+                            `users/${uid}`
+                        )
+                    );
+
+                if (
+                    userSnapshot.exists()
+                ) {
+
+                    points =
+                        Number(
+                            userSnapshot.val()
+                                .chaosPoints
+                        ) || 1000;
+
+                }
+
+                else {
+
+                    points = 1000;
+
+                }
+
+            }
+
+            catch {
+
+                points = 1000;
+
+            }
+
+        }
+
+
+        gamePlayers[uid] = {
+
+            uid: uid,
+
+            username:
+                lobbyPlayer.username ||
+                "Unknown Player",
+
+            chaosPoints:
+                points,
+
+            startingPoints:
+                points,
+
+            spent: 0,
+
+            bought: 0,
+
+            items: {}
+
+        };
+
+    }
+
+
+    /*
+        Create the ten auction items.
+    */
+
+    const storages =
+        createStorages();
+
+
+    /*
+        Only the original lobby host
+        becomes the auction coordinator.
+    */
+
+    const auction = {
+
+        code: roomId,
+
+        hostId:
+            lobby.hostId,
+
+        status:
+            "playing",
+
+        currentRound:
+            1,
+
+        phase:
+            "open",
+
+        callNumber:
+            0,
+
+        phaseStartedAt:
+            Date.now(),
+
+        currentBid:
+            0,
+
+        currentBidder:
+            null,
+
+        currentBidderName:
+            null,
+
+        players:
+            gamePlayers,
+
+        storages:
+            storages,
+
+        log: {
+
+            start: {
+
+                message:
+                    "Auction opened.",
+
+                timestamp:
+                    Date.now()
+
+            }
+
+        },
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    try {
+
+        await set(
+            auctionRef,
+            auction
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to initialize auction:",
+            error
+        );
+
+        alert(
+            "Unable to start auction."
+        );
+
+        window.location.href =
+            "caulobby.html";
+
+    }
+
+}
+
+
+/* =========================================================
+   STORAGE ITEMS
+========================================================= */
+
+function createStorages() {
+
+    return [
+
+        {
+            icon: "⌚",
+            name: "Luxury Watch",
+            description:
+                "A premium mechanical watch hidden inside the unit.",
+            estimatedValue: 520,
+            basePrice: 100
+        },
+
+        {
+            icon: "🏆",
+            name: "Championship Trophy",
+            description:
+                "A mysterious engraved trophy from an unknown competition.",
+            estimatedValue: 760,
+            basePrice: 180
+        },
+
+        {
+            icon: "💎",
+            name: "Loose Diamond",
+            description:
+                "A brilliant stone sealed inside a small velvet box.",
+            estimatedValue: 1200,
+            basePrice: 300
+        },
+
+        {
+            icon: "🖼️",
+            name: "Old Master Painting",
+            description:
+                "An antique painting with an uncertain history.",
+            estimatedValue: 1500,
+            basePrice: 400
+        },
+
+        {
+            icon: "📷",
+            name: "Vintage Camera",
+            description:
+                "A collectible film camera from a forgotten era.",
+            estimatedValue: 650,
+            basePrice: 150
+        },
+
+        {
+            icon: "🎸",
+            name: "Signed Guitar",
+            description:
+                "A beautifully preserved guitar carrying a mysterious signature.",
+            estimatedValue: 980,
+            basePrice: 250
+        },
+
+        {
+            icon: "💻",
+            name: "Collector Laptop",
+            description:
+                "An unusual limited-edition computer hidden in its original case.",
+            estimatedValue: 830,
+            basePrice: 220
+        },
+
+        {
+            icon: "🪙",
+            name: "Rare Coin Collection",
+            description:
+                "Several old coins wrapped in a weathered leather pouch.",
+            estimatedValue: 1100,
+            basePrice: 280
+        },
+
+        {
+            icon: "💍",
+            name: "Antique Jewelry Box",
+            description:
+                "An ornate box containing several unidentified pieces of jewelry.",
+            estimatedValue: 1350,
+            basePrice: 350
+        },
+
+        {
+            icon: "👑",
+            name: "Mystery Heirloom",
+            description:
+                "A strange antique object whose true value is impossible to know.",
+            estimatedValue: 1800,
+            basePrice: 500
+        }
+
+    ].map(
+        function (item, index) {
+
+            return {
+
+                ...item,
+
+                round:
+                    index + 1,
+
+                currentBid:
+                    item.basePrice,
+
+                currentBidder:
+                    null,
+
+                currentBidderName:
+                    null,
+
+                bidHistory: {},
+
+                result:
+                    "unsold"
+
+            };
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    LISTEN TO AUCTION
-========================= */
+========================================================= */
 
 function listenToAuction() {
 
     const auctionRef =
         ref(
             database,
-            `chaosAuctions/${roomId}`
+            `${AUCTION_PATH}/${roomId}`
         );
 
-    unsubscribeRoom =
+
+    unsubscribeAuction =
         onValue(
             auctionRef,
             function (snapshot) {
 
-                if (!snapshot.exists()) {
+                if (
+                    !snapshot.exists()
+                ) {
 
                     alert(
                         "Auction room no longer exists."
@@ -321,21 +766,27 @@ function listenToAuction() {
 
                 }
 
-                roomData =
+
+                auctionData =
                     snapshot.val();
 
-                players =
-                    roomData.players ||
-                    {};
-
-                currentRound =
-                    Number(
-                        roomData.currentRound
-                    ) || 1;
 
                 renderAuction();
 
-                startAuctioneer();
+
+                /*
+                    Only the host runs the
+                    auction progression scheduler.
+                */
+
+                if (
+                    auctionData.hostId ===
+                    currentUser?.uid
+                ) {
+
+                    scheduleAuctionProgress();
+
+                }
 
             }
         );
@@ -343,29 +794,32 @@ function listenToAuction() {
 }
 
 
-/* =========================
+/* =========================================================
    RENDER AUCTION
-========================= */
+========================================================= */
 
 function renderAuction() {
 
-    if (
-        roomCodeDisplay &&
-        roomData.code
-    ) {
+    if (!auctionData) {
+
+        return;
+
+    }
+
+
+    if (roomCodeDisplay) {
 
         roomCodeDisplay.textContent =
-            roomData.code;
+            auctionData.code ||
+            roomId;
 
     }
 
 
     if (
-        roomData.status ===
+        auctionData.status ===
         "finished"
     ) {
-
-        stopAuctioneer();
 
         showFinalResults();
 
@@ -374,10 +828,16 @@ function renderAuction() {
     }
 
 
+    const round =
+        Number(
+            auctionData.currentRound
+        ) || 1;
+
+
     if (roundDisplay) {
 
         roundDisplay.textContent =
-            `${currentRound} / 10`;
+            `${round} / ${TOTAL_ROUNDS}`;
 
     }
 
@@ -385,15 +845,14 @@ function renderAuction() {
     if (storageNumber) {
 
         storageNumber.textContent =
-            currentRound;
+            round;
 
     }
 
 
     const storage =
-        roomData.storages &&
-        roomData.storages[
-            currentRound - 1
+        auctionData.storages?.[
+            round - 1
         ];
 
 
@@ -404,20 +863,50 @@ function renderAuction() {
     }
 
 
-    if (storageIcon) {
-
-        storageIcon.textContent =
-            storage.icon ||
-            "📦";
-
-    }
+    renderStorage(
+        storage,
+        round
+    );
 
 
-    if (storageCategory) {
+    renderBid(
+        storage
+    );
 
-        storageCategory.textContent =
-            storage.category ||
-            "MYSTERY";
+
+    renderBidders(
+        storage
+    );
+
+
+    renderAuctionLog(
+        storage
+    );
+
+
+    renderCallState();
+
+
+    updateBidButton(
+        storage
+    );
+
+}
+
+
+/* =========================================================
+   RENDER STORAGE
+========================================================= */
+
+function renderStorage(
+    storage,
+    round
+) {
+
+    if (itemVisual) {
+
+        itemVisual.textContent =
+            storage.icon || "📦";
 
     }
 
@@ -425,17 +914,25 @@ function renderAuction() {
     if (storageTitle) {
 
         storageTitle.textContent =
-            storage.name ||
-            `UNIT #${currentRound}`;
+            `UNIT #${round}`;
 
     }
 
 
-    if (storageDescription) {
+    if (itemName) {
 
-        storageDescription.textContent =
+        itemName.textContent =
+            storage.name ||
+            "Mystery Storage";
+
+    }
+
+
+    if (itemDescription) {
+
+        itemDescription.textContent =
             storage.description ||
-            "A mysterious item.";
+            "The contents are unknown.";
 
     }
 
@@ -455,11 +952,115 @@ function renderAuction() {
 
     }
 
+}
+
+
+/* =========================================================
+   CALL STATE
+========================================================= */
+
+function renderCallState() {
+
+    const phase =
+        auctionData.phase ||
+        "open";
+
+    const callNumber =
+        Number(
+            auctionData.callNumber
+        ) || 0;
+
+
+    if (phase === "open") {
+
+        auctionStatus.textContent =
+            "OPEN FOR BIDS";
+
+        auctionMessage.textContent =
+            "Place your bid. The auctioneer is waiting.";
+
+        return;
+
+    }
+
+
+    if (phase === "call") {
+
+        if (callNumber === 1) {
+
+            auctionStatus.textContent =
+                "GOING ONCE";
+
+            auctionMessage.textContent =
+                "Going once... any higher bid?";
+
+        }
+
+        else if (callNumber === 2) {
+
+            auctionStatus.textContent =
+                "GOING TWICE";
+
+            auctionMessage.textContent =
+                "Going twice... final opportunity.";
+
+        }
+
+        else if (callNumber === 3) {
+
+            auctionStatus.textContent =
+                "FINAL CALL";
+
+            auctionMessage.textContent =
+                "Last call... going, going...";
+
+        }
+
+        return;
+
+    }
+
+
+    if (phase === "sold") {
+
+        auctionStatus.textContent =
+            "SOLD! 🔨";
+
+        auctionMessage.textContent =
+            auctionData.currentBidderName
+                ? `${auctionData.currentBidderName} wins the unit.`
+                : "No one bought this unit.";
+
+    }
+
+
+    if (phase === "preparing") {
+
+        auctionStatus.textContent =
+            "NEXT UNIT";
+
+        auctionMessage.textContent =
+            "Preparing the next storage unit...";
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER BID
+========================================================= */
+
+function renderBid(
+    storage
+) {
 
     const bid =
-        Number(storage.currentBid) > 0
-            ? Number(storage.currentBid)
-            : Number(storage.basePrice) || 0;
+        Number(
+            storage.currentBid
+        ) || Number(
+            storage.basePrice
+        ) || 0;
 
 
     if (currentBid) {
@@ -478,830 +1079,92 @@ function renderAuction() {
 
     }
 
-
-    renderCallStatus(storage);
-
-    renderBidders(storage);
-
-    renderAuctionLog(storage);
-
-    updatePlayerPoints();
-
-    updateBidControls(storage);
-
 }
 
 
-/* =========================
-   AUCTION CALL DISPLAY
-========================= */
-
-function renderCallStatus(storage) {
-
-    const call =
-        Number(storage.callNumber) || 0;
-
-
-    if (
-        storage.sold
-    ) {
-
-        if (auctionStatus) {
-
-            auctionStatus.textContent =
-                "SOLD";
-
-        }
-
-        if (auctionMessage) {
-
-            auctionMessage.textContent =
-                `${storage.currentBidderName || "Player"} bought the lot for ${storage.currentBid} CP.`;
-
-        }
-
-        if (callBadge) {
-
-            callBadge.textContent =
-                "SOLD";
-
-        }
-
-        return;
-
-    }
-
-
-    if (call === 0) {
-
-        if (auctionStatus) {
-
-            auctionStatus.textContent =
-                "AUCTION OPEN";
-
-        }
-
-        if (auctionMessage) {
-
-            auctionMessage.textContent =
-                storage.currentBidderName
-                    ? `Going at ${storage.currentBid} CP. Any advance?`
-                    : "Who wants to make the opening bid?";
-
-        }
-
-        if (callBadge) {
-
-            callBadge.textContent =
-                "OPEN";
-
-        }
-
-        return;
-
-    }
-
-
-    if (call === 1) {
-
-        if (auctionStatus) {
-
-            auctionStatus.textContent =
-                "GOING ONCE";
-
-        }
-
-        if (auctionMessage) {
-
-            auctionMessage.textContent =
-                `Going once at ${storage.currentBid} CP...`;
-
-        }
-
-        if (callBadge) {
-
-            callBadge.textContent =
-                "1ST CALL";
-
-        }
-
-        return;
-
-    }
-
-
-    if (call === 2) {
-
-        if (auctionStatus) {
-
-            auctionStatus.textContent =
-                "GOING TWICE";
-
-        }
-
-        if (auctionMessage) {
-
-            auctionMessage.textContent =
-                `Going twice at ${storage.currentBid} CP...`;
-
-        }
-
-        if (callBadge) {
-
-            callBadge.textContent =
-                "2ND CALL";
-
-        }
-
-        return;
-
-    }
-
-
-    if (call === 3) {
-
-        if (auctionStatus) {
-
-            auctionStatus.textContent =
-                "LAST CALL";
-
-        }
-
-        if (auctionMessage) {
-
-            auctionMessage.textContent =
-                `Final call at ${storage.currentBid} CP...`;
-
-        }
-
-        if (callBadge) {
-
-            callBadge.textContent =
-                "3RD CALL";
-
-        }
-
-    }
-
-}
-
-
-/* =========================
-   AUCTIONEER ENGINE
-========================= */
-
-function startAuctioneer() {
-
-    stopAuctioneer();
-
-    if (
-        !currentUser ||
-        !roomData
-    ) {
-
-        return;
-
-    }
-
-    if (
-        roomData.status !==
-        "playing"
-    ) {
-
-        return;
-
-    }
-
-    if (
-        roomData.hostId !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-    auctioneerInterval =
-        setInterval(
-            auctioneerTick,
-            1000
-        );
-
-}
-
-
-function stopAuctioneer() {
-
-    if (auctioneerInterval) {
-
-        clearInterval(
-            auctioneerInterval
-        );
-
-        auctioneerInterval =
-            null;
-
-    }
-
-}
-
-
-/* =========================
-   AUCTIONEER TICK
-========================= */
-
-async function auctioneerTick() {
-
-    if (
-        !roomData ||
-        !currentUser
-    ) {
-
-        return;
-
-    }
-
-    if (
-        roomData.hostId !==
-        currentUser.uid
-    ) {
-
-        stopAuctioneer();
-
-        return;
-
-    }
-
-    if (
-        roomData.status !==
-        "playing"
-    ) {
-
-        stopAuctioneer();
-
-        return;
-
-    }
-
-    const index =
-        (
-            Number(
-                roomData.currentRound
-            ) || 1
-        ) - 1;
-
-    const storage =
-        roomData.storages?.[index];
-
-
-    if (!storage) {
-
-        return;
-
-    }
-
-
-    if (storage.sold) {
-
-        return;
-
-    }
-
-
-    /*
-        If nobody has bid yet,
-        don't start "going once".
-    */
-
-    if (
-        !storage.currentBidder
-    ) {
-
-        return;
-
-    }
-
-
-    const lastBidAt =
-        Number(
-            storage.lastBidAt
-        ) || 0;
-
-
-    const elapsed =
-        Date.now() -
-        lastBidAt;
-
-
-    /*
-        A player gets CALL_DELAY
-        milliseconds to respond.
-    */
-
-    if (
-        elapsed <
-        CALL_DELAY
-    ) {
-
-        return;
-
-    }
-
-
-    const callNumber =
-        Number(
-            storage.callNumber
-        ) || 0;
-
-
-    if (
-        callNumber < 3
-    ) {
-
-        await advanceCall(
-            callNumber + 1
-        );
-
-        return;
-
-    }
-
-
-    await sellCurrentLot();
-
-}
-
-
-/* =========================
-   ADVANCE CALL
-========================= */
-
-async function advanceCall(
-    nextCall
-) {
-
-    const auctionRef =
-        ref(
-            database,
-            `chaosAuctions/${roomId}`
-        );
-
-    try {
-
-        await runTransaction(
-            auctionRef,
-            function (data) {
-
-                if (!data) {
-
-                    return;
-
-                }
-
-                if (
-                    data.status !==
-                    "playing"
-                ) {
-
-                    return;
-
-                }
-
-                if (
-                    data.hostId !==
-                    currentUser.uid
-                ) {
-
-                    return;
-
-                }
-
-                const index =
-                    (
-                        Number(
-                            data.currentRound
-                        ) || 1
-                    ) - 1;
-
-                const storage =
-                    data.storages?.[index];
-
-
-                if (!storage) {
-
-                    return;
-
-                }
-
-
-                if (storage.sold) {
-
-                    return;
-
-                }
-
-
-                if (
-                    !storage.currentBidder
-                ) {
-
-                    return;
-
-                }
-
-
-                const elapsed =
-                    Date.now() -
-                    (
-                        Number(
-                            storage.lastBidAt
-                        ) || 0
-                    );
-
-
-                if (
-                    elapsed <
-                    CALL_DELAY
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    Number(
-                        storage.callNumber
-                    ) !==
-                    nextCall - 1
-                ) {
-
-                    return;
-
-                }
-
-
-                storage.callNumber =
-                    nextCall;
-
-                storage.callText =
-                    nextCall === 1
-                        ? "GOING ONCE"
-                        : nextCall === 2
-                            ? "GOING TWICE"
-                            : "LAST CALL";
-
-
-                storage.callAt =
-                    Date.now();
-
-
-                data.storages[index] =
-                    storage;
-
-
-                return data;
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Auctioneer call failed:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   SELL LOT
-========================= */
-
-async function sellCurrentLot() {
-
-    const auctionRef =
-        ref(
-            database,
-            `chaosAuctions/${roomId}`
-        );
-
-    try {
-
-        const result =
-            await runTransaction(
-                auctionRef,
-                function (data) {
-
-                    if (!data) {
-
-                        return;
-
-                    }
-
-                    if (
-                        data.status !==
-                        "playing"
-                    ) {
-
-                        return;
-
-                    }
-
-                    if (
-                        data.hostId !==
-                        currentUser.uid
-                    ) {
-
-                        return;
-
-                    }
-
-                    const index =
-                        (
-                            Number(
-                                data.currentRound
-                            ) || 1
-                        ) - 1;
-
-                    const storage =
-                        data.storages?.[index];
-
-
-                    if (!storage) {
-
-                        return;
-
-                    }
-
-
-                    if (storage.sold) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        !storage.currentBidder
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        Number(
-                            storage.callNumber
-                        ) !== 3
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const winnerId =
-                        storage.currentBidder;
-
-                    const price =
-                        Number(
-                            storage.currentBid
-                        ) || 0;
-
-
-                    const winner =
-                        data.players?.[winnerId];
-
-
-                    if (winner) {
-
-                        winner.bought =
-                            Number(
-                                winner.bought
-                            ) + 1;
-
-                        winner.spent =
-                            Number(
-                                winner.spent
-                            ) + price;
-
-                        winner.chaosPoints =
-                            Math.max(
-                                0,
-                                (
-                                    Number(
-                                        winner.chaosPoints
-                                    ) || 0
-                                ) - price
-                            );
-
-                    }
-
-
-                    storage.sold =
-                        true;
-
-                    storage.soldAt =
-                        Date.now();
-
-                    storage.callText =
-                        "SOLD";
-
-
-                    data.storages[index] =
-                        storage;
-
-
-                    /*
-                        Move to next lot.
-                    */
-
-                    if (
-                        index >=
-                        data.storages.length - 1
-                    ) {
-
-                        data.status =
-                            "finished";
-
-                        data.finishedAt =
-                            Date.now();
-
-                    }
-
-                    else {
-
-                        data.currentRound =
-                            index + 2;
-
-                    }
-
-
-                    data.players[winnerId] =
-                        winner;
-
-
-                    return data;
-
-                }
-            );
-
-
-        if (
-            result.committed
-        ) {
-
-            /*
-                Refresh the local state immediately.
-            */
-
-            roomData =
-                result.snapshot.val();
-
-            players =
-                roomData.players || {};
-
-            currentRound =
-                Number(
-                    roomData.currentRound
-                ) || 1;
-
-            renderAuction();
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Unable to sell lot:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   UPDATE PLAYER POINTS
-========================= */
-
-function updatePlayerPoints() {
-
-    if (
-        !currentUser ||
-        !players
-    ) {
-
-        return;
-
-    }
-
-    const me =
-        players[
-            currentUser.uid
-        ];
-
-    if (!me) {
-
-        return;
-
-    }
-
-    const points =
-        Number(
-            me.chaosPoints
-        ) || 0;
-
-
-    if (playerPoints) {
-
-        playerPoints.textContent =
-            `${points} CP`;
-
-    }
-
-}
-
-
-/* =========================
-   BID CONTROLS
-========================= */
-
-function updateBidControls(
+/* =========================================================
+   BID BUTTON
+========================================================= */
+
+function updateBidButton(
     storage
 ) {
+
+    if (!bidButton) {
+
+        return;
+
+    }
+
+
+    /*
+        Bids are allowed only while
+        the auction is OPEN.
+    */
+
+    if (
+        auctionData.phase !==
+        "open"
+    ) {
+
+        bidButton.disabled =
+            true;
+
+        return;
+
+    }
+
 
     const current =
         Number(
             storage.currentBid
-        ) ||
-        Number(
-            storage.basePrice
-        ) ||
-        0;
+        ) || 0;
+
 
     const nextBid =
         current +
         selectedBid;
 
-    if (bidIncrement) {
 
-        bidIncrement.textContent =
-            selectedBid;
+    const myPoints =
+        Number(
+            auctionData.players?.[
+                currentUser.uid
+            ]?.chaosPoints
+        ) ||
+        getLocalUserPoints();
 
-    }
 
-    if (bidButton) {
-
-        const points =
-            getLocalUserPoints();
-
-        bidButton.disabled =
-            nextBid >
-            points;
-
-    }
+    bidButton.disabled =
+        nextBid >
+        myPoints;
 
 }
 
 
-/* =========================
-   LOCAL CP
-========================= */
+/* =========================================================
+   GET LOCAL POINTS
+========================================================= */
 
 function getLocalUserPoints() {
 
-    const me =
-        players?.[
-            currentUser?.uid
-        ];
+    const text =
+        playerPoints?.textContent ||
+        "0";
 
-    if (me) {
-
-        return Number(
-            me.chaosPoints
-        ) || 0;
-
-    }
-
-    return 0;
+    return Number(
+        text.replace(
+            /[^0-9-]/g,
+            ""
+        )
+    ) || 0;
 
 }
 
 
-/* =========================
-   BID INCREMENT
-========================= */
+/* =========================================================
+   INCREMENT
+========================================================= */
 
 if (bidPlusButton) {
 
@@ -1311,23 +1174,27 @@ if (bidPlusButton) {
 
             selectedBid += 10;
 
-            if (bidIncrement) {
+            bidIncrement.textContent =
+                selectedBid;
 
-                bidIncrement.textContent =
-                    selectedBid;
+            if (auctionData) {
 
-            }
+                const storage =
+                    auctionData.storages?.[
+                        (
+                            Number(
+                                auctionData.currentRound
+                            ) || 1
+                        ) - 1
+                    ];
 
-            const storage =
-                roomData?.storages?.[
-                    currentRound - 1
-                ];
+                if (storage) {
 
-            if (storage) {
+                    updateBidButton(
+                        storage
+                    );
 
-                updateBidControls(
-                    storage
-                );
+                }
 
             }
 
@@ -1349,23 +1216,27 @@ if (bidMinusButton) {
                     selectedBid - 10
                 );
 
-            if (bidIncrement) {
+            bidIncrement.textContent =
+                selectedBid;
 
-                bidIncrement.textContent =
-                    selectedBid;
+            if (auctionData) {
 
-            }
+                const storage =
+                    auctionData.storages?.[
+                        (
+                            Number(
+                                auctionData.currentRound
+                            ) || 1
+                        ) - 1
+                    ];
 
-            const storage =
-                roomData?.storages?.[
-                    currentRound - 1
-                ];
+                if (storage) {
 
-            if (storage) {
+                    updateBidButton(
+                        storage
+                    );
 
-                updateBidControls(
-                    storage
-                );
+                }
 
             }
 
@@ -1375,9 +1246,9 @@ if (bidMinusButton) {
 }
 
 
-/* =========================
+/* =========================================================
    PLACE BID
-========================= */
+========================================================= */
 
 if (bidButton) {
 
@@ -1393,8 +1264,23 @@ async function placeBid() {
 
     if (
         !currentUser ||
-        !roomId
+        !roomId ||
+        !auctionData
     ) {
+
+        return;
+
+    }
+
+
+    if (
+        auctionData.phase !==
+        "open"
+    ) {
+
+        showBidStatus(
+            "The auctioneer has already started calling."
+        );
 
         return;
 
@@ -1404,7 +1290,7 @@ async function placeBid() {
     const auctionRef =
         ref(
             database,
-            `chaosAuctions/${roomId}`
+            `${AUCTION_PATH}/${roomId}`
         );
 
 
@@ -1421,9 +1307,10 @@ async function placeBid() {
 
                     }
 
+
                     if (
-                        data.status !==
-                        "playing"
+                        data.status ===
+                        "finished"
                     ) {
 
                         return;
@@ -1431,12 +1318,24 @@ async function placeBid() {
                     }
 
 
+                    if (
+                        data.phase !==
+                        "open"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const round =
+                        Number(
+                            data.currentRound
+                        ) || 1;
+
+
                     const index =
-                        (
-                            Number(
-                                data.currentRound
-                            ) || 1
-                        ) - 1;
+                        round - 1;
 
 
                     const storage =
@@ -1452,27 +1351,20 @@ async function placeBid() {
                     }
 
 
-                    if (storage.sold) {
-
-                        return;
-
-                    }
-
-
-                    const me =
+                    const player =
                         data.players?.[
                             currentUser.uid
                         ];
 
 
-                    if (!me) {
+                    if (!player) {
 
                         return;
 
                     }
 
 
-                    const current =
+                    const oldBid =
                         Number(
                             storage.currentBid
                         ) ||
@@ -1483,13 +1375,13 @@ async function placeBid() {
 
 
                     const newBid =
-                        current +
+                        oldBid +
                         selectedBid;
 
 
                     const points =
                         Number(
-                            me.chaosPoints
+                            player.chaosPoints
                         ) || 0;
 
 
@@ -1504,8 +1396,8 @@ async function placeBid() {
 
 
                     /*
-                        Every bid resets
-                        the classical call.
+                        New bid resets the
+                        classical call sequence.
                     */
 
                     storage.currentBid =
@@ -1515,17 +1407,8 @@ async function placeBid() {
                         currentUser.uid;
 
                     storage.currentBidderName =
-                        me.username ||
+                        player.username ||
                         "Unknown";
-
-                    storage.callNumber =
-                        0;
-
-                    storage.callText =
-                        "OPEN FOR BIDDING";
-
-                    storage.lastBidAt =
-                        Date.now();
 
 
                     if (
@@ -1550,7 +1433,7 @@ async function placeBid() {
                             currentUser.uid,
 
                         username:
-                            me.username ||
+                            player.username ||
                             "Unknown",
 
                         amount:
@@ -1568,6 +1451,16 @@ async function placeBid() {
                         storage;
 
 
+                    data.phase =
+                        "open";
+
+                    data.callNumber =
+                        0;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+
                     return data;
 
                 }
@@ -1579,7 +1472,7 @@ async function placeBid() {
         ) {
 
             showBidStatus(
-                "Bid rejected. Check your CP or wait for another bid."
+                "Bid rejected. Try again."
             );
 
             return;
@@ -1601,7 +1494,7 @@ async function placeBid() {
         );
 
         showBidStatus(
-            "Something went wrong."
+            "Unable to place bid."
         );
 
     }
@@ -1609,39 +1502,539 @@ async function placeBid() {
 }
 
 
-/* =========================
-   BID STATUS
-========================= */
+/* =========================================================
+   AUCTION SCHEDULER
+========================================================= */
 
-function showBidStatus(
-    message
-) {
+function scheduleAuctionProgress() {
 
-    if (!bidStatus) {
+    if (schedulerTimer) {
+
+        clearTimeout(
+            schedulerTimer
+        );
+
+        schedulerTimer =
+            null;
+
+    }
+
+
+    if (!auctionData) {
 
         return;
 
     }
 
-    bidStatus.textContent =
-        message;
 
-    setTimeout(
-        function () {
+    if (
+        auctionData.status ===
+        "finished"
+    ) {
 
-            bidStatus.textContent =
-                "";
+        return;
 
-        },
-        2500
-    );
+    }
+
+
+    /*
+        Only the host controls progression.
+    */
+
+    if (
+        auctionData.hostId !==
+        currentUser?.uid
+    ) {
+
+        return;
+
+    }
+
+
+    const phase =
+        auctionData.phase ||
+        "open";
+
+
+    const startedAt =
+        Number(
+            auctionData.phaseStartedAt
+        ) || Date.now();
+
+
+    let delay;
+
+
+    if (
+        phase === "open"
+    ) {
+
+        delay =
+            CALL_DELAY;
+
+    }
+
+    else if (
+        phase === "call"
+    ) {
+
+        if (
+            Number(
+                auctionData.callNumber
+            ) >= 3
+        ) {
+
+            delay =
+                SOLD_DELAY;
+
+        }
+
+        else {
+
+            delay =
+                CALL_DELAY;
+
+        }
+
+    }
+
+    else if (
+        phase === "sold"
+    ) {
+
+        delay =
+            1800;
+
+    }
+
+    else if (
+        phase === "preparing"
+    ) {
+
+        delay =
+            1200;
+
+    }
+
+    else {
+
+        return;
+
+    }
+
+
+    const elapsed =
+        Date.now() -
+        startedAt;
+
+
+    const remaining =
+        Math.max(
+            100,
+            delay - elapsed
+        );
+
+
+    schedulerTimer =
+        setTimeout(
+            function () {
+
+                advanceAuction();
+
+            },
+            remaining
+        );
 
 }
 
 
-/* =========================
-   BIDDERS
-========================= */
+/* =========================================================
+   ADVANCE AUCTION
+========================================================= */
+
+async function advanceAuction() {
+
+    if (
+        !auctionData ||
+        auctionData.hostId !==
+        currentUser?.uid
+    ) {
+
+        return;
+
+    }
+
+
+    const auctionRef =
+        ref(
+            database,
+            `${AUCTION_PATH}/${roomId}`
+        );
+
+
+    try {
+
+        await runTransaction(
+            auctionRef,
+            function (data) {
+
+                if (!data) {
+
+                    return;
+
+                }
+
+
+                if (
+                    data.status ===
+                    "finished"
+                ) {
+
+                    return;
+
+                }
+
+
+                const phase =
+                    data.phase ||
+                    "open";
+
+
+                const round =
+                    Number(
+                        data.currentRound
+                    ) || 1;
+
+
+                /*
+                    OPEN -> GOING ONCE
+                */
+
+                if (
+                    phase ===
+                    "open"
+                ) {
+
+                    data.phase =
+                        "call";
+
+                    data.callNumber =
+                        1;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                /*
+                    GOING ONCE -> GOING TWICE
+                */
+
+                if (
+                    phase ===
+                    "call" &&
+                    Number(
+                        data.callNumber
+                    ) === 1
+                ) {
+
+                    data.callNumber =
+                        2;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                /*
+                    GOING TWICE -> FINAL CALL
+                */
+
+                if (
+                    phase ===
+                    "call" &&
+                    Number(
+                        data.callNumber
+                    ) === 2
+                ) {
+
+                    data.callNumber =
+                        3;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                /*
+                    FINAL CALL -> SOLD
+                */
+
+                if (
+                    phase ===
+                    "call" &&
+                    Number(
+                        data.callNumber
+                    ) === 3
+                ) {
+
+                    const storage =
+                        data.storages?.[
+                            round - 1
+                        ];
+
+
+                    if (!storage) {
+
+                        return;
+
+                    }
+
+
+                    const winnerId =
+                        storage.currentBidder;
+
+
+                    const finalPrice =
+                        Number(
+                            storage.currentBid
+                        ) ||
+                        Number(
+                            storage.basePrice
+                        ) ||
+                        0;
+
+
+                    /*
+                        There was a winner.
+                    */
+
+                    if (winnerId) {
+
+                        const winner =
+                            data.players?.[
+                                winnerId
+                            ];
+
+
+                        if (winner) {
+
+                            winner.chaosPoints =
+                                Math.max(
+                                    0,
+                                    (
+                                        Number(
+                                            winner.chaosPoints
+                                        ) || 0
+                                    ) -
+                                    finalPrice
+                                );
+
+
+                            winner.spent =
+                                (
+                                    Number(
+                                        winner.spent
+                                    ) || 0
+                                ) +
+                                finalPrice;
+
+
+                            winner.bought =
+                                (
+                                    Number(
+                                        winner.bought
+                                    ) || 0
+                                ) +
+                                1;
+
+
+                            if (
+                                !winner.items
+                            ) {
+
+                                winner.items =
+                                    {};
+
+                            }
+
+
+                            winner.items[
+                                String(round)
+                            ] = {
+
+                                name:
+                                    storage.name,
+
+                                icon:
+                                    storage.icon,
+
+                                value:
+                                    Number(
+                                        storage.estimatedValue
+                                    ) || 0,
+
+                                price:
+                                    finalPrice
+
+                            };
+
+                        }
+
+
+                        storage.result =
+                            "sold";
+
+                    }
+
+                    else {
+
+                        storage.result =
+                            "unsold";
+
+                    }
+
+
+                    data.storages[
+                        round - 1
+                    ] =
+                        storage;
+
+
+                    data.phase =
+                        "sold";
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                /*
+                    SOLD -> NEXT UNIT
+                */
+
+                if (
+                    phase ===
+                    "sold"
+                ) {
+
+                    if (
+                        round >=
+                        TOTAL_ROUNDS
+                    ) {
+
+                        data.status =
+                            "finished";
+
+                        data.phase =
+                            "finished";
+
+                        data.finishedAt =
+                            Date.now();
+
+                        return data;
+
+                    }
+
+
+                    data.currentRound =
+                        round + 1;
+
+                    data.phase =
+                        "preparing";
+
+                    data.callNumber =
+                        0;
+
+                    data.currentBid =
+                        0;
+
+                    data.currentBidder =
+                        null;
+
+                    data.currentBidderName =
+                        null;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                /*
+                    PREPARING -> OPEN
+                */
+
+                if (
+                    phase ===
+                    "preparing"
+                ) {
+
+                    const nextStorage =
+                        data.storages?.[
+                            round - 1
+                        ];
+
+
+                    if (
+                        !nextStorage
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    data.phase =
+                        "open";
+
+                    data.callNumber =
+                        0;
+
+                    data.phaseStartedAt =
+                        Date.now();
+
+                    return data;
+
+                }
+
+
+                return;
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Auction progression failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BIDDER LIST
+========================================================= */
 
 function renderBidders(
     storage
@@ -1653,25 +2046,34 @@ function renderBidders(
 
     }
 
+
     biddersList.innerHTML =
         "";
+
 
     const history =
         storage.bidHistory ||
         {};
 
+
     const bids =
-        Object.values(history)
-            .sort(
-                function (a, b) {
+        Object.values(
+            history
+        )
+        .sort(
+            function (a, b) {
 
-                    return (
-                        b.timestamp -
+                return (
+                    Number(
+                        b.timestamp
+                    ) -
+                    Number(
                         a.timestamp
-                    );
+                    )
+                );
 
-                }
-            );
+            }
+        );
 
 
     if (bidderCount) {
@@ -1682,7 +2084,9 @@ function renderBidders(
     }
 
 
-    if (!bids.length) {
+    if (
+        bids.length === 0
+    ) {
 
         biddersList.innerHTML = `
             <div class="empty-bidders">
@@ -1698,32 +2102,34 @@ function renderBidders(
     bids.forEach(
         function (bid) {
 
-            const element =
-                document.createElement("div");
+            const item =
+                document.createElement(
+                    "div"
+                );
 
-            element.className =
+            item.className =
                 "bidder";
 
-            element.innerHTML = `
+
+            item.innerHTML = `
 
                 <span class="bidder-name">
-
                     ${escapeHTML(
                         bid.username
                     )}
-
                 </span>
 
                 <span class="bidder-amount">
-
-                    ${Number(bid.amount)} CP
-
+                    ${Number(
+                        bid.amount
+                    ) || 0} CP
                 </span>
 
             `;
 
+
             biddersList.appendChild(
-                element
+                item
             );
 
         }
@@ -1732,9 +2138,9 @@ function renderBidders(
 }
 
 
-/* =========================
+/* =========================================================
    AUCTION LOG
-========================= */
+========================================================= */
 
 function renderAuctionLog(
     storage
@@ -1746,80 +2152,71 @@ function renderAuctionLog(
 
     }
 
+
+    auctionLog.innerHTML =
+        "";
+
+
     const history =
         storage.bidHistory ||
         {};
 
+
     const bids =
-        Object.values(history)
-            .sort(
-                function (a, b) {
+        Object.values(
+            history
+        )
+        .sort(
+            function (a, b) {
 
-                    return (
-                        a.timestamp -
+                return (
+                    Number(
+                        a.timestamp
+                    ) -
+                    Number(
                         b.timestamp
-                    );
+                    )
+                );
 
-                }
-            );
-
-
-    const signature =
-        JSON.stringify({
-            round: currentRound,
-            bids: bids.length,
-            call: storage.callNumber,
-            sold: storage.sold
-        });
+            }
+        );
 
 
     if (
-        signature ===
-        lastRenderedLogSignature
+        bids.length === 0
     ) {
+
+        auctionLog.innerHTML = `
+
+            <div class="log-item">
+
+                Auction opened at
+                <strong>
+                    ${Number(
+                        storage.basePrice
+                    ) || 0} CP
+                </strong>
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    lastRenderedLogSignature =
-        signature;
-
-
-    auctionLog.innerHTML =
-        "";
-
-
-    const opening =
-        document.createElement("div");
-
-    opening.className =
-        "log-item";
-
-    opening.innerHTML = `
-
-        Auction opened at
-
-        <strong>
-            ${Number(storage.basePrice)} CP
-        </strong>
-
-    `;
-
-    auctionLog.appendChild(
-        opening
-    );
-
-
     bids.forEach(
         function (bid) {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             item.className =
                 "log-item";
+
 
             item.innerHTML = `
 
@@ -1832,10 +2229,13 @@ function renderAuctionLog(
                 bid
 
                 <strong>
-                    ${Number(bid.amount)} CP
+                    ${Number(
+                        bid.amount
+                    ) || 0} CP
                 </strong>
 
             `;
+
 
             auctionLog.appendChild(
                 item
@@ -1844,88 +2244,51 @@ function renderAuctionLog(
         }
     );
 
+}
 
-    if (
-        Number(
-            storage.callNumber
-        ) > 0
-    ) {
 
-        const call =
-            document.createElement("div");
+/* =========================================================
+   BID STATUS
+========================================================= */
 
-        call.className =
-            "log-item";
+function showBidStatus(
+    message
+) {
 
-        call.innerHTML = `
+    if (!bidStatus) {
 
-            <strong>
-                ${escapeHTML(
-                    storage.callText
-                )}
-            </strong>
-
-            at
-
-            <strong>
-                ${Number(storage.currentBid)} CP
-            </strong>
-
-        `;
-
-        auctionLog.appendChild(
-            call
-        );
+        return;
 
     }
 
 
-    if (storage.sold) {
-
-        const sold =
-            document.createElement("div");
-
-        sold.className =
-            "log-item";
-
-        sold.innerHTML = `
-
-            <strong>
-                SOLD
-            </strong>
-
-            to
-
-            <strong>
-                ${escapeHTML(
-                    storage.currentBidderName
-                )}
-            </strong>
-
-            for
-
-            <strong>
-                ${Number(storage.currentBid)} CP
-            </strong>
-
-        `;
-
-        auctionLog.appendChild(
-            sold
-        );
-
-    }
+    bidStatus.textContent =
+        message;
 
 
-    auctionLog.scrollTop =
-        auctionLog.scrollHeight;
+    setTimeout(
+        function () {
+
+            if (
+                bidStatus.textContent ===
+                message
+            ) {
+
+                bidStatus.textContent =
+                    "";
+
+            }
+
+        },
+        2500
+    );
 
 }
 
 
-/* =========================
+/* =========================================================
    FINAL RESULTS
-========================= */
+========================================================= */
 
 function showFinalResults() {
 
@@ -1935,63 +2298,116 @@ function showFinalResults() {
 
     }
 
+
     resultsCard.classList.remove(
         "hidden"
     );
+
+
+    document
+        .querySelector(
+            ".hero"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".player-bar"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".auction-status-card"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".storage-card"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".bid-card"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".players-card"
+        )
+        ?.classList.add(
+            "hidden"
+        );
+
+
+    document
+        .querySelector(
+            ".log-card"
+        )
+        ?.classList.add(
+            "hidden"
+        );
 
 
     const results =
         calculateResults();
 
 
-    renderPodium(results);
-
-    renderOtherBuyers(results);
-
-    renderNonBuyers(results);
+    renderPodium(
+        results
+    );
 
 
-    document
-        .querySelector(".auction-status-card")
-        ?.classList.add("hidden");
+    renderOtherBuyers(
+        results
+    );
 
-    document
-        .querySelector(".storage-card")
-        ?.classList.add("hidden");
 
-    document
-        .querySelector(".bid-card")
-        ?.classList.add("hidden");
-
-    document
-        .querySelector(".players-card")
-        ?.classList.add("hidden");
-
-    document
-        .querySelector(".log-card")
-        ?.classList.add("hidden");
+    renderNonBuyers(
+        results
+    );
 
 }
 
 
-/* =========================
+/* =========================================================
    CALCULATE RESULTS
-========================= */
+========================================================= */
 
 function calculateResults() {
 
     const allPlayers =
-        Object.values(players);
+        Object.values(
+            auctionData.players ||
+            {}
+        );
 
 
-    const playerResults =
-        {};
+    const results = {};
 
 
     allPlayers.forEach(
         function (player) {
 
-            playerResults[
+            results[
                 player.uid
             ] = {
 
@@ -2002,18 +2418,18 @@ function calculateResults() {
                     player.username ||
                     "Unknown",
 
-                profit:
-                    0,
+                spent:
+                    Number(
+                        player.spent
+                    ) || 0,
 
                 bought:
                     Number(
                         player.bought
                     ) || 0,
 
-                spent:
-                    Number(
-                        player.spent
-                    ) || 0
+                profit:
+                    0
 
             };
 
@@ -2022,60 +2438,56 @@ function calculateResults() {
 
 
     const storages =
-        roomData.storages ||
+        auctionData.storages ||
         [];
 
 
-    Object.values(storages)
-        .forEach(
-            function (storage) {
+    storages.forEach(
+        function (storage) {
 
-                if (
-                    !storage.sold ||
-                    !storage.currentBidder
-                ) {
-
-                    return;
-
-                }
+            const winner =
+                storage.currentBidder;
 
 
-                const player =
-                    playerResults[
-                        storage.currentBidder
-                    ];
+            if (!winner) {
 
-
-                if (!player) {
-
-                    return;
-
-                }
-
-
-                const value =
-                    Number(
-                        storage.estimatedValue
-                    ) || 0;
-
-
-                const price =
-                    Number(
-                        storage.currentBid
-                    ) || 0;
-
-
-                player.profit +=
-                    value -
-                    price;
+                return;
 
             }
-        );
+
+
+            if (
+                !results[winner]
+            ) {
+
+                return;
+
+            }
+
+
+            const value =
+                Number(
+                    storage.estimatedValue
+                ) || 0;
+
+
+            const price =
+                Number(
+                    storage.currentBid
+                ) || 0;
+
+
+            results[winner].profit +=
+                value -
+                price;
+
+        }
+    );
 
 
     const ranked =
         Object.values(
-            playerResults
+            results
         )
         .sort(
             function (a, b) {
@@ -2091,14 +2503,16 @@ function calculateResults() {
 
     return {
 
-        ranked,
+        ranked:
+            ranked,
 
         buyers:
             ranked.filter(
                 function (player) {
 
                     return (
-                        player.bought > 0
+                        player.bought >
+                        0
                     );
 
                 }
@@ -2109,7 +2523,8 @@ function calculateResults() {
                 function (player) {
 
                     return (
-                        player.bought === 0
+                        player.bought ===
+                        0
                     );
 
                 }
@@ -2120,9 +2535,9 @@ function calculateResults() {
 }
 
 
-/* =========================
+/* =========================================================
    PODIUM
-========================= */
+========================================================= */
 
 function renderPodium(
     results
@@ -2133,6 +2548,7 @@ function renderPodium(
         return;
 
     }
+
 
     podium.innerHTML =
         "";
@@ -2177,39 +2593,33 @@ function renderPodium(
             }
 
 
-            const div =
-                document.createElement("div");
+            const element =
+                document.createElement(
+                    "div"
+                );
 
-            div.className =
+
+            element.className =
                 `podium-player ${position.className}`;
 
 
-            div.innerHTML = `
+            element.innerHTML = `
 
                 <div class="position">
-
                     ${position.medal}
-
                 </div>
 
-
                 <div class="result-name">
-
                     ${escapeHTML(
                         player.username
                     )}
-
                 </div>
 
-
-                <div class="
-                    result-profit
-                    ${
-                        player.profit >= 0
-                            ? "profit"
-                            : "loss"
-                    }
-                ">
+                <div class="result-profit ${
+                    player.profit >= 0
+                        ? "profit"
+                        : "loss"
+                }">
 
                     ${
                         player.profit >= 0
@@ -2222,7 +2632,9 @@ function renderPodium(
             `;
 
 
-            podium.appendChild(div);
+            podium.appendChild(
+                element
+            );
 
         }
     );
@@ -2230,9 +2642,9 @@ function renderPodium(
 }
 
 
-/* =========================
+/* =========================================================
    OTHER BUYERS
-========================= */
+========================================================= */
 
 function renderOtherBuyers(
     results
@@ -2244,6 +2656,7 @@ function renderOtherBuyers(
 
     }
 
+
     otherBuyers.innerHTML =
         "";
 
@@ -2251,7 +2664,10 @@ function renderOtherBuyers(
     results.buyers
         .slice(3)
         .forEach(
-            function (player, index) {
+            function (
+                player,
+                index
+            ) {
 
                 addResultItem(
                     otherBuyers,
@@ -2264,13 +2680,16 @@ function renderOtherBuyers(
 
 
     if (
-        !otherBuyers.children.length
+        otherBuyers.children.length ===
+        0
     ) {
 
         otherBuyers.innerHTML = `
+
             <div class="result-item">
                 No other buyers.
             </div>
+
         `;
 
     }
@@ -2278,9 +2697,9 @@ function renderOtherBuyers(
 }
 
 
-/* =========================
+/* =========================================================
    NON BUYERS
-========================= */
+========================================================= */
 
 function renderNonBuyers(
     results
@@ -2292,32 +2711,35 @@ function renderNonBuyers(
 
     }
 
+
     nonBuyers.innerHTML =
         "";
 
 
-    results.nonBuyers
-        .forEach(
-            function (player) {
+    results.nonBuyers.forEach(
+        function (player) {
 
-                addResultItem(
-                    nonBuyers,
-                    player,
-                    "NO BUY"
-                );
+            addResultItem(
+                nonBuyers,
+                player,
+                "NO BUY"
+            );
 
-            }
-        );
+        }
+    );
 
 
     if (
-        !nonBuyers.children.length
+        nonBuyers.children.length ===
+        0
     ) {
 
         nonBuyers.innerHTML = `
+
             <div class="result-item">
-                Everyone bought at least one item.
+                Everyone bought at least one unit.
             </div>
+
         `;
 
     }
@@ -2325,9 +2747,9 @@ function renderNonBuyers(
 }
 
 
-/* =========================
+/* =========================================================
    RESULT ITEM
-========================= */
+========================================================= */
 
 function addResultItem(
     container,
@@ -2336,7 +2758,10 @@ function addResultItem(
 ) {
 
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     item.className =
         "result-item";
@@ -2345,23 +2770,17 @@ function addResultItem(
     item.innerHTML = `
 
         <span>
-
             ${position}
-
             ${escapeHTML(
                 player.username
             )}
-
         </span>
 
-
-        <strong
-            class="${
-                player.profit >= 0
-                    ? "profit"
-                    : "loss"
-            }"
-        >
+        <strong class="${
+            player.profit >= 0
+                ? "profit"
+                : "loss"
+        }">
 
             ${
                 player.profit >= 0
@@ -2381,9 +2800,9 @@ function addResultItem(
 }
 
 
-/* =========================
+/* =========================================================
    RETURN LOBBY
-========================= */
+========================================================= */
 
 if (returnLobbyButton) {
 
@@ -2400,14 +2819,18 @@ if (returnLobbyButton) {
 }
 
 
-/* =========================
+/* =========================================================
    ESCAPE HTML
-========================= */
+========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.textContent =
         value ?? "";
