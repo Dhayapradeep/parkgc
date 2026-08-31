@@ -31,13 +31,8 @@
 
 
     <div class="auction-room">
-
-        <span>ROOM</span>
-
-        <strong id="roomCodeDisplay">
-            ------
-        </strong>
-
+        ROOM
+        <strong id="roomCodeDisplay">------</strong>
     </div>
 
 
@@ -55,9 +50,7 @@
 <main>
 
 
-    <!-- =========================
-         HERO
-    ========================== -->
+    <!-- HERO -->
 
     <section class="hero">
 
@@ -81,17 +74,13 @@
 
 
 
-    <!-- =========================
-         PLAYER INFORMATION
-    ========================== -->
+    <!-- PLAYER BAR -->
 
     <section class="player-bar">
 
         <div class="player-stat">
 
-            <span>
-                PLAYER
-            </span>
+            <span>PLAYER</span>
 
             <strong id="playerName">
                 Loading...
@@ -102,9 +91,7 @@
 
         <div class="player-stat">
 
-            <span>
-                CHAOS POINTS
-            </span>
+            <span>CHAOS POINTS</span>
 
             <strong id="playerPoints">
                 0 CP
@@ -115,9 +102,7 @@
 
         <div class="player-stat">
 
-            <span>
-                LOT
-            </span>
+            <span>STORAGE</span>
 
             <strong id="roundDisplay">
                 1 / 10
@@ -129,95 +114,73 @@
 
 
 
-    <!-- =========================
-         AUCTIONEER
-    ========================== -->
+    <!-- AUCTION STATUS -->
 
     <section
         class="auction-status-card"
         id="auctionStatusCard"
     >
 
-        <div class="auctioneer-top">
-
-            <div>
-
-                <p class="round-label">
-                    STORAGE UNIT
-                    <span id="storageNumber">
-                        1
-                    </span>
-                    / 10
-                </p>
-
-                <h2 id="auctionStatus">
-                    AUCTION OPEN
-                </h2>
-
-            </div>
-
-            <div
-                id="callBadge"
-                class="call-badge"
-            >
-                OPEN
-            </div>
-
+        <div class="round-label">
+            STORAGE UNIT
+            <span id="storageNumber">1</span>
+            / 10
         </div>
 
 
-        <p
-            id="auctionMessage"
-            class="auction-message"
+        <div
+            id="auctionStatus"
+            class="auction-call"
         >
-            Who wants to make the opening bid?
+            PREPARING AUCTION...
+        </div>
+
+
+        <p id="auctionMessage">
+            Get ready for the first unit.
         </p>
 
     </section>
 
 
 
-    <!-- =========================
-         ITEM
-    ========================== -->
+    <!-- ITEM DISPLAY -->
 
     <section
         class="storage-card"
         id="storageCard"
     >
 
-        <div class="storage-visual">
-
-            <div
-                id="storageIcon"
-                class="storage-icon"
-            >
-                💎
-            </div>
-
+        <div
+            id="itemVisual"
+            class="item-visual"
+        >
+            ⏳
         </div>
 
 
         <div class="storage-info">
 
-            <p
-                id="storageCategory"
-                class="storage-label"
-            >
-                JEWELLERY
+            <p class="storage-label">
+                STORAGE UNIT
             </p>
 
 
             <h2 id="storageTitle">
-                DIAMOND NECKLACE
+                UNIT #1
             </h2>
 
 
+            <h3 id="itemName">
+                Mystery Storage
+            </h3>
+
+
             <p
-                id="storageDescription"
-                class="storage-description"
+                id="itemDescription"
+                class="item-description"
             >
-                A mysterious item waiting to be discovered.
+                The contents of this unit are unknown.
             </p>
 
 
@@ -239,7 +202,7 @@
                 <div class="value-box">
 
                     <span>
-                        OPENING BID
+                        STARTING PRICE
                     </span>
 
                     <strong id="basePrice">
@@ -252,7 +215,7 @@
 
 
             <p class="warning">
-                ⚠ Estimated value may be completely wrong.
+                ⚠️ The estimated value may be completely wrong.
             </p>
 
         </div>
@@ -261,9 +224,7 @@
 
 
 
-    <!-- =========================
-         CURRENT BID
-    ========================== -->
+    <!-- CURRENT BID -->
 
     <section class="bid-card">
 
@@ -273,9 +234,11 @@
                 CURRENT BID
             </span>
 
+
             <strong id="currentBid">
                 0 CP
             </strong>
+
 
             <small id="currentBidder">
                 NO BIDS YET
@@ -296,10 +259,10 @@
 
             <div class="bid-increase">
 
-                +<span id="bidIncrement">
+                +
+                <span id="bidIncrement">
                     10
                 </span>
-
                 CP
 
             </div>
@@ -332,9 +295,7 @@
 
 
 
-    <!-- =========================
-         BIDDERS
-    ========================== -->
+    <!-- LIVE BIDDERS -->
 
     <section class="players-card">
 
@@ -366,9 +327,7 @@
 
 
 
-    <!-- =========================
-         AUCTION LOG
-    ========================== -->
+    <!-- AUCTION LOG -->
 
     <section class="log-card">
 
@@ -387,7 +346,7 @@
         >
 
             <div class="log-item">
-                Auction is opening...
+                Auction is preparing...
             </div>
 
         </div>
@@ -396,9 +355,7 @@
 
 
 
-    <!-- =========================
-         RESULTS
-    ========================== -->
+    <!-- RESULTS -->
 
     <section
         class="results-card hidden"
@@ -421,7 +378,7 @@
 
 
         <p class="results-subtitle">
-            Ten lots. One final ranking.
+            Ten storage units. One final ranking.
         </p>
 
 
@@ -470,6 +427,7 @@
 
 
 </main>
+
 
 
 <script
