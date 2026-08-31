@@ -13,21 +13,37 @@ body {
         radial-gradient(
             circle at 50% 10%,
             rgba(216,173,75,0.12),
-            transparent 30%
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 10% 60%,
+            rgba(120,80,180,0.06),
+            transparent 25%
         ),
         #050505;
 
     color: white;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, sans-serif;
 
     padding-bottom: 70px;
 
 }
 
+
+button {
+    font-family: inherit;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   HEADER
+========================= */
 
 header {
 
@@ -35,14 +51,14 @@ header {
 
     padding: 20px 5%;
 
-    display: flex;
+    display: grid;
 
-    justify-content: space-between;
+    grid-template-columns: 1fr auto 1fr;
 
     align-items: center;
 
-    border-bottom:
-        1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid
+        rgba(255,255,255,0.07);
 
 }
 
@@ -58,49 +74,55 @@ header {
 
     font-size: 17px;
 
-    font-weight: bold;
-
     letter-spacing: 3px;
+
+    font-weight: bold;
 
 }
 
 
-.auction-room {
+.room-info {
+
+    text-align: center;
 
     color:
         rgba(255,255,255,0.35);
 
-    font-size: 9px;
+    font-size: 8px;
 
     letter-spacing: 2px;
 
 }
 
 
-.auction-room strong {
+.room-info strong {
 
     color: #f3d487;
 
-    font-size: 12px;
+    display: block;
 
-    letter-spacing: 3px;
+    font-size: 14px;
 
-    margin-left: 5px;
+    letter-spacing: 4px;
+
+    margin-top: 3px;
 
 }
 
 
 .back-button {
 
+    justify-self: end;
+
     padding: 8px 13px;
 
     background: transparent;
 
-    border:
-        1px solid rgba(255,255,255,0.14);
-
     color:
-        rgba(255,255,255,0.55);
+        rgba(255,255,255,0.6);
+
+    border: 1px solid
+        rgba(255,255,255,0.15);
 
     border-radius: 5px;
 
@@ -124,27 +146,35 @@ header {
 }
 
 
+/* =========================
+   MAIN
+========================= */
+
 main {
 
-    width: min(720px, 92%);
+    width: min(760px, 92%);
 
     margin: auto;
 
 }
 
 
+/* =========================
+   HERO
+========================= */
+
 .hero {
 
     text-align: center;
 
-    padding: 42px 0 25px;
+    padding: 38px 0 24px;
 
 }
 
 
 .auction-icon {
 
-    font-size: 52px;
+    font-size: 48px;
 
     margin-bottom: 12px;
 
@@ -161,7 +191,7 @@ main {
 
     letter-spacing: 4px;
 
-    margin-bottom: 10px;
+    margin-bottom: 9px;
 
 }
 
@@ -177,11 +207,11 @@ main {
 
     font-size: 38px;
 
-    font-weight: normal;
+    font-weight: 500;
 
     letter-spacing: 4px;
 
-    margin-bottom: 10px;
+    margin-bottom: 9px;
 
 }
 
@@ -196,178 +226,111 @@ main {
 }
 
 
-/* PLAYER BAR */
+/* =========================
+   WALLET
+========================= */
 
-.player-bar {
+.wallet-card {
 
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        1.3fr
+        1fr
+        1fr
+        0.8fr;
+
+    gap: 1px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 12px;
+
+    overflow: hidden;
 
     margin-bottom: 18px;
+
+}
+
+
+.wallet-item {
+
+    padding: 15px;
 
     background:
         rgba(255,255,255,0.025);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    border-radius: 10px;
-
-    overflow: hidden;
-
 }
 
 
-.player-stat {
-
-    padding: 15px;
-
-    text-align: center;
-
-    border-right:
-        1px solid rgba(255,255,255,0.06);
-
-}
-
-
-.player-stat:last-child {
-    border-right: none;
-}
-
-
-.player-stat span {
+.wallet-item span {
 
     display: block;
 
     color:
-        rgba(255,255,255,0.3);
+        rgba(255,255,255,0.35);
 
-    font-size: 8px;
+    font-size: 7px;
 
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 
     margin-bottom: 6px;
 
 }
 
 
-.player-stat strong {
+.wallet-item strong {
 
     color:
-        rgba(255,255,255,0.85);
+        rgba(255,255,255,0.9);
 
-    font-size: 12px;
-
-}
-
-
-/* STATUS */
-
-.auction-status-card {
-
-    padding: 25px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(216,173,75,0.08),
-            rgba(255,255,255,0.025)
-        );
-
-    border:
-        1px solid rgba(216,173,75,0.22);
-
-    border-radius: 12px;
-
-    margin-bottom: 18px;
+    font-size: 15px;
 
 }
 
 
-.round-label {
+.wallet-item small {
 
     color:
         rgba(255,255,255,0.3);
 
-    font-size: 9px;
+    font-size: 7px;
 
-    letter-spacing: 3px;
-
-    margin-bottom: 12px;
+    margin-left: 4px;
 
 }
 
 
-.round-label span {
-
-    color: #d8ad4b;
-
-    font-weight: bold;
-
-}
-
-
-.auction-call {
+.cash-wallet strong {
 
     color: #f3d487;
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 29px;
-
-    letter-spacing: 2px;
-
-    min-height: 38px;
-
 }
 
 
-.auction-message {
+/* =========================
+   AUCTION CALL
+========================= */
 
-    color:
-        rgba(255,255,255,0.4);
+.auction-call-card {
 
-    font-size: 11px;
+    text-align: center;
 
-}
-
-
-#auctionMessage {
-
-    color:
-        rgba(255,255,255,0.4);
-
-    font-size: 11px;
-
-    margin-top: 7px;
-
-}
-
-
-/* STORAGE */
-
-.storage-card {
-
-    display: grid;
-
-    grid-template-columns: 190px 1fr;
-
-    gap: 25px;
-
-    padding: 24px;
+    padding: 20px;
 
     background:
-        rgba(255,255,255,0.025);
+        linear-gradient(
+            135deg,
+            rgba(216,173,75,0.07),
+            rgba(255,255,255,0.025)
+        );
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid
+        rgba(216,173,75,0.18);
 
     border-radius: 12px;
 
@@ -376,48 +339,32 @@ main {
 }
 
 
-.item-visual {
-
-    min-height: 210px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(216,173,75,0.15),
-            rgba(255,255,255,0.02)
-        );
-
-    border:
-        1px solid rgba(216,173,75,0.15);
-
-    border-radius: 10px;
-
-    font-size: 75px;
-
-}
-
-
-.storage-label {
+.unit-progress {
 
     color:
         rgba(255,255,255,0.3);
 
     font-size: 8px;
 
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 
 }
 
 
-.storage-info h2 {
+.unit-progress strong {
+
+    color: #d8ad4b;
+
+    font-size: 15px;
+
+    margin: 0 4px;
+
+}
+
+
+.auction-status {
 
     color: #f3d487;
 
@@ -428,138 +375,126 @@ main {
 
     font-size: 24px;
 
-    font-weight: normal;
+    letter-spacing: 2px;
 
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 
 }
 
 
-.storage-info h3 {
+.auction-message {
 
     color:
-        rgba(255,255,255,0.82);
+        rgba(255,255,255,0.4);
 
-    font-size: 15px;
-
-    margin-bottom: 10px;
+    font-size: 10px;
 
 }
 
 
-.item-description {
+.call-progress {
 
-    color:
-        rgba(255,255,255,0.42);
+    margin: 17px auto 0;
 
-    font-size: 11px;
-
-    line-height: 1.6;
-
-    margin-bottom: 18px;
+    max-width: 340px;
 
 }
 
 
-.value-grid {
+.call-text {
 
-    display: grid;
+    color: #f3d487;
 
-    grid-template-columns:
-        1fr 1fr;
+    font-size: 12px;
 
-    gap: 8px;
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 9px;
 
 }
 
 
-.value-box {
+.call-bars {
 
-    padding: 13px;
+    display: flex;
+
+    gap: 5px;
+
+}
+
+
+.call-bars span {
+
+    height: 4px;
+
+    flex: 1;
+
+    border-radius: 5px;
 
     background:
-        rgba(255,255,255,0.035);
-
-    border-radius: 7px;
+        rgba(216,173,75,0.18);
 
 }
 
 
-.value-box span {
+.call-bars span.active {
 
-    display: block;
-
-    color:
-        rgba(255,255,255,0.28);
-
-    font-size: 7px;
-
-    letter-spacing: 1.5px;
-
-    margin-bottom: 5px;
+    background: #d8ad4b;
 
 }
 
 
-.value-box strong {
+/* =========================
+   STORAGE
+========================= */
 
-    color: #d8ad4b;
+.storage-card {
 
-    font-size: 14px;
-
-}
-
-
-.warning {
-
-    margin-top: 14px;
-
-    color:
-        rgba(255,190,90,0.55);
-
-    font-size: 9px;
-
-}
-
-
-/* BID */
-
-.bid-card {
-
-    padding: 24px;
-
-    text-align: center;
+    padding: 22px;
 
     background:
         rgba(255,255,255,0.025);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid
+        rgba(255,255,255,0.08);
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     margin-bottom: 18px;
 
 }
 
 
-.current-bid span {
+.storage-top {
 
-    display: block;
+    display: flex;
 
-    color:
-        rgba(255,255,255,0.3);
+    justify-content: space-between;
 
-    font-size: 8px;
+    align-items: center;
 
-    letter-spacing: 3px;
+    margin-bottom: 17px;
 
 }
 
 
-.current-bid strong {
+.storage-label {
 
-    display: block;
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.storage-top h2 {
 
     color: #f3d487;
 
@@ -568,110 +503,293 @@ main {
         "Times New Roman",
         serif;
 
-    font-size: 35px;
+    font-size: 23px;
 
-    margin: 7px 0;
-
-}
-
-
-.current-bid small {
-
-    color:
-        rgba(255,255,255,0.4);
-
-    font-size: 9px;
-
-    letter-spacing: 1px;
+    font-weight: 500;
 
 }
 
 
-.bid-controls {
+.storage-number {
+
+    width: 44px;
+
+    height: 44px;
 
     display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(216,173,75,0.08);
+
+    border: 1px solid
+        rgba(216,173,75,0.25);
+
+    color: #d8ad4b;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   STORAGE ITEMS
+========================= */
+
+.storage-items {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.storage-item {
+
+    min-height: 95px;
+
+    display: flex;
+
+    flex-direction: column;
 
     align-items: center;
 
     justify-content: center;
 
-    gap: 20px;
+    text-align: center;
 
-    margin: 20px 0;
+    padding: 10px;
 
-}
+    background:
+        rgba(255,255,255,0.035);
 
+    border: 1px solid
+        rgba(255,255,255,0.07);
 
-.bid-adjust {
-
-    width: 38px;
-
-    height: 38px;
-
-    background: transparent;
-
-    border:
-        1px solid rgba(255,255,255,0.15);
-
-    color:
-        rgba(255,255,255,0.7);
-
-    border-radius: 50%;
-
-    font-size: 20px;
-
-    cursor: pointer;
+    border-radius: 9px;
 
 }
 
 
-.bid-adjust:hover {
+.storage-item-icon {
 
-    border-color: #d8ad4b;
+    font-size: 31px;
 
-    color: #d8ad4b;
+    margin-bottom: 7px;
 
 }
 
 
-.bid-increase {
+.storage-item-name {
 
     color:
         rgba(255,255,255,0.65);
 
-    font-size: 12px;
+    font-size: 8px;
 
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 
 }
 
 
-.bid-increase span {
+/* =========================
+   ESTIMATE
+========================= */
 
-    color: #d8ad4b;
+.estimate-card {
 
-    font-size: 18px;
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+}
+
+
+.estimate-card > div {
+
+    padding: 13px;
+
+    background:
+        rgba(0,0,0,0.2);
+
+    border: 1px solid
+        rgba(255,255,255,0.06);
+
+    border-radius: 7px;
+
+}
+
+
+.estimate-card span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.estimate-card strong {
+
+    color:
+        rgba(255,255,255,0.8);
+
+    font-size: 14px;
+
+}
+
+
+.mystery-note {
+
+    margin-top: 12px;
+
+    padding: 10px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    border: 1px dashed
+        rgba(255,255,255,0.08);
+
+    border-radius: 6px;
+
+}
+
+
+/* =========================
+   BID
+========================= */
+
+.bid-card {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    padding: 22px;
+
+    background:
+        rgba(216,173,75,0.045);
+
+    border: 1px solid
+        rgba(216,173,75,0.16);
+
+    border-radius: 14px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.bid-main,
+.bid-next {
+
+    padding: 14px;
+
+    background:
+        rgba(0,0,0,0.18);
+
+    border-radius: 8px;
+
+    text-align: center;
+
+}
+
+
+.bid-main span,
+.bid-next span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 7px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.bid-main strong {
+
+    display: block;
+
+    color: #f3d487;
+
+    font-size: 28px;
+
+}
+
+
+.bid-main small {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    margin-top: 6px;
+
+}
+
+
+.bid-next strong {
+
+    color:
+        rgba(255,255,255,0.8);
+
+    font-size: 21px;
 
 }
 
 
 .bid-button {
 
-    width: 100%;
+    grid-column: 1 / -1;
 
-    padding: 15px;
+    padding: 16px;
 
     background:
-        rgba(216,173,75,0.12);
+        rgba(216,173,75,0.13);
 
-    border:
-        1px solid #d8ad4b;
+    border: 1px solid #d8ad4b;
 
     color: #f3d487;
 
     border-radius: 7px;
 
-    font-size: 10px;
+    font-size: 11px;
 
     font-weight: bold;
 
@@ -701,29 +819,34 @@ main {
 
 .bid-status {
 
+    grid-column: 1 / -1;
+
     min-height: 16px;
 
-    margin-top: 10px;
+    text-align: center;
 
-    color: #d8ad4b;
+    color:
+        rgba(255,255,255,0.45);
 
-    font-size: 10px;
+    font-size: 9px;
 
 }
 
 
-/* SECTIONS */
+/* =========================
+   COMMON CARDS
+========================= */
 
 .players-card,
 .log-card {
 
-    padding: 22px;
+    padding: 20px;
 
     background:
         rgba(255,255,255,0.025);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid
+        rgba(255,255,255,0.08);
 
     border-radius: 12px;
 
@@ -740,7 +863,7 @@ main {
 
     align-items: center;
 
-    margin-bottom: 13px;
+    margin-bottom: 12px;
 
 }
 
@@ -750,14 +873,14 @@ main {
     color:
         rgba(255,255,255,0.75);
 
-    font-size: 11px;
+    font-size: 10px;
 
     letter-spacing: 2px;
 
 }
 
 
-.section-heading span {
+.section-heading > span {
 
     color: #d8ad4b;
 
@@ -766,8 +889,11 @@ main {
 }
 
 
-.bidders-list,
-.auction-log {
+/* =========================
+   BIDDERS
+========================= */
+
+.bidders-list {
 
     display: flex;
 
@@ -784,14 +910,14 @@ main {
 
     justify-content: space-between;
 
+    align-items: center;
+
     padding: 11px 13px;
 
     background:
         rgba(255,255,255,0.035);
 
     border-radius: 6px;
-
-    font-size: 10px;
 
 }
 
@@ -801,6 +927,8 @@ main {
     color:
         rgba(255,255,255,0.7);
 
+    font-size: 10px;
+
 }
 
 
@@ -808,31 +936,60 @@ main {
 
     color: #d8ad4b;
 
+    font-size: 10px;
+
     font-weight: bold;
 
 }
 
 
-.empty-bidders,
-.log-item {
+.empty-bidders {
 
-    padding: 12px;
+    padding: 18px;
+
+    text-align: center;
 
     color:
-        rgba(255,255,255,0.32);
+        rgba(255,255,255,0.25);
 
-    font-size: 10px;
+    font-size: 9px;
+
+}
+
+
+/* =========================
+   LOG
+========================= */
+
+.auction-log {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    max-height: 230px;
+
+    overflow-y: auto;
 
 }
 
 
 .log-item {
 
-    border-left:
-        2px solid rgba(216,173,75,0.25);
+    padding: 9px 11px;
 
     background:
-        rgba(255,255,255,0.02);
+        rgba(255,255,255,0.025);
+
+    border-left: 2px solid
+        rgba(216,173,75,0.3);
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size: 9px;
 
 }
 
@@ -845,35 +1002,133 @@ main {
 }
 
 
-/* RESULTS */
+/* =========================
+   SOLD
+========================= */
 
-.hidden {
+.sold-reveal {
 
-    display: none !important;
-
-}
-
-
-.results-card {
-
-    padding: 35px 25px;
+    padding: 28px;
 
     text-align: center;
 
     background:
-        rgba(255,255,255,0.025);
+        linear-gradient(
+            135deg,
+            rgba(216,173,75,0.12),
+            rgba(255,255,255,0.025)
+        );
 
-    border:
-        1px solid rgba(216,173,75,0.2);
+    border: 1px solid
+        rgba(216,173,75,0.3);
 
     border-radius: 14px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.sold-icon {
+
+    font-size: 42px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.sold-reveal h2 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    margin-bottom: 16px;
+
+}
+
+
+.reveal-box {
+
+    padding: 17px;
+
+    background:
+        rgba(0,0,0,0.25);
+
+    border-radius: 9px;
+
+}
+
+
+.reveal-box span {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.reveal-box strong {
+
+    color: #f3d487;
+
+    font-size: 31px;
+
+}
+
+
+#soldProfit {
+
+    margin-top: 11px;
+
+    color:
+        rgba(255,255,255,0.5);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+.results-card {
+
+    padding: 30px 22px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216,173,75,0.09),
+            rgba(255,255,255,0.025)
+        );
+
+    border: 1px solid
+        rgba(216,173,75,0.2);
+
+    border-radius: 15px;
 
 }
 
 
 .results-icon {
 
-    font-size: 60px;
+    font-size: 55px;
 
     margin-bottom: 10px;
 
@@ -889,9 +1144,9 @@ main {
         "Times New Roman",
         serif;
 
-    font-size: 31px;
+    font-size: 30px;
 
-    font-weight: normal;
+    font-weight: 500;
 
     letter-spacing: 3px;
 
@@ -901,41 +1156,110 @@ main {
 .results-subtitle {
 
     color:
-        rgba(255,255,255,0.4);
+        rgba(255,255,255,0.35);
 
-    font-size: 11px;
+    font-size: 10px;
 
     margin-top: 8px;
 
 }
 
 
+.my-result {
+
+    margin: 25px 0;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,0.25);
+
+    border: 1px solid
+        rgba(216,173,75,0.15);
+
+    border-radius: 10px;
+
+}
+
+
+.my-result .result-cash {
+
+    color:
+        rgba(255,255,255,0.4);
+
+    font-size: 9px;
+
+}
+
+
+.my-result .result-cp {
+
+    display: block;
+
+    color: #f3d487;
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin: 7px 0;
+
+}
+
+
+.my-result .result-profit {
+
+    font-size: 11px;
+
+}
+
+
+.profit {
+
+    color: #83d99b;
+
+}
+
+
+.loss {
+
+    color: #ff8585;
+
+}
+
+
+.results-heading {
+
+    margin-top: 22px;
+
+    text-align: left;
+
+}
+
+
 .podium {
 
-    display: flex;
+    display: grid;
 
-    align-items: flex-end;
-
-    justify-content: center;
+    grid-template-columns:
+        repeat(3, 1fr);
 
     gap: 8px;
 
-    margin: 35px 0;
+    align-items: end;
 
 }
 
 
 .podium-player {
 
-    width: 30%;
-
-    padding: 18px 8px;
+    padding: 16px 8px;
 
     background:
-        rgba(255,255,255,0.04);
+        rgba(255,255,255,0.035);
 
-    border:
-        1px solid rgba(255,255,255,0.08);
+    border: 1px solid
+        rgba(255,255,255,0.07);
 
     border-radius: 8px;
 
@@ -944,120 +1268,109 @@ main {
 
 .podium-player.first {
 
-    min-height: 160px;
+    padding-top: 25px;
+
+    border-color:
+        rgba(216,173,75,0.4);
 
 }
 
 
-.podium-player.second {
+.podium-medal {
 
-    min-height: 130px;
+    font-size: 25px;
 
-}
-
-
-.podium-player.third {
-
-    min-height: 110px;
+    margin-bottom: 7px;
 
 }
 
 
-.position {
-
-    font-size: 27px;
-
-    margin-bottom: 8px;
-
-}
-
-
-.result-name {
+.podium-name {
 
     color:
-        rgba(255,255,255,0.8);
+        rgba(255,255,255,0.75);
+
+    font-size: 9px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.podium-profit {
 
     font-size: 10px;
 
     font-weight: bold;
 
-    overflow-wrap: anywhere;
+    margin-top: 6px;
 
 }
 
 
-.result-profit {
-
-    margin-top: 7px;
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-}
-
-
-.profit {
-    color: #75c98a;
-}
-
-
-.loss {
-    color: #d66f6f;
-}
-
-
-.result-section {
-
-    text-align: left;
-
-    margin-top: 25px;
-
-}
-
-
-.result-section h2 {
-
-    color:
-        rgba(255,255,255,0.5);
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 8px;
-
-}
-
-
-.result-list {
+.final-leaderboard {
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 6px;
+    gap: 5px;
+
+    margin-bottom: 20px;
 
 }
 
 
-.result-item {
+.final-player {
 
-    display: flex;
+    display: grid;
 
-    justify-content: space-between;
+    grid-template-columns: 42px 1fr auto;
 
-    padding: 11px;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px;
 
     background:
         rgba(255,255,255,0.035);
 
     border-radius: 6px;
 
-    color:
-        rgba(255,255,255,0.65);
+}
+
+
+.final-rank {
+
+    color: #d8ad4b;
 
     font-size: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.final-name {
+
+    text-align: left;
+
+    color:
+        rgba(255,255,255,0.75);
+
+    font-size: 10px;
+
+}
+
+
+.final-score {
+
+    font-size: 10px;
+
+    font-weight: bold;
 
 }
 
@@ -1066,15 +1379,12 @@ main {
 
     width: 100%;
 
-    margin-top: 28px;
-
     padding: 14px;
 
     background:
         rgba(216,173,75,0.12);
 
-    border:
-        1px solid #d8ad4b;
+    border: 1px solid #d8ad4b;
 
     color: #f3d487;
 
@@ -1091,84 +1401,152 @@ main {
 }
 
 
-@media (max-width: 600px) {
+.primary-button:hover {
+
+    background:
+        rgba(216,173,75,0.2);
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
 
     header {
-        padding: 16px 4%;
+
+        grid-template-columns:
+            1fr auto;
+
+        gap: 10px;
+
+    }
+
+
+    .room-info {
+
+        grid-column: 2;
+
+        grid-row: 1;
+
     }
 
 
     .brand {
+
         font-size: 11px;
+
         letter-spacing: 2px;
-    }
 
-
-    .auction-room {
-        display: none;
     }
 
 
     .back-button {
-        font-size: 7px;
-        padding: 7px 9px;
-    }
 
+        grid-column: 1 / -1;
 
-    main {
-        width: 92%;
-    }
+        grid-row: 2;
 
+        justify-self: stretch;
 
-    .hero {
-        padding-top: 30px;
     }
 
 
     .hero h1 {
+
         font-size: 27px;
+
+        letter-spacing: 2px;
+
     }
 
 
-    .player-bar {
+    .wallet-card {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .storage-items {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .estimate-card,
+    .bid-card {
+
         grid-template-columns: 1fr;
+
     }
 
 
-    .player-stat {
-        border-right: none;
-        border-bottom:
-            1px solid rgba(255,255,255,0.06);
+    .bid-button {
+
+        grid-column: auto;
+
     }
 
 
-    .player-stat:last-child {
-        border-bottom: none;
+    .bid-status {
+
+        grid-column: auto;
+
     }
 
 
-    .storage-card {
+    .podium {
+
         grid-template-columns: 1fr;
+
     }
 
 
-    .item-visual {
-        min-height: 160px;
+    .podium-player.first {
+
+        order: -1;
+
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    main {
+
+        width: 94%;
+
     }
 
 
-    .auction-call {
-        font-size: 24px;
+    .storage-card,
+    .bid-card,
+    .players-card,
+    .log-card {
+
+        padding: 15px;
+
     }
 
 
-    .value-grid {
-        grid-template-columns: 1fr;
+    .wallet-item {
+
+        padding: 11px;
+
     }
 
 
-    .podium-player {
-        padding: 12px 5px;
+    .wallet-item strong {
+
+        font-size: 12px;
+
     }
 
 }
