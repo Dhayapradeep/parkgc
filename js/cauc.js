@@ -2,8 +2,7 @@ import {
     ref,
     get,
     onValue,
-    runTransaction,
-    update
+    runTransaction
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 import {
@@ -11,44 +10,28 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
-import {
-    app,
-    database
-} from "../firebase.js";
+import { app, database } from "../firebase.js";
 
 
 /* =========================================================
-   CONFIGURATION
-========================================================= */
+   GAME RULES
+   ========================================================= */
 
-const ROOM_PATH =
-    "chaosAuctionRooms";
+const ROOM_PATH = "chaosAuctionRooms";
+const STARTING_CASH = 1000;
+const BID_INCREMENT = 10;
+const TOTAL_STORAGES = 5;
 
-const STARTING_CASH =
-    1000;
-
-const BID_INCREMENT =
-    10;
-
-const TOTAL_STORAGES =
-    5;
-
-const GOING_ONCE_MS =
-    3000;
-
-const GOING_TWICE_MS =
-    3000;
-
-const SOLD_DELAY_MS =
-    2000;
+const GOING_ONCE_MS = 3000;
+const GOING_TWICE_MS = 3000;
+const SOLD_DELAY_MS = 2000;
 
 
 /* =========================================================
-   STORAGE CONTENTS
-========================================================= */
+   STORAGE CONFIGURATION
+   ========================================================= */
 
 const STORAGE_TYPES = [
-
     {
         title: "Luxury Collection",
         estimate: "300 – 700 CP",
@@ -108,19 +91,12 @@ const STORAGE_TYPES = [
             ["🎁", "Unknown Item"]
         ]
     }
-
 ];
 
 
 /*
-    IMPORTANT:
-
-    The values below are NOT displayed before purchase.
-
-    They are the actual hidden CP values inside
-    the five storage units.
-*/
-
+ * These values stay in Firebase but are never rendered before SOLD.
+ */
 const HIDDEN_CP_VALUES = [
     650,
     900,
@@ -130,254 +106,153 @@ const HIDDEN_CP_VALUES = [
 ];
 
 
-/* =========================================================
-   AUTH
-========================================================= */
-
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
 
 /* =========================================================
-   ELEMENTS
-========================================================= */
+   DOM
+   ========================================================= */
 
 const backButton =
-    document.getElementById(
-        "backButton"
-    );
+    document.getElementById("backButton");
 
 const roomCodeDisplay =
-    document.getElementById(
-        "roomCodeDisplay"
-    );
+    document.getElementById("roomCodeDisplay");
 
 const playerName =
-    document.getElementById(
-        "playerName"
-    );
+    document.getElementById("playerName");
 
 const playerCash =
-    document.getElementById(
-        "playerCash"
-    );
+    document.getElementById("playerCash");
 
 const playerPoints =
-    document.getElementById(
-        "playerPoints"
-    );
+    document.getElementById("playerPoints");
 
 const roundDisplay =
-    document.getElementById(
-        "roundDisplay"
-    );
+    document.getElementById("roundDisplay");
+
 
 const storageNumber =
-    document.getElementById(
-        "storageNumber"
-    );
+    document.getElementById("storageNumber");
 
 const storageNumberLarge =
-    document.getElementById(
-        "storageNumberLarge"
-    );
+    document.getElementById("storageNumberLarge");
 
 const auctionStatus =
-    document.getElementById(
-        "auctionStatus"
-    );
+    document.getElementById("auctionStatus");
 
 const auctionMessage =
-    document.getElementById(
-        "auctionMessage"
-    );
+    document.getElementById("auctionMessage");
+
 
 const callProgress =
-    document.getElementById(
-        "callProgress"
-    );
+    document.getElementById("callProgress");
 
 const callText =
-    document.getElementById(
-        "callText"
-    );
+    document.getElementById("callText");
 
 const callBar1 =
-    document.getElementById(
-        "callBar1"
-    );
+    document.getElementById("callBar1");
 
 const callBar2 =
-    document.getElementById(
-        "callBar2"
-    );
+    document.getElementById("callBar2");
 
 const callBar3 =
-    document.getElementById(
-        "callBar3"
-    );
+    document.getElementById("callBar3");
+
 
 const storageTitle =
-    document.getElementById(
-        "storageTitle"
-    );
+    document.getElementById("storageTitle");
 
 const storageItems =
-    document.getElementById(
-        "storageItems"
-    );
+    document.getElementById("storageItems");
 
 const estimatedRange =
-    document.getElementById(
-        "estimatedRange"
-    );
+    document.getElementById("estimatedRange");
 
 const basePrice =
-    document.getElementById(
-        "basePrice"
-    );
+    document.getElementById("basePrice");
+
 
 const currentBid =
-    document.getElementById(
-        "currentBid"
-    );
+    document.getElementById("currentBid");
 
 const currentBidder =
-    document.getElementById(
-        "currentBidder"
-    );
+    document.getElementById("currentBidder");
 
 const nextBid =
-    document.getElementById(
-        "nextBid"
-    );
+    document.getElementById("nextBid");
 
 const bidButton =
-    document.getElementById(
-        "bidButton"
-    );
+    document.getElementById("bidButton");
 
 const bidStatus =
-    document.getElementById(
-        "bidStatus"
-    );
+    document.getElementById("bidStatus");
+
 
 const bidderCount =
-    document.getElementById(
-        "bidderCount"
-    );
+    document.getElementById("bidderCount");
 
 const biddersList =
-    document.getElementById(
-        "biddersList"
-    );
+    document.getElementById("biddersList");
 
 const auctionLog =
-    document.getElementById(
-        "auctionLog"
-    );
+    document.getElementById("auctionLog");
+
 
 const soldReveal =
-    document.getElementById(
-        "soldReveal"
-    );
+    document.getElementById("soldReveal");
 
 const soldWinner =
-    document.getElementById(
-        "soldWinner"
-    );
+    document.getElementById("soldWinner");
 
 const revealedCP =
-    document.getElementById(
-        "revealedCP"
-    );
+    document.getElementById("revealedCP");
+
+const revealedBid =
+    document.getElementById("revealedBid");
 
 const soldProfit =
-    document.getElementById(
-        "soldProfit"
-    );
+    document.getElementById("soldProfit");
+
 
 const resultsCard =
-    document.getElementById(
-        "resultsCard"
-    );
+    document.getElementById("resultsCard");
 
 const myResult =
-    document.getElementById(
-        "myResult"
-    );
+    document.getElementById("myResult");
 
 const podium =
-    document.getElementById(
-        "podium"
-    );
+    document.getElementById("podium");
 
 const finalLeaderboard =
-    document.getElementById(
-        "finalLeaderboard"
-    );
+    document.getElementById("finalLeaderboard");
 
 const returnLobbyButton =
-    document.getElementById(
-        "returnLobbyButton"
-    );
+    document.getElementById("returnLobbyButton");
 
 
 /* =========================================================
    STATE
-========================================================= */
+   ========================================================= */
 
-let currentUser =
-    null;
+let currentUser = null;
+let currentRoom = null;
+let currentRoomCode = null;
+let localUserData = null;
 
-let currentRoom =
-    null;
+let unsubscribeRoom = null;
 
-let currentRoomCode =
-    null;
+let hostTimer = null;
+let hostTimerToken = null;
 
-let unsubscribeRoom =
-    null;
-
-let localUserData =
-    null;
-
-let localUserCash =
-    STARTING_CASH;
-
-let previousStatus =
-    null;
-
-
-/*
-    Only the host runs the auction progression.
-
-    This is critical.
-
-    Every client can BID.
-
-    Only the host advances:
-        bidding
-        → going_once
-        → going_twice
-        → sold
-        → next storage
-        → finished
-
-    This prevents five clients from independently
-    advancing the same auction.
-*/
-
-let hostTimer =
-    null;
-
-let hostTimerToken =
-    null;
+let initializationInProgress = false;
+let rewardUpdateInProgress = false;
 
 
 /* =========================================================
-   ROOM CODE
-========================================================= */
+   ROOM
+   ========================================================= */
 
 const params =
     new URLSearchParams(
@@ -397,31 +272,12 @@ if (!currentRoomCode) {
 
 
 /* =========================================================
-   BACK BUTTON
-========================================================= */
-
-if (backButton) {
-
-    backButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "caulobby.html";
-
-        }
-    );
-
-}
-
-
-/* =========================================================
    AUTH
-========================================================= */
+   ========================================================= */
 
 onAuthStateChanged(
     auth,
-    async function (user) {
+    async (user) => {
 
         if (!user) {
 
@@ -432,8 +288,10 @@ onAuthStateChanged(
 
         }
 
+
         currentUser =
             user;
+
 
         await loadUser();
 
@@ -445,37 +303,43 @@ onAuthStateChanged(
 
 /* =========================================================
    LOAD USER
-========================================================= */
+   ========================================================= */
 
 async function loadUser() {
 
     try {
 
-        const userRef =
-            ref(
-                database,
-                `users/${currentUser.uid}`
-            );
-
         const snapshot =
             await get(
-                userRef
+                ref(
+                    database,
+                    `users/${currentUser.uid}`
+                )
             );
 
-        if (!snapshot.exists()) {
 
-            localUserData = {
-                username:
-                    currentUser.displayName ||
-                    "Player"
-            };
+        if (snapshot.exists()) {
 
-            return;
+            localUserData =
+                snapshot.val();
 
         }
 
-        localUserData =
-            snapshot.val();
+        else {
+
+            localUserData = {
+
+                username:
+                    currentUser.displayName ||
+                    "Player",
+
+                chaosPoints:
+                    0
+
+            };
+
+        }
+
 
         if (playerName) {
 
@@ -486,16 +350,8 @@ async function loadUser() {
 
         }
 
-        if (playerPoints) {
 
-            playerPoints.textContent =
-                formatNumber(
-                    Number(
-                        localUserData.chaosPoints
-                    ) || 0
-                );
-
-        }
+        renderPersistentCP();
 
     }
 
@@ -511,111 +367,43 @@ async function loadUser() {
 }
 
 
-/* =========================================================
-   LISTEN TO ROOM
-========================================================= */
+async function refreshUserPoints() {
 
-function listenToRoom() {
+    try {
 
-    const roomRef =
-        ref(
-            database,
-            `${ROOM_PATH}/${currentRoomCode}`
+        const snapshot =
+            await get(
+                ref(
+                    database,
+                    `users/${currentUser.uid}`
+                )
+            );
+
+
+        if (snapshot.exists()) {
+
+            localUserData =
+                snapshot.val();
+
+            renderPersistentCP();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to refresh CP:",
+            error
         );
 
-    unsubscribeRoom =
-        onValue(
-            roomRef,
-            function (snapshot) {
-
-                if (!snapshot.exists()) {
-
-                    alert(
-                        "Auction room no longer exists."
-                    );
-
-                    window.location.href =
-                        "caulobby.html";
-
-                    return;
-
-                }
-
-                currentRoom =
-                    snapshot.val();
-
-                renderRoom();
-
-                handleHostAuction();
-
-            }
-        );
+    }
 
 }
 
 
-/* =========================================================
-   RENDER ROOM
-========================================================= */
-
-function renderRoom() {
-
-    const room =
-        currentRoom;
-
-    if (roomCodeDisplay) {
-
-        roomCodeDisplay.textContent =
-            room.code ||
-            currentRoomCode;
-
-    }
-
-
-    const player =
-        room.players?.[
-            currentUser.uid
-        ];
-
-
-    if (player) {
-
-        localUserCash =
-            Number(
-                player.cash
-            );
-
-        if (
-            !Number.isFinite(
-                localUserCash
-            )
-        ) {
-
-            localUserCash =
-                STARTING_CASH;
-
-        }
-
-        if (playerName) {
-
-            playerName.textContent =
-                player.username ||
-                "Player";
-
-        }
-
-    }
-
-
-    if (playerCash) {
-
-        playerCash.textContent =
-            formatNumber(
-                localUserCash
-            );
-
-    }
-
+function renderPersistentCP() {
 
     if (playerPoints) {
 
@@ -628,11 +416,136 @@ function renderRoom() {
 
     }
 
+}
+
+
+/* =========================================================
+   ROOM LISTENER
+   ========================================================= */
+
+function listenToRoom() {
+
+    const roomRef =
+        ref(
+            database,
+            `${ROOM_PATH}/${currentRoomCode}`
+        );
+
+
+    unsubscribeRoom =
+        onValue(
+            roomRef,
+            (snapshot) => {
+
+                if (!snapshot.exists()) {
+
+                    clearHostTimer();
+
+                    alert(
+                        "Auction room no longer exists."
+                    );
+
+                    window.location.href =
+                        "caulobby.html";
+
+                    return;
+
+                }
+
+
+                currentRoom =
+                    snapshot.val();
+
+
+                renderRoom();
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Initialization is checked before
+                 * getCurrentStorage().
+                 *
+                 * This fixes the broken state where Firebase
+                 * says "playing" but storages were never created.
+                 */
+
+                handleHostAuction();
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   RENDER ROOM
+   ========================================================= */
+
+function renderRoom() {
+
+    const room =
+        currentRoom;
+
+
+    if (!room) {
+
+        return;
+
+    }
+
+
+    if (roomCodeDisplay) {
+
+        roomCodeDisplay.textContent =
+            room.code ||
+            currentRoomCode;
+
+    }
+
+
+    const me =
+        room.players?.[
+            currentUser.uid
+        ];
+
+
+    if (me) {
+
+        if (playerName) {
+
+            playerName.textContent =
+                me.username ||
+                "Player";
+
+        }
+
+
+        if (playerCash) {
+
+            playerCash.textContent =
+                formatNumber(
+                    Number.isFinite(
+                        Number(me.cash)
+                    )
+                        ? Number(me.cash)
+                        : STARTING_CASH
+                );
+
+        }
+
+    }
+
+
+    renderPersistentCP();
+
 
     if (
         room.status ===
         "finished"
     ) {
+
+        clearHostTimer();
 
         showFinalResults();
 
@@ -644,9 +557,12 @@ function renderRoom() {
     const round =
         Math.max(
             1,
-            Number(
-                room.currentRound
-            ) || 1
+            Math.min(
+                TOTAL_STORAGES,
+                Number(
+                    room.currentRound
+                ) || 1
+            )
         );
 
 
@@ -669,7 +585,7 @@ function renderRoom() {
     if (storageNumberLarge) {
 
         storageNumberLarge.textContent =
-            round;
+            `#${round}`;
 
     }
 
@@ -679,6 +595,35 @@ function renderRoom() {
 
 
     if (!storage) {
+
+        /*
+         * Host will repair/initialize this.
+         * Other players simply see preparation state.
+         */
+
+        if (auctionStatus) {
+
+            auctionStatus.textContent =
+                "PREPARING AUCTION...";
+
+        }
+
+
+        if (auctionMessage) {
+
+            auctionMessage.textContent =
+                "The auctioneer is preparing the next storage unit.";
+
+        }
+
+
+        if (bidButton) {
+
+            bidButton.disabled =
+                true;
+
+        }
+
 
         return;
 
@@ -701,14 +646,15 @@ function renderRoom() {
     );
 
 
+    renderAuctionState(
+        storage
+    );
+
+
     updateBidButton(
         storage
     );
 
-
-    renderAuctionState(
-        storage
-    );
 
     renderSoldReveal();
 
@@ -716,8 +662,8 @@ function renderRoom() {
 
 
 /* =========================================================
-   GET CURRENT STORAGE
-========================================================= */
+   CURRENT STORAGE
+   ========================================================= */
 
 function getCurrentStorage() {
 
@@ -730,15 +676,17 @@ function getCurrentStorage() {
 
     }
 
-    const round =
+
+    const index =
         (
             Number(
                 currentRoom.currentRound
             ) || 1
         ) - 1;
 
+
     return (
-        currentRoom.storages[round] ||
+        currentRoom.storages[index] ||
         null
     );
 
@@ -747,7 +695,7 @@ function getCurrentStorage() {
 
 /* =========================================================
    STORAGE UI
-========================================================= */
+   ========================================================= */
 
 function renderStorage(
     storage,
@@ -758,6 +706,7 @@ function renderStorage(
         STORAGE_TYPES[
             round - 1
         ];
+
 
     if (!config) {
 
@@ -796,26 +745,30 @@ function renderStorage(
         storageItems.innerHTML =
             "";
 
+
         config.items.forEach(
-            function (item) {
+            ([icon, name]) => {
 
                 const element =
                     document.createElement(
                         "div"
                     );
 
+
                 element.className =
                     "storage-item";
 
+
                 element.innerHTML = `
                     <div class="storage-item-icon">
-                        ${item[0]}
+                        ${icon}
                     </div>
 
                     <div class="storage-item-name">
-                        ${escapeHTML(item[1])}
+                        ${escapeHTML(name)}
                     </div>
                 `;
+
 
                 storageItems.appendChild(
                     element
@@ -828,29 +781,40 @@ function renderStorage(
 
 
     const bid =
-        Number(
-            storage.currentBid
-        ) ||
-        Number(
-            storage.basePrice
-        ) ||
-        0;
+        storage.currentBid === null ||
+        storage.currentBid === undefined
+            ? 0
+            : Number(
+                storage.currentBid
+            );
 
 
     if (currentBid) {
 
         currentBid.textContent =
-            `${formatNumber(bid)} CASH`;
+            `${formatNumber(
+                bid ||
+                Number(
+                    storage.basePrice
+                ) ||
+                0
+            )} CASH`;
 
     }
 
 
     if (nextBid) {
 
+        const next =
+            bid > 0
+                ? bid + BID_INCREMENT
+                : Number(
+                    storage.basePrice
+                ) || 0;
+
+
         nextBid.textContent =
-            `${formatNumber(
-                bid + BID_INCREMENT
-            )} CASH`;
+            `${formatNumber(next)} CASH`;
 
     }
 
@@ -868,7 +832,7 @@ function renderStorage(
 
 /* =========================================================
    AUCTION STATE UI
-========================================================= */
+   ========================================================= */
 
 function renderAuctionState(
     storage
@@ -879,117 +843,168 @@ function renderAuctionState(
         "bidding";
 
 
-    if (
-        state ===
-        "bidding"
-    ) {
+    if (callProgress) {
 
-        auctionStatus.textContent =
-            "BIDDING OPEN";
-
-        auctionMessage.textContent =
-            "Place your bid. Every bid increases the price by 10 Cash.";
-
-        callProgress.classList.add(
-            "hidden"
+        callProgress.classList.toggle(
+            "hidden",
+            state === "bidding" ||
+            state === "sold"
         );
+
+    }
+
+
+    if (state === "bidding") {
+
+        if (auctionStatus) {
+
+            auctionStatus.textContent =
+                "BIDDING OPEN";
+
+        }
+
+
+        if (auctionMessage) {
+
+            auctionMessage.textContent =
+                "Every bid increases the price by exactly 10 Cash.";
+
+        }
+
+
+        if (callText) {
+
+            callText.textContent =
+                "";
+
+        }
+
+
+        setCallBars(0);
 
         return;
 
     }
 
 
-    if (
-        state ===
-        "going_once"
-    ) {
+    if (state === "going_once") {
 
-        auctionStatus.textContent =
-            "GOING ONCE";
+        if (auctionStatus) {
 
-        auctionMessage.textContent =
-            "No higher bid yet...";
+            auctionStatus.textContent =
+                "GOING ONCE";
 
-        showCall(
-            1,
-            "GOING ONCE"
-        );
-
-        return;
-
-    }
+        }
 
 
-    if (
-        state ===
-        "going_twice"
-    ) {
+        if (auctionMessage) {
 
-        auctionStatus.textContent =
-            "GOING TWICE";
+            auctionMessage.textContent =
+                "No higher bid yet. You still have time to bid.";
 
-        auctionMessage.textContent =
-            "Last chance to bid!";
+        }
 
-        showCall(
-            2,
-            "GOING TWICE"
-        );
+
+        if (callText) {
+
+            callText.textContent =
+                "GOING ONCE";
+
+        }
+
+
+        setCallBars(1);
 
         return;
 
     }
 
 
-    if (
-        state ===
-        "sold"
-    ) {
+    if (state === "going_twice") {
 
-        auctionStatus.textContent =
-            "SOLD!";
+        if (auctionStatus) {
 
-        auctionMessage.textContent =
-            "The winning bidder has claimed the storage.";
+            auctionStatus.textContent =
+                "GOING TWICE";
 
-        callProgress.classList.add(
-            "hidden"
-        );
+        }
+
+
+        if (auctionMessage) {
+
+            auctionMessage.textContent =
+                "Last chance. Place a higher bid to continue.";
+
+        }
+
+
+        if (callText) {
+
+            callText.textContent =
+                "GOING TWICE";
+
+        }
+
+
+        setCallBars(2);
+
+        return;
+
+    }
+
+
+    if (state === "sold") {
+
+        if (auctionStatus) {
+
+            auctionStatus.textContent =
+                "SOLD!";
+
+        }
+
+
+        if (auctionMessage) {
+
+            auctionMessage.textContent =
+                storage.currentBidderName
+                    ? `Sold to ${storage.currentBidderName}. Opening the box...`
+                    : "No one bought this storage unit.";
+
+        }
+
+
+        if (callText) {
+
+            callText.textContent =
+                storage.currentBidderName
+                    ? "SOLD"
+                    : "UNSOLD";
+
+        }
+
+
+        setCallBars(3);
 
     }
 
 }
 
 
-/* =========================================================
-   CALL DISPLAY
-========================================================= */
+function setCallBars(stage) {
 
-function showCall(
-    stage,
-    text
-) {
-
-    callProgress.classList.remove(
-        "hidden"
-    );
-
-    callText.textContent =
-        text;
-
-    callBar1.classList.toggle(
+    callBar1?.classList.toggle(
         "active",
         stage >= 1
     );
 
-    callBar2.classList.toggle(
+    callBar2?.classList.toggle(
         "active",
         stage >= 2
     );
 
-    callBar3.classList.toggle(
+    callBar3?.classList.toggle(
         "active",
-        false
+        stage >= 3
     );
 
 }
@@ -997,7 +1012,7 @@ function showCall(
 
 /* =========================================================
    BID BUTTON
-========================================================= */
+   ========================================================= */
 
 function updateBidButton(
     storage
@@ -1016,18 +1031,22 @@ function updateBidButton(
 
 
     const current =
-        Number(
-            storage.currentBid
-        ) ||
-        Number(
-            storage.basePrice
-        ) ||
-        0;
+        storage.currentBid === null ||
+        storage.currentBid === undefined
+            ? Number(
+                storage.basePrice
+            ) || 0
+            : Number(
+                storage.currentBid
+            );
 
 
-    const amount =
-        current +
-        BID_INCREMENT;
+    const proposedBid =
+        current > 0
+            ? current + BID_INCREMENT
+            : Number(
+                storage.basePrice
+            ) || 0;
 
 
     const player =
@@ -1042,32 +1061,52 @@ function updateBidButton(
         );
 
 
-    const availableCash =
-        Number.isFinite(cash)
-            ? cash
-            : localUserCash;
+    /*
+     * Cash is NOT deducted when bidding.
+     *
+     * It is only checked here so a player cannot
+     * make a bid they could not afford if they win.
+     */
+
+    const affordable =
+        Number.isFinite(cash) &&
+        proposedBid <= cash;
 
 
     bidButton.disabled =
         state !== "bidding" ||
-        amount > availableCash ||
+        !affordable ||
         currentRoom.status === "finished";
 
 
+    bidButton.textContent =
+        affordable
+            ? `🔨 BID +${
+                state === "bidding" &&
+                current > 0
+                    ? BID_INCREMENT
+                    : 0
+            } CASH`
+            : "💸 NOT ENOUGH CASH";
+
+
+    /*
+     * On a fresh storage the first bid is
+     * the starting price.
+     *
+     * After that every bid is exactly +10.
+     */
+
     if (
-        amount >
-        availableCash
+        state === "bidding" &&
+        current ===
+            Number(
+                storage.basePrice
+            )
     ) {
 
         bidButton.textContent =
-            "💸 NOT ENOUGH CASH";
-
-    }
-
-    else {
-
-        bidButton.textContent =
-            `🔨 BID +${BID_INCREMENT} CASH`;
+            `🔨 OPEN AT ${formatNumber(current)} CASH`;
 
     }
 
@@ -1076,16 +1115,12 @@ function updateBidButton(
 
 /* =========================================================
    PLACE BID
-========================================================= */
+   ========================================================= */
 
-if (bidButton) {
-
-    bidButton.addEventListener(
-        "click",
-        placeBid
-    );
-
-}
+bidButton?.addEventListener(
+    "click",
+    placeBid
+);
 
 
 async function placeBid() {
@@ -1100,7 +1135,7 @@ async function placeBid() {
     }
 
 
-    const auctionRef =
+    const roomRef =
         ref(
             database,
             `${ROOM_PATH}/${currentRoomCode}`
@@ -1111,19 +1146,13 @@ async function placeBid() {
 
         const result =
             await runTransaction(
-                auctionRef,
-                function (room) {
-
-                    if (!room) {
-
-                        return;
-
-                    }
-
+                roomRef,
+                (room) => {
 
                     if (
+                        !room ||
                         room.status ===
-                        "finished"
+                            "finished"
                     ) {
 
                         return;
@@ -1132,26 +1161,15 @@ async function placeBid() {
 
 
                     const round =
-                        (
-                            Number(
-                                room.currentRound
-                            ) || 1
-                        );
+                        Number(
+                            room.currentRound
+                        ) || 1;
 
 
                     if (
-                        round >
-                        TOTAL_STORAGES
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    if (
-                        !room.players ||
-                        !room.players[
+                        round < 1 ||
+                        round > TOTAL_STORAGES ||
+                        !room.players?.[
                             currentUser.uid
                         ]
                     ) {
@@ -1167,25 +1185,10 @@ async function placeBid() {
                         ];
 
 
-                    if (!storage) {
-
-                        return;
-
-                    }
-
-
-                    /*
-                        Bids are only accepted during
-                        the normal BIDDING state.
-
-                        This deliberately prevents race
-                        conditions during SOLD.
-                    */
-
                     if (
-                        storage.state &&
+                        !storage ||
                         storage.state !==
-                        "bidding"
+                            "bidding"
                     ) {
 
                         return;
@@ -1205,27 +1208,43 @@ async function placeBid() {
                         );
 
 
-                    const oldBid =
-                        Number(
-                            storage.currentBid
-                        ) ||
-                        Number(
-                            storage.basePrice
-                        ) ||
-                        0;
+                    if (
+                        !Number.isFinite(cash)
+                    ) {
+
+                        return;
+
+                    }
 
 
-                    const newBid =
-                        oldBid +
-                        BID_INCREMENT;
+                    const hasBidder =
+                        Boolean(
+                            storage.currentBidder
+                        );
+
+
+                    const current =
+                        hasBidder
+                            ? Number(
+                                storage.currentBid
+                            )
+                            : Number(
+                                storage.basePrice
+                            );
+
+
+                    const proposedBid =
+                        hasBidder
+                            ? current +
+                              BID_INCREMENT
+                            : current;
 
 
                     if (
                         !Number.isFinite(
-                            cash
+                            proposedBid
                         ) ||
-                        cash <
-                        newBid
+                        proposedBid > cash
                     ) {
 
                         return;
@@ -1234,82 +1253,33 @@ async function placeBid() {
 
 
                     /*
-                        CASH IS DEDUCTED ONLY WHEN
-                        THE BID IS PLACED.
+                     * IMPORTANT:
+                     *
+                     * NO CASH IS DEDUCTED HERE.
+                     *
+                     * The player only proves they can afford
+                     * the bid.
+                     *
+                     * The winner pays the winning bid exactly
+                     * once when the storage is SOLD.
+                     */
 
-                        The player therefore cannot
-                        bid more than their remaining
-                        1000-Cash budget.
-                    */
-
-                    player.cash =
-                        cash -
-                        BID_INCREMENT;
-
-
-                    /*
-                        But the first bid is special:
-
-                        If the starting bid is 100,
-                        the first valid bid should
-                        actually be 100, not 110.
-
-                        Therefore restore the first
-                        increment when no previous
-                        bidder exists.
-                    */
-
-                    if (
-                        !storage.currentBidder
-                    ) {
-
-                        const firstBid =
-                            Number(
-                                storage.basePrice
-                            ) ||
-                            0;
-
-
-                        if (
-                            cash <
-                            firstBid
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        player.cash =
-                            cash -
-                            firstBid;
-
-
-                        storage.currentBid =
-                            firstBid;
-
-                    }
-
-                    else {
-
-                        storage.currentBid =
-                            newBid;
-
-                    }
+                    storage.currentBid =
+                        proposedBid;
 
 
                     storage.currentBidder =
                         currentUser.uid;
+
 
                     storage.currentBidderName =
                         player.username ||
                         "Player";
 
 
-                    /*
-                        Any new bid immediately
-                        cancels GOING ONCE / GOING TWICE.
-                    */
+                    storage.lastBidAt =
+                        Date.now();
+
 
                     storage.state =
                         "bidding";
@@ -1326,9 +1296,11 @@ async function placeBid() {
 
 
                     const bidId =
-                        `${Date.now()}_${currentUser.uid}_${Math.random()
+                        `${Date.now()}_${
+                            currentUser.uid
+                        }_${Math.random()
                             .toString(36)
-                            .slice(2, 7)}`;
+                            .slice(2, 8)}`;
 
 
                     storage.bidHistory[
@@ -1343,7 +1315,7 @@ async function placeBid() {
                             "Player",
 
                         amount:
-                            storage.currentBid,
+                            proposedBid,
 
                         timestamp:
                             Date.now()
@@ -1357,6 +1329,10 @@ async function placeBid() {
                         storage;
 
 
+                    room.lastActionAt =
+                        Date.now();
+
+
                     return room;
 
                 }
@@ -1368,7 +1344,7 @@ async function placeBid() {
         ) {
 
             showBidStatus(
-                "Bid rejected. The auction may have changed."
+                "Bid rejected. Another bid may have changed the auction."
             );
 
             return;
@@ -1389,6 +1365,7 @@ async function placeBid() {
             error
         );
 
+
         showBidStatus(
             "Unable to place bid."
         );
@@ -1400,7 +1377,7 @@ async function placeBid() {
 
 /* =========================================================
    HOST AUCTION ENGINE
-========================================================= */
+   ========================================================= */
 
 function handleHostAuction() {
 
@@ -1408,7 +1385,9 @@ function handleHostAuction() {
         !currentUser ||
         !currentRoom
     ) {
+
         return;
+
     }
 
 
@@ -1439,25 +1418,54 @@ function handleHostAuction() {
 
 
     /*
-        IMPORTANT:
+     * SELF-HEAL INITIALIZATION
+     *
+     * A previous broken room could have:
+     *
+     * status = "playing"
+     * auctionInitialized = true
+     * storages = missing
+     *
+     * That state previously caused the host engine
+     * to return forever.
+     *
+     * We only repair startup state.
+     */
 
-        Initialize the auction BEFORE trying
-        to get the current storage.
+    const round =
+        Number(
+            currentRoom.currentRound
+        ) || 1;
 
-        The previous version checked for the
-        storage first. Since storages did not
-        exist yet, the function returned and
-        initializeAuction() was never called.
-    */
+
+    const storagesValid =
+        Array.isArray(
+            currentRoom.storages
+        ) &&
+        currentRoom.storages.length ===
+            TOTAL_STORAGES &&
+        currentRoom.storages[0] &&
+        Number(
+            currentRoom.storages[0].basePrice
+        ) > 0;
+
+
+    const needsStartupRepair =
+        round === 1 &&
+        (
+            !currentRoom.auctionInitialized ||
+            !storagesValid
+        );
+
 
     if (
-        currentRoom.status ===
-        "starting" ||
         (
             currentRoom.status ===
-            "waiting" &&
-            !currentRoom.auctionInitialized
-        )
+                "starting" ||
+            currentRoom.status ===
+                "playing"
+        ) &&
+        needsStartupRepair
     ) {
 
         initializeAuction();
@@ -1473,6 +1481,17 @@ function handleHostAuction() {
 
     if (!storage) {
 
+        /*
+         * If a later round is somehow missing,
+         * finish safely rather than freezing forever.
+         */
+
+        if (round > 1) {
+
+            finalizeGameSafely();
+
+        }
+
         return;
 
     }
@@ -1483,31 +1502,28 @@ function handleHostAuction() {
         "bidding";
 
 
-    /*
-        NORMAL BIDDING
+    if (state === "bidding") {
 
-        Nothing happens automatically until
-        somebody has actually placed a bid.
+        /*
+         * Do nothing until a bid exists.
+         */
 
-        Once a bid exists, the auctioneer waits
-        3 seconds before GOING ONCE.
-    */
+        clearHostTimer();
 
-    if (
-        state ===
-        "bidding"
-    ) {
 
-        scheduleGoingOnce();
+        if (
+            storage.currentBidder
+        ) {
+
+            scheduleGoingOnce();
+
+        }
+
 
         return;
 
     }
 
-
-    /*
-        GOING ONCE
-    */
 
     if (
         state ===
@@ -1521,10 +1537,6 @@ function handleHostAuction() {
     }
 
 
-    /*
-        GOING TWICE
-    */
-
     if (
         state ===
         "going_twice"
@@ -1536,13 +1548,6 @@ function handleHostAuction() {
 
     }
 
-
-    /*
-        SOLD
-
-        Wait 2 seconds and move to the next
-        storage.
-    */
 
     if (
         state ===
@@ -1557,91 +1562,119 @@ function handleHostAuction() {
 
 
 /* =========================================================
-   INITIALIZE AUCTION
-========================================================= */
+   INITIALIZE / REPAIR AUCTION
+   ========================================================= */
 
 async function initializeAuction() {
 
-    const roomRef =
-        ref(
-            database,
-            `${ROOM_PATH}/${currentRoomCode}`
-        );
+    if (
+        initializationInProgress
+    ) {
+
+        return;
+
+    }
 
 
-    const result =
-        await runTransaction(
-            roomRef,
-            function (room) {
-
-                if (!room) {
-
-                    return;
-
-                }
+    initializationInProgress =
+        true;
 
 
-                if (
-                    room.auctionInitialized
-                ) {
+    try {
 
-                    return;
-
-                }
-
-
-                const existingPlayers =
-                    room.players ||
-                    {};
+        const roomRef =
+            ref(
+                database,
+                `${ROOM_PATH}/${currentRoomCode}`
+            );
 
 
-                Object.keys(
-                    existingPlayers
-                ).forEach(
-                    function (uid) {
+        const result =
+            await runTransaction(
+                roomRef,
+                (room) => {
 
-                        existingPlayers[
-                            uid
-                        ].cash =
-                            STARTING_CASH;
+                    if (!room) {
 
-                        existingPlayers[
-                            uid
-                        ].startingCash =
-                            STARTING_CASH;
-
-                        existingPlayers[
-                            uid
-                        ].totalSpent =
-                            0;
-
-                        existingPlayers[
-                            uid
-                        ].totalCP =
-                            0;
-
-                        existingPlayers[
-                            uid
-                        ].profit =
-                            0;
-
-                        existingPlayers[
-                            uid
-                        ].boxesWon =
-                            0;
+                        return;
 
                     }
-                );
 
 
-                const storages =
-                    STORAGE_TYPES.map(
-                        function (
-                            config,
-                            index
-                        ) {
+                    const round =
+                        Number(
+                            room.currentRound
+                        ) || 1;
 
-                            return {
+
+                    /*
+                     * Never reset an auction after
+                     * it has moved past round 1.
+                     */
+
+                    if (
+                        round !== 1
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const players =
+                        room.players ||
+                        {};
+
+
+                    /*
+                     * Give every player exactly
+                     * 1,000 starting Cash.
+                     *
+                     * CP is NOT touched.
+                     */
+
+                    Object.entries(
+                        players
+                    ).forEach(
+                        ([uid, player]) => {
+
+                            players[uid] = {
+
+                                ...player,
+
+                                cash:
+                                    STARTING_CASH,
+
+                                startingCash:
+                                    STARTING_CASH,
+
+                                totalSpent:
+                                    0,
+
+                                totalCP:
+                                    0,
+
+                                boxesWon:
+                                    0,
+
+                                profit:
+                                    0,
+
+                                rewardApplied:
+                                    false
+
+                            };
+
+                        }
+                    );
+
+
+                    const storages =
+                        STORAGE_TYPES.map(
+                            (
+                                config,
+                                index
+                            ) => ({
 
                                 number:
                                     index + 1,
@@ -1654,6 +1687,10 @@ async function initializeAuction() {
 
                                 basePrice:
                                     config.basePrice,
+
+                                /*
+                                 * Hidden until SOLD
+                                 */
 
                                 hiddenCP:
                                     HIDDEN_CP_VALUES[
@@ -1672,6 +1709,9 @@ async function initializeAuction() {
                                 currentBidderName:
                                     null,
 
+                                lastBidAt:
+                                    null,
+
                                 bidHistory:
                                     {},
 
@@ -1679,44 +1719,87 @@ async function initializeAuction() {
                                     false,
 
                                 winnerCP:
-                                    0
+                                    0,
 
-                            };
+                                winningBid:
+                                    0,
 
-                        }
-                    );
+                                winnerId:
+                                    null,
+
+                                winnerName:
+                                    null,
+
+                                soldAt:
+                                    null
+
+                            })
+                        );
 
 
-                room.players =
-                    existingPlayers;
+                    room.players =
+                        players;
 
-                room.storages =
-                    storages;
 
-                room.currentRound =
-                    1;
+                    room.storages =
+                        storages;
 
-                room.status =
-                    "playing";
 
-                room.auctionInitialized =
-                    true;
+                    room.currentRound =
+                        1;
 
-                room.startedAt =
-                    Date.now();
 
-                room.lastActionAt =
-                    Date.now();
+                    room.status =
+                        "playing";
 
-                return room;
 
-            }
+                    room.auctionInitialized =
+                        true;
+
+
+                    room.startedAt =
+                        Date.now();
+
+
+                    room.lastActionAt =
+                        Date.now();
+
+
+                    room.leaderboardApplied =
+                        false;
+
+
+                    return room;
+
+                }
+            );
+
+
+        if (
+            !result.committed
+        ) {
+
+            console.warn(
+                "Auction initialization was not committed."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Auction initialization failed:",
+            error
         );
 
+    }
 
-    if (!result.committed) {
+    finally {
 
-        return;
+        initializationInProgress =
+            false;
 
     }
 
@@ -1724,14 +1807,12 @@ async function initializeAuction() {
 
 
 /* =========================================================
-   GOING ONCE
-========================================================= */
+   HOST TIMERS
+   ========================================================= */
 
 function scheduleGoingOnce() {
 
-    if (
-        hostTimer
-    ) {
+    if (hostTimer) {
 
         return;
 
@@ -1742,19 +1823,8 @@ function scheduleGoingOnce() {
         getCurrentStorage();
 
 
-    if (!storage) {
-
-        return;
-
-    }
-
-
     if (
-        storage.currentBidder ===
-        null
-        ||
-        storage.currentBidder ===
-        undefined
+        !storage?.currentBidder
     ) {
 
         return;
@@ -1762,85 +1832,206 @@ function scheduleGoingOnce() {
     }
 
 
-    const lastBidTime =
+    const lastBidAt =
+        Number(
+            storage.lastBidAt
+        ) ||
         getLastBidTime(
             storage
-        );
-
-
-    /*
-        Wait three seconds after the
-        latest bid.
-    */
-
-    const elapsed =
-        Date.now() -
-        lastBidTime;
+        ) ||
+        Date.now();
 
 
     const remaining =
         Math.max(
-            3000 - elapsed,
+            GOING_ONCE_MS -
+                (
+                    Date.now() -
+                    lastBidAt
+                ),
             0
         );
 
 
-    const token =
-        Date.now() +
-        Math.random();
+    setHostTimer(
+        async () => {
+
+            const latest =
+                getCurrentStorage();
 
 
-    hostTimerToken =
-        token;
+            if (
+                !latest ||
+                latest.state !==
+                    "bidding" ||
+                !latest.currentBidder
+            ) {
+
+                return;
+
+            }
 
 
-    hostTimer =
-        setTimeout(
-            async function () {
-
-                hostTimer =
-                    null;
-
-
-                if (
-                    hostTimerToken !==
-                    token
-                ) {
-
-                    return;
-
-                }
-
-
-                await changeStorageState(
-                    "going_once"
+            const latestBidAt =
+                Number(
+                    latest.lastBidAt
+                ) ||
+                getLastBidTime(
+                    latest
                 );
 
-            },
-            remaining
-        );
+
+            /*
+             * If somebody bid while the timer
+             * was waiting, wait a full 3 seconds
+             * from that new bid.
+             */
+
+            const elapsed =
+                Date.now() -
+                latestBidAt;
+
+
+            if (
+                elapsed <
+                GOING_ONCE_MS
+            ) {
+
+                scheduleGoingOnce();
+
+                return;
+
+            }
+
+
+            await changeStorageState(
+                "going_once"
+            );
+
+        },
+        remaining
+    );
 
 }
 
-
-/* =========================================================
-   GOING TWICE
-========================================================= */
 
 function scheduleGoingTwice() {
 
-    if (
-        hostTimer
-    ) {
+    if (hostTimer) {
 
         return;
 
     }
 
 
+    setHostTimer(
+        async () => {
+
+            const latest =
+                getCurrentStorage();
+
+
+            if (
+                !latest ||
+                latest.state !==
+                    "going_once"
+            ) {
+
+                return;
+
+            }
+
+
+            await changeStorageState(
+                "going_twice"
+            );
+
+        },
+        GOING_TWICE_MS
+    );
+
+}
+
+
+function scheduleSold() {
+
+    if (hostTimer) {
+
+        return;
+
+    }
+
+
+    setHostTimer(
+        async () => {
+
+            const latest =
+                getCurrentStorage();
+
+
+            if (
+                !latest ||
+                latest.state !==
+                    "going_twice"
+            ) {
+
+                return;
+
+            }
+
+
+            await sellCurrentStorage();
+
+        },
+        GOING_TWICE_MS
+    );
+
+}
+
+
+function scheduleNextRound() {
+
+    if (hostTimer) {
+
+        return;
+
+    }
+
+
+    setHostTimer(
+        async () => {
+
+            const latest =
+                getCurrentStorage();
+
+
+            if (
+                !latest ||
+                latest.state !==
+                    "sold"
+            ) {
+
+                return;
+
+            }
+
+
+            await moveToNextRound();
+
+        },
+        SOLD_DELAY_MS
+    );
+
+}
+
+
+function setHostTimer(
+    callback,
+    delay
+) {
+
     const token =
-        Date.now() +
-        Math.random();
+        `${Date.now()}_${Math.random()}`;
 
 
     hostTimerToken =
@@ -1849,7 +2040,7 @@ function scheduleGoingTwice() {
 
     hostTimer =
         setTimeout(
-            async function () {
+            async () => {
 
                 hostTimer =
                     null;
@@ -1865,113 +2056,136 @@ function scheduleGoingTwice() {
                 }
 
 
-                const latest =
-                    getCurrentStorage();
-
-
-                if (!latest) {
-
-                    return;
-
-                }
-
-
-                if (
-                    latest.state !==
-                    "going_once"
-                ) {
-
-                    return;
-
-                }
-
-
-                await changeStorageState(
-                    "going_twice"
-                );
+                await callback();
 
             },
-            GOING_ONCE_MS
+            delay
         );
 
 }
 
 
-/* =========================================================
-   SOLD
-========================================================= */
+function clearHostTimer() {
 
-function scheduleSold() {
+    if (hostTimer) {
 
-    if (
-        hostTimer
-    ) {
+        clearTimeout(
+            hostTimer
+        );
 
-        return;
+        hostTimer =
+            null;
 
     }
 
 
-    const token =
-        Date.now() +
-        Math.random();
-
-
     hostTimerToken =
-        token;
+        null;
+
+}
 
 
-    hostTimer =
-        setTimeout(
-            async function () {
+/* =========================================================
+   CHANGE STORAGE STATE
+   ========================================================= */
 
-                hostTimer =
-                    null;
+async function changeStorageState(
+    newState
+) {
 
-
-                if (
-                    hostTimerToken !==
-                    token
-                ) {
-
-                    return;
-
-                }
-
-
-                const latest =
-                    getCurrentStorage();
-
-
-                if (!latest) {
-
-                    return;
-
-                }
-
-
-                if (
-                    latest.state !==
-                    "going_twice"
-                ) {
-
-                    return;
-
-                }
-
-
-                await sellCurrentStorage();
-
-            },
-            GOING_TWICE_MS
+    const roomRef =
+        ref(
+            database,
+            `${ROOM_PATH}/${currentRoomCode}`
         );
+
+
+    await runTransaction(
+        roomRef,
+        (room) => {
+
+            if (
+                !room ||
+                room.status ===
+                    "finished"
+            ) {
+
+                return;
+
+            }
+
+
+            const round =
+                Number(
+                    room.currentRound
+                ) || 1;
+
+
+            const storage =
+                room.storages?.[
+                    round - 1
+                ];
+
+
+            if (!storage) {
+
+                return;
+
+            }
+
+
+            if (
+                newState ===
+                    "going_once" &&
+                (
+                    storage.state !==
+                        "bidding" ||
+                    !storage.currentBidder
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                newState ===
+                    "going_twice" &&
+                storage.state !==
+                    "going_once"
+            ) {
+
+                return;
+
+            }
+
+
+            storage.state =
+                newState;
+
+
+            room.storages[
+                round - 1
+            ] =
+                storage;
+
+
+            room.lastActionAt =
+                Date.now();
+
+
+            return room;
+
+        }
+    );
 
 }
 
 
 /* =========================================================
    SELL CURRENT STORAGE
-========================================================= */
+   ========================================================= */
 
 async function sellCurrentStorage() {
 
@@ -1985,18 +2199,12 @@ async function sellCurrentStorage() {
     const result =
         await runTransaction(
             roomRef,
-            function (room) {
-
-                if (!room) {
-
-                    return;
-
-                }
-
+            (room) => {
 
                 if (
+                    !room ||
                     room.status ===
-                    "finished"
+                        "finished"
                 ) {
 
                     return;
@@ -2020,16 +2228,10 @@ async function sellCurrentStorage() {
                     ];
 
 
-                if (!storage) {
-
-                    return;
-
-                }
-
-
                 if (
+                    !storage ||
                     storage.state !==
-                    "going_twice"
+                        "going_twice"
                 ) {
 
                     return;
@@ -2042,27 +2244,48 @@ async function sellCurrentStorage() {
 
 
                 /*
-                    Nobody bid.
-
-                    The storage is simply marked
-                    unsold and we move on.
-                */
+                 * Nobody bid:
+                 *
+                 * Mark UNSOLD and continue.
+                 */
 
                 if (!winnerId) {
 
                     storage.state =
                         "sold";
 
+
                     storage.sold =
                         true;
+
 
                     storage.winnerCP =
                         0;
 
-                    room.storages[
-                        index
-                    ] =
+
+                    storage.winningBid =
+                        0;
+
+
+                    storage.winnerId =
+                        null;
+
+
+                    storage.winnerName =
+                        null;
+
+
+                    storage.soldAt =
+                        Date.now();
+
+
+                    room.storages[index] =
                         storage;
+
+
+                    room.lastActionAt =
+                        Date.now();
+
 
                     return room;
 
@@ -2095,15 +2318,41 @@ async function sellCurrentStorage() {
 
 
                 /*
-                    Cash was reserved/deducted
-                    when each bid was placed.
+                 * FINAL CASH DEDUCTION
+                 *
+                 * Cash was never deducted during bidding.
+                 *
+                 * The winner pays the winning bid exactly once NOW.
+                 */
 
-                    Therefore we do NOT deduct
-                    anything here.
+                const winnerCash =
+                    Number(
+                        winner.cash
+                    );
 
-                    The winning bid becomes the
-                    player's spending amount.
-                */
+
+                if (
+                    !Number.isFinite(
+                        winnerCash
+                    ) ||
+                    winnerCash <
+                        winningBid
+                ) {
+
+                    /*
+                     * This should normally be impossible
+                     * because every bid checked affordability.
+                     */
+
+                    return;
+
+                }
+
+
+                winner.cash =
+                    winnerCash -
+                    winningBid;
+
 
                 winner.totalSpent =
                     (
@@ -2133,44 +2382,46 @@ async function sellCurrentStorage() {
 
 
                 winner.profit =
-                    (
-                        Number(
-                            winner.totalCP
-                        ) || 0
-                    ) -
-                    (
-                        Number(
-                            winner.totalSpent
-                        ) || 0
-                    );
+                    winner.totalCP -
+                    winner.totalSpent;
 
 
                 storage.state =
                     "sold";
 
+
                 storage.sold =
                     true;
+
 
                 storage.winnerCP =
                     hiddenCP;
 
+
+                storage.winningBid =
+                    winningBid;
+
+
                 storage.winnerId =
                     winnerId;
+
 
                 storage.winnerName =
                     winner.username ||
                     "Player";
 
-                storage.winningBid =
-                    winningBid;
 
                 storage.soldAt =
                     Date.now();
 
 
-                room.storages[
-                    index
+                room.players[
+                    winnerId
                 ] =
+                    winner;
+
+
+                room.storages[index] =
                     storage;
 
 
@@ -2184,78 +2435,20 @@ async function sellCurrentStorage() {
         );
 
 
-    if (!result.committed) {
-
-        return;
-
-    }
-
-
-    /*
-        The room listener will show the
-        revealed CP automatically.
-
-        Then the host waits 2 seconds
-        before moving forward.
-    */
-
-}
-
-
-/* =========================================================
-   NEXT ROUND
-========================================================= */
-
-function scheduleNextRound() {
-
     if (
-        hostTimer
+        !result.committed
     ) {
 
         return;
 
     }
 
-
-    const token =
-        Date.now() +
-        Math.random();
-
-
-    hostTimerToken =
-        token;
-
-
-    hostTimer =
-        setTimeout(
-            async function () {
-
-                hostTimer =
-                    null;
-
-
-                if (
-                    hostTimerToken !==
-                    token
-                ) {
-
-                    return;
-
-                }
-
-
-                await moveToNextRound();
-
-            },
-            SOLD_DELAY_MS
-        );
-
 }
 
 
 /* =========================================================
-   MOVE TO NEXT ROUND
-========================================================= */
+   NEXT STORAGE / FINISH
+   ========================================================= */
 
 async function moveToNextRound() {
 
@@ -2269,18 +2462,12 @@ async function moveToNextRound() {
     const result =
         await runTransaction(
             roomRef,
-            function (room) {
-
-                if (!room) {
-
-                    return;
-
-                }
-
+            (room) => {
 
                 if (
+                    !room ||
                     room.status ===
-                    "finished"
+                        "finished"
                 ) {
 
                     return;
@@ -2294,16 +2481,16 @@ async function moveToNextRound() {
                     ) || 1;
 
 
-                const storage =
+                const currentStorage =
                     room.storages?.[
                         round - 1
                     ];
 
 
                 if (
-                    !storage ||
-                    storage.state !==
-                    "sold"
+                    !currentStorage ||
+                    currentStorage.state !==
+                        "sold"
                 ) {
 
                     return;
@@ -2312,8 +2499,8 @@ async function moveToNextRound() {
 
 
                 /*
-                    FINAL STORAGE
-                */
+                 * FINAL STORAGE
+                 */
 
                 if (
                     round >=
@@ -2329,17 +2516,13 @@ async function moveToNextRound() {
                 }
 
 
-                /*
-                    NEXT STORAGE
-                */
-
-                room.currentRound =
-                    round + 1;
+                const nextIndex =
+                    round;
 
 
                 const nextStorage =
-                    room.storages[
-                        round
+                    room.storages?.[
+                        nextIndex
                     ];
 
 
@@ -2354,21 +2537,66 @@ async function moveToNextRound() {
                 }
 
 
+                /*
+                 * Each storage starts fresh.
+                 *
+                 * Previous storage data remains untouched.
+                 */
+
                 nextStorage.state =
                     "bidding";
+
 
                 nextStorage.currentBid =
                     null;
 
+
                 nextStorage.currentBidder =
                     null;
+
 
                 nextStorage.currentBidderName =
                     null;
 
 
+                nextStorage.lastBidAt =
+                    null;
+
+
+                nextStorage.bidHistory =
+                    {};
+
+
+                nextStorage.sold =
+                    false;
+
+
+                nextStorage.winnerCP =
+                    0;
+
+
+                nextStorage.winningBid =
+                    0;
+
+
+                nextStorage.winnerId =
+                    null;
+
+
+                nextStorage.winnerName =
+                    null;
+
+
+                nextStorage.soldAt =
+                    null;
+
+
+                room.currentRound =
+                    round + 1;
+
+
                 room.storages[
-                    round
+                    nextIndex
                 ] =
                     nextStorage;
 
@@ -2383,21 +2611,65 @@ async function moveToNextRound() {
         );
 
 
-    if (!result.committed) {
+    if (
+        result.committed &&
+        result.snapshot?.val?.status ===
+            "finished"
+    ) {
 
-        return;
+        await applyLeaderboardRewards(
+            result.snapshot.val()
+        );
 
     }
 
+}
 
-    /*
-        Final CP rewards are written
-        after the auction is finished.
-    */
+
+/* =========================================================
+   SAFE FINALIZATION
+   ========================================================= */
+
+async function finalizeGameSafely() {
+
+    const roomRef =
+        ref(
+            database,
+            `${ROOM_PATH}/${currentRoomCode}`
+        );
+
+
+    const result =
+        await runTransaction(
+            roomRef,
+            (room) => {
+
+                if (
+                    !room ||
+                    room.status ===
+                        "finished"
+                ) {
+
+                    return;
+
+                }
+
+
+                finalizeGame(
+                    room
+                );
+
+
+                return room;
+
+            }
+        );
+
 
     if (
-        result.snapshot?.val?.status ===
-        "finished"
+        result.committed &&
+        result.snapshot?.val()?.status ===
+            "finished"
     ) {
 
         await applyLeaderboardRewards(
@@ -2411,7 +2683,7 @@ async function moveToNextRound() {
 
 /* =========================================================
    FINALIZE GAME
-========================================================= */
+   ========================================================= */
 
 function finalizeGame(
     room
@@ -2419,6 +2691,7 @@ function finalizeGame(
 
     room.status =
         "finished";
+
 
     room.finishedAt =
         Date.now();
@@ -2429,32 +2702,30 @@ function finalizeGame(
         {};
 
 
-    Object.entries(
+    Object.values(
         players
     ).forEach(
-        function (
-            [uid, player]
-        ) {
-
-            player.totalCP =
-                Number(
-                    player.totalCP
-                ) || 0;
+        (player) => {
 
             player.totalSpent =
                 Number(
                     player.totalSpent
                 ) || 0;
 
+
+            player.totalCP =
+                Number(
+                    player.totalCP
+                ) || 0;
+
+
             player.profit =
                 player.totalCP -
                 player.totalSpent;
 
+
             player.finalReward =
                 player.totalCP;
-
-            player.finalRank =
-                0;
 
         }
     );
@@ -2463,16 +2734,42 @@ function finalizeGame(
     const ranked =
         Object.entries(
             players
-        )
-        .sort(
-            function (a, b) {
+        ).sort(
+            ([, a], [, b]) => {
+
+                const profitDifference =
+                    (
+                        Number(
+                            b.profit
+                        ) || 0
+                    ) -
+                    (
+                        Number(
+                            a.profit
+                        ) || 0
+                    );
+
+
+                if (
+                    profitDifference !==
+                    0
+                ) {
+
+                    return profitDifference;
+
+                }
+
 
                 return (
-                    Number(
-                        b[1].profit
+                    (
+                        Number(
+                            b.totalCP
+                        ) || 0
                     ) -
-                    Number(
-                        a[1].profit
+                    (
+                        Number(
+                            a.totalCP
+                        ) || 0
                     )
                 );
 
@@ -2481,10 +2778,7 @@ function finalizeGame(
 
 
     ranked.forEach(
-        function (
-            [, player],
-            index
-        ) {
+        ([, player], index) => {
 
             player.finalRank =
                 index + 1;
@@ -2497,8 +2791,12 @@ function finalizeGame(
         players;
 
 
-    room.leaderboardFinalized =
+    room.leaderboardApplied =
         false;
+
+
+    room.finishedAt =
+        Date.now();
 
 
     return room;
@@ -2507,81 +2805,54 @@ function finalizeGame(
 
 
 /* =========================================================
-   APPLY LEADERBOARD CP
-========================================================= */
+   PERSIST CP TO GLOBAL LEADERBOARD
+   ========================================================= */
 
 async function applyLeaderboardRewards(
     finishedRoom
 ) {
 
-    /*
-        Every player receives the CP they
-        actually discovered in their boxes.
-
-        This updates:
-
-        users/{uid}/chaosPoints
-
-        which is what the existing
-        dashboard leaderboard uses.
-    */
-
-    const players =
-        finishedRoom.players ||
-        {};
-
-
-    for (
-        const [uid, player]
-        of Object.entries(
-            players
-        )
+    if (
+        rewardUpdateInProgress ||
+        finishedRoom?.status !==
+            "finished"
     ) {
 
-        const reward =
-            Number(
-                player.finalReward
-            ) || 0;
+        return;
+
+    }
 
 
-        if (
-            reward <= 0
-        ) {
-
-            continue;
-
-        }
+    rewardUpdateInProgress =
+        true;
 
 
-        const playerRoomRef =
+    try {
+
+        /*
+         * One room-level transaction claims
+         * the leaderboard update.
+         *
+         * This prevents every player's browser
+         * from adding CP multiple times.
+         */
+
+        const roomRef =
             ref(
                 database,
-                `${ROOM_PATH}/${currentRoomCode}/players/${uid}`
+                `${ROOM_PATH}/${currentRoomCode}`
             );
 
 
-        /*
-            Mark reward as applied atomically
-            so the same finished game cannot
-            repeatedly add CP.
-        */
-
         const claim =
             await runTransaction(
-                playerRoomRef,
-                function (
-                    currentPlayer
-                ) {
-
-                    if (!currentPlayer) {
-
-                        return;
-
-                    }
-
+                roomRef,
+                (room) => {
 
                     if (
-                        currentPlayer.rewardApplied
+                        !room ||
+                        room.status !==
+                            "finished"
                     ) {
 
                         return;
@@ -2589,10 +2860,20 @@ async function applyLeaderboardRewards(
                     }
 
 
-                    currentPlayer.rewardApplied =
+                    if (
+                        room.leaderboardApplied
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    room.leaderboardApplied =
                         true;
 
-                    return currentPlayer;
+
+                    return room;
 
                 }
             );
@@ -2602,301 +2883,93 @@ async function applyLeaderboardRewards(
             !claim.committed
         ) {
 
-            continue;
-
-        }
-
-
-        const pointsRef =
-            ref(
-                database,
-                `users/${uid}/chaosPoints`
-            );
-
-
-        await runTransaction(
-            pointsRef,
-            function (
-                existingPoints
-            ) {
-
-                return (
-                    Number(
-                        existingPoints
-                    ) || 0
-                ) +
-                reward;
-
-            }
-        );
-
-    }
-
-
-    /*
-        Refresh local user data after the
-        leaderboard update.
-    */
-
-    if (currentUser) {
-
-        await refreshUserPoints();
-
-    }
-
-}
-
-
-/* =========================================================
-   REFRESH USER CP
-========================================================= */
-
-async function refreshUserPoints() {
-
-    try {
-
-        const userRef =
-            ref(
-                database,
-                `users/${currentUser.uid}`
-            );
-
-
-        const snapshot =
-            await get(
-                userRef
-            );
-
-
-        if (
-            !snapshot.exists()
-        ) {
-
             return;
 
         }
 
 
-        localUserData =
-            snapshot.val();
+        const players =
+            claim.snapshot
+                .val()
+                ?.players ||
+            {};
 
 
-        if (playerPoints) {
+        /*
+         * Host browser performs actual
+         * persistent CP updates.
+         */
 
-            playerPoints.textContent =
-                formatNumber(
-                    Number(
-                        localUserData.chaosPoints
-                    ) || 0
+        for (
+            const [
+                uid,
+                player
+            ]
+            of Object.entries(players)
+        ) {
+
+            const reward =
+                Number(
+                    player.finalReward
+                ) || 0;
+
+
+            if (
+                reward <= 0
+            ) {
+
+                continue;
+
+            }
+
+
+            const pointsRef =
+                ref(
+                    database,
+                    `users/${uid}/chaosPoints`
                 );
 
+
+            await runTransaction(
+                pointsRef,
+                (existingPoints) =>
+                    (
+                        Number(
+                            existingPoints
+                        ) || 0
+                    ) +
+                    reward
+            );
+
         }
+
+
+        await refreshUserPoints();
 
     }
 
     catch (error) {
 
         console.error(
-            "Unable to refresh CP:",
+            "Unable to update leaderboard:",
             error
         );
 
     }
 
-}
+    finally {
 
-
-/* =========================================================
-   CHANGE STORAGE STATE
-========================================================= */
-
-async function changeStorageState(
-    newState
-) {
-
-    const roomRef =
-        ref(
-            database,
-            `${ROOM_PATH}/${currentRoomCode}`
-        );
-
-
-    await runTransaction(
-        roomRef,
-        function (room) {
-
-            if (!room) {
-
-                return;
-
-            }
-
-
-            if (
-                room.status ===
-                "finished"
-            ) {
-
-                return;
-
-            }
-
-
-            const round =
-                Number(
-                    room.currentRound
-                ) || 1;
-
-
-            const storage =
-                room.storages?.[
-                    round - 1
-                ];
-
-
-            if (!storage) {
-
-                return;
-
-            }
-
-
-            /*
-                Do not advance an auction if a
-                newer bid has already reset the
-                state.
-            */
-
-            if (
-                newState ===
-                "going_twice"
-                &&
-                storage.state !==
-                "going_once"
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                newState ===
-                "going_once"
-                &&
-                storage.state !==
-                "bidding"
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                newState ===
-                "going_once"
-                &&
-                !storage.currentBidder
-            ) {
-
-                return;
-
-            }
-
-
-            storage.state =
-                newState;
-
-
-            room.storages[
-                round - 1
-            ] =
-                storage;
-
-
-            room.lastActionAt =
-                Date.now();
-
-
-            return room;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   LAST BID TIME
-========================================================= */
-
-function getLastBidTime(
-    storage
-) {
-
-    const history =
-        storage.bidHistory ||
-        {};
-
-
-    const bids =
-        Object.values(
-            history
-        );
-
-
-    if (
-        bids.length === 0
-    ) {
-
-        return Date.now();
+        rewardUpdateInProgress =
+            false;
 
     }
 
-
-    return Math.max(
-        ...bids.map(
-            function (bid) {
-
-                return Number(
-                    bid.timestamp
-                ) || 0;
-
-            }
-        )
-    );
-
 }
 
 
 /* =========================================================
-   CLEAR HOST TIMER
-========================================================= */
-
-function clearHostTimer() {
-
-    if (hostTimer) {
-
-        clearTimeout(
-            hostTimer
-        );
-
-        hostTimer =
-            null;
-
-    }
-
-
-    hostTimerToken =
-        null;
-
-}
-
-
-/* =========================================================
-   RENDER BIDDERS
-========================================================= */
+   BIDDERS
+   ========================================================= */
 
 function renderBidders(
     storage
@@ -2921,20 +2994,18 @@ function renderBidders(
     const bids =
         Object.values(
             history
-        )
-        .sort(
-            function (a, b) {
-
-                return (
+        ).sort(
+            (a, b) =>
+                (
                     Number(
                         b.timestamp
-                    ) -
+                    ) || 0
+                ) -
+                (
                     Number(
                         a.timestamp
-                    )
-                );
-
-            }
+                    ) || 0
+                )
         );
 
 
@@ -2946,15 +3017,14 @@ function renderBidders(
     }
 
 
-    if (
-        bids.length === 0
-    ) {
+    if (!bids.length) {
 
-        biddersList.innerHTML = `
+        biddersList.innerHTML =
+            `
             <div class="empty-bidders">
                 No bids yet.
             </div>
-        `;
+            `;
 
         return;
 
@@ -2962,49 +3032,42 @@ function renderBidders(
 
 
     bids.forEach(
-        function (bid) {
+        (bid) => {
 
             const element =
                 document.createElement(
                     "div"
                 );
 
+
             element.className =
                 "bidder";
 
 
-            const isCurrent =
+            const current =
                 bid.uid ===
-                storage.currentBidder;
+                storage.currentBidder
+                    ? " 🔨"
+                    : "";
 
 
-            element.innerHTML = `
-
+            element.innerHTML =
+                `
                 <span class="bidder-name">
-
                     ${escapeHTML(
-                        bid.username
-                    )}
-
-                    ${
-                        isCurrent
-                            ? " 🔨"
-                            : ""
-                    }
-
+                        bid.username ||
+                        "Player"
+                    )}${current}
                 </span>
 
                 <span class="bidder-amount">
-
                     ${formatNumber(
                         Number(
                             bid.amount
                         ) || 0
                     )} CASH
-
                 </span>
-
-            `;
+                `;
 
 
             biddersList.appendChild(
@@ -3019,7 +3082,7 @@ function renderBidders(
 
 /* =========================================================
    AUCTION LOG
-========================================================= */
+   ========================================================= */
 
 function renderAuctionLog(
     storage
@@ -3044,67 +3107,68 @@ function renderAuctionLog(
     const bids =
         Object.values(
             history
-        )
-        .sort(
-            function (a, b) {
-
-                return (
+        ).sort(
+            (a, b) =>
+                (
                     Number(
                         a.timestamp
-                    ) -
+                    ) || 0
+                ) -
+                (
                     Number(
                         b.timestamp
-                    )
-                );
-
-            }
+                    ) || 0
+                )
         );
 
 
-    if (
-        bids.length === 0
-    ) {
+    const opening =
+        document.createElement(
+            "div"
+        );
 
-        auctionLog.innerHTML = `
 
-            <div class="log-item">
+    opening.className =
+        "log-item";
 
-                Auction opened at
 
-                <strong>
-                    ${formatNumber(
-                        Number(
-                            storage.basePrice
-                        ) || 0
-                    )} CASH
-                </strong>
-
-            </div>
-
+    opening.innerHTML =
+        `
+        Auction opened at
+        <strong>
+            ${formatNumber(
+                Number(
+                    storage.basePrice
+                ) || 0
+            )} CASH
+        </strong>
         `;
 
-        return;
 
-    }
+    auctionLog.appendChild(
+        opening
+    );
 
 
     bids.forEach(
-        function (bid) {
+        (bid) => {
 
             const item =
                 document.createElement(
                     "div"
                 );
 
+
             item.className =
                 "log-item";
 
 
-            item.innerHTML = `
-
+            item.innerHTML =
+                `
                 <strong>
                     ${escapeHTML(
-                        bid.username
+                        bid.username ||
+                        "Player"
                     )}
                 </strong>
 
@@ -3117,8 +3181,7 @@ function renderAuctionLog(
                         ) || 0
                     )} CASH
                 </strong>
-
-            `;
+                `;
 
 
             auctionLog.appendChild(
@@ -3128,12 +3191,87 @@ function renderAuctionLog(
         }
     );
 
+
+    if (
+        storage.state ===
+        "going_once"
+    ) {
+
+        addLogMessage(
+            "Auctioneer: GOING ONCE..."
+        );
+
+    }
+
+
+    if (
+        storage.state ===
+        "going_twice"
+    ) {
+
+        addLogMessage(
+            "Auctioneer: GOING TWICE..."
+        );
+
+    }
+
+
+    if (
+        storage.state ===
+        "sold"
+    ) {
+
+        if (
+            storage.winnerName
+        ) {
+
+            addLogMessage(
+                `Auctioneer: SOLD to ${storage.winnerName}!`
+            );
+
+        }
+
+        else {
+
+            addLogMessage(
+                "Auctioneer: UNSOLD."
+            );
+
+        }
+
+    }
+
+}
+
+
+function addLogMessage(
+    message
+) {
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+
+    item.className =
+        "log-item";
+
+
+    item.textContent =
+        message;
+
+
+    auctionLog.appendChild(
+        item
+    );
+
 }
 
 
 /* =========================================================
    SOLD REVEAL
-========================================================= */
+   ========================================================= */
 
 function renderSoldReveal() {
 
@@ -3143,10 +3281,11 @@ function renderSoldReveal() {
 
     if (
         !storage ||
-        !storage.sold
+        !storage.sold ||
+        !soldReveal
     ) {
 
-        soldReveal.classList.add(
+        soldReveal?.classList.add(
             "hidden"
         );
 
@@ -3160,23 +3299,37 @@ function renderSoldReveal() {
     );
 
 
-    soldWinner.textContent =
-        storage.winnerName ||
-        "NO WINNER";
+    if (soldWinner) {
+
+        soldWinner.textContent =
+            storage.winnerName ||
+            "NO WINNER";
+
+    }
 
 
-    revealedCP.textContent =
-        `${formatNumber(
-            Number(
-                storage.winnerCP
-            ) || 0
-        )} CP`;
+    if (revealedCP) {
+
+        revealedCP.textContent =
+            `${formatNumber(
+                Number(
+                    storage.winnerCP
+                ) || 0
+            )} CP`;
+
+    }
 
 
-    const winnerBid =
-        Number(
-            storage.winningBid
-        ) || 0;
+    if (revealedBid) {
+
+        revealedBid.textContent =
+            `${formatNumber(
+                Number(
+                    storage.winningBid
+                ) || 0
+            )} CASH`;
+
+    }
 
 
     const value =
@@ -3185,25 +3338,42 @@ function renderSoldReveal() {
         ) || 0;
 
 
+    const price =
+        Number(
+            storage.winningBid
+        ) || 0;
+
+
     const profit =
         value -
-        winnerBid;
+        price;
 
 
-    soldProfit.textContent =
-        `Storage result: ${
+    if (soldProfit) {
+
+        soldProfit.textContent =
+            `${
+                profit >= 0
+                    ? "+"
+                    : ""
+            }${formatNumber(
+                profit
+            )} CP`;
+
+
+        soldProfit.className =
             profit >= 0
-                ? "+"
-                : ""
-        }${formatNumber(profit)} CP`;
+                ? "profit"
+                : "loss";
 
+    }
 
 }
 
 
 /* =========================================================
-   SHOW FINAL RESULTS
-========================================================= */
+   FINAL RESULTS
+   ========================================================= */
 
 function showFinalResults() {
 
@@ -3220,11 +3390,13 @@ function showFinalResults() {
             "hidden"
         );
 
+
     document
         .querySelector(".wallet-card")
         ?.classList.add(
             "hidden"
         );
+
 
     document
         .querySelector(".auction-call-card")
@@ -3232,11 +3404,13 @@ function showFinalResults() {
             "hidden"
         );
 
+
     document
         .querySelector(".storage-card")
         ?.classList.add(
             "hidden"
         );
+
 
     document
         .querySelector(".bid-card")
@@ -3244,11 +3418,13 @@ function showFinalResults() {
             "hidden"
         );
 
+
     document
         .querySelector(".players-card")
         ?.classList.add(
             "hidden"
         );
+
 
     document
         .querySelector(".log-card")
@@ -3256,7 +3432,8 @@ function showFinalResults() {
             "hidden"
         );
 
-    soldReveal.classList.add(
+
+    soldReveal?.classList.add(
         "hidden"
     );
 
@@ -3268,12 +3445,29 @@ function showFinalResults() {
 
     renderResults();
 
+
+    /*
+     * Only the host should attempt the
+     * persistent leaderboard update.
+     */
+
+    if (
+        currentUser?.uid ===
+        currentRoom?.hostId
+    ) {
+
+        applyLeaderboardRewards(
+            currentRoom
+        );
+
+    }
+
 }
 
 
 /* =========================================================
-   RESULTS
-========================================================= */
+   RENDER RESULTS
+   ========================================================= */
 
 function renderResults() {
 
@@ -3292,23 +3486,19 @@ function renderResults() {
     const entries =
         Object.entries(
             players
-        );
-
-
-    entries.sort(
-        function (a, b) {
-
-            return (
-                Number(
-                    a[1].finalRank
+        ).sort(
+            ([, a], [, b]) =>
+                (
+                    Number(
+                        a.finalRank
+                    ) || 9999
                 ) -
-                Number(
-                    b[1].finalRank
+                (
+                    Number(
+                        b.finalRank
+                    ) || 9999
                 )
-            );
-
-        }
-    );
+        );
 
 
     const me =
@@ -3328,22 +3518,18 @@ function renderResults() {
             ) || 0;
 
 
-        myResult.innerHTML = `
-
+        myResult.innerHTML =
+            `
             <div class="result-cash">
-
                 REMAINING CASH
-
             </div>
 
             <div class="result-cp">
-
                 ${formatNumber(
                     Number(
                         me.totalCP
                     ) || 0
                 )} CP
-
             </div>
 
             <div class="result-profit ${
@@ -3358,11 +3544,10 @@ function renderResults() {
                         : ""
                 }${formatNumber(
                     profit
-                )} CP PROFIT/LOSS
+                )} CP PROFIT / LOSS
 
             </div>
-
-        `;
+            `;
 
     }
 
@@ -3376,25 +3561,12 @@ function renderResults() {
         entries
     );
 
-
-    /*
-        Refresh the player's persistent
-        leaderboard CP.
-
-        The transaction is protected by
-        rewardApplied.
-    */
-
-    applyLeaderboardRewards(
-        currentRoom
-    );
-
 }
 
 
 /* =========================================================
    PODIUM
-========================================================= */
+   ========================================================= */
 
 function renderPodium(
     entries
@@ -3419,11 +3591,15 @@ function renderPodium(
 
 
     const order =
-        [1, 0, 2];
+        [
+            1,
+            0,
+            2
+        ];
 
 
     order.forEach(
-        function (index) {
+        (index) => {
 
             const entry =
                 top[index];
@@ -3436,11 +3612,11 @@ function renderPodium(
             }
 
 
-            const uid =
-                entry[0];
-
-            const player =
-                entry[1];
+            const [
+                uid,
+                player
+            ] =
+                entry;
 
 
             const element =
@@ -3478,16 +3654,13 @@ function renderPodium(
                 ) || 0;
 
 
-            element.innerHTML = `
-
+            element.innerHTML =
+                `
                 <div class="podium-medal">
-
                     ${medal}
-
                 </div>
 
                 <div class="podium-name">
-
                     ${escapeHTML(
                         player.username ||
                         "Player"
@@ -3499,7 +3672,6 @@ function renderPodium(
                             ? " (YOU)"
                             : ""
                     }
-
                 </div>
 
                 <div class="podium-profit ${
@@ -3517,8 +3689,7 @@ function renderPodium(
                     )} CP
 
                 </div>
-
-            `;
+                `;
 
 
             podium.appendChild(
@@ -3533,7 +3704,7 @@ function renderPodium(
 
 /* =========================================================
    FINAL LEADERBOARD
-========================================================= */
+   ========================================================= */
 
 function renderFinalLeaderboard(
     entries
@@ -3551,9 +3722,7 @@ function renderFinalLeaderboard(
 
 
     entries.forEach(
-        function (
-            [uid, player]
-        ) {
+        ([uid, player]) => {
 
             const row =
                 document.createElement(
@@ -3577,12 +3746,22 @@ function renderFinalLeaderboard(
                 ) || 0;
 
 
-            row.innerHTML = `
+            const cp =
+                Number(
+                    player.totalCP
+                ) || 0;
 
+
+            const spent =
+                Number(
+                    player.totalSpent
+                ) || 0;
+
+
+            row.innerHTML =
+                `
                 <span class="final-rank">
-
                     #${rank}
-
                 </span>
 
                 <span class="final-name">
@@ -3598,6 +3777,23 @@ function renderFinalLeaderboard(
                             ? " (YOU)"
                             : ""
                     }
+
+                    <small
+                        style="
+                            display:block;
+                            color:#777;
+                            font-weight:400;
+                            margin-top:3px
+                        "
+                    >
+                        ${formatNumber(
+                            cp
+                        )} CP
+                        •
+                        ${formatNumber(
+                            spent
+                        )} CASH SPENT
+                    </small>
 
                 </span>
 
@@ -3616,8 +3812,7 @@ function renderFinalLeaderboard(
                     )} CP
 
                 </span>
-
-            `;
+                `;
 
 
             finalLeaderboard.appendChild(
@@ -3631,27 +3826,72 @@ function renderFinalLeaderboard(
 
 
 /* =========================================================
-   RETURN TO LOBBY
-========================================================= */
+   NAVIGATION
+   ========================================================= */
 
-if (returnLobbyButton) {
+backButton?.addEventListener(
+    "click",
+    () => {
 
-    returnLobbyButton.addEventListener(
-        "click",
-        function () {
+        clearHostTimer();
 
-            window.location.href =
-                "caulobby.html";
+        window.location.href =
+            "caulobby.html";
 
-        }
+    }
+);
+
+
+returnLobbyButton?.addEventListener(
+    "click",
+    () => {
+
+        clearHostTimer();
+
+        window.location.href =
+            "caulobby.html";
+
+    }
+);
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function getLastBidTime(
+    storage
+) {
+
+    const history =
+        storage?.bidHistory ||
+        {};
+
+
+    const bids =
+        Object.values(
+            history
+        );
+
+
+    if (!bids.length) {
+
+        return 0;
+
+    }
+
+
+    return Math.max(
+        ...bids.map(
+            (bid) =>
+                Number(
+                    bid.timestamp
+                ) || 0
+        )
     );
 
 }
 
-
-/* =========================================================
-   BID STATUS
-========================================================= */
 
 function showBidStatus(
     message
@@ -3669,7 +3909,7 @@ function showBidStatus(
 
 
     setTimeout(
-        function () {
+        () => {
 
             if (
                 bidStatus.textContent ===
@@ -3688,10 +3928,6 @@ function showBidStatus(
 }
 
 
-/* =========================================================
-   NUMBER FORMAT
-========================================================= */
-
 function formatNumber(
     number
 ) {
@@ -3705,10 +3941,6 @@ function formatNumber(
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
 function escapeHTML(
     value
 ) {
@@ -3720,11 +3952,9 @@ function escapeHTML(
 
 
     div.textContent =
-        value ??
-        "";
+        value ?? "";
 
 
     return div.innerHTML;
 
 }
-
