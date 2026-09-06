@@ -611,6 +611,211 @@ async function handleStartingState() {
 }
 
 
+/* =========================
+   LIVE STANDINGS
+========================= */
+
+function renderStandings(room) {
+
+    const players =
+        room.players || {};
+
+
+    const entries =
+        Object.entries(players)
+            .filter(
+                function ([, player]) {
+
+                    return !player.leftGame;
+
+                }
+            )
+            .sort(
+                function (a, b) {
+
+                    return Number(
+                        b[1].score || 0
+                    ) -
+                    Number(
+                        a[1].score || 0
+                    );
+
+                }
+            );
+
+
+    standingsList.innerHTML =
+        "";
+
+
+    if (
+        entries.length === 0
+    ) {
+
+        standingsList.innerHTML = `
+            <div class="empty-standing">
+                Waiting for scores...
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    entries.forEach(
+        function ([uid, player], index) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "standing";
+
+
+            const left =
+                document.createElement(
+                    "div"
+                );
+
+
+            left.className =
+                "standing-left";
+
+
+            const rank =
+                document.createElement(
+                    "span"
+                );
+
+
+            rank.className =
+                "rank";
+
+
+            if (
+                index === 0
+            ) {
+
+                rank.textContent =
+                    "🥇";
+
+            }
+
+            else if (
+                index === 1
+            ) {
+
+                rank.textContent =
+                    "🥈";
+
+            }
+
+            else if (
+                index === 2
+            ) {
+
+                rank.textContent =
+                    "🥉";
+
+            }
+
+            else {
+
+                rank.textContent =
+                    index + 1;
+
+            }
+
+
+            const name =
+                document.createElement(
+                    "span"
+                );
+
+
+            name.className =
+                "standing-name";
+
+
+            name.textContent =
+                player.username ||
+                "Player";
+
+
+            if (
+                currentUser &&
+                uid === currentUser.uid
+            ) {
+
+                const you =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                you.className =
+                    "standing-you";
+
+
+                you.textContent =
+                    "YOU";
+
+
+                name.appendChild(
+                    you
+                );
+
+            }
+
+
+            left.appendChild(
+                rank
+            );
+
+
+            left.appendChild(
+                name
+            );
+
+
+            const score =
+                document.createElement(
+                    "span"
+                );
+
+
+            score.className =
+                "standing-score";
+
+
+            score.textContent =
+                `${Number(player.score || 0)} PTS`;
+
+
+            row.appendChild(
+                left
+            );
+
+
+            row.appendChild(
+                score
+            );
+
+
+            standingsList.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
 
 /* =========================
    PLAYING STATE
