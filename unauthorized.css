@@ -1,0 +1,267 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(216, 173, 75, 0.09),
+            transparent 35%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   BACKGROUND LOGO
+========================= */
+
+.background-logo {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: 850px;
+    height: 850px;
+
+    transform:
+        translate(-50%, -50%);
+
+    background:
+        url("images/abparklogo.jpeg")
+        center / contain
+        no-repeat;
+
+    opacity: 0.018;
+
+    filter: blur(3px);
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.unauthorized-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(450px, 100%);
+
+    text-align: center;
+
+    padding: 35px 25px;
+}
+
+
+/* =========================
+   LOCK
+========================= */
+
+.lock {
+    font-size: 55px;
+
+    margin-bottom: 22px;
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(216, 173, 75, 0.15)
+        );
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+    width: 70px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 0 auto 22px;
+
+    box-shadow:
+        0 0 8px
+        rgba(216, 173, 75, 0.4);
+}
+
+
+/* =========================
+   PRIVATE LABEL
+========================= */
+
+.private {
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    color: #f3d487;
+
+    font-size: 34px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    margin-bottom: 8px;
+}
+
+
+.sub-message {
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+    display: inline-block;
+
+    padding: 13px 20px;
+
+    background: transparent;
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.45);
+
+    border-radius: 4px;
+
+    text-decoration: none;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    transition: 0.25s;
+}
+
+
+.back-button:hover {
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border-color: #d8ad4b;
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.12);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 412px) {
+
+    .unauthorized-container {
+        padding: 25px 15px;
+    }
+
+
+    .lock {
+        font-size: 48px;
+
+        margin-bottom: 18px;
+    }
+
+
+    h1 {
+        font-size: 28px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .message {
+        font-size: 14px;
+    }
+
+
+    .sub-message {
+        font-size: 10px;
+    }
+
+
+    .back-button {
+        width: 100%;
+
+        padding: 14px;
+    }
+
+}

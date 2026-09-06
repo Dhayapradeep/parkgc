@@ -1,0 +1,375 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(216, 173, 75, 0.09),
+            transparent 38%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+main {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 25px 16px;
+}
+
+
+.login-box {
+    width: 100%;
+
+    max-width: 390px;
+
+    text-align: center;
+
+    padding: 35px 28px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.2);
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.5);
+}
+
+
+.logo {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 21px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+
+.tagline {
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-top: 8px;
+}
+
+
+.divider {
+    width: 55px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 22px auto;
+}
+
+
+h1 {
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+}
+
+
+.subtitle {
+    color: #666;
+
+    font-size: 11px;
+
+    margin-top: 7px;
+
+    margin-bottom: 28px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+form {
+    text-align: left;
+}
+
+
+.field {
+    margin-bottom: 16px;
+}
+
+
+.field label {
+    display: block;
+
+    color: #888;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 7px;
+}
+
+
+.field input {
+    width: 100%;
+
+    padding: 13px 12px;
+
+    background: #090909;
+
+    color: white;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 6px;
+
+    outline: none;
+
+    font-size: 12px;
+
+    transition: 0.2s;
+}
+
+
+.field input:focus {
+    border-color:
+        rgba(216, 173, 75, 0.7);
+}
+
+
+.field input::placeholder {
+    color: #444;
+}
+
+
+form button {
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding: 14px;
+
+    background: #d8ad4b;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+form button:hover {
+    background: #f3d487;
+}
+
+
+#message {
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   INVITATION
+========================= */
+
+.invitation {
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.invitation span {
+    color: #555;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+}
+
+
+.invitation p {
+    color: #444;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+    margin-top: 6px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    main {
+        padding: 20px 15px;
+    }
+
+
+    .login-box {
+        padding: 30px 22px;
+
+        border-radius: 10px;
+    }
+
+
+    .logo {
+        font-size: 18px;
+
+        letter-spacing: 2px;
+    }
+
+
+    h1 {
+        font-size: 23px;
+    }
+
+
+    .subtitle {
+        margin-bottom: 24px;
+    }
+
+}
+
+/* =========================
+   NEW MEMBER / INVITATION
+========================= */
+
+.invitation {
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid
+        rgba(255, 255, 255, 0.06);
+
+    text-align: center;
+}
+
+
+.invitation span {
+    color: #555;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+
+.invitation p {
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    margin: 7px 0 13px;
+}
+
+
+#invitationButton {
+    width: 100%;
+
+    padding: 12px;
+
+    background: transparent;
+
+    color: #d8ad4b;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.4);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+#invitationButton:hover {
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border-color: #d8ad4b;
+}

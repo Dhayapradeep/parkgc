@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Last Word</title>
+
+    <link
+        rel="stylesheet"
+        href="lw.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <div
+        id="roomDisplay"
+        class="room-display"
+    >
+
+        ROOM ----
+
+    </div>
+
+</header>
+
+
+
+<main
+    id="gameContent"
+    class="hidden"
+>
+
+
+    <!-- =========================
+         GAME HEADER
+    ========================== -->
+
+    <section class="game-header">
+
+
+        <div class="round-info">
+
+            <p>
+                ROUND
+            </p>
+
+            <h2
+                id="roundNumber"
+            >
+                1 / 30
+            </h2>
+
+        </div>
+
+
+        <div class="timer-box">
+
+            <p>
+                TIME LEFT
+            </p>
+
+            <strong
+                id="roundTimer"
+            >
+                15
+            </strong>
+
+        </div>
+
+
+        <div class="score-info">
+
+            <p>
+                YOUR SCORE
+            </p>
+
+            <h2
+                id="playerScore"
+            >
+                0
+            </h2>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         QUESTION
+    ========================== -->
+
+    <section class="question-card">
+
+
+        <p class="question-label">
+
+            CATEGORY
+
+        </p>
+
+
+        <h1
+            id="categoryText"
+        >
+
+            WAITING...
+
+        </h1>
+
+
+        <div class="letter-section">
+
+
+            <p>
+
+                YOUR WORD MUST START WITH
+
+            </p>
+
+
+            <div
+                id="letterDisplay"
+                class="letter-display"
+            >
+
+                ?
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         ANSWER
+    ========================== -->
+
+    <section class="answer-card">
+
+
+        <input
+            type="text"
+            id="answerInput"
+            placeholder="TYPE YOUR ANSWER..."
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+
+        <button
+            id="submitAnswerButton"
+            class="submit-button"
+        >
+
+            SUBMIT ANSWER
+
+        </button>
+
+
+        <p
+            id="answerStatus"
+            class="answer-status"
+        >
+
+        </p>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         USED WORDS
+    ========================== -->
+
+    <section class="used-words-card">
+
+
+        <div class="section-heading">
+
+            <h2>
+
+                📝 WORDS ALREADY USED
+
+            </h2>
+
+
+            <span
+                id="usedWordCount"
+            >
+
+                0
+
+            </span>
+
+
+        </div>
+
+
+        <div
+            id="usedWords"
+            class="used-words"
+        >
+
+
+            <div class="empty-words">
+
+                No words submitted yet.
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         PLAYERS
+    ========================== -->
+
+    <section class="players-card">
+
+
+        <div class="section-heading">
+
+            <h2>
+
+                🏆 LIVE SCOREBOARD
+
+            </h2>
+
+
+        </div>
+
+
+        <div
+            id="scoreboard"
+            class="scoreboard"
+        >
+
+        </div>
+
+
+    </section>
+
+
+
+</main>
+
+
+
+<!-- =========================
+     LOADING
+========================= -->
+
+<section
+    id="loadingCard"
+    class="loading-card"
+>
+
+
+    <div class="loading-icon">
+
+        ⏳
+
+    </div>
+
+
+    <h2>
+
+        LAST WORD
+
+    </h2>
+
+
+    <p
+        id="loadingText"
+    >
+
+        CONNECTING TO GAME...
+
+    </p>
+
+
+</section>
+
+
+
+<!-- =========================
+     ROUND RESULT
+========================= -->
+
+<section
+    id="roundResult"
+    class="round-result hidden"
+>
+
+
+    <div class="result-card">
+
+
+        <div class="result-icon">
+
+            ⏱️
+
+        </div>
+
+
+        <p
+            id="roundResultSmall"
+            class="result-small"
+        >
+
+            ROUND COMPLETE
+
+        </p>
+
+
+        <h1
+            id="roundResultTitle"
+        >
+
+            TIME'S UP!
+
+        </h1>
+
+
+        <p
+            id="roundResultDescription"
+            class="result-description"
+        >
+
+            Get ready for the next category.
+
+        </p>
+
+
+        <div class="next-round">
+
+            NEXT ROUND IN
+
+            <strong
+                id="nextRoundTimer"
+            >
+
+                3
+
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================
+     FINAL RESULT
+========================= -->
+
+<section
+    id="finalResult"
+    class="final-result hidden"
+>
+
+
+    <div class="final-card">
+
+
+        <div
+            id="finalIcon"
+            class="final-icon"
+        >
+
+            🏆
+
+        </div>
+
+
+        <p
+            id="finalSmallTitle"
+            class="final-small-title"
+        >
+
+            GAME COMPLETE
+
+        </p>
+
+
+        <h1
+            id="finalTitle"
+        >
+
+            FINAL RESULTS
+
+        </h1>
+
+
+        <p
+            id="finalDescription"
+            class="final-description"
+        >
+
+        </p>
+
+
+        <!-- =========================
+             FINAL LEADERBOARD
+        ========================== -->
+
+        <div
+            id="finalLeaderboard"
+            class="final-leaderboard"
+        >
+
+        </div>
+
+
+        <!-- =========================
+             YOUR REWARD
+        ========================== -->
+
+        <div class="reward-box">
+
+
+            <p>
+
+                YOUR REWARD
+
+            </p>
+
+
+            <strong
+                id="rewardAmount"
+            >
+
+                0 CP
+
+            </strong>
+
+
+        </div>
+
+
+        <button
+            id="backToLobbyButton"
+            class="back-lobby-button"
+        >
+
+            ← BACK TO LOBBY
+
+        </button>
+
+
+    </div>
+
+
+</section>
+
+
+
+<script
+    type="module"
+    src="js/lw.js"
+></script>
+
+
+</body>
+
+</html>

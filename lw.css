@@ -1,0 +1,1215 @@
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(216, 173, 75, 0.12),
+            transparent 30%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    padding-bottom: 60px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 22px 5%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.06);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.room-display {
+
+    padding: 8px 12px;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 5px;
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width: min(700px, 92%);
+
+    margin: auto;
+
+    padding-top: 30px;
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================
+   GAME HEADER
+========================= */
+
+.game-header {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.2fr
+        1fr;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.round-info,
+.timer-box,
+.score-info {
+
+    padding: 15px 10px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+}
+
+
+.round-info p,
+.timer-box p,
+.score-info p {
+
+    margin-bottom: 6px;
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.round-info h2,
+.score-info h2 {
+
+    color:
+        rgba(255, 255, 255, 0.9);
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+}
+
+
+.timer-box {
+
+    border-color:
+        rgba(216, 173, 75, 0.3);
+
+    background:
+        rgba(216, 173, 75, 0.05);
+
+}
+
+
+.timer-box strong {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 30px;
+
+    font-weight: normal;
+
+}
+
+
+/* =========================
+   QUESTION CARD
+========================= */
+
+.question-card {
+
+    padding: 35px 25px;
+
+    margin-bottom: 18px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.18);
+
+    border-radius: 14px;
+
+}
+
+
+.question-label {
+
+    margin-bottom: 10px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+}
+
+
+.question-card h1 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 34px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    word-break: break-word;
+
+}
+
+
+.letter-section {
+
+    margin-top: 28px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid
+        rgba(255, 255, 255, 0.07);
+
+}
+
+
+.letter-section p {
+
+    margin-bottom: 12px;
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.letter-display {
+
+    width: 75px;
+
+    height: 75px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #d8ad4b;
+
+    border-radius: 12px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 42px;
+
+}
+
+
+/* =========================
+   ANSWER
+========================= */
+
+.answer-card {
+
+    padding: 20px;
+
+    margin-bottom: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+}
+
+
+.answer-card input {
+
+    width: 100%;
+
+    padding: 15px;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 7px;
+
+    outline: none;
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.answer-card input::placeholder {
+
+    color:
+        rgba(255, 255, 255, 0.25);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.answer-card input:focus {
+
+    border-color:
+        rgba(216, 173, 75, 0.6);
+
+}
+
+
+.submit-button {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    background:
+        rgba(216, 173, 75, 0.12);
+
+    border: 1px solid #d8ad4b;
+
+    border-radius: 7px;
+
+    color: #f3d487;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.submit-button:hover {
+
+    background:
+        rgba(216, 173, 75, 0.2);
+
+}
+
+
+.submit-button:active {
+
+    transform:
+        scale(0.98);
+
+}
+
+
+.submit-button:disabled {
+
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+}
+
+
+.answer-status {
+
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    text-align: center;
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   SHARED CARD
+========================= */
+
+.used-words-card,
+.players-card {
+
+    padding: 20px;
+
+    margin-bottom: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+}
+
+
+.section-heading h2 {
+
+    color:
+        rgba(255, 255, 255, 0.85);
+
+    font-size: 11px;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.section-heading span {
+
+    color: #d8ad4b;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================
+   USED WORDS
+========================= */
+
+.used-words {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+}
+
+
+.used-word {
+
+    padding: 8px 11px;
+
+    background:
+        rgba(216, 173, 75, 0.07);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.15);
+
+    border-radius: 5px;
+
+    color:
+        rgba(255, 255, 255, 0.7);
+
+    font-size: 10px;
+
+}
+
+
+.empty-words {
+
+    width: 100%;
+
+    padding: 14px;
+
+    text-align: center;
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   LIVE SCOREBOARD
+========================= */
+
+.scoreboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.scoreboard-player {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px 14px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 7px;
+
+}
+
+
+.scoreboard-player.you {
+
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+}
+
+
+.scoreboard-name {
+
+    color:
+        rgba(255, 255, 255, 0.7);
+
+    font-size: 11px;
+
+}
+
+
+.scoreboard-score {
+
+    color: #f3d487;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading-card {
+
+    width: min(400px, 90%);
+
+    margin: 120px auto;
+
+    padding: 40px 25px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.2);
+
+    border-radius: 14px;
+
+}
+
+
+.loading-icon {
+
+    margin-bottom: 15px;
+
+    font-size: 42px;
+
+}
+
+
+.loading-card h2 {
+
+    margin-bottom: 10px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    font-weight: normal;
+
+    letter-spacing: 3px;
+
+}
+
+
+.loading-card p {
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   ROUND RESULT OVERLAY
+========================= */
+
+.round-result,
+.final-result {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.92);
+
+}
+
+
+.result-card {
+
+    width: min(430px, 100%);
+
+    padding: 40px 25px;
+
+    text-align: center;
+
+    background:
+        #0a0a0a;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 15px;
+
+}
+
+
+.result-icon {
+
+    margin-bottom: 15px;
+
+    font-size: 50px;
+
+}
+
+
+.result-small {
+
+    margin-bottom: 10px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.result-card h1 {
+
+    margin-bottom: 12px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 30px;
+
+    font-weight: normal;
+
+    letter-spacing: 2px;
+
+}
+
+
+.result-description {
+
+    color:
+        rgba(255, 255, 255, 0.45);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+.next-round {
+
+    margin-top: 25px;
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.next-round strong {
+
+    margin-left: 6px;
+
+    color: #f3d487;
+
+    font-size: 20px;
+
+}
+
+
+/* =========================
+   FINAL RESULT
+========================= */
+
+.final-result {
+
+    overflow-y: auto;
+
+    align-items: flex-start;
+
+}
+
+
+.final-card {
+
+    width: min(550px, 100%);
+
+    margin: 40px auto;
+
+    padding: 35px 25px;
+
+    text-align: center;
+
+    background:
+        #0a0a0a;
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 15px;
+
+}
+
+
+.final-icon {
+
+    margin-bottom: 15px;
+
+    font-size: 55px;
+
+}
+
+
+.final-small-title {
+
+    margin-bottom: 10px;
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.final-card h1 {
+
+    margin-bottom: 12px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 32px;
+
+    font-weight: normal;
+
+    letter-spacing: 2px;
+
+}
+
+
+.final-description {
+
+    margin-bottom: 25px;
+
+    color:
+        rgba(255, 255, 255, 0.45);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   FINAL LEADERBOARD
+========================= */
+
+.final-leaderboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+
+}
+
+
+.final-player {
+
+    display: grid;
+
+    grid-template-columns:
+        45px
+        1fr
+        auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.07);
+
+    border-radius: 8px;
+
+    text-align: left;
+
+}
+
+
+.final-rank {
+
+    color: #d8ad4b;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+.final-name {
+
+    color:
+        rgba(255, 255, 255, 0.75);
+
+    font-size: 11px;
+
+}
+
+
+.final-score {
+
+    color: #f3d487;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   REWARD
+========================= */
+
+.reward-box {
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
+    background:
+        rgba(216, 173, 75, 0.06);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.2);
+
+    border-radius: 10px;
+
+}
+
+
+.reward-box p {
+
+    margin-bottom: 7px;
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+
+.reward-box strong {
+
+    color: #f3d487;
+
+    font-size: 24px;
+
+}
+
+
+.back-lobby-button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    background: transparent;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 7px;
+
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+}
+
+
+.back-lobby-button:hover {
+
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding: 17px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .room-display {
+
+        padding: 7px 9px;
+
+        font-size: 7px;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+        padding-top: 20px;
+
+    }
+
+
+    .game-header {
+
+        gap: 6px;
+
+    }
+
+
+    .round-info,
+    .timer-box,
+    .score-info {
+
+        padding: 12px 5px;
+
+    }
+
+
+    .round-info h2,
+    .score-info h2 {
+
+        font-size: 13px;
+
+    }
+
+
+    .timer-box strong {
+
+        font-size: 25px;
+
+    }
+
+
+    .question-card {
+
+        padding: 28px 15px;
+
+    }
+
+
+    .question-card h1 {
+
+        font-size: 27px;
+
+    }
+
+
+    .letter-display {
+
+        width: 65px;
+
+        height: 65px;
+
+        font-size: 36px;
+
+    }
+
+
+    .answer-card,
+    .used-words-card,
+    .players-card {
+
+        padding: 16px;
+
+    }
+
+
+    .final-card {
+
+        margin: 20px auto;
+
+        padding: 30px 18px;
+
+    }
+
+
+    .final-card h1 {
+
+        font-size: 26px;
+
+    }
+
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chaos Code Lobby</title>
+
+    <link
+        rel="stylesheet"
+        href="clobby.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+        ← DASHBOARD
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="code-icon">
+            🧠
+        </div>
+
+
+        <p class="small-title">
+            CHAOS MODE
+        </p>
+
+
+        <h1>
+            CHAOS CODE
+        </h1>
+
+
+        <p class="subtitle">
+            Crack the code. Beat everyone. Be the fastest.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         ROOM SETUP
+    ========================== -->
+
+    <section
+        class="setup-card"
+        id="setupCard"
+    >
+
+        <h2>
+            🧠 ENTER THE CHAOS
+        </h2>
+
+
+        <p>
+            Create a new room or join an existing one.
+        </p>
+
+
+        <button
+            id="createRoomButton"
+            class="primary-button"
+        >
+            CREATE ROOM
+        </button>
+
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+
+        <div class="join-area">
+
+            <input
+                type="text"
+                id="roomCodeInput"
+                placeholder="ENTER ROOM CODE"
+                maxlength="6"
+                autocomplete="off"
+            >
+
+
+            <button
+                id="joinRoomButton"
+                class="secondary-button"
+            >
+                JOIN ROOM
+            </button>
+
+        </div>
+
+
+        <p
+            id="setupStatus"
+            class="status-text"
+        ></p>
+
+    </section>
+
+
+
+    <!-- =========================
+         ROOM
+    ========================== -->
+
+    <section
+        class="room-card hidden"
+        id="roomCard"
+    >
+
+
+        <div class="room-header">
+
+
+            <div>
+
+                <p class="room-label">
+                    ROOM CODE
+                </p>
+
+
+                <strong
+                    id="roomCodeDisplay"
+                    class="room-code"
+                >
+                    ------
+                </strong>
+
+            </div>
+
+
+            <button
+                id="copyRoomButton"
+                class="copy-button"
+            >
+                📋 COPY
+            </button>
+
+        </div>
+
+
+
+        <div class="room-status">
+
+            <span id="roomStatus">
+                WAITING FOR PLAYERS
+            </span>
+
+        </div>
+
+
+
+        <!-- =========================
+             PLAYERS
+        ========================== -->
+
+        <div class="players-section">
+
+
+            <div class="section-heading">
+
+                <h2>
+                    👥 PLAYERS
+                </h2>
+
+
+                <span id="playerCount">
+                    0 / 12
+                </span>
+
+            </div>
+
+
+            <div
+                id="playersList"
+                class="players-list"
+            >
+
+                <div class="empty-player">
+                    Waiting for players...
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             HOST CONTROLS
+        ========================== -->
+
+        <div
+            id="hostControls"
+            class="host-controls hidden"
+        >
+
+            <button
+                id="startGameButton"
+                class="primary-button"
+            >
+                🧠 START GAME
+            </button>
+
+
+            <p id="startHint">
+                Minimum 2 players required.
+            </p>
+
+        </div>
+
+
+
+        <p
+            id="roomStatusText"
+            class="status-text"
+        ></p>
+
+
+        <button
+            id="leaveRoomButton"
+            class="leave-button"
+        >
+            LEAVE ROOM
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         HOW TO PLAY
+    ========================== -->
+
+    <section class="rules-card">
+
+
+        <h2>
+            HOW TO PLAY
+        </h2>
+
+
+
+        <div class="rule">
+
+            <span>1</span>
+
+            <p>
+                Create a room or join your friend's room.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>2</span>
+
+            <p>
+                Each game contains
+                5 rounds.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>3</span>
+
+            <p>
+                Every round gives you a
+                5-digit code
+                and
+                5 clues.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>4</span>
+
+            <p>
+                One new clue appears every
+                10 seconds.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>5</span>
+
+            <p>
+                You have
+                60 seconds
+                to crack each code.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>6</span>
+
+            <p>
+                The faster you solve it,
+                the more points you earn.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>7</span>
+
+            <p>
+                After 5 rounds, the player with the
+                highest total score
+                wins.
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>8</span>
+
+            <p>
+                The top 3 players earn
+                Chaos Points.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/clobby.js"
+></script>
+
+
+</body>
+
+</html>

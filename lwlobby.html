@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Last Word Lobby</title>
+
+    <link
+        rel="stylesheet"
+        href="lwlobby.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+
+        ← DASHBOARD
+
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="game-icon">
+
+            📝
+
+        </div>
+
+
+        <p class="small-title">
+
+            CHAOS MODE
+
+        </p>
+
+
+        <h1>
+
+            LAST WORD
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Think fast. Find the word. Don't repeat.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         ROOM SETUP
+    ========================== -->
+
+    <section
+        class="setup-card"
+        id="setupCard"
+    >
+
+        <h2>
+
+            ⚡ ENTER THE GAME
+
+        </h2>
+
+
+        <p>
+
+            Create a new room or join an existing one.
+
+        </p>
+
+
+        <button
+            id="createRoomButton"
+            class="primary-button"
+        >
+
+             CREATE ROOM
+
+        </button>
+
+
+        <div class="divider">
+
+            <span>
+
+                OR
+
+            </span>
+
+        </div>
+
+
+        <div class="join-area">
+
+            <input
+                type="text"
+                id="roomCodeInput"
+                placeholder="ENTER ROOM CODE"
+                maxlength="6"
+                autocomplete="off"
+            >
+
+
+            <button
+                id="joinRoomButton"
+                class="secondary-button"
+            >
+
+                JOIN ROOM
+
+            </button>
+
+        </div>
+
+
+        <p
+            id="setupStatus"
+            class="status-text"
+        ></p>
+
+    </section>
+
+
+
+    <!-- =========================
+         ROOM
+    ========================== -->
+
+    <section
+        class="room-card hidden"
+        id="roomCard"
+    >
+
+
+        <div class="room-header">
+
+
+            <div>
+
+                <p class="room-label">
+
+                    ROOM CODE
+
+                </p>
+
+
+                <strong
+                    id="roomCodeDisplay"
+                    class="room-code"
+                >
+
+                    ------
+
+                </strong>
+
+            </div>
+
+
+            <button
+                id="copyRoomButton"
+                class="copy-button"
+            >
+
+                📋 COPY
+
+            </button>
+
+        </div>
+
+
+
+        <div class="room-status">
+
+            <span
+                id="roomStatus"
+            >
+
+                WAITING FOR PLAYERS
+
+            </span>
+
+        </div>
+
+
+
+        <!-- =========================
+             PLAYERS
+        ========================== -->
+
+        <div class="players-section">
+
+
+            <div class="section-heading">
+
+                <h2>
+
+                    👥 PLAYERS
+
+                </h2>
+
+
+                <span
+                    id="playerCount"
+                >
+
+                    0
+
+                </span>
+
+            </div>
+
+
+
+            <div
+                id="playersList"
+                class="players-list"
+            >
+
+                <div class="empty-player">
+
+                    Waiting for players...
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             HOST CONTROLS
+        ========================== -->
+
+        <div
+            id="hostControls"
+            class="host-controls hidden"
+        >
+
+            <button
+                id="startGameButton"
+                class="primary-button"
+            >
+
+                📝 START GAME
+
+            </button>
+
+
+            <p>
+
+                Minimum 2 players required.
+
+            </p>
+
+        </div>
+
+
+
+        <p
+            id="roomStatusText"
+            class="status-text"
+        ></p>
+
+
+
+        <button
+            id="leaveRoomButton"
+            class="leave-button"
+        >
+
+            LEAVE ROOM
+
+        </button>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         HOW TO PLAY
+    ========================== -->
+
+    <section class="rules-card">
+
+
+        <h2>
+
+             HOW TO PLAY
+
+        </h2>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                1
+
+            </span>
+
+
+            <p>
+
+                Join a room with your friends.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                2
+
+            </span>
+
+
+            <p>
+
+                Each round gives you a
+                category
+                and a
+                starting letter.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                3
+
+            </span>
+
+
+            <p>
+
+                Type a valid answer before the
+                15-second timer
+                reaches zero.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                4
+
+            </span>
+
+
+            <p>
+
+                If another player already uses your word,
+                you must quickly choose a different one.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                5
+
+            </span>
+
+
+            <p>
+
+                Every valid and unused answer earns
+                1 point.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="rule">
+
+            <span>
+
+                6
+
+            </span>
+
+
+            <p>
+
+                The game lasts
+                30 rounds.
+                The players with the highest scores can earn
+                Chaos Points.
+
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/lwlobby.js"
+></script>
+
+
+</body>
+
+
+</html>

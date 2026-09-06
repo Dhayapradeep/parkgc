@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Community Hub | Admin
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="acommunity.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <a
+        href="admin.html"
+        class="back"
+    >
+
+        ← ADMIN PANEL
+
+    </a>
+
+
+</header>
+
+
+
+<main>
+
+
+    <section class="acommunity-page">
+
+
+        <!-- =========================
+             HEADING
+        ========================= -->
+
+        <div class="acommunity-heading">
+
+
+            <span class="heading-icon">
+
+                📬
+
+            </span>
+
+
+            <p>
+
+                ABUSEMENT PARK
+
+            </p>
+
+
+            <h1>
+
+                COMMUNITY HUB
+
+            </h1>
+
+
+            <span class="line"></span>
+
+
+            <small>
+
+                Manage what your members see
+
+            </small>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             ACTION BUTTONS
+        ========================= -->
+
+        <div class="hub-actions">
+
+
+            <!-- ADMIN UPDATE -->
+
+            <button
+                class="hub-action"
+                data-target="updateForm"
+            >
+
+
+                <span class="action-icon">
+
+                    📢
+
+                </span>
+
+
+                <div>
+
+                    <strong>
+
+                        ADMIN UPDATE
+
+                    </strong>
+
+
+                    <small>
+
+                        Publish a message for members
+
+                    </small>
+
+                </div>
+
+
+                <span class="arrow">
+
+                    +
+
+                </span>
+
+
+            </button>
+
+
+
+            <!-- GIFT DROP -->
+
+            <button
+                class="hub-action"
+                data-target="giftForm"
+            >
+
+
+                <span class="action-icon">
+
+                    🎁
+
+                </span>
+
+
+                <div>
+
+                    <strong>
+
+                        GIFT DROP
+
+                    </strong>
+
+
+                    <small>
+
+                        Reward lucky members with CP
+
+                    </small>
+
+                </div>
+
+
+                <span class="arrow">
+
+                    +
+
+                </span>
+
+
+            </button>
+
+
+
+            <!-- POLL -->
+
+            <button
+                class="hub-action"
+                data-target="pollForm"
+            >
+
+
+                <span class="action-icon">
+
+                    🗳️
+
+                </span>
+
+
+                <div>
+
+                    <strong>
+
+                        CREATE POLL
+
+                    </strong>
+
+
+                    <small>
+
+                        Ask members and collect votes
+
+                    </small>
+
+                </div>
+
+
+                <span class="arrow">
+
+                    +
+
+                </span>
+
+
+            </button>
+
+
+
+            <!-- GC INVITATION -->
+
+            <button
+                class="hub-action"
+                data-target="gcForm"
+            >
+
+
+                <span class="action-icon">
+
+                    🔗
+
+                </span>
+
+
+                <div>
+
+                    <strong>
+
+                        GC INVITATION
+
+                    </strong>
+
+
+                    <small>
+
+                        Share your group chat invitation
+
+                    </small>
+
+                </div>
+
+
+                <span class="arrow">
+
+                    +
+
+                </span>
+
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             ADMIN UPDATE FORM
+        ========================= -->
+
+        <section
+            class="hub-form-card"
+            id="updateForm"
+        >
+
+
+            <div class="form-heading">
+
+                <span>
+
+                    📢
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        ADMIN UPDATE
+
+                    </h2>
+
+
+                    <p>
+
+                        Write a message for all members.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <input
+                type="text"
+                id="updateTitle"
+                placeholder="Update title"
+            >
+
+
+            <textarea
+                id="updateMessage"
+                placeholder="Write your update..."
+            ></textarea>
+
+
+            <button
+                id="publishUpdate"
+                class="publish-button"
+            >
+
+                PUBLISH UPDATE
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             GIFT DROP FORM
+        ========================= -->
+
+        <section
+            class="hub-form-card"
+            id="giftForm"
+        >
+
+
+            <div class="form-heading">
+
+                <span>
+
+                    🎁
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        GIFT DROP
+
+                    </h2>
+
+
+                    <p>
+
+                        Set the reward and number of winners.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <input
+                type="text"
+                id="giftTitle"
+                placeholder="Gift title"
+            >
+
+
+            <textarea
+                id="giftMessage"
+                placeholder="Gift message..."
+            ></textarea>
+
+
+            <div class="form-row">
+
+
+                <input
+                    type="number"
+                    id="giftReward"
+                    placeholder="CP reward"
+                    min="1"
+                >
+
+
+                <input
+                    type="number"
+                    id="giftWinners"
+                    placeholder="Number of winners"
+                    min="1"
+                >
+
+
+            </div>
+
+
+            <button
+                id="publishGift"
+                class="publish-button"
+            >
+
+                DROP GIFT
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             POLL FORM
+        ========================= -->
+
+        <section
+            class="hub-form-card"
+            id="pollForm"
+        >
+
+
+            <div class="form-heading">
+
+                <span>
+
+                    🗳️
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        CREATE POLL
+
+                    </h2>
+
+
+                    <p>
+
+                        Create your own question and options.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <input
+                type="text"
+                id="pollQuestion"
+                placeholder="Ask your question..."
+            >
+
+
+            <div
+                id="pollOptions"
+                class="poll-options"
+            >
+
+
+                <div class="poll-option-row">
+
+                    <input
+                        type="text"
+                        class="poll-option"
+                        placeholder="Option 1"
+                    >
+
+                </div>
+
+
+                <div class="poll-option-row">
+
+                    <input
+                        type="text"
+                        class="poll-option"
+                        placeholder="Option 2"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                id="addPollOption"
+                class="add-option-button"
+            >
+
+                + ADD OPTION
+
+            </button>
+
+
+            <button
+                id="publishPoll"
+                class="publish-button"
+            >
+
+                PUBLISH POLL
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             GC INVITATION FORM
+        ========================= -->
+
+        <section
+            class="hub-form-card"
+            id="gcForm"
+        >
+
+
+            <div class="form-heading">
+
+                <span>
+
+                    🔗
+
+                </span>
+
+
+                <div>
+
+                    <h2>
+
+                        GC INVITATION
+
+                    </h2>
+
+
+                    <p>
+
+                        Share a message and your invitation link.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <input
+                type="text"
+                id="gcTitle"
+                placeholder="Group chat title"
+            >
+
+
+            <textarea
+                id="gcMessage"
+                placeholder="Write a message..."
+            ></textarea>
+
+
+            <input
+                type="url"
+                id="gcLink"
+                placeholder="Paste group chat invitation link"
+            >
+
+
+            <button
+                id="publishGc"
+                class="publish-button"
+            >
+
+                PUBLISH INVITATION
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             STATUS
+        ========================= -->
+
+        <div
+            id="statusMessage"
+            class="status-message"
+        >
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/acommunity.js"
+></script>
+
+
+</body>
+
+</html>

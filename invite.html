@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Private Access | Abusement Park</title>
+
+    <link rel="stylesheet" href="invite.css">
+
+</head>
+
+<body>
+
+    <div class="background-logo"></div>
+
+    <main class="invite-container">
+
+        <img
+            src="images/abparklogo.jpeg"
+            alt="Abusement Park"
+            class="logo"
+        >
+
+        <div class="divider"></div>
+
+        <p class="private">
+            🔒 PRIVATE ACCESS
+        </p>
+
+        <h1>YOU'RE INVITED</h1>
+
+        <p class="description">
+            Abusement Park is a private community.
+            Enter the invitation code you received
+            from the administrator.
+        </p>
+
+        <div class="form">
+
+            <label for="inviteCode">
+                INVITATION CODE
+            </label>
+
+            <input
+                type="text"
+                id="inviteCode"
+                placeholder="XXX-XXXX-XXX"
+                maxlength="12"
+                autocomplete="off"
+            >
+
+            <button onclick="verifyInvite()">
+                VERIFY INVITATION
+            </button>
+
+        </div>
+
+        <p id="message"></p>
+
+        <p class="contact">
+            Don't have an invitation?<br>
+            Contact the administrator.
+        </p>
+
+        <a href="index.html" class="back">
+            ← BACK
+        </a>
+
+    </main>
+
+    <script type="module" src="js/invite.js"></script>
+
+</body>
+
+</html>

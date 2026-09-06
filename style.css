@@ -1,0 +1,375 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            rgba(212, 167, 55, 0.10),
+            transparent 35%
+        ),
+        #050505;
+}
+
+
+/* =================================
+   SUBTLE BACKGROUND
+================================= */
+
+.background-logo {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: 900px;
+    height: 900px;
+
+    transform: translate(-50%, -50%);
+
+    background: url("images/logo.png") center / contain no-repeat;
+
+    opacity: 0.018;
+
+    filter: blur(3px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* =================================
+   MAIN CONTENT
+================================= */
+
+.welcome {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(760px, 90%);
+
+    text-align: center;
+
+    padding: 35px 20px;
+}
+
+
+/* =================================
+   LOGO
+================================= */
+
+.logo {
+    display: block;
+
+    width: 300px;
+
+    max-width: 72vw;
+
+    margin: 0 auto 28px;
+
+    filter:
+        drop-shadow(0 0 12px rgba(218, 170, 60, 0.12));
+
+    animation: logoAppear 1.2s ease;
+}
+
+
+/* =================================
+   GOLD LINE
+================================= */
+
+.divider {
+    width: 90px;
+
+    height: 1px;
+
+    background: #d8ad4b;
+
+    margin: 0 auto 24px;
+
+    box-shadow:
+        0 0 8px rgba(216, 173, 75, 0.4);
+}
+
+
+/* =================================
+   PRIVATE LABEL
+================================= */
+
+.private {
+    color: #d8ad4b;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 20px;
+
+    text-transform: uppercase;
+}
+
+
+/* =================================
+   WELCOME TITLE
+================================= */
+
+h1 {
+    font-family: Georgia, "Times New Roman", serif;
+
+    color: #f3d487;
+
+    font-size: 42px;
+
+    font-weight: 500;
+
+    letter-spacing: 4px;
+
+    line-height: 1.25;
+
+    margin-bottom: 16px;
+
+    text-transform: uppercase;
+}
+
+
+/* =================================
+   TAGLINE
+================================= */
+
+.tagline {
+    color: rgba(255, 255, 255, 0.62);
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 17px;
+
+    font-style: italic;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 38px;
+}
+
+
+/* =================================
+   ENTER BUTTON
+================================= */
+
+button {
+    position: relative;
+
+    padding: 15px 42px;
+
+    background: transparent;
+
+    color: #e6c46c;
+
+    border: 1px solid #c9a347;
+
+    border-radius: 3px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    cursor: pointer;
+
+    text-transform: uppercase;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+button:hover {
+    background: #d8ad4b;
+
+    color: #050505;
+
+    box-shadow:
+        0 0 25px rgba(216, 173, 75, 0.35);
+
+    transform: translateY(-2px);
+}
+
+
+/* =================================
+   INVITATION TEXT
+================================= */
+
+.invite-text {
+    margin-top: 17px;
+
+    color: rgba(255, 255, 255, 0.3);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =================================
+   LOGO ANIMATION
+================================= */
+
+@keyframes logoAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =================================
+   MOBILE
+   412 × 915
+================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        min-height: 100vh;
+
+        padding: 20px 14px;
+    }
+
+
+    .welcome {
+        width: 100%;
+
+        padding: 20px 10px;
+    }
+
+
+    .logo {
+        width: 245px;
+
+        max-width: 72vw;
+
+        margin-bottom: 23px;
+    }
+
+
+    .divider {
+        width: 65px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .private {
+        font-size: 9px;
+
+        letter-spacing: 3px;
+
+        margin-bottom: 16px;
+    }
+
+
+    h1 {
+        font-size: 28px;
+
+        letter-spacing: 2px;
+
+        line-height: 1.25;
+
+        margin-bottom: 13px;
+    }
+
+
+    .tagline {
+        font-size: 15px;
+
+        margin-bottom: 32px;
+    }
+
+
+    button {
+        width: 230px;
+
+        max-width: 80vw;
+
+        padding: 14px 20px;
+
+        font-size: 12px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .invite-text {
+        margin-top: 15px;
+
+        font-size: 10px;
+    }
+
+}
+
+
+/* =================================
+   VERY SMALL PHONES
+================================= */
+
+@media (max-width: 360px) {
+
+    .logo {
+        width: 210px;
+
+        margin-bottom: 20px;
+    }
+
+
+    h1 {
+        font-size: 25px;
+    }
+
+
+    .tagline {
+        font-size: 14px;
+
+        margin-bottom: 27px;
+    }
+
+
+    button {
+        width: 210px;
+    }
+
+}
