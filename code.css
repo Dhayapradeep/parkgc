@@ -1,0 +1,1294 @@
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(216,173,75,0.11),
+            transparent 30%
+        ),
+        #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    padding-bottom: 60px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 20px 5%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.06);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.room-code {
+
+    color: #f3d487;
+
+    font-size: 11px;
+
+    letter-spacing: 3px;
+
+    font-weight: bold;
+
+}
+
+
+.exit-button {
+
+    padding: 8px 12px;
+
+    background: transparent;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.13);
+
+    color:
+        rgba(255,255,255,0.55);
+
+    border-radius: 5px;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.exit-button:hover {
+
+    border-color:
+        rgba(255,90,90,0.6);
+
+    color: #ff8b8b;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width: min(760px, 92%);
+
+    margin: auto;
+
+}
+
+
+/* =========================
+   GAME HEADER
+========================= */
+
+.game-header {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 10px;
+
+    padding: 25px 0 15px;
+
+}
+
+
+.round-box,
+.timer-box,
+.score-box {
+
+    padding: 13px;
+
+    text-align: center;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.07);
+
+    border-radius: 8px;
+
+}
+
+
+.label {
+
+    display: block;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.round-box strong,
+.timer-box strong,
+.score-box strong {
+
+    color: #f3d487;
+
+    font-size: 18px;
+
+}
+
+
+.timer-box strong {
+
+    font-family:
+        "Courier New",
+        monospace;
+
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.code-card,
+.clues-card,
+.answer-card,
+.standings-card {
+
+    padding: 24px;
+
+    margin-bottom: 15px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 13px;
+
+}
+
+
+.section-label {
+
+    color: #f3d487;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.code-instruction,
+.small-description {
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================
+   CODE DIGITS
+========================= */
+
+.code-card {
+
+    text-align: center;
+
+}
+
+
+.code-digits {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-top: 20px;
+
+}
+
+
+.code-digits span {
+
+    width: 57px;
+
+    height: 57px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(216,173,75,0.35);
+
+    background:
+        rgba(216,173,75,0.07);
+
+    border-radius: 9px;
+
+    color: #f3d487;
+
+    font-size: 25px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   CARD HEADING
+========================= */
+
+.card-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 16px;
+
+}
+
+
+.clue-counter {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   CLUES
+========================= */
+
+.clues-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.locked-clue,
+.clue {
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+.locked-clue {
+
+    border:
+        1px solid
+        rgba(255,255,255,0.05);
+
+    background:
+        rgba(255,255,255,0.018);
+
+    color:
+        rgba(255,255,255,0.22);
+
+}
+
+
+.clue {
+
+    border:
+        1px solid
+        rgba(216,173,75,0.17);
+
+    background:
+        rgba(216,173,75,0.045);
+
+}
+
+
+.clue-number {
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.clue-guess {
+
+    color: #f3d487;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.clue-text {
+
+    color:
+        rgba(255,255,255,0.62);
+
+}
+
+
+/* =========================
+   ANSWER
+========================= */
+
+.answer-card {
+
+    text-align: center;
+
+}
+
+
+.answer-slots {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin: 20px 0 15px;
+
+}
+
+
+.digit-input {
+
+    width: 55px;
+
+    height: 58px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.13);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 22px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-weight: bold;
+
+}
+
+
+.digit-input:focus {
+
+    border-color: #d8ad4b;
+
+    background:
+        rgba(216,173,75,0.06);
+
+}
+
+
+.digit-input:disabled {
+
+    opacity: 0.35;
+
+}
+
+
+.submit-button {
+
+    width: min(380px, 100%);
+
+    padding: 14px;
+
+    background:
+        rgba(216,173,75,0.11);
+
+    border:
+        1px solid #d8ad4b;
+
+    border-radius: 7px;
+
+    color: #f3d487;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+}
+
+
+.submit-button:hover {
+
+    background:
+        rgba(216,173,75,0.18);
+
+}
+
+
+.submit-button:disabled {
+
+    opacity: 0.35;
+
+    cursor: not-allowed;
+
+}
+
+
+.answer-status {
+
+    min-height: 18px;
+
+    margin-top: 10px;
+
+    color:
+        rgba(255,255,255,0.45);
+
+    font-size: 10px;
+
+}
+
+
+.answer-status.correct {
+
+    color: #83d391;
+
+}
+
+
+.answer-status.wrong {
+
+    color: #ff8585;
+
+}
+
+
+/* =========================
+   STANDINGS
+========================= */
+
+.standings-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.standing {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.05);
+
+    border-radius: 7px;
+
+}
+
+
+.standing-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.rank {
+
+    width: 20px;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 10px;
+
+    text-align: center;
+
+}
+
+
+.standing-name {
+
+    color:
+        rgba(255,255,255,0.78);
+
+    font-size: 10px;
+
+}
+
+
+.standing-you {
+
+    color: #d8ad4b;
+
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    margin-left: 5px;
+
+}
+
+
+.standing-score {
+
+    color: #f3d487;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+}
+
+
+.empty-standing {
+
+    padding: 16px;
+
+    color:
+        rgba(255,255,255,0.28);
+
+    text-align: center;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 50;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,0.87);
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+.overlay-card {
+
+    width: min(520px, 100%);
+
+    padding: 30px;
+
+    background:
+        #0d0d0d;
+
+    border:
+        1px solid
+        rgba(216,173,75,0.22);
+
+    border-radius: 15px;
+
+    text-align: center;
+
+}
+
+
+.overlay-icon {
+
+    font-size: 38px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.overlay-small {
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.overlay-card h2 {
+
+    margin-top: 9px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+}
+
+
+.round-result-list {
+
+    margin: 22px 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+.round-result {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 10px 12px;
+
+    background:
+        rgba(255,255,255,0.03);
+
+    border-radius: 6px;
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 9px;
+
+}
+
+
+.round-result strong {
+
+    color: #f3d487;
+
+}
+
+
+.next-round-text {
+
+    margin-top: 12px;
+
+    color:
+        rgba(255,255,255,0.3);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.break-countdown {
+
+    display: block;
+
+    margin-top: 6px;
+
+    color: #f3d487;
+
+    font-size: 28px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+}
+
+
+/* =========================
+   FINAL RESULTS
+========================= */
+
+.final-results {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    overflow-y: auto;
+
+    padding: 30px 15px;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(216,173,75,0.12),
+            transparent 35%
+        ),
+        #050505;
+
+}
+
+
+.final-card {
+
+    width: min(620px, 100%);
+
+    margin: 20px auto;
+
+    padding: 32px;
+
+    background:
+        rgba(255,255,255,0.025);
+
+    border:
+        1px solid
+        rgba(216,173,75,0.18);
+
+    border-radius: 15px;
+
+    text-align: center;
+
+}
+
+
+.final-icon {
+
+    font-size: 50px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.final-card h1 {
+
+    margin-top: 8px;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 32px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+}
+
+
+.winner-display {
+
+    margin: 25px 0;
+
+    padding: 19px;
+
+    background:
+        rgba(216,173,75,0.06);
+
+    border:
+        1px solid
+        rgba(216,173,75,0.16);
+
+    border-radius: 9px;
+
+}
+
+
+.winner-title {
+
+    color:
+        rgba(255,255,255,0.35);
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.winner-name {
+
+    color: #f3d487;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+.winner-score {
+
+    margin-top: 5px;
+
+    color:
+        rgba(255,255,255,0.5);
+
+    font-size: 10px;
+
+}
+
+
+.final-leaderboard {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.final-player {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 13px;
+
+    background:
+        rgba(255,255,255,0.03);
+
+    border-radius: 7px;
+
+}
+
+
+.final-player-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+
+.final-rank {
+
+    width: 25px;
+
+    color: #d8ad4b;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.final-name {
+
+    color:
+        rgba(255,255,255,0.78);
+
+    font-size: 10px;
+
+}
+
+
+.final-score {
+
+    color: #f3d487;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+}
+
+
+.reward {
+
+    color: #87d690;
+
+    font-size: 8px;
+
+    margin-left: 6px;
+
+}
+
+
+.final-actions {
+
+    margin-top: 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.primary-final-button,
+.secondary-final-button {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+}
+
+
+.primary-final-button {
+
+    background:
+        rgba(216,173,75,0.12);
+
+    border:
+        1px solid #d8ad4b;
+
+    color: #f3d487;
+
+}
+
+
+.secondary-final-button {
+
+    background: transparent;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12);
+
+    color:
+        rgba(255,255,255,0.55);
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding: 17px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .room-code {
+
+        font-size: 8px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .exit-button {
+
+        padding: 7px 8px;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+    }
+
+
+    .game-header {
+
+        gap: 6px;
+
+    }
+
+
+    .round-box,
+    .timer-box,
+    .score-box {
+
+        padding: 10px 5px;
+
+    }
+
+
+    .label {
+
+        font-size: 6px;
+
+        letter-spacing: 1px;
+
+    }
+
+
+    .round-box strong,
+    .timer-box strong,
+    .score-box strong {
+
+        font-size: 14px;
+
+    }
+
+
+    .code-card,
+    .clues-card,
+    .answer-card,
+    .standings-card {
+
+        padding: 18px;
+
+    }
+
+
+    .code-digits {
+
+        gap: 6px;
+
+    }
+
+
+    .code-digits span {
+
+        width: 44px;
+
+        height: 48px;
+
+        font-size: 20px;
+
+    }
+
+
+    .answer-slots {
+
+        gap: 5px;
+
+    }
+
+
+    .digit-input {
+
+        width: 45px;
+
+        height: 52px;
+
+    }
+
+
+    .final-card {
+
+        padding: 22px;
+
+    }
+
+
+    .final-card h1 {
+
+        font-size: 25px;
+
+    }
+
+}

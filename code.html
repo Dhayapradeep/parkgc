@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chaos Code</title>
+
+    <link
+        rel="stylesheet"
+        href="code.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+
+    <div class="header-right">
+
+        <span
+            id="roomCodeDisplay"
+            class="room-code"
+        >
+            ------
+        </span>
+
+
+        <button
+            id="exitButton"
+            class="exit-button"
+        >
+            EXIT
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         GAME HEADER
+    ========================== -->
+
+    <section class="game-header">
+
+
+        <div class="round-box">
+
+            <span class="label">
+                ROUND
+            </span>
+
+            <strong id="roundDisplay">
+                1 / 5
+            </strong>
+
+        </div>
+
+
+        <div class="timer-box">
+
+            <span class="label">
+                TIME
+            </span>
+
+            <strong id="timerDisplay">
+                01:00
+            </strong>
+
+        </div>
+
+
+        <div class="score-box">
+
+            <span class="label">
+                YOUR SCORE
+            </span>
+
+            <strong id="scoreDisplay">
+                0
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         GAME AREA
+    ========================== -->
+
+    <section
+        id="gameSection"
+        class="game-section"
+    >
+
+
+        <!-- =========================
+             CODE
+        ========================== -->
+
+        <div class="code-card">
+
+
+            <p class="section-label">
+                🔐 THE FIVE DIGITS
+            </p>
+
+
+            <p class="code-instruction">
+                The digits are visible.
+                Figure out their correct order.
+            </p>
+
+
+            <div
+                id="codeDigits"
+                class="code-digits"
+            >
+
+                <span>?</span>
+                <span>?</span>
+                <span>?</span>
+                <span>?</span>
+                <span>?</span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             CLUES
+        ========================== -->
+
+        <div class="clues-card">
+
+
+            <div class="card-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        🧩 CLUES
+                    </p>
+
+                    <p class="small-description">
+                        A new clue appears every 10 seconds.
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="clueCounter"
+                    class="clue-counter"
+                >
+                    0 / 5
+                </span>
+
+            </div>
+
+
+            <div
+                id="cluesList"
+                class="clues-list"
+            >
+
+                <div class="locked-clue">
+                    🔒 CLUE 1
+                </div>
+
+                <div class="locked-clue">
+                    🔒 CLUE 2
+                </div>
+
+                <div class="locked-clue">
+                    🔒 CLUE 3
+                </div>
+
+                <div class="locked-clue">
+                    🔒 CLUE 4
+                </div>
+
+                <div class="locked-clue">
+                    🔒 CLUE 5
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             ANSWER
+        ========================== -->
+
+        <div class="answer-card">
+
+
+            <p class="section-label">
+                🔢 YOUR ANSWER
+            </p>
+
+
+            <p class="small-description">
+                Arrange the five digits into the correct order.
+            </p>
+
+
+            <div
+                id="answerSlots"
+                class="answer-slots"
+            >
+
+                <input
+                    id="digit1"
+                    class="digit-input"
+                    type="text"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <input
+                    id="digit2"
+                    class="digit-input"
+                    type="text"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <input
+                    id="digit3"
+                    class="digit-input"
+                    type="text"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <input
+                    id="digit4"
+                    class="digit-input"
+                    type="text"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <input
+                    id="digit5"
+                    class="digit-input"
+                    type="text"
+                    maxlength="1"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                id="submitButton"
+                class="submit-button"
+            >
+                🔓 SUBMIT CODE
+            </button>
+
+
+            <p
+                id="answerStatus"
+                class="answer-status"
+            ></p>
+
+        </div>
+
+
+
+        <!-- =========================
+             PLAYERS
+        ========================== -->
+
+        <div class="standings-card">
+
+
+            <div class="card-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        🏆 LIVE STANDINGS
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="standingsList"
+                class="standings-list"
+            >
+
+                <div class="empty-standing">
+                    Waiting for scores...
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         ROUND BREAK
+    ========================== -->
+
+    <section
+        id="roundBreak"
+        class="overlay hidden"
+    >
+
+        <div class="overlay-card">
+
+            <div class="overlay-icon">
+                ✅
+            </div>
+
+
+            <p class="overlay-small">
+                ROUND COMPLETE
+            </p>
+
+
+            <h2 id="breakTitle">
+                ROUND 1 RESULTS
+            </h2>
+
+
+            <div
+                id="roundResultList"
+                class="round-result-list"
+            >
+            </div>
+
+
+            <p class="next-round-text">
+                NEXT ROUND IN
+            </p>
+
+
+            <strong
+                id="breakCountdown"
+                class="break-countdown"
+            >
+                5
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FINAL RESULTS
+    ========================== -->
+
+    <section
+        id="finalResults"
+        class="final-results hidden"
+    >
+
+
+        <div class="final-card">
+
+
+            <div class="final-icon">
+                🏆
+            </div>
+
+
+            <p class="overlay-small">
+                CHAOS CODE COMPLETE
+            </p>
+
+
+            <h1>
+                FINAL RESULTS
+            </h1>
+
+
+            <div
+                id="winnerDisplay"
+                class="winner-display"
+            >
+            </div>
+
+
+            <div
+                id="finalLeaderboard"
+                class="final-leaderboard"
+            >
+            </div>
+
+
+            <div class="final-actions">
+
+                <button
+                    id="lobbyButton"
+                    class="primary-final-button"
+                >
+                    RETURN TO LOBBY
+                </button>
+
+
+                <button
+                    id="dashboardButton"
+                    class="secondary-final-button"
+                >
+                    DASHBOARD
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/code.js"
+></script>
+
+
+</body>
+
+</html>
