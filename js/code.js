@@ -19,67 +19,53 @@ import {
 } from "../firebase.js";
 
 
-
 /* =========================
    FIREBASE
 ========================= */
 
-const auth =
-    getAuth(app);
-
+const auth = getAuth(app);
 
 
 /* =========================
    GAME SETTINGS
 ========================= */
 
-const TOTAL_ROUNDS =
-    5;
+const TOTAL_ROUNDS = 5;
 
-const CODE_LENGTH =
-    5;
-
+const CODE_LENGTH = 5;
 
 /*
-   UPDATED:
    2 MINUTES PER ROUND
 */
-
-const ROUND_DURATION =
-    20 * 1000;
-
+const ROUND_DURATION = 120 * 1000;
 
 /*
-   One new clue every 10 seconds.
+   ONE CLUE EVERY 10 SECONDS
 */
-
-const CLUE_INTERVAL =
-    2 * 1000;
-
+const CLUE_INTERVAL = 10 * 1000;
 
 /*
-   Five-second break between rounds.
+   5 SECOND BREAK BETWEEN ROUNDS
 */
-
-const BREAK_DURATION =
-    3 * 1000;
-
+const BREAK_DURATION = 5 * 1000;
 
 
 /* =========================
    CHAOS POINT REWARDS
+
+   ONLY TOP 3 PLAYERS WHO
+   ACTUALLY SCORED GET CP
 ========================= */
 
 const TOP_REWARDS = {
 
-    1: 500,
+    1: 100,
 
-    2: 250,
+    2: 75,
 
-    3: 100
+    3: 50
 
 };
-
 
 
 /* =========================
@@ -87,109 +73,68 @@ const TOP_REWARDS = {
 ========================= */
 
 const roomCodeDisplay =
-    document.getElementById(
-        "roomCodeDisplay"
-    );
+    document.getElementById("roomCodeDisplay");
 
 const exitButton =
-    document.getElementById(
-        "exitButton"
-    );
+    document.getElementById("exitButton");
 
 const roundDisplay =
-    document.getElementById(
-        "roundDisplay"
-    );
+    document.getElementById("roundDisplay");
 
 const timerDisplay =
-    document.getElementById(
-        "timerDisplay"
-    );
+    document.getElementById("timerDisplay");
 
 const scoreDisplay =
-    document.getElementById(
-        "scoreDisplay"
-    );
+    document.getElementById("scoreDisplay");
 
 const codeDigits =
-    document.getElementById(
-        "codeDigits"
-    );
+    document.getElementById("codeDigits");
 
 const clueCounter =
-    document.getElementById(
-        "clueCounter"
-    );
+    document.getElementById("clueCounter");
 
 const cluesList =
-    document.getElementById(
-        "cluesList"
-    );
+    document.getElementById("cluesList");
 
 const submitButton =
-    document.getElementById(
-        "submitButton"
-    );
+    document.getElementById("submitButton");
 
 const answerStatus =
-    document.getElementById(
-        "answerStatus"
-    );
+    document.getElementById("answerStatus");
 
 const standingsList =
-    document.getElementById(
-        "standingsList"
-    );
+    document.getElementById("standingsList");
 
 const gameSection =
-    document.getElementById(
-        "gameSection"
-    );
+    document.getElementById("gameSection");
 
 const roundBreak =
-    document.getElementById(
-        "roundBreak"
-    );
+    document.getElementById("roundBreak");
 
 const breakTitle =
-    document.getElementById(
-        "breakTitle"
-    );
+    document.getElementById("breakTitle");
 
 const roundResultList =
-    document.getElementById(
-        "roundResultList"
-    );
+    document.getElementById("roundResultList");
 
 const breakCountdown =
-    document.getElementById(
-        "breakCountdown"
-    );
+    document.getElementById("breakCountdown");
 
 const finalResults =
-    document.getElementById(
-        "finalResults"
-    );
+    document.getElementById("finalResults");
 
 const winnerDisplay =
-    document.getElementById(
-        "winnerDisplay"
-    );
+    document.getElementById("winnerDisplay");
 
 const finalLeaderboard =
-    document.getElementById(
-        "finalLeaderboard"
-    );
+    document.getElementById("finalLeaderboard");
 
 const lobbyButton =
-    document.getElementById(
-        "lobbyButton"
-    );
+    document.getElementById("lobbyButton");
 
 const dashboardButton =
-    document.getElementById(
-        "dashboardButton"
-    );
+    document.getElementById("dashboardButton");
+
 
 const digitInputs = [
 
@@ -204,7 +149,6 @@ const digitInputs = [
     document.getElementById("digit5")
 
 ];
-
 
 
 /* =========================
@@ -235,49 +179,33 @@ if (!currentRoomCode) {
 }
 
 
-
 /* =========================
    STATE
 ========================= */
 
-let currentUser =
-    null;
+let currentUser = null;
 
-let currentUsername =
-    "Player";
+let currentUsername = "Player";
 
-let currentRoomData =
-    null;
+let currentRoomData = null;
 
-let roomListenerStarted =
-    false;
+let roomListenerStarted = false;
 
-let timerInterval =
-    null;
+let timerInterval = null;
 
-let hostRoundTimer =
-    null;
+let hostRoundTimer = null;
 
-let hostTransitionTimer =
-    null;
+let hostTransitionTimer = null;
 
-let countdownTimer =
-    null;
+let countdownTimer = null;
 
-let hostRoundKey =
-    null;
+let hostRoundKey = null;
 
-let hostTransitionKey =
-    null;
+let hostTransitionKey = null;
 
-let currentRoundNumber =
-    null;
+let currentRoundNumber = null;
 
-let redirecting =
-    false;
-
-let answerProcessorStarted =
-    false;
+let answerProcessorStarted = false;
 
 
 
@@ -306,9 +234,7 @@ onAuthStateChanged(
         await loadUserProfile();
 
 
-        if (
-            currentRoomCode
-        ) {
+        if (currentRoomCode) {
 
             listenToRoom();
 
@@ -338,9 +264,7 @@ async function loadUserProfile() {
             await get(userRef);
 
 
-        if (
-            snapshot.exists()
-        ) {
+        if (snapshot.exists()) {
 
             const data =
                 snapshot.val();
@@ -368,7 +292,7 @@ async function loadUserProfile() {
 
 
 /* =========================
-   ROOM REF
+   ROOM REFERENCE
 ========================= */
 
 function getRoomRef() {
@@ -451,17 +375,28 @@ function listenToRoom() {
 
 
             /*
-               Start answer processor once.
+               START ANSWER PROCESSOR
+               FOR HOST
             */
 
             ensureAnswerProcessor();
 
 
             /*
-               GAME STATE
+               GAME STATES
             */
 
             if (
+                currentRoomData.status ===
+                "starting"
+            ) {
+
+                await handleStartingState();
+
+            }
+
+
+            else if (
                 currentRoomData.status ===
                 "playing"
             ) {
@@ -492,20 +427,6 @@ function listenToRoom() {
 
             }
 
-
-            /*
-               STARTING STATE
-            */
-
-            else if (
-                currentRoomData.status ===
-                "starting"
-            ) {
-
-                await handleStartingState();
-
-            }
-
         }
     );
 
@@ -514,13 +435,13 @@ function listenToRoom() {
 
 
 /* =========================
-   STARTING
+   STARTING STATE
 ========================= */
 
 async function handleStartingState() {
 
     /*
-       ONLY HOST generates the first round.
+       ONLY HOST CREATES ROUND 1.
     */
 
     if (
@@ -534,7 +455,7 @@ async function handleStartingState() {
 
 
     /*
-       Don't create it twice.
+       Prevent duplicate generation.
     */
 
     if (
@@ -556,45 +477,35 @@ async function handleStartingState() {
             Date.now();
 
 
-        const updates = {
-
-            "rounds/1":
-                round,
-
-            currentRound:
-                1,
-
-            currentCode:
-                round.code,
-
-            currentClues:
-                round.clues,
-
-            /*
-               IMPORTANT:
-               use numeric Date.now()
-               instead of serverTimestamp()
-               for state scheduling.
-            */
-
-            roundStartAt:
-                now,
-
-            roundEndAt:
-                null,
-
-            roundResultAt:
-                null,
-
-            status:
-                "playing"
-
-        };
-
-
         await update(
             getRoomRef(),
-            updates
+            {
+
+                "rounds/1":
+                    round,
+
+                currentRound:
+                    1,
+
+                currentCode:
+                    round.code,
+
+                currentClues:
+                    round.clues,
+
+                roundStartAt:
+                    now,
+
+                roundEndAt:
+                    null,
+
+                roundResultAt:
+                    null,
+
+                status:
+                    "playing"
+
+            }
         );
 
     }
@@ -609,6 +520,2106 @@ async function handleStartingState() {
     }
 
 }
+
+
+
+/* =========================
+   PLAYING STATE
+========================= */
+
+function handlePlayingState() {
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    if (!roundNumber) {
+
+        return;
+
+    }
+
+
+    const round =
+        currentRoomData.rounds?.[
+            roundNumber
+        ];
+
+
+    if (!round) {
+
+        return;
+
+    }
+
+
+    /*
+       CLOSE RESULT SCREEN
+    */
+
+    roundBreak.classList.add(
+        "hidden"
+    );
+
+
+    /*
+       SHOW GAME
+    */
+
+    gameSection.classList.remove(
+        "hidden"
+    );
+
+
+    /*
+       RENDER ROUND
+    */
+
+    renderRound(
+        roundNumber,
+        round
+    );
+
+
+    /*
+       START PLAYER TIMER
+    */
+
+    startTimer();
+
+
+    /*
+       HOST MANAGES ROUND END
+    */
+
+    if (
+        currentRoomData.hostUid ===
+        currentUser.uid
+    ) {
+
+        scheduleHostRoundEnd();
+
+    }
+
+}
+
+
+
+/* =========================
+   RENDER ROUND
+========================= */
+
+function renderRound(
+    roundNumber,
+    round
+) {
+
+    if (
+        currentRoundNumber !==
+        roundNumber
+    ) {
+
+        currentRoundNumber =
+            roundNumber;
+
+
+        clearAnswerInputs();
+
+        resetAnswerStatus();
+
+    }
+
+
+    roundDisplay.textContent =
+        `${roundNumber} / ${TOTAL_ROUNDS}`;
+
+
+    renderCodeDigits(
+        round.displayDigits
+    );
+
+
+    renderAvailableClues(
+        round
+    );
+
+
+    /*
+       Check if this player
+       already solved this round.
+    */
+
+    const answers =
+        currentRoomData.answers?.[
+            roundNumber
+        ] || {};
+
+
+    const myAnswer =
+        answers[
+            currentUser.uid
+        ];
+
+
+    if (
+        myAnswer?.correct === true
+    ) {
+
+        submitButton.disabled =
+            true;
+
+
+        digitInputs.forEach(
+            function (input) {
+
+                input.disabled =
+                    true;
+
+            }
+        );
+
+
+        answerStatus.className =
+            "answer-status correct";
+
+
+        answerStatus.textContent =
+            `✅ CODE CRACKED! +${Number(myAnswer.points || 0)} POINTS`;
+
+    }
+
+    else {
+
+        submitButton.disabled =
+            false;
+
+
+        digitInputs.forEach(
+            function (input) {
+
+                input.disabled =
+                    false;
+
+            }
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   DISPLAY CODE DIGITS
+========================= */
+
+function renderCodeDigits(
+    digits
+) {
+
+    codeDigits.innerHTML =
+        "";
+
+
+    digits.forEach(
+        function (digit) {
+
+            const element =
+                document.createElement(
+                    "span"
+                );
+
+
+            element.textContent =
+                digit;
+
+
+            codeDigits.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================
+   DISPLAY CLUES
+========================= */
+
+function renderAvailableClues(
+    round
+) {
+
+    if (!round) {
+
+        return;
+
+    }
+
+
+    const startAt =
+        Number(
+            currentRoomData.roundStartAt
+        );
+
+
+    if (!startAt) {
+
+        return;
+
+    }
+
+
+    const elapsed =
+        Math.max(
+            0,
+            Date.now() -
+            startAt
+        );
+
+
+    /*
+       Clue 1 is available immediately.
+
+       Clue 2 after 10 seconds.
+
+       Clue 3 after 20 seconds.
+
+       Clue 4 after 30 seconds.
+
+       Clue 5 after 40 seconds.
+    */
+
+    let visibleCount =
+        Math.floor(
+            elapsed /
+            CLUE_INTERVAL
+        ) + 1;
+
+
+    visibleCount =
+        Math.max(
+            1,
+            Math.min(
+                5,
+                visibleCount
+            )
+        );
+
+
+    if (
+        elapsed >=
+        ROUND_DURATION
+    ) {
+
+        visibleCount =
+            5;
+
+    }
+
+
+    clueCounter.textContent =
+        `${visibleCount} / 5`;
+
+
+    cluesList.innerHTML =
+        "";
+
+
+    for (
+        let i = 0;
+        i < 5;
+        i++
+    ) {
+
+        if (
+            i < visibleCount
+        ) {
+
+            const clue =
+                round.clues[i];
+
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "clue";
+
+
+            element.innerHTML = `
+
+                <div class="clue-number">
+                    🔢 CLUE ${i + 1}
+                </div>
+
+                <div class="clue-guess">
+                    ${escapeHtml(
+                        clue.guess.join(" ")
+                    )}
+                </div>
+
+                <div class="clue-text">
+                    ${escapeHtml(
+                        clue.text
+                    )}
+                </div>
+
+            `;
+
+
+            cluesList.appendChild(
+                element
+            );
+
+        }
+
+        else {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "locked-clue";
+
+
+            element.textContent =
+                `🔒 CLUE ${i + 1}`;
+
+
+            cluesList.appendChild(
+                element
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================
+   PLAYER TIMER
+========================= */
+
+function startTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    function tick() {
+
+        if (
+            !currentRoomData ||
+            currentRoomData.status !==
+            "playing"
+        ) {
+
+            clearInterval(
+                timerInterval
+            );
+
+            return;
+
+        }
+
+
+        const startAt =
+            Number(
+                currentRoomData.roundStartAt
+            );
+
+
+        if (!startAt) {
+
+            return;
+
+        }
+
+
+        const elapsed =
+            Date.now() -
+            startAt;
+
+
+        const remaining =
+            Math.max(
+                0,
+                ROUND_DURATION -
+                elapsed
+            );
+
+
+        const totalSeconds =
+            Math.ceil(
+                remaining /
+                1000
+            );
+
+
+        const minutes =
+            Math.floor(
+                totalSeconds /
+                60
+            );
+
+
+        const seconds =
+            totalSeconds %
+            60;
+
+
+        timerDisplay.textContent =
+            `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+
+        renderAvailableClues(
+            currentRoomData.rounds?.[
+                currentRoomData.currentRound
+            ]
+        );
+
+
+        if (
+            remaining <= 0
+        ) {
+
+            clearInterval(
+                timerInterval
+            );
+
+        }
+
+    }
+
+
+    tick();
+
+
+    timerInterval =
+        setInterval(
+            tick,
+            250
+        );
+
+}
+
+
+
+/* =========================
+   HOST ROUND END SCHEDULER
+========================= */
+
+function scheduleHostRoundEnd() {
+
+    if (
+        !currentRoomData ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    const startAt =
+        Number(
+            currentRoomData.roundStartAt
+        );
+
+
+    if (
+        !roundNumber ||
+        !startAt
+    ) {
+
+        return;
+
+    }
+
+
+    const key =
+        `${roundNumber}-${startAt}`;
+
+
+    /*
+       Prevent multiple host timers
+       for the same round.
+    */
+
+    if (
+        hostRoundKey ===
+        key
+    ) {
+
+        return;
+
+    }
+
+
+    hostRoundKey =
+        key;
+
+
+    clearTimeout(
+        hostRoundTimer
+    );
+
+
+    const elapsed =
+        Date.now() -
+        startAt;
+
+
+    const remaining =
+        Math.max(
+            0,
+            ROUND_DURATION -
+            elapsed
+        );
+
+
+    hostRoundTimer =
+        setTimeout(
+            function () {
+
+                finishCurrentRound();
+
+            },
+            remaining + 100
+        );
+
+}
+
+
+
+/* =========================
+   FINISH CURRENT ROUND
+========================= */
+
+async function finishCurrentRound() {
+
+    if (
+        !currentRoomData ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.status !==
+        "playing"
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    clearTimeout(
+        hostRoundTimer
+    );
+
+
+    hostRoundTimer =
+        null;
+
+
+    hostRoundKey =
+        null;
+
+
+    try {
+
+        const now =
+            Date.now();
+
+
+        await update(
+            getRoomRef(),
+            {
+
+                status:
+                    "roundResult",
+
+                roundEndAt:
+                    now,
+
+                roundResultAt:
+                    now
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "FINISH ROUND ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   ROUND RESULT STATE
+========================= */
+
+function handleRoundResultState() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    clearTimeout(
+        hostRoundTimer
+    );
+
+
+    hostRoundTimer =
+        null;
+
+
+    /*
+       Disable answer input.
+    */
+
+    submitButton.disabled =
+        true;
+
+
+    digitInputs.forEach(
+        function (input) {
+
+            input.disabled =
+                true;
+
+        }
+    );
+
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    const round =
+        currentRoomData.rounds?.[
+            roundNumber
+        ];
+
+
+    if (!round) {
+
+        return;
+
+    }
+
+
+    /*
+       Build round results.
+    */
+
+    const answers =
+        currentRoomData.answers?.[
+            roundNumber
+        ] || {};
+
+
+    const players =
+        currentRoomData.players ||
+        {};
+
+
+    const results =
+        Object.entries(players)
+            .filter(
+                ([, player]) =>
+                    !player.leftGame
+            )
+            .map(
+                ([uid, player]) => {
+
+                    const answer =
+                        answers[uid];
+
+
+                    return {
+
+                        uid,
+
+                        username:
+                            player.username ||
+                            "Player",
+
+                        points:
+                            Number(
+                                answer?.points ||
+                                0
+                            ),
+
+                        correct:
+                            answer?.correct ===
+                            true,
+
+                        totalScore:
+                            Number(
+                                player.score ||
+                                0
+                            )
+
+                    };
+
+                }
+            )
+            .sort(
+                function (a, b) {
+
+                    if (
+                        b.points !==
+                        a.points
+                    ) {
+
+                        return b.points -
+                            a.points;
+
+                    }
+
+
+                    return b.totalScore -
+                        a.totalScore;
+
+                }
+            );
+
+
+    showRoundBreak(
+        roundNumber,
+        results
+    );
+
+
+    /*
+       ONLY HOST schedules
+       the next round.
+    */
+
+    if (
+        currentRoomData.hostUid ===
+        currentUser.uid
+    ) {
+
+        scheduleNextRound();
+
+    }
+
+}
+
+
+
+/* =========================
+   ROUND BREAK SCREEN
+========================= */
+
+function showRoundBreak(
+    roundNumber,
+    results
+) {
+
+    roundBreak.classList.remove(
+        "hidden"
+    );
+
+
+    breakTitle.textContent =
+        `ROUND ${roundNumber} RESULTS`;
+
+
+    roundResultList.innerHTML =
+        "";
+
+
+    results.forEach(
+        function (result, index) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "round-result";
+
+
+            const left =
+                document.createElement(
+                    "span"
+                );
+
+
+            left.textContent =
+                `${index + 1}. ${result.username}`;
+
+
+            const right =
+                document.createElement(
+                    "strong"
+                );
+
+
+            right.textContent =
+                result.correct
+                    ? `+${result.points}`
+                    : "+0";
+
+
+            row.appendChild(
+                left
+            );
+
+
+            row.appendChild(
+                right
+            );
+
+
+            roundResultList.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    startBreakCountdown();
+
+}
+
+
+
+/* =========================
+   BREAK COUNTDOWN
+========================= */
+
+function startBreakCountdown() {
+
+    clearInterval(
+        countdownTimer
+    );
+
+
+    const resultAt =
+        Number(
+            currentRoomData.roundResultAt
+        );
+
+
+    if (!resultAt) {
+
+        breakCountdown.textContent =
+            "5";
+
+        return;
+
+    }
+
+
+    function updateCountdown() {
+
+        const elapsed =
+            Date.now() -
+            resultAt;
+
+
+        const remaining =
+            Math.max(
+                0,
+                BREAK_DURATION -
+                elapsed
+            );
+
+
+        const seconds =
+            Math.ceil(
+                remaining /
+                1000
+            );
+
+
+        breakCountdown.textContent =
+            seconds;
+
+
+        if (
+            remaining <= 0
+        ) {
+
+            clearInterval(
+                countdownTimer
+            );
+
+        }
+
+    }
+
+
+    updateCountdown();
+
+
+    countdownTimer =
+        setInterval(
+            updateCountdown,
+            100
+        );
+
+}
+
+
+
+/* =========================
+   SCHEDULE NEXT ROUND
+========================= */
+
+function scheduleNextRound() {
+
+    if (
+        !currentRoomData ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    const resultAt =
+        Number(
+            currentRoomData.roundResultAt
+        );
+
+
+    if (
+        !roundNumber ||
+        !resultAt
+    ) {
+
+        return;
+
+    }
+
+
+    const key =
+        `${roundNumber}-${resultAt}`;
+
+
+    /*
+       Prevent duplicate timers.
+    */
+
+    if (
+        hostTransitionKey ===
+        key
+    ) {
+
+        return;
+
+    }
+
+
+    hostTransitionKey =
+        key;
+
+
+    clearTimeout(
+        hostTransitionTimer
+    );
+
+
+    const elapsed =
+        Date.now() -
+        resultAt;
+
+
+    const remaining =
+        Math.max(
+            0,
+            BREAK_DURATION -
+            elapsed
+        );
+
+
+    hostTransitionTimer =
+        setTimeout(
+            function () {
+
+                startNextRound();
+
+            },
+            remaining + 100
+        );
+
+}
+
+
+
+/* =========================
+   START NEXT ROUND
+========================= */
+
+async function startNextRound() {
+
+    if (
+        !currentRoomData ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.status !==
+        "roundResult"
+    ) {
+
+        return;
+
+    }
+
+
+    const currentRound =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    /*
+       ROUND 5 IS THE FINAL ROUND.
+    */
+
+    if (
+        currentRound >=
+        TOTAL_ROUNDS
+    ) {
+
+        await finishGame();
+
+        return;
+
+    }
+
+
+    const nextRound =
+        currentRound + 1;
+
+
+    try {
+
+        /*
+           Get fresh Firebase data.
+
+           This protects against stale local
+           state and duplicate transitions.
+        */
+
+        const snapshot =
+            await get(
+                getRoomRef()
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            return;
+
+        }
+
+
+        const room =
+            snapshot.val();
+
+
+        if (
+            room.hostUid !==
+            currentUser.uid
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            room.status !==
+            "roundResult"
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            Number(
+                room.currentRound
+            ) !==
+            currentRound
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+           Generate next puzzle.
+        */
+
+        const round =
+            generateRound();
+
+
+        const now =
+            Date.now();
+
+
+        const updates = {};
+
+
+        /*
+           Preserve TOTAL SCORE.
+
+           Only reset round-specific data.
+        */
+
+        const players =
+            room.players ||
+            {};
+
+
+        Object.keys(players)
+            .forEach(
+                function (uid) {
+
+                    updates[
+                        `players/${uid}/currentRoundScore`
+                    ] = 0;
+
+
+                    updates[
+                        `players/${uid}/lastAnswer`
+                    ] = null;
+
+
+                    updates[
+                        `players/${uid}/lastAnsweredRound`
+                    ] = null;
+
+
+                    updates[
+                        `players/${uid}/submittedAt`
+                    ] = null;
+
+                }
+            );
+
+
+        updates[
+            `rounds/${nextRound}`
+        ] =
+            round;
+
+
+        updates[
+            `answers/${nextRound}`
+        ] =
+            null;
+
+
+        updates.currentRound =
+            nextRound;
+
+
+        updates.currentCode =
+            round.code;
+
+
+        updates.currentClues =
+            round.clues;
+
+
+        updates.roundStartAt =
+            now;
+
+
+        updates.roundEndAt =
+            null;
+
+
+        updates.roundResultAt =
+            null;
+
+
+        updates.status =
+            "playing";
+
+
+        await update(
+            getRoomRef(),
+            updates
+        );
+
+
+        /*
+           Reset scheduling state.
+        */
+
+        hostTransitionKey =
+            null;
+
+
+        hostRoundKey =
+            null;
+
+
+        clearTimeout(
+            hostTransitionTimer
+        );
+
+
+        hostTransitionTimer =
+            null;
+
+
+        /*
+           New round will now arrive through
+           the Firebase listener.
+        */
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "START NEXT ROUND ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   SUBMIT ANSWER
+========================= */
+
+submitButton.addEventListener(
+    "click",
+    submitAnswer
+);
+
+
+async function submitAnswer() {
+
+    if (
+        !currentUser ||
+        !currentRoomData
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.status !==
+        "playing"
+    ) {
+
+        return;
+
+    }
+
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    const round =
+        currentRoomData.rounds?.[
+            roundNumber
+        ];
+
+
+    if (!round) {
+
+        return;
+
+    }
+
+
+    /*
+       Already solved?
+    */
+
+    const existingAnswer =
+        currentRoomData.answers?.[
+            roundNumber
+        ]?.[
+            currentUser.uid
+        ];
+
+
+    if (
+        existingAnswer?.correct ===
+        true
+    ) {
+
+        return;
+
+    }
+
+
+    const answer =
+        getAnswerFromInputs();
+
+
+    if (
+        answer.length !==
+        CODE_LENGTH
+    ) {
+
+        showAnswerStatus(
+            "ENTER ALL 5 DIGITS.",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Five different digits.
+    */
+
+    if (
+        new Set(answer).size !==
+        CODE_LENGTH
+    ) {
+
+        showAnswerStatus(
+            "THE CODE USES 5 DIFFERENT DIGITS.",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Only use the five digits
+       shown to the player.
+    */
+
+    const availableDigits =
+        round.displayDigits
+            .map(
+                digit =>
+                    String(digit)
+            );
+
+
+    const validDigits =
+        availableDigits.every(
+            digit =>
+                answer.includes(
+                    digit
+                )
+        );
+
+
+    if (!validDigits) {
+
+        showAnswerStatus(
+            "USE ONLY THE FIVE DIGITS SHOWN ABOVE.",
+            "wrong"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Check solution.
+    */
+
+    const codeString =
+        round.code.join("");
+
+
+    const isCorrect =
+        answer === codeString;
+
+
+    submitButton.disabled =
+        true;
+
+
+    try {
+
+        const answerRef =
+            ref(
+                database,
+                `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${currentUser.uid}`
+            );
+
+
+        /*
+           Don't overwrite an already-correct
+           answer.
+        */
+
+        const existingSnapshot =
+            await get(answerRef);
+
+
+        if (
+            existingSnapshot.exists() &&
+            existingSnapshot.val()?.correct ===
+            true
+        ) {
+
+            submitButton.disabled =
+                true;
+
+            return;
+
+        }
+
+
+        await set(
+            answerRef,
+            {
+
+                answer,
+
+                submittedAt:
+                    serverTimestamp(),
+
+                correct:
+                    isCorrect,
+
+                points:
+                    0
+
+            }
+        );
+
+
+        if (!isCorrect) {
+
+            showAnswerStatus(
+                "❌ NOT THE CODE. TRY AGAIN.",
+                "wrong"
+            );
+
+
+            /*
+               Re-enable quickly.
+            */
+
+            setTimeout(
+                function () {
+
+                    if (
+                        currentRoomData &&
+                        currentRoomData.status ===
+                        "playing"
+                    ) {
+
+                        submitButton.disabled =
+                            false;
+
+                    }
+
+                },
+                200
+            );
+
+        }
+
+        else {
+
+            showAnswerStatus(
+                "✅ CORRECT! CALCULATING SPEED...",
+                "correct"
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "SUBMIT ANSWER ERROR:",
+            error
+        );
+
+
+        submitButton.disabled =
+            false;
+
+
+        showAnswerStatus(
+            "COULD NOT SUBMIT. TRY AGAIN.",
+            "wrong"
+        );
+
+    }
+
+}
+
+
+
+/* =========================
+   GET ANSWER
+========================= */
+
+function getAnswerFromInputs() {
+
+    return digitInputs
+        .map(
+            function (input) {
+
+                return input.value.trim();
+
+            }
+        )
+        .join("");
+
+}
+
+
+
+/* =========================
+   INPUT EVENTS
+========================= */
+
+digitInputs.forEach(
+    function (input, index) {
+
+        input.addEventListener(
+            "input",
+            function () {
+
+                input.value =
+                    input.value
+                        .replace(
+                            /[^0-9]/g,
+                            ""
+                        )
+                        .slice(0, 1);
+
+
+                if (
+                    input.value &&
+                    index <
+                    digitInputs.length - 1
+                ) {
+
+                    digitInputs[
+                        index + 1
+                    ].focus();
+
+                }
+
+            }
+        );
+
+
+        input.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key ===
+                    "Backspace" &&
+                    !input.value &&
+                    index > 0
+                ) {
+
+                    digitInputs[
+                        index - 1
+                    ].focus();
+
+                }
+
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    submitAnswer();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =========================
+   ANSWER PROCESSOR
+========================= */
+
+function ensureAnswerProcessor() {
+
+    if (
+        answerProcessorStarted
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !currentUser ||
+        !currentRoomCode
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       ONLY HOST PROCESSES
+       CORRECT ANSWERS.
+    */
+
+    if (
+        currentRoomData &&
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    answerProcessorStarted =
+        true;
+
+
+    const answersRef =
+        ref(
+            database,
+            `chaosCodeRooms/${currentRoomCode}/answers`
+        );
+
+
+    onValue(
+        answersRef,
+        async function () {
+
+            await processCorrectAnswers();
+
+        }
+    );
+
+}
+
+
+
+/* =========================
+   PROCESS CORRECT ANSWERS
+========================= */
+
+async function processCorrectAnswers() {
+
+    if (
+        !currentRoomData ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.hostUid !==
+        currentUser.uid
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        currentRoomData.status !==
+        "playing"
+    ) {
+
+        return;
+
+    }
+
+
+    const roundNumber =
+        Number(
+            currentRoomData.currentRound
+        );
+
+
+    const round =
+        currentRoomData.rounds?.[
+            roundNumber
+        ];
+
+
+    if (!round) {
+
+        return;
+
+    }
+
+
+    const answers =
+        currentRoomData.answers?.[
+            roundNumber
+        ] || {};
+
+
+    for (
+        const [uid, answer] of
+        Object.entries(answers)
+    ) {
+
+        /*
+           Ignore:
+
+           - no answer
+           - wrong answer
+           - already processed answer
+        */
+
+        if (
+            !answer ||
+            answer.correct !== true ||
+            Number(answer.points || 0) > 0
+        ) {
+
+            continue;
+
+        }
+
+
+        const submittedAt =
+            getTimestamp(
+                answer.submittedAt
+            );
+
+
+        const roundStartAt =
+            Number(
+                currentRoomData.roundStartAt
+            );
+
+
+        if (
+            !submittedAt ||
+            !roundStartAt
+        ) {
+
+            /*
+               Firebase serverTimestamp may
+               not have resolved yet.
+            */
+
+            continue;
+
+        }
+
+
+        /*
+           Calculate exact elapsed time.
+        */
+
+        const elapsed =
+            Math.max(
+                0,
+                submittedAt -
+                roundStartAt
+            );
+
+
+        /*
+           CONTINUOUS SPEED SCORE.
+
+           No fixed 10-second brackets.
+
+           Faster = more points.
+
+           Slower = fewer points.
+
+           Maximum approximately 100.
+
+           Minimum 1.
+        */
+
+        const progress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    1 -
+                    (
+                        elapsed /
+                        ROUND_DURATION
+                    )
+                )
+            );
+
+
+        const points =
+            Math.max(
+                1,
+                Math.round(
+                    100 *
+                    Math.pow(
+                        progress,
+                        1.25
+                    )
+                )
+            );
+
+
+        const answerRef =
+            ref(
+                database,
+                `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${uid}`
+            );
+
+
+        /*
+           Transaction ensures the answer
+           isn't awarded twice.
+        */
+
+        const transactionResult =
+            await runTransaction(
+                answerRef,
+                function (current) {
+
+                    if (!current) {
+
+                        return current;
+
+                    }
+
+
+                    if (
+                        Number(
+                            current.points ||
+                            0
+                        ) > 0
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    current.points =
+                        points;
+
+
+                    current.processed =
+                        true;
+
+
+                    return current;
+
+                }
+            );
+
+
+        if (
+            !transactionResult.committed
+        ) {
+
+            continue;
+
+        }
+
+
+        /*
+           Add the points to the player's
+           total score.
+        */
+
+        const playerRef =
+            ref(
+                database,
+                `chaosCodeRooms/${currentRoomCode}/players/${uid}`
+            );
+
+
+        await runTransaction(
+            playerRef,
+            function (player) {
+
+                if (!player) {
+
+                    return player;
+
+                }
+
+
+                /*
+                   Prevent duplicate round scoring.
+                */
+
+                if (
+                    Number(
+                        player.lastAnsweredRound
+                    ) ===
+                    roundNumber
+                ) {
+
+                    return;
+
+                }
+
+
+                player.score =
+                    Number(
+                        player.score || 0
+                    ) +
+                    points;
+
+
+                player.currentRoundScore =
+                    points;
+
+
+                player.lastAnsweredRound =
+                    roundNumber;
+
+
+                player.lastAnswer =
+                    answer.answer;
+
+
+                player.submittedAt =
+                    answer.submittedAt;
+
+
+                return player;
+
+            }
+        );
+
+    }
+
+}
+
 
 
 /* =========================
@@ -633,12 +2644,19 @@ function renderStandings(room) {
             .sort(
                 function (a, b) {
 
-                    return Number(
-                        b[1].score || 0
-                    ) -
-                    Number(
-                        a[1].score || 0
-                    );
+                    const scoreA =
+                        Number(
+                            a[1].score || 0
+                        );
+
+
+                    const scoreB =
+                        Number(
+                            b[1].score || 0
+                        );
+
+
+                    return scoreB - scoreA;
 
                 }
             );
@@ -818,2016 +2836,14 @@ function renderStandings(room) {
 
 
 /* =========================
-   PLAYING STATE
-========================= */
-
-function handlePlayingState() {
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    if (
-        !roundNumber
-    ) {
-
-        return;
-
-    }
-
-
-    const round =
-        currentRoomData.rounds?.[
-            roundNumber
-        ];
-
-
-    if (!round) {
-
-        return;
-
-    }
-
-
-    /*
-       Hide result overlay.
-    */
-
-    roundBreak.classList.add(
-        "hidden"
-    );
-
-
-    /*
-       Render round.
-    */
-
-    renderRound(
-        roundNumber,
-        round
-    );
-
-
-    /*
-       Start player's local timer.
-    */
-
-    startTimer();
-
-
-    /*
-       Host controls exact round transition.
-    */
-
-    if (
-        currentRoomData.hostUid ===
-        currentUser.uid
-    ) {
-
-        scheduleHostRoundEnd();
-
-    }
-
-}
-
-
-
-/* =========================
-   RENDER ROUND
-========================= */
-
-function renderRound(
-    roundNumber,
-    round
-) {
-
-    if (
-        currentRoundNumber !==
-        roundNumber
-    ) {
-
-        currentRoundNumber =
-            roundNumber;
-
-
-        clearAnswerInputs();
-
-        resetAnswerStatus();
-
-    }
-
-
-    roundDisplay.textContent =
-        `${roundNumber} / ${TOTAL_ROUNDS}`;
-
-
-    renderCodeDigits(
-        round.displayDigits
-    );
-
-
-    renderAvailableClues(
-        round
-    );
-
-
-    /*
-       Check whether this player
-       already solved this round.
-    */
-
-    const answers =
-        currentRoomData.answers?.[
-            roundNumber
-        ] || {};
-
-
-    const myAnswer =
-        answers[
-            currentUser.uid
-        ];
-
-
-    if (
-        myAnswer?.correct === true
-    ) {
-
-        submitButton.disabled =
-            true;
-
-
-        digitInputs.forEach(
-            function (input) {
-
-                input.disabled =
-                    true;
-
-            }
-        );
-
-
-        answerStatus.className =
-            "answer-status correct";
-
-
-        answerStatus.textContent =
-            `✅ CODE CRACKED! +${myAnswer.points || 0} POINTS`;
-
-    }
-
-    else {
-
-        submitButton.disabled =
-            false;
-
-
-        digitInputs.forEach(
-            function (input) {
-
-                input.disabled =
-                    false;
-
-            }
-        );
-
-    }
-
-}
-
-
-
-/* =========================
-   CODE DISPLAY
-========================= */
-
-function renderCodeDigits(
-    digits
-) {
-
-    codeDigits.innerHTML =
-        "";
-
-
-    digits.forEach(
-        function (digit) {
-
-            const element =
-                document.createElement(
-                    "span"
-                );
-
-
-            element.textContent =
-                digit;
-
-
-            codeDigits.appendChild(
-                element
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================
-   CLUES
-========================= */
-
-function renderAvailableClues(
-    round
-) {
-
-    if (!round) {
-
-        return;
-
-    }
-
-
-    const startAt =
-        Number(
-            currentRoomData.roundStartAt
-        );
-
-
-    if (
-        !startAt
-    ) {
-
-        return;
-
-    }
-
-
-    const elapsed =
-        Math.max(
-            0,
-            Date.now() - startAt
-        );
-
-
-    let visibleCount =
-        Math.floor(
-            elapsed /
-            CLUE_INTERVAL
-        ) + 1;
-
-
-    visibleCount =
-        Math.max(
-            1,
-            Math.min(
-                5,
-                visibleCount
-            )
-        );
-
-
-    if (
-        elapsed >=
-        ROUND_DURATION
-    ) {
-
-        visibleCount =
-            5;
-
-    }
-
-
-    clueCounter.textContent =
-        `${visibleCount} / 5`;
-
-
-    cluesList.innerHTML =
-        "";
-
-
-    for (
-        let i = 0;
-        i < 5;
-        i++
-    ) {
-
-        if (
-            i < visibleCount
-        ) {
-
-            const clue =
-                round.clues[i];
-
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "clue";
-
-
-            element.innerHTML = `
-
-                <div class="clue-number">
-                    🔢 CLUE ${i + 1}
-                </div>
-
-                <div class="clue-guess">
-                    ${escapeHtml(
-                        clue.guess.join(" ")
-                    )}
-                </div>
-
-                <div class="clue-text">
-                    ${escapeHtml(
-                        clue.text
-                    )}
-                </div>
-
-            `;
-
-
-            cluesList.appendChild(
-                element
-            );
-
-        }
-
-        else {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "locked-clue";
-
-
-            element.textContent =
-                `🔒 CLUE ${i + 1}`;
-
-
-            cluesList.appendChild(
-                element
-            );
-
-        }
-
-    }
-
-}
-
-
-
-/* =========================
-   PLAYER TIMER
-========================= */
-
-function startTimer() {
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    function tick() {
-
-        if (
-            !currentRoomData ||
-            currentRoomData.status !==
-            "playing"
-        ) {
-
-            return;
-
-        }
-
-
-        const startAt =
-            Number(
-                currentRoomData.roundStartAt
-            );
-
-
-        if (!startAt) {
-
-            return;
-
-        }
-
-
-        const elapsed =
-            Date.now() -
-            startAt;
-
-
-        const remaining =
-            Math.max(
-                0,
-                ROUND_DURATION -
-                elapsed
-            );
-
-
-        const totalSeconds =
-            Math.ceil(
-                remaining /
-                1000
-            );
-
-
-        const minutes =
-            Math.floor(
-                totalSeconds /
-                60
-            );
-
-
-        const seconds =
-            totalSeconds % 60;
-
-
-        timerDisplay.textContent =
-            `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-
-        renderAvailableClues(
-            currentRoomData.rounds?.[
-                currentRoomData.currentRound
-            ]
-        );
-
-
-        if (
-            remaining <= 0
-        ) {
-
-            clearInterval(
-                timerInterval
-            );
-
-        }
-
-    }
-
-
-    tick();
-
-
-    timerInterval =
-        setInterval(
-            tick,
-            250
-        );
-
-}
-
-
-
-/* =========================
-   HOST ROUND END
-========================= */
-
-function scheduleHostRoundEnd() {
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    const startAt =
-        Number(
-            currentRoomData.roundStartAt
-        );
-
-
-    if (
-        !roundNumber ||
-        !startAt
-    ) {
-
-        return;
-
-    }
-
-
-    const key =
-        `${roundNumber}-${startAt}`;
-
-
-    /*
-       Prevent repeated timers every time
-       Firebase sends another update.
-    */
-
-    if (
-        hostRoundKey === key
-    ) {
-
-        return;
-
-    }
-
-
-    hostRoundKey =
-        key;
-
-
-    clearTimeout(
-        hostRoundTimer
-    );
-
-
-    const elapsed =
-        Date.now() -
-        startAt;
-
-
-    const remaining =
-        Math.max(
-            0,
-            ROUND_DURATION -
-            elapsed
-        );
-
-
-    hostRoundTimer =
-        setTimeout(
-            finishCurrentRound,
-            remaining + 100
-        );
-
-}
-
-
-
-/* =========================
-   FINISH CURRENT ROUND
-========================= */
-
-async function finishCurrentRound() {
-
-    if (
-        !currentRoomData
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.status !==
-        "playing"
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    clearTimeout(
-        hostRoundTimer
-    );
-
-
-    hostRoundTimer =
-        null;
-
-
-    hostRoundKey =
-        null;
-
-
-    try {
-
-        const now =
-            Date.now();
-
-
-        await update(
-            getRoomRef(),
-            {
-
-                status:
-                    "roundResult",
-
-                roundEndAt:
-                    now,
-
-                roundResultAt:
-                    now
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "FINISH ROUND ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* =========================
-   ROUND RESULT STATE
-========================= */
-
-function handleRoundResultState() {
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    clearTimeout(
-        hostRoundTimer
-    );
-
-
-    hostRoundTimer =
-        null;
-
-
-    /*
-       Disable answering.
-    */
-
-    submitButton.disabled =
-        true;
-
-
-    digitInputs.forEach(
-        function (input) {
-
-            input.disabled =
-                true;
-
-        }
-    );
-
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    const round =
-        currentRoomData.rounds?.[
-            roundNumber
-        ];
-
-
-    if (!round) {
-
-        return;
-
-    }
-
-
-    /*
-       Show round result overlay.
-    */
-
-    const answers =
-        currentRoomData.answers?.[
-            roundNumber
-        ] || {};
-
-
-    const players =
-        currentRoomData.players ||
-        {};
-
-
-    const results =
-        Object.entries(players)
-            .filter(
-                ([, player]) =>
-                    !player.leftGame
-            )
-            .map(
-                ([uid, player]) => {
-
-                    const answer =
-                        answers[uid];
-
-
-                    return {
-
-                        uid,
-
-                        username:
-                            player.username ||
-                            "Player",
-
-                        points:
-                            Number(
-                                answer?.points || 0
-                            ),
-
-                        correct:
-                            answer?.correct === true,
-
-                        totalScore:
-                            Number(
-                                player.score || 0
-                            )
-
-                    };
-
-                }
-            )
-            .sort(
-                (a, b) => {
-
-                    if (
-                        b.points !==
-                        a.points
-                    ) {
-
-                        return b.points -
-                            a.points;
-
-                    }
-
-
-                    return b.totalScore -
-                        a.totalScore;
-
-                }
-            );
-
-
-    showRoundBreak(
-        roundNumber,
-        results
-    );
-
-
-    /*
-       Only host schedules the next step.
-    */
-
-    if (
-        currentRoomData.hostUid ===
-        currentUser.uid
-    ) {
-
-        scheduleNextRound();
-
-    }
-
-}
-
-
-
-/* =========================
-   ROUND BREAK
-========================= */
-
-function showRoundBreak(
-    roundNumber,
-    results
-) {
-
-    roundBreak.classList.remove(
-        "hidden"
-    );
-
-
-    breakTitle.textContent =
-        `ROUND ${roundNumber} RESULTS`;
-
-
-    roundResultList.innerHTML =
-        "";
-
-
-    results.forEach(
-        function (result, index) {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "round-result";
-
-
-            const left =
-                document.createElement(
-                    "span"
-                );
-
-
-            left.textContent =
-                `${index + 1}. ${result.username}`;
-
-
-            const right =
-                document.createElement(
-                    "strong"
-                );
-
-
-            right.textContent =
-                result.correct
-                    ? `+${result.points}`
-                    : "+0";
-
-
-            row.appendChild(
-                left
-            );
-
-
-            row.appendChild(
-                right
-            );
-
-
-            roundResultList.appendChild(
-                row
-            );
-
-        }
-    );
-
-
-    startBreakCountdown();
-
-}
-
-
-
-/* =========================
-   FIVE-SECOND COUNTDOWN
-========================= */
-
-function startBreakCountdown() {
-
-    clearInterval(
-        countdownTimer
-    );
-
-
-    const resultAt =
-        Number(
-            currentRoomData.roundResultAt
-        );
-
-
-    /*
-       If Firebase hasn't delivered the value
-       yet, use the current time temporarily.
-    */
-
-    const effectiveStart =
-        resultAt ||
-        Date.now();
-
-
-    function updateCountdown() {
-
-        const elapsed =
-            Date.now() -
-            effectiveStart;
-
-
-        const remaining =
-            Math.max(
-                0,
-                BREAK_DURATION -
-                elapsed
-            );
-
-
-        const seconds =
-            Math.ceil(
-                remaining /
-                1000
-            );
-
-
-        breakCountdown.textContent =
-            seconds;
-
-
-        if (
-            remaining <= 0
-        ) {
-
-            clearInterval(
-                countdownTimer
-            );
-
-        }
-
-    }
-
-
-    updateCountdown();
-
-
-    countdownTimer =
-        setInterval(
-            updateCountdown,
-            100
-        );
-
-}
-
-
-
-/* =========================
-   SCHEDULE NEXT ROUND
-========================= */
-
-function scheduleNextRound() {
-
-    if (
-        !currentRoomData
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    const resultAt =
-        Number(
-            currentRoomData.roundResultAt
-        );
-
-
-    if (
-        !roundNumber ||
-        !resultAt
-    ) {
-
-        return;
-
-    }
-
-
-    const key =
-        `${roundNumber}-${resultAt}`;
-
-
-    /*
-       VERY IMPORTANT:
-
-       Firebase may trigger onValue multiple
-       times while the result screen is visible.
-
-       We only schedule ONE transition.
-    */
-
-    if (
-        hostTransitionKey === key
-    ) {
-
-        return;
-
-    }
-
-
-    hostTransitionKey =
-        key;
-
-
-    clearTimeout(
-        hostTransitionTimer
-    );
-
-
-    const elapsed =
-        Date.now() -
-        resultAt;
-
-
-    const remaining =
-        Math.max(
-            0,
-            BREAK_DURATION -
-            elapsed
-        );
-
-
-    hostTransitionTimer =
-        setTimeout(
-            function () {
-
-                startNextRound();
-
-            },
-            remaining + 100
-        );
-
-}
-
-
-
-/* =========================
-   START NEXT ROUND
-========================= */
-
-async function startNextRound() {
-
-    if (
-        !currentRoomData
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.status !==
-        "roundResult"
-    ) {
-
-        return;
-
-    }
-
-
-    const currentRound =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    /*
-       Round 5 is finished.
-    */
-
-    if (
-        currentRound >=
-        TOTAL_ROUNDS
-    ) {
-
-        await finishGame();
-
-        return;
-
-    }
-
-
-    const nextRound =
-        currentRound + 1;
-
-
-    const roomRef =
-        getRoomRef();
-
-
-    try {
-
-        /*
-           Make sure another onValue event
-           doesn't cause duplicate generation.
-        */
-
-        const freshSnapshot =
-            await get(roomRef);
-
-
-        if (
-            !freshSnapshot.exists()
-        ) {
-
-            return;
-
-        }
-
-
-        const freshRoom =
-            freshSnapshot.val();
-
-
-        if (
-            freshRoom.hostUid !==
-            currentUser.uid
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            freshRoom.status !==
-            "roundResult"
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            freshRoom.currentRound !==
-            currentRound
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-           Generate the new round.
-        */
-
-        const round =
-            generateRound();
-
-
-        const now =
-            Date.now();
-
-
-        const updates = {};
-
-
-        /*
-           Reset only round-specific
-           player information.
-
-           Total score is NOT reset.
-        */
-
-        const players =
-            freshRoom.players ||
-            {};
-
-
-        Object.keys(players)
-            .forEach(
-                function (uid) {
-
-                    updates[
-                        `players/${uid}/currentRoundScore`
-                    ] = 0;
-
-
-                    updates[
-                        `players/${uid}/lastAnswer`
-                    ] = null;
-
-
-                    updates[
-                        `players/${uid}/lastAnsweredRound`
-                    ] = null;
-
-
-                    updates[
-                        `players/${uid}/submittedAt`
-                    ] = null;
-
-                }
-            );
-
-
-        updates[
-            `rounds/${nextRound}`
-        ] = round;
-
-
-        /*
-           Clear answer area for this round.
-        */
-
-        updates[
-            `answers/${nextRound}`
-        ] = null;
-
-
-        updates.currentRound =
-            nextRound;
-
-
-        updates.currentCode =
-            round.code;
-
-
-        updates.currentClues =
-            round.clues;
-
-
-        /*
-           Numeric timestamp.
-        */
-
-        updates.roundStartAt =
-            now;
-
-
-        updates.roundEndAt =
-            null;
-
-
-        updates.roundResultAt =
-            null;
-
-
-        updates.status =
-            "playing";
-
-
-        await update(
-            roomRef,
-            updates
-        );
-
-
-        /*
-           Reset host scheduling state.
-        */
-
-        hostTransitionKey =
-            null;
-
-
-        hostRoundKey =
-            null;
-
-
-        clearTimeout(
-            hostTransitionTimer
-        );
-
-
-        hostTransitionTimer =
-            null;
-
-
-        /*
-           The realtime listener will close
-           the result screen and render the
-           new round.
-        */
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "START NEXT ROUND ERROR:",
-            error
-        );
-
-    }
-
-}
-
-
-
-/* =========================
-   SUBMIT ANSWER
-========================= */
-
-submitButton.addEventListener(
-    "click",
-    submitAnswer
-);
-
-
-async function submitAnswer() {
-
-    if (
-        !currentUser ||
-        !currentRoomData
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.status !==
-        "playing"
-    ) {
-
-        return;
-
-    }
-
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    const round =
-        currentRoomData.rounds?.[
-            roundNumber
-        ];
-
-
-    if (!round) {
-
-        return;
-
-    }
-
-
-    const existingAnswer =
-        currentRoomData.answers?.[
-            roundNumber
-        ]?.[
-            currentUser.uid
-        ];
-
-
-    if (
-        existingAnswer?.correct === true
-    ) {
-
-        return;
-
-    }
-
-
-    const answer =
-        getAnswerFromInputs();
-
-
-    if (
-        answer.length !==
-        CODE_LENGTH
-    ) {
-
-        showAnswerStatus(
-            "ENTER ALL 5 DIGITS.",
-            "wrong"
-        );
-
-        return;
-
-    }
-
-
-    if (
-        new Set(answer).size !==
-        CODE_LENGTH
-    ) {
-
-        showAnswerStatus(
-            "THE CODE USES 5 DIFFERENT DIGITS.",
-            "wrong"
-        );
-
-        return;
-
-    }
-
-
-    const availableDigits =
-        round.displayDigits.map(
-            digit =>
-                String(digit)
-        );
-
-
-    const validDigits =
-        availableDigits.every(
-            digit =>
-                answer.includes(
-                    digit
-                )
-        );
-
-
-    if (!validDigits) {
-
-        showAnswerStatus(
-            "USE ONLY THE FIVE DIGITS SHOWN ABOVE.",
-            "wrong"
-        );
-
-        return;
-
-    }
-
-
-    const codeString =
-        round.code.join("");
-
-
-    const isCorrect =
-        answer === codeString;
-
-
-    submitButton.disabled =
-        true;
-
-
-    try {
-
-        const answerRef =
-            ref(
-                database,
-                `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${currentUser.uid}`
-            );
-
-
-        /*
-           Do not overwrite a correct answer
-           that was already stored.
-        */
-
-        const existingSnapshot =
-            await get(
-                answerRef
-            );
-
-
-        if (
-            existingSnapshot.exists() &&
-            existingSnapshot.val()?.correct === true
-        ) {
-
-            submitButton.disabled =
-                true;
-
-            return;
-
-        }
-
-
-        await set(
-            answerRef,
-            {
-
-                answer,
-
-                submittedAt:
-                    serverTimestamp(),
-
-                correct:
-                    isCorrect,
-
-                points:
-                    0
-
-            }
-        );
-
-
-        if (!isCorrect) {
-
-            showAnswerStatus(
-                "❌ NOT THE CODE. TRY AGAIN.",
-                "wrong"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    if (
-                        currentRoomData &&
-                        currentRoomData.status ===
-                        "playing"
-                    ) {
-
-                        submitButton.disabled =
-                            false;
-
-                    }
-
-                },
-                250
-            );
-
-        }
-
-        else {
-
-            showAnswerStatus(
-                "✅ CORRECT! CALCULATING SPEED...",
-                "correct"
-            );
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "SUBMIT ANSWER ERROR:",
-            error
-        );
-
-
-        submitButton.disabled =
-            false;
-
-
-        showAnswerStatus(
-            "COULD NOT SUBMIT. TRY AGAIN.",
-            "wrong"
-        );
-
-    }
-
-}
-
-
-
-/* =========================
-   ANSWER INPUT
-========================= */
-
-function getAnswerFromInputs() {
-
-    return digitInputs
-        .map(
-            input =>
-                input.value.trim()
-        )
-        .join("");
-
-
-
-}
-
-
-
-/* =========================
-   INPUT EVENTS
-========================= */
-
-digitInputs.forEach(
-    function (input, index) {
-
-        input.addEventListener(
-            "input",
-            function () {
-
-                input.value =
-                    input.value
-                        .replace(
-                            /[^0-9]/g,
-                            ""
-                        )
-                        .slice(0, 1);
-
-
-                if (
-                    input.value &&
-                    index <
-                    digitInputs.length - 1
-                ) {
-
-                    digitInputs[
-                        index + 1
-                    ].focus();
-
-                }
-
-            }
-        );
-
-
-        input.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key ===
-                    "Backspace" &&
-                    !input.value &&
-                    index > 0
-                ) {
-
-                    digitInputs[
-                        index - 1
-                    ].focus();
-
-                }
-
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    submitAnswer();
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-
-/* =========================
-   ANSWER PROCESSOR
-========================= */
-
-function ensureAnswerProcessor() {
-
-    if (
-        answerProcessorStarted
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !currentUser ||
-        !currentRoomCode
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-       Only host processes scores.
-    */
-
-    if (
-        currentRoomData &&
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    answerProcessorStarted =
-        true;
-
-
-    const answersRef =
-        ref(
-            database,
-            `chaosCodeRooms/${currentRoomCode}/answers`
-        );
-
-
-    onValue(
-        answersRef,
-        async function () {
-
-            await processCorrectAnswers();
-
-        }
-    );
-
-}
-
-
-
-/* =========================
-   PROCESS CORRECT ANSWERS
-========================= */
-
-async function processCorrectAnswers() {
-
-    if (
-        !currentRoomData ||
-        !currentUser
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.status !==
-        "playing"
-    ) {
-
-        return;
-
-    }
-
-
-    const roundNumber =
-        Number(
-            currentRoomData.currentRound
-        );
-
-
-    const round =
-        currentRoomData.rounds?.[
-            roundNumber
-        ];
-
-
-    if (!round) {
-
-        return;
-
-    }
-
-
-    const answers =
-        currentRoomData.answers?.[
-            roundNumber
-        ] || {};
-
-
-    for (
-        const [uid, answer] of
-        Object.entries(answers)
-    ) {
-
-        if (
-            !answer ||
-            answer.correct !== true ||
-            Number(answer.points || 0) > 0
-        ) {
-
-            continue;
-
-        }
-
-
-        const submittedAt =
-            getTimestamp(
-                answer.submittedAt
-            );
-
-
-        const roundStartAt =
-            Number(
-                currentRoomData.roundStartAt
-            );
-
-
-        if (
-            !submittedAt ||
-            !roundStartAt
-        ) {
-
-            continue;
-
-        }
-
-
-        const elapsed =
-            Math.max(
-                0,
-                submittedAt -
-                roundStartAt
-            );
-
-
-        /*
-           Continuous speed-based scoring.
-
-           100 points at very high speed,
-           gradually decreasing to 1 point
-           near the end of the 2-minute round.
-
-           There are NO 10-second brackets.
-        */
-
-        const progress =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    1 -
-                    elapsed /
-                    ROUND_DURATION
-                )
-            );
-
-
-        const points =
-            Math.max(
-                1,
-                Math.round(
-                    100 *
-                    Math.pow(
-                        progress,
-                        1.25
-                    )
-                )
-            );
-
-
-        const answerRef =
-            ref(
-                database,
-                `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${uid}`
-            );
-
-
-        const transactionResult =
-            await runTransaction(
-                answerRef,
-                function (current) {
-
-                    if (!current) {
-
-                        return current;
-
-                    }
-
-
-                    if (
-                        Number(
-                            current.points ||
-                            0
-                        ) > 0
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    current.points =
-                        points;
-
-
-                    current.processed =
-                        true;
-
-
-                    return current;
-
-                }
-            );
-
-
-        if (
-            !transactionResult.committed
-        ) {
-
-            continue;
-
-        }
-
-
-        const playerRef =
-            ref(
-                database,
-                `chaosCodeRooms/${currentRoomCode}/players/${uid}`
-            );
-
-
-        await runTransaction(
-            playerRef,
-            function (player) {
-
-                if (!player) {
-
-                    return player;
-
-                }
-
-
-                if (
-                    Number(
-                        player.lastAnsweredRound
-                    ) ===
-                    roundNumber
-                ) {
-
-                    return;
-
-                }
-
-
-                player.score =
-                    Number(
-                        player.score || 0
-                    ) +
-                    points;
-
-
-                player.currentRoundScore =
-                    points;
-
-
-                player.lastAnsweredRound =
-                    roundNumber;
-
-
-                player.lastAnswer =
-                    answer.answer;
-
-
-                player.submittedAt =
-                    answer.submittedAt;
-
-
-                return player;
-
-            }
-        );
-
-    }
-
-}
-
-
-
-/* =========================
-   FINAL GAME
+   FINISH GAME
 ========================= */
 
 async function finishGame() {
 
     if (
-        !currentRoomData
+        !currentRoomData ||
+        !currentUser
     ) {
 
         return;
@@ -2855,17 +2871,21 @@ async function finishGame() {
     }
 
 
-    clearTimeout(
-        hostRoundTimer
-    );
-
-
-    clearTimeout(
-        hostTransitionTimer
-    );
-
-
     try {
+
+        clearTimeout(
+            hostRoundTimer
+        );
+
+
+        clearTimeout(
+            hostTransitionTimer
+        );
+
+
+        /*
+           Get fresh room data.
+        */
 
         const snapshot =
             await get(
@@ -2901,6 +2921,10 @@ async function finishGame() {
             {};
 
 
+        /*
+           ALL active players sorted by score.
+        */
+
         const entries =
             Object.entries(players)
                 .filter(
@@ -2908,44 +2932,113 @@ async function finishGame() {
                         !player.leftGame
                 )
                 .sort(
-                    (a, b) =>
-                        Number(
-                            b[1].score || 0
-                        ) -
-                        Number(
-                            a[1].score || 0
-                        )
+                    function (a, b) {
+
+                        const scoreA =
+                            Number(
+                                a[1].score ||
+                                0
+                            );
+
+
+                        const scoreB =
+                            Number(
+                                b[1].score ||
+                                0
+                            );
+
+
+                        return scoreB -
+                            scoreA;
+
+                    }
                 );
+
+
+        /*
+           Players who actually scored.
+
+           THESE are the only players
+           eligible for Chaos Points.
+        */
+
+        const scoringPlayers =
+            entries.filter(
+                ([, player]) => {
+
+                    return Number(
+                        player.score ||
+                        0
+                    ) > 0;
+
+                }
+            );
 
 
         const updates = {};
 
 
-        entries.forEach(
-            function ([uid], index) {
+        /*
+           Final rank for EVERY player.
+        */
 
-                const rank =
+        entries.forEach(
+            function ([uid, player], index) {
+
+                const finalRank =
                     index + 1;
 
 
-                const reward =
-                    TOP_REWARDS[
-                        rank
-                    ] || 0;
+                /*
+                   Reward position is based
+                   ONLY on players who scored.
+                */
+
+                const scoringPosition =
+                    scoringPlayers.findIndex(
+                        function ([scoringUid]) {
+
+                            return scoringUid ===
+                                uid;
+
+                        }
+                    );
+
+
+                let reward = 0;
+
+
+                if (
+                    scoringPosition >= 0 &&
+                    scoringPosition < 3
+                ) {
+
+                    reward =
+                        TOP_REWARDS[
+                            scoringPosition + 1
+                        ] || 0;
+
+                }
 
 
                 updates[
                     `players/${uid}/finalRank`
-                ] = rank;
+                ] =
+                    finalRank;
 
 
                 updates[
                     `players/${uid}/finalReward`
-                ] = reward;
+                ] =
+                    reward;
 
             }
         );
 
+
+        /*
+           Mark room finished.
+        */
 
         updates.status =
             "finished";
@@ -2965,8 +3058,14 @@ async function finishGame() {
         );
 
 
+        /*
+           Distribute CP.
+
+           Only scoringPlayers are passed.
+        */
+
         await distributeRewards(
-            entries
+            scoringPlayers
         );
 
     }
@@ -2985,54 +3084,92 @@ async function finishGame() {
 
 
 /* =========================
-   DISTRIBUTE CP
+   DISTRIBUTE CHAOS POINTS
 ========================= */
 
 async function distributeRewards(
-    entries
+    scoringPlayers
 ) {
-
-    const roomRef =
-        getRoomRef();
-
-
-    const snapshot =
-        await get(roomRef);
-
-
-    if (
-        !snapshot.exists()
-    ) {
-
-        return;
-
-    }
-
-
-    const room =
-        snapshot.val();
-
-
-    if (
-        room.rewardsDistributed ===
-        true
-    ) {
-
-        return;
-
-    }
-
 
     try {
 
+        const roomRef =
+            getRoomRef();
+
+
+        const snapshot =
+            await get(roomRef);
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            return;
+
+        }
+
+
+        const room =
+            snapshot.val();
+
+
+        /*
+           Do not distribute twice.
+        */
+
+        if (
+            room.rewardsDistributed ===
+            true
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+           IMPORTANT:
+
+           scoringPlayers contains ONLY
+           players with > 0 game points.
+
+           Therefore a 0-point player can
+           NEVER get CP.
+        */
+
         for (
             let index = 0;
-            index < entries.length;
+            index < scoringPlayers.length &&
+            index < 3;
             index++
         ) {
 
             const uid =
-                entries[index][0];
+                scoringPlayers[index][0];
+
+
+            const player =
+                scoringPlayers[index][1];
+
+
+            const score =
+                Number(
+                    player.score || 0
+                );
+
+
+            /*
+               Extra safety check.
+            */
+
+            if (
+                score <= 0
+            ) {
+
+                continue;
+
+            }
 
 
             const reward =
@@ -3097,15 +3234,18 @@ async function distributeRewards(
 
 
 /* =========================
-   FINAL RESULTS UI
+   FINAL RESULTS
 ========================= */
 
-function renderFinalResults(
-    room
-) {
+function renderFinalResults(room) {
 
     clearInterval(
         timerInterval
+    );
+
+
+    clearInterval(
+        countdownTimer
     );
 
 
@@ -3116,11 +3256,6 @@ function renderFinalResults(
 
     clearTimeout(
         hostTransitionTimer
-    );
-
-
-    clearInterval(
-        countdownTimer
     );
 
 
@@ -3151,15 +3286,24 @@ function renderFinalResults(
                     !player.leftGame
             )
             .sort(
-                (a, b) =>
-                    Number(
-                        a[1].finalRank || 999
+                function (a, b) {
+
+                    return Number(
+                        a[1].finalRank ||
+                        999
                     ) -
                     Number(
-                        b[1].finalRank || 999
-                    )
+                        b[1].finalRank ||
+                        999
+                    );
+
+                }
             );
 
+
+    /*
+       Winner is the highest scorer.
+    */
 
     const winner =
         entries[0];
@@ -3181,7 +3325,9 @@ function renderFinalResults(
             </div>
 
             <div class="winner-score">
-                ${winner[1].score || 0} POINTS
+                ${Number(
+                    winner[1].score || 0
+                )} POINTS
             </div>
 
         `;
@@ -3197,13 +3343,17 @@ function renderFinalResults(
         function ([, player], index) {
 
             const rank =
-                player.finalRank ||
-                index + 1;
+                Number(
+                    player.finalRank ||
+                    index + 1
+                );
 
 
             const reward =
-                player.finalReward ||
-                0;
+                Number(
+                    player.finalReward ||
+                    0
+                );
 
 
             const row =
@@ -3216,29 +3366,57 @@ function renderFinalResults(
                 "final-player";
 
 
+            let rankDisplay;
+
+
+            if (
+                rank === 1
+            ) {
+
+                rankDisplay =
+                    "🥇";
+
+            }
+
+            else if (
+                rank === 2
+            ) {
+
+                rankDisplay =
+                    "🥈";
+
+            }
+
+            else if (
+                rank === 3
+            ) {
+
+                rankDisplay =
+                    "🥉";
+
+            }
+
+            else {
+
+                rankDisplay =
+                    rank;
+
+            }
+
+
             row.innerHTML = `
 
                 <div class="final-player-left">
 
                     <span class="final-rank">
-
-                        ${
-                            rank <= 3
-                                ? ["🥇", "🥈", "🥉"][
-                                    rank - 1
-                                ]
-                                : rank
-                        }
-
+                        ${rankDisplay}
                     </span>
 
                     <span class="final-name">
-
                         ${escapeHtml(
                             player.username ||
                             "Player"
                         )}
-
                     </span>
 
                 </div>
@@ -3246,7 +3424,9 @@ function renderFinalResults(
 
                 <div class="final-score">
 
-                    ${player.score || 0} PTS
+                    ${Number(
+                        player.score || 0
+                    )} PTS
 
                     ${
                         reward > 0
@@ -3275,7 +3455,7 @@ function renderFinalResults(
 
 
 /* =========================
-   EXIT
+   EXIT GAME
 ========================= */
 
 exitButton.addEventListener(
@@ -3335,7 +3515,7 @@ exitButton.addEventListener(
 
 
 /* =========================
-   LOBBY
+   LOBBY BUTTON
 ========================= */
 
 lobbyButton.addEventListener(
@@ -3351,7 +3531,7 @@ lobbyButton.addEventListener(
 
 
 /* =========================
-   DASHBOARD
+   DASHBOARD BUTTON
 ========================= */
 
 dashboardButton.addEventListener(
@@ -3367,7 +3547,7 @@ dashboardButton.addEventListener(
 
 
 /* =========================
-   INPUT RESET
+   CLEAR ANSWERS
 ========================= */
 
 function clearAnswerInputs() {
@@ -3375,9 +3555,11 @@ function clearAnswerInputs() {
     digitInputs.forEach(
         function (input) {
 
-            input.value = "";
+            input.value =
+                "";
 
-            input.disabled = false;
+            input.disabled =
+                false;
 
         }
     );
@@ -3391,7 +3573,7 @@ function clearAnswerInputs() {
 
 
 /* =========================
-   STATUS
+   ANSWER STATUS
 ========================= */
 
 function showAnswerStatus(
@@ -3428,11 +3610,19 @@ function resetAnswerStatus() {
 
 function generateRound() {
 
+    /*
+       Pick five unique digits.
+    */
+
     const digits =
         generateUniqueDigits(
             CODE_LENGTH
         );
 
+
+    /*
+       The true code order.
+    */
 
     const secret =
         shuffle(
@@ -3442,6 +3632,12 @@ function generateRound() {
 
     let clues = [];
 
+
+    /*
+       Try many candidate clue sets
+       until we find one that uniquely
+       identifies the secret.
+    */
 
     for (
         let attempt = 0;
@@ -3484,6 +3680,11 @@ function generateRound() {
             );
 
 
+            /*
+               Don't use the actual
+               answer as a clue guess.
+            */
+
             if (
                 guessString ===
                 secret.join("")
@@ -3500,6 +3701,11 @@ function generateRound() {
                     secret
                 );
 
+
+            /*
+               Reject clues that contain
+               absolutely no useful information.
+            */
 
             if (
                 feedback.exact === 0 &&
@@ -3534,6 +3740,11 @@ function generateRound() {
         }
 
 
+        /*
+           Check whether the five clues
+           identify exactly one arrangement.
+        */
+
         if (
             hasUniqueSolution(
                 digits,
@@ -3552,6 +3763,10 @@ function generateRound() {
     }
 
 
+    /*
+       Fallback.
+    */
+
     if (
         clues.length !== 5
     ) {
@@ -3564,6 +3779,13 @@ function generateRound() {
 
     }
 
+
+    /*
+       Shuffle the displayed digits.
+
+       Players see all five digits,
+       but not their correct order.
+    */
 
     const displayDigits =
         shuffle(
@@ -3587,7 +3809,7 @@ function generateRound() {
 
 
 /* =========================
-   DIGITS
+   UNIQUE DIGITS
 ========================= */
 
 function generateUniqueDigits(
@@ -3630,7 +3852,7 @@ function generateUniqueDigits(
 
 
 /* =========================
-   GUESS
+   GENERATE GUESS
 ========================= */
 
 function generateGuess() {
@@ -3671,7 +3893,7 @@ function generateGuess() {
 
 
 /* =========================
-   EVALUATE
+   EVALUATE GUESS
 ========================= */
 
 function evaluateGuess(
@@ -3693,6 +3915,10 @@ function evaluateGuess(
         i++
     ) {
 
+        /*
+           Correct number AND position.
+        */
+
         if (
             guess[i] ===
             secret[i]
@@ -3702,6 +3928,10 @@ function evaluateGuess(
 
         }
 
+
+        /*
+           Correct number anywhere.
+        */
 
         if (
             secret.includes(
@@ -3742,7 +3972,7 @@ function evaluateGuess(
 
 
 /* =========================
-   CLUE TEXT
+   BUILD CLUE TEXT
 ========================= */
 
 function buildClueText(
@@ -3751,6 +3981,10 @@ function buildClueText(
 
     const parts = [];
 
+
+    /*
+       CORRECT POSITION
+    */
 
     if (
         feedback.exact === 1
@@ -3773,6 +4007,10 @@ function buildClueText(
     }
 
 
+    /*
+       WRONG POSITION
+    */
+
     if (
         feedback.misplaced === 1
     ) {
@@ -3793,6 +4031,10 @@ function buildClueText(
 
     }
 
+
+    /*
+       ABSENT
+    */
 
     if (
         feedback.absent === 1
@@ -3822,7 +4064,7 @@ function buildClueText(
 
 
 /* =========================
-   UNIQUE SOLUTION
+   UNIQUE SOLUTION CHECK
 ========================= */
 
 function hasUniqueSolution(
@@ -3888,9 +4130,13 @@ function hasUniqueSolution(
             solutions++;
 
 
+            /*
+               More than one possible
+               answer = invalid clue set.
+            */
+
             if (
-                solutions >
-                1
+                solutions > 1
             ) {
 
                 return false;
@@ -3992,7 +4238,8 @@ function createFallbackClues(
 
 
     for (
-        const guess of permutations
+        const guess of
+        permutations
     ) {
 
         if (
@@ -4059,8 +4306,11 @@ function shuffle(
 ) {
 
     for (
-        let i = array.length - 1;
+        let i =
+            array.length - 1;
+
         i > 0;
+
         i--
     ) {
 
@@ -4160,22 +4410,27 @@ function escapeHtml(
 ) {
 
     return String(value)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
