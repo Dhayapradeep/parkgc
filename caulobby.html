@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chaos Auction Lobby</title>
+
+    <link
+        rel="stylesheet"
+        href="caulobby.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+
+    <button
+        id="backButton"
+        class="back-button"
+    >
+        ← DASHBOARD
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="auction-icon">
+            🔨
+        </div>
+
+        <p class="small-title">
+            CHAOS MODE
+        </p>
+
+        <h1>
+            CHAOS AUCTION
+        </h1>
+
+        <p class="subtitle">
+            Buy the unknown. Risk everything. Make a profit.
+        </p>
+
+    </section>
+
+
+
+    <!-- ROOM SETUP -->
+
+    <section
+        class="setup-card"
+        id="setupCard"
+    >
+
+        <h2>
+            🔨 ENTER THE AUCTION
+        </h2>
+
+        <p>
+            Create a new auction room or join an existing one.
+        </p>
+
+
+        <button
+            id="createRoomButton"
+            class="primary-button"
+        >
+            CREATE ROOM
+        </button>
+
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+
+        <div class="join-area">
+
+            <input
+                type="text"
+                id="roomCodeInput"
+                placeholder="ENTER ROOM CODE"
+                maxlength="6"
+                autocomplete="off"
+            >
+
+            <button
+                id="joinRoomButton"
+                class="secondary-button"
+            >
+                JOIN ROOM
+            </button>
+
+        </div>
+
+
+        <p
+            id="setupStatus"
+            class="status-text"
+        ></p>
+
+    </section>
+
+
+
+    <!-- ROOM -->
+
+    <section
+        class="room-card hidden"
+        id="roomCard"
+    >
+
+        <div class="room-header">
+
+            <div>
+
+                <p class="room-label">
+                    ROOM CODE
+                </p>
+
+                <strong
+                    id="roomCodeDisplay"
+                    class="room-code"
+                >
+                    ------
+                </strong>
+
+            </div>
+
+
+            <button
+                id="copyRoomButton"
+                class="copy-button"
+            >
+                📋 COPY
+            </button>
+
+        </div>
+
+
+        <div class="room-status">
+
+            <span id="roomStatus">
+                WAITING FOR PLAYERS
+            </span>
+
+        </div>
+
+
+
+        <!-- PLAYERS -->
+
+        <div class="players-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    👥 PLAYERS
+                </h2>
+
+                <span id="playerCount">
+                    0
+                </span>
+
+            </div>
+
+
+            <div
+                id="playersList"
+                class="players-list"
+            >
+
+                <div class="empty-player">
+                    Waiting for players...
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HOST -->
+
+        <div
+            id="hostControls"
+            class="host-controls hidden"
+        >
+
+            <button
+                id="startGameButton"
+                class="primary-button"
+            >
+                🔨 START AUCTION
+            </button>
+
+            <p>
+                Minimum 2 players required.
+            </p>
+
+        </div>
+
+
+        <p
+            id="roomStatusText"
+            class="status-text"
+        ></p>
+
+
+        <button
+            id="leaveRoomButton"
+            class="leave-button"
+        >
+            LEAVE ROOM
+        </button>
+
+    </section>
+
+
+
+    <!-- RULES -->
+
+    <section class="rules-card">
+
+        <h2>
+            HOW TO PLAY
+        </h2>
+
+
+        <div class="rule">
+
+            <span>1</span>
+
+            <p>
+                Create a room and invite your friends.
+            </p>
+
+        </div>
+
+
+        <div class="rule">
+
+            <span>2</span>
+
+            <p>
+                Everyone starts with
+                <strong>1000 Chaos Points.</strong>
+            </p>
+
+        </div>
+
+
+        <div class="rule">
+
+            <span>3</span>
+
+            <p>
+                Ten mysterious storage units will be auctioned.
+            </p>
+
+        </div>
+
+
+        <div class="rule">
+
+            <span>4</span>
+
+            <p>
+                Bid against the other players.
+            </p>
+
+        </div>
+
+
+        <div class="rule">
+
+            <span>5</span>
+
+            <p>
+                The highest bidder wins the storage unit.
+            </p>
+
+        </div>
+
+
+        <div class="rule">
+
+            <span>6</span>
+
+            <p>
+                Your final score is based on the value of what you bought
+                minus what you spent.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/caulobby.js"
+></script>
+
+
+</body>
+
+</html>
