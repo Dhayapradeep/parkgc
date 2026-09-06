@@ -46,7 +46,7 @@ const CODE_LENGTH =
 */
 
 const ROUND_DURATION =
-    120 * 1000;
+    20 * 1000;
 
 
 /*
@@ -54,7 +54,7 @@ const ROUND_DURATION =
 */
 
 const CLUE_INTERVAL =
-    10 * 1000;
+    2 * 1000;
 
 
 /*
@@ -62,7 +62,7 @@ const CLUE_INTERVAL =
 */
 
 const BREAK_DURATION =
-    5 * 1000;
+    3 * 1000;
 
 
 
@@ -72,11 +72,11 @@ const BREAK_DURATION =
 
 const TOP_REWARDS = {
 
-    1: 100,
+    1: 500,
 
-    2: 75,
+    2: 250,
 
-    3: 50
+    3: 100
 
 };
 
