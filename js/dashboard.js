@@ -752,14 +752,14 @@ if (lastWordButton) {
 }
 
 
-if (chaosAuctionButton) {
+if (unoParkButton) {
 
-    chaosAuctionButton.addEventListener(
+    unoParkButton.addEventListener(
         "click",
         function () {
 
             window.location.href =
-                "caulobby.html";
+                "ulobby.html";
 
         }
     );

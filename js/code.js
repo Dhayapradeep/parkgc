@@ -3575,9 +3575,10 @@ function generateRound() {
     /*
        Pick five unique digits.
 
-       These are the five digits shown
-       to every player.
+       Players see these five digits,
+       but NOT their correct order.
     */
+
     const digits =
         generateUniqueDigits(
             CODE_LENGTH
@@ -3586,10 +3587,8 @@ function generateRound() {
 
     /*
        Secret order.
-
-       Players know the five digits,
-       but not this arrangement.
     */
+
     const secret =
         shuffle(
             [...digits]
@@ -3597,15 +3596,9 @@ function generateRound() {
 
 
     /*
-       There are only:
-
-       5! = 120
-
-       possible arrangements.
-
-       We use all of them when testing
-       whether a clue set is logical.
+       Exactly 120 possible arrangements.
     */
+
     const allSolutions =
         generatePermutations(
             digits
@@ -3613,55 +3606,29 @@ function generateRound() {
 
 
     /*
-       Build a large pool of possible
-       Mastermind-style clues.
-
-       These include both:
-       - visible-code digits
-       - decoy digits
-
-       So the old clue style remains.
+       Build easier, more varied clues.
     */
+
     const cluePool =
         generateCluePool(
-            digits,
-            secret,
-            allSolutions
+            secret
         );
 
 
     /*
-       Choose five clues.
-
-       The important part is that the clues
-       become progressively more useful.
-
-       We DON'T want:
-
-       Clue 1 -> impossible to solve
-       Clue 2 -> impossible
-       Clue 3 -> impossible
-       Clue 4 -> impossible
-       Clue 5 -> magically obvious
-
-       Instead:
-
-       Clue 1 -> broad information
-       Clue 2 -> removes many possibilities
-       Clue 3 -> logical narrowing
-       Clue 4 -> few possibilities remain
-       Clue 5 -> answer becomes deducible
+       Select five clues that:
+       - use different kinds of information
+       - become progressively stronger
+       - always remain mathematically true
+       - eventually identify exactly one solution
     */
+
     let clues = [];
 
 
-    /*
-       Try several times because the clue
-       pool is random.
-    */
     for (
         let attempt = 0;
-        attempt < 40;
+        attempt < 25;
         attempt++
     ) {
 
@@ -3676,52 +3643,26 @@ function generateRound() {
         if (
             clues.length === 5
         ) {
+
             break;
+
         }
 
     }
 
 
     /*
-       If the random clue pool failed,
-       use every permutation of the five
-       actual digits.
+       Emergency fallback.
 
-       This gives us a completely reliable
-       Mastermind-style fallback.
+       This should almost never be needed.
     */
-    if (
-        clues.length !== 5
-    ) {
 
-        const permutationPool =
-            buildPermutationCluePool(
-                digits,
-                secret,
-                allSolutions
-            );
-
-
-        clues =
-            selectProgressiveClues(
-                permutationPool,
-                allSolutions,
-                secret
-            );
-
-    }
-
-
-    /*
-       Final safety fallback.
-    */
     if (
         clues.length !== 5
     ) {
 
         clues =
-            createFallbackClues(
-                digits,
+            createEasyFallbackClues(
                 secret,
                 allSolutions
             );
@@ -3730,12 +3671,11 @@ function generateRound() {
 
 
     /*
-       Shuffle only the displayed digits.
+       Shuffle only the visible digits.
 
-       IMPORTANT:
-
-       displayDigits !== secret
+       The secret order stays hidden.
     */
+
     const displayDigits =
         shuffle(
             [...digits]
@@ -3756,257 +3696,222 @@ function generateRound() {
 }
 
 
-
 /* =========================
    GENERATE CLUE POOL
 ========================= */
 
 function generateCluePool(
-    digits,
-    secret,
-    allSolutions
+    secret
 ) {
 
     const pool = [];
 
-    const used =
-        new Set();
-
 
     /*
-       First generate clues using only
-       the five real digits.
+       These are the preferred clue shapes.
 
-       These are the cleanest and easiest
-       clues for players to understand.
+       They deliberately give different
+       types of information.
+
+       1:
+       0 exact
+       4 misplaced
+       1 unavailable
+
+       2:
+       1–2 exact
+       2–3 misplaced
+       0–1 unavailable
+
+       3:
+       1–2 exact
+       1–2 misplaced
+       1–2 unavailable
+
+       4:
+       2–3 exact
+       1–2 misplaced
+       0–1 unavailable
+
+       5:
+       3 exact
+       1–2 misplaced
+       0–1 unavailable
     */
-    const permutations =
-        generatePermutations(
-            digits
-        );
 
+    const profiles = [
 
-    permutations.forEach(
-        function (guess) {
+        {
+            minExact: 0,
+            maxExact: 0,
 
-            addClueCandidate(
-                pool,
-                used,
-                guess,
-                secret,
-                allSolutions
-            );
+            minMisplaced: 4,
+            maxMisplaced: 4,
 
+            minAbsent: 1,
+            maxAbsent: 1
+        },
+
+        {
+            minExact: 1,
+            maxExact: 2,
+
+            minMisplaced: 2,
+            maxMisplaced: 3,
+
+            minAbsent: 0,
+            maxAbsent: 1
+        },
+
+        {
+            minExact: 1,
+            maxExact: 2,
+
+            minMisplaced: 1,
+            maxMisplaced: 2,
+
+            minAbsent: 1,
+            maxAbsent: 2
+        },
+
+        {
+            minExact: 2,
+            maxExact: 3,
+
+            minMisplaced: 1,
+            maxMisplaced: 2,
+
+            minAbsent: 0,
+            maxAbsent: 1
+        },
+
+        {
+            minExact: 3,
+            maxExact: 3,
+
+            minMisplaced: 1,
+            maxMisplaced: 2,
+
+            minAbsent: 0,
+            maxAbsent: 1
         }
-    );
+
+    ];
 
 
     /*
-       Add decoy clues too.
-
-       This preserves the old clue system
-       where clues can tell the player that
-       certain numbers are not in the code.
+       Generate a large collection of
+       mathematically valid guesses.
     */
-    let attempts = 0;
+
+    const allGuesses =
+        generateAllUniqueGuesses();
 
 
-    while (
-        attempts < 10000 &&
-        pool.length < 1000
-    ) {
+    profiles.forEach(
+        function (profile) {
 
-        attempts++;
+            const matching = [];
 
 
-        const guess =
-            generateGuess();
+            for (
+                let i = 0;
+                i < allGuesses.length;
+                i++
+            ) {
+
+                const guess =
+                    allGuesses[i];
 
 
-        const commonDigits =
-            guess.filter(
-                function (digit) {
+                /*
+                   Never use the actual answer.
+                */
 
-                    return digits.includes(
-                        digit
-                    );
+                if (
+                    guess.join("") ===
+                    secret.join("")
+                ) {
+
+                    continue;
 
                 }
-            ).length;
 
 
-        /*
-           Random clues in this section must
-           contain at least one decoy.
-        */
-        if (
-            commonDigits >= CODE_LENGTH
-        ) {
-            continue;
-        }
+                const feedback =
+                    evaluateGuess(
+                        guess,
+                        secret
+                    );
 
 
-        addClueCandidate(
-            pool,
-            used,
-            guess,
-            secret,
-            allSolutions
-        );
+                if (
 
-    }
+                    feedback.exact >=
+                        profile.minExact &&
 
+                    feedback.exact <=
+                        profile.maxExact &&
 
-    return pool;
+                    feedback.misplaced >=
+                        profile.minMisplaced &&
 
-}
+                    feedback.misplaced <=
+                        profile.maxMisplaced &&
 
+                    feedback.absent >=
+                        profile.minAbsent &&
 
+                    feedback.absent <=
+                        profile.maxAbsent
 
-/* =========================
-   ADD CLUE CANDIDATE
-========================= */
+                ) {
 
-function addClueCandidate(
-    pool,
-    used,
-    guess,
-    secret,
-    allSolutions
-) {
+                    matching.push({
 
-    const key =
-        guess.join("");
+                        guess,
 
+                        exact:
+                            feedback.exact,
 
-    /*
-       Don't repeat the same guess.
-    */
-    if (
-        used.has(key)
-    ) {
-        return;
-    }
+                        misplaced:
+                            feedback.misplaced,
 
+                        absent:
+                            feedback.absent,
 
-    used.add(key);
+                        text:
+                            buildClueText(
+                                feedback
+                            )
 
+                    });
 
-    /*
-       Never show the actual answer
-       as a clue guess.
-    */
-    if (
-        key === secret.join("")
-    ) {
-        return;
-    }
+                }
+
+            }
 
 
-    const feedback =
-        evaluateGuess(
-            guess,
-            secret
-        );
+            /*
+               Randomize this category so the
+               same clue does not appear every round.
+            */
+
+            shuffle(
+                matching
+            );
 
 
-    /*
-       Completely useless clue.
+            /*
+               Keep enough candidates for
+               the selector to choose from.
+            */
 
-       Example:
-
-       0 correct
-       0 misplaced
-       5 absent
-    */
-    if (
-        feedback.exact === 0 &&
-        feedback.misplaced === 0
-    ) {
-        return;
-    }
-
-
-    /*
-       See how many possible secret
-       arrangements satisfy this clue.
-    */
-    const matchingSolutions =
-        getMatchingSolutions(
-            allSolutions,
-            guess,
-            feedback
-        );
-
-
-    /*
-       Don't allow a single clue to solve
-       the puzzle immediately.
-    */
-    if (
-        matchingSolutions.length <= 1
-    ) {
-        return;
-    }
-
-
-    pool.push({
-
-        guess,
-
-        exact:
-            feedback.exact,
-
-        misplaced:
-            feedback.misplaced,
-
-        absent:
-            feedback.absent,
-
-        text:
-            buildClueText(
-                feedback
-            ),
-
-        matchingSolutions
-
-    });
-
-}
-
-
-
-/* =========================
-   BUILD PERMUTATION CLUE POOL
-========================= */
-
-function buildPermutationCluePool(
-    digits,
-    secret,
-    allSolutions
-) {
-
-    const pool = [];
-
-    const used =
-        new Set();
-
-
-    const permutations =
-        generatePermutations(
-            digits
-        );
-
-
-    permutations.forEach(
-        function (guess) {
-
-            addClueCandidate(
-                pool,
-                used,
-                guess,
-                secret,
-                allSolutions
+            pool.push(
+                matching.slice(
+                    0,
+                    400
+                )
             );
 
         }
@@ -4016,7 +3921,6 @@ function buildPermutationCluePool(
     return pool;
 
 }
-
 
 
 /* =========================
@@ -4030,90 +3934,44 @@ function selectProgressiveClues(
 ) {
 
     if (
-        cluePool.length < 5
+        cluePool.length !== 5
     ) {
+
         return [];
+
     }
 
 
-    let possibleSolutions =
-        [...allSolutions];
-
-
-    const selected =
-        [];
-
-
-    const usedGuesses =
-        new Set();
-
-
     /*
-       TARGET DIFFICULTY
+       Target number of possible solutions
+       after each clue.
 
-       We have 120 possible arrangements.
-
-       The player should progressively narrow
-       them down.
-
-       These are NOT exact requirements.
-
-       They are targets the selector tries
-       to stay near.
+       We intentionally make the early
+       clues easier than the old system.
     */
+
     const targets = [
 
-        /*
-           First clue:
-
-           Still lots of possibilities.
-        */
         {
             min: 45,
-            max: 90
+            max: 100
         },
 
-
-        /*
-           Second clue:
-
-           The puzzle should start becoming
-           meaningfully narrower.
-        */
         {
-            min: 18,
-            max: 50
+            min: 20,
+            max: 60
         },
 
-
-        /*
-           Third clue:
-
-           Logical deduction should start
-           becoming important.
-        */
         {
-            min: 6,
-            max: 20
+            min: 7,
+            max: 30
         },
 
-
-        /*
-           Fourth clue:
-
-           Only a handful should remain.
-        */
         {
             min: 2,
-            max: 7
+            max: 10
         },
 
-
-        /*
-           Fifth clue:
-
-           Unique solution.
-        */
         {
             min: 1,
             max: 1
@@ -4122,40 +3980,87 @@ function selectProgressiveClues(
     ];
 
 
-    for (
-        let clueIndex = 0;
-        clueIndex < 5;
-        clueIndex++
+    /*
+       Start with every possible arrangement.
+    */
+
+    const initialSolutions =
+        [...allSolutions];
+
+
+    /*
+       Recursive search.
+
+       The clue categories are fixed in order,
+       so every game has a clear progression.
+    */
+
+    function search(
+        index,
+        possibleSolutions,
+        selected,
+        usedGuesses
     ) {
 
-        const target =
-            targets[
-                clueIndex
-            ];
+        /*
+           Five clues selected.
+        */
+
+        if (
+            index === 5
+        ) {
+
+            if (
+                possibleSolutions.length === 1 &&
+                possibleSolutions[0].join("") ===
+                    secret.join("")
+            ) {
+
+                return selected;
+
+            }
+
+
+            return null;
+
+        }
 
 
         const candidates =
-            [];
+            cluePool[index];
 
 
-        cluePool.forEach(
+        const target =
+            targets[index];
+
+
+        const scoredCandidates = [];
+
+
+        candidates.forEach(
             function (clue) {
 
-                const guessKey =
+                const key =
                     clue.guess.join("");
 
 
                 /*
-                   Don't reuse the same clue.
+                   Don't repeat guesses.
                 */
+
                 if (
-                    usedGuesses.has(
-                        guessKey
-                    )
+                    usedGuesses.has(key)
                 ) {
+
                     return;
+
                 }
 
+
+                /*
+                   Find all arrangements
+                   compatible with this clue.
+                */
 
                 const remaining =
                     possibleSolutions.filter(
@@ -4186,11 +4091,11 @@ function selectProgressiveClues(
 
 
                 /*
-                   The clue must actually
-                   contain the secret answer.
+                   Secret must remain possible.
                 */
-                const secretStillPossible =
-                    remaining.some(
+
+                if (
+                    !remaining.some(
                         function (candidate) {
 
                             return (
@@ -4199,32 +4104,35 @@ function selectProgressiveClues(
                             );
 
                         }
-                    );
-
-
-                if (
-                    !secretStillPossible
+                    )
                 ) {
+
                     return;
+
                 }
 
 
                 /*
-                   Don't solve the puzzle early.
+                   Don't solve the puzzle
+                   before the final clue.
                 */
+
                 if (
-                    clueIndex < 4 &&
+                    index < 4 &&
                     remaining.length <= 1
                 ) {
+
                     return;
+
                 }
 
 
                 /*
-                   How far are we from our
-                   desired difficulty range?
+                   How close is this clue to
+                   our desired difficulty?
                 */
-                let rangeDistance = 0;
+
+                let distance = 0;
 
 
                 if (
@@ -4232,27 +4140,24 @@ function selectProgressiveClues(
                     target.min
                 ) {
 
-                    rangeDistance =
+                    distance =
                         target.min -
                         remaining.length;
 
                 }
+
                 else if (
                     remaining.length >
                     target.max
                 ) {
 
-                    rangeDistance =
+                    distance =
                         remaining.length -
                         target.max;
 
                 }
 
 
-                /*
-                   Prefer the middle of the
-                   target range when possible.
-                */
                 const midpoint =
                     (
                         target.min +
@@ -4268,52 +4173,33 @@ function selectProgressiveClues(
 
 
                 /*
-                   Information score.
+                   Prefer clues that contain
+                   useful information.
 
-                   A clue containing both exact
-                   and misplaced information is
-                   generally more useful than a
-                   completely weak clue.
+                   Exact > misplaced > absent
+                   as a very small tie-breaker.
                 */
-                let usefulInformation =
-                    0;
 
+                const informationScore =
 
-                usefulInformation +=
-                    clue.exact * 3;
+                    clue.exact * 4 +
 
+                    clue.misplaced * 2 +
 
-                usefulInformation +=
-                    clue.misplaced * 2;
-
-
-                usefulInformation +=
                     clue.absent;
 
 
-                /*
-                   Slight preference for clues
-                   that actually shrink the
-                   possibility space.
-                */
-                const reduction =
-                    possibleSolutions.length -
-                    remaining.length;
-
-
-                candidates.push({
+                scoredCandidates.push({
 
                     clue,
 
                     remaining,
 
-                    rangeDistance,
+                    distance,
 
                     midpointDistance,
 
-                    usefulInformation,
-
-                    reduction
+                    informationScore
 
                 });
 
@@ -4322,39 +4208,29 @@ function selectProgressiveClues(
 
 
         if (
-            candidates.length === 0
+            scoredCandidates.length === 0
         ) {
-            return [];
+
+            return null;
+
         }
 
 
         /*
-           Sort candidates.
-
-           Primary:
-           target difficulty
-
-           Secondary:
-           useful information
-
-           Tertiary:
-           actual reduction
-
-           Final:
-           small randomness so every round
-           doesn't produce identical clues.
+           Best candidates first.
         */
-        candidates.sort(
+
+        scoredCandidates.sort(
             function (a, b) {
 
                 if (
-                    a.rangeDistance !==
-                    b.rangeDistance
+                    a.distance !==
+                    b.distance
                 ) {
 
                     return (
-                        a.rangeDistance -
-                        b.rangeDistance
+                        a.distance -
+                        b.distance
                     );
 
                 }
@@ -4374,26 +4250,13 @@ function selectProgressiveClues(
 
 
                 if (
-                    a.usefulInformation !==
-                    b.usefulInformation
+                    a.informationScore !==
+                    b.informationScore
                 ) {
 
                     return (
-                        b.usefulInformation -
-                        a.usefulInformation
-                    );
-
-                }
-
-
-                if (
-                    a.reduction !==
-                    b.reduction
-                ) {
-
-                    return (
-                        b.reduction -
-                        a.reduction
+                        b.informationScore -
+                        a.informationScore
                     );
 
                 }
@@ -4409,58 +4272,503 @@ function selectProgressiveClues(
 
 
         /*
-           Select randomly from the best few.
+           Try the best candidates first.
 
-           This prevents every round from
-           feeling exactly the same.
+           Randomness is limited so the clues
+           remain varied between rounds.
         */
-        const choiceWindow =
+
+        const limit =
             Math.min(
-                8,
-                candidates.length
+                30,
+                scoredCandidates.length
             );
 
 
-        const chosen =
-            candidates[
-                Math.floor(
-                    Math.random() *
-                    choiceWindow
-                )
-            ];
+        for (
+            let i = 0;
+            i < limit;
+            i++
+        ) {
+
+            const choice =
+                scoredCandidates[i];
 
 
-        selected.push(
-            chosen.clue
+            const key =
+                choice.clue.guess.join("");
+
+
+            const result =
+                search(
+
+                    index + 1,
+
+                    choice.remaining,
+
+                    [
+                        ...selected,
+                        choice.clue
+                    ],
+
+                    new Set([
+                        ...usedGuesses,
+                        key
+                    ])
+
+                );
+
+
+            if (
+                result
+            ) {
+
+                return result;
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    const result =
+        search(
+            0,
+            initialSolutions,
+            [],
+            new Set()
         );
 
 
-        usedGuesses.add(
-            chosen.clue.guess.join("")
+    /*
+       Final safety check.
+    */
+
+    if (
+        !result ||
+        result.length !== 5
+    ) {
+
+        return [];
+
+    }
+
+
+    const finalSolutions =
+        allSolutions.filter(
+            function (candidate) {
+
+                return result.every(
+                    function (clue) {
+
+                        const feedback =
+                            evaluateGuess(
+                                clue.guess,
+                                candidate
+                            );
+
+
+                        return (
+
+                            feedback.exact ===
+                                clue.exact &&
+
+                            feedback.misplaced ===
+                                clue.misplaced &&
+
+                            feedback.absent ===
+                                clue.absent
+
+                        );
+
+                    }
+                );
+
+            }
         );
 
 
-        possibleSolutions =
-            chosen.remaining;
+    /*
+       MUST be exactly one solution.
+    */
+
+    if (
+        finalSolutions.length !== 1
+    ) {
+
+        return [];
 
     }
 
 
     /*
-       FINAL VALIDATION
-
-       All five clues together MUST identify
-       exactly one solution.
-
-       And that one solution MUST be the
-       generated secret.
+       MUST be the actual secret.
     */
+
     if (
-        selected.length !== 5
+        finalSolutions[0].join("") !==
+        secret.join("")
     ) {
+
         return [];
+
     }
 
+
+    return result;
+
+}
+
+
+/* =========================
+   GENERATE ALL UNIQUE GUESSES
+========================= */
+
+function generateAllUniqueGuesses() {
+
+    const result = [];
+
+
+    function build(
+        current
+    ) {
+
+        if (
+            current.length ===
+            CODE_LENGTH
+        ) {
+
+            result.push(
+                [...current]
+            );
+
+            return;
+
+        }
+
+
+        for (
+            let digit = 0;
+            digit <= 9;
+            digit++
+        ) {
+
+            if (
+                current.includes(
+                    digit
+                )
+            ) {
+
+                continue;
+
+            }
+
+
+            current.push(
+                digit
+            );
+
+
+            build(
+                current
+            );
+
+
+            current.pop();
+
+        }
+
+    }
+
+
+    build([]);
+
+
+    return result;
+
+}
+
+
+/* =========================
+   EASY FALLBACK CLUES
+========================= */
+
+function createEasyFallbackClues(
+    secret,
+    allSolutions
+) {
+
+    /*
+       Preferred feedback patterns.
+
+       We search directly for clues
+       matching these patterns.
+    */
+
+    const patterns = [
+
+        {
+            exact: 0,
+            misplaced: 4,
+            absent: 1
+        },
+
+        {
+            exact: 1,
+            misplaced: 3,
+            absent: 1
+        },
+
+        {
+            exact: 2,
+            misplaced: 1,
+            absent: 2
+        },
+
+        {
+            exact: 3,
+            misplaced: 1,
+            absent: 1
+        },
+
+        {
+            exact: 3,
+            misplaced: 2,
+            absent: 0
+        }
+
+    ];
+
+
+    const allGuesses =
+        generateAllUniqueGuesses();
+
+
+    const selected = [];
+
+
+    let possibleSolutions =
+        [...allSolutions];
+
+
+    const used =
+        new Set();
+
+
+    for (
+        let patternIndex = 0;
+        patternIndex < patterns.length;
+        patternIndex++
+    ) {
+
+        const target =
+            patterns[
+                patternIndex
+            ];
+
+
+        const candidates = [];
+
+
+        for (
+            let i = 0;
+            i < allGuesses.length;
+            i++
+        ) {
+
+            const guess =
+                allGuesses[i];
+
+
+            const key =
+                guess.join("");
+
+
+            if (
+                used.has(key)
+            ) {
+
+                continue;
+
+            }
+
+
+            if (
+                key ===
+                secret.join("")
+            ) {
+
+                continue;
+
+            }
+
+
+            const feedback =
+                evaluateGuess(
+                    guess,
+                    secret
+                );
+
+
+            if (
+
+                feedback.exact !==
+                    target.exact ||
+
+                feedback.misplaced !==
+                    target.misplaced ||
+
+                feedback.absent !==
+                    target.absent
+
+            ) {
+
+                continue;
+
+            }
+
+
+            const remaining =
+                possibleSolutions.filter(
+                    function (candidate) {
+
+                        const test =
+                            evaluateGuess(
+                                guess,
+                                candidate
+                            );
+
+
+                        return (
+
+                            test.exact ===
+                                feedback.exact &&
+
+                            test.misplaced ===
+                                feedback.misplaced &&
+
+                            test.absent ===
+                                feedback.absent
+
+                        );
+
+                    }
+                );
+
+
+            if (
+                !remaining.some(
+                    function (candidate) {
+
+                        return (
+                            candidate.join("") ===
+                            secret.join("")
+                        );
+
+                    }
+                )
+            ) {
+
+                continue;
+
+            }
+
+
+            candidates.push({
+
+                guess,
+
+                exact:
+                    feedback.exact,
+
+                misplaced:
+                    feedback.misplaced,
+
+                absent:
+                    feedback.absent,
+
+                text:
+                    buildClueText(
+                        feedback
+                    ),
+
+                remaining
+
+            });
+
+        }
+
+
+        if (
+            candidates.length === 0
+        ) {
+
+            return [];
+
+        }
+
+
+        /*
+           Pick the candidate that leaves
+           the most reasonable number of
+           possibilities.
+        */
+
+        candidates.sort(
+            function (a, b) {
+
+                return (
+                    b.remaining.length -
+                    a.remaining.length
+                );
+
+            }
+        );
+
+
+        const choice =
+            candidates[0];
+
+
+        selected.push({
+
+            guess:
+                choice.guess,
+
+            exact:
+                choice.exact,
+
+            misplaced:
+                choice.misplaced,
+
+            absent:
+                choice.absent,
+
+            text:
+                choice.text
+
+        });
+
+
+        possibleSolutions =
+            choice.remaining;
+
+
+        used.add(
+            choice.guess.join("")
+        );
+
+    }
+
+
+    /*
+       Only accept fallback if it really
+       produces one solution.
+    */
 
     const finalSolutions =
         allSolutions.filter(
@@ -4497,21 +4805,24 @@ function selectProgressiveClues(
 
 
     if (
-        finalSolutions.length !== 1
+        finalSolutions.length === 1 &&
+        finalSolutions[0].join("") ===
+            secret.join("")
     ) {
-        return [];
+
+        return selected;
+
     }
 
 
-    if (
-        finalSolutions[0].join("") !==
-        secret.join("")
-    ) {
-        return [];
-    }
+    /*
+       If that exact fallback combination
+       isn't possible for a particular code,
+       use the existing mathematical fallback
+       already present later in the file.
+    */
 
-
-    return selected;
+    return [];
 
 }
 
