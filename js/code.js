@@ -3508,7 +3508,7 @@ function buildProgressiveClues(
             clue5Feedback.misplaced,
 
         text:
-            "Exactly 4 numbers are in the correct positions."
+            "Imposter spoiled your 5th clue, think carefully cz 4 numbers were correct."
 
     });
 
