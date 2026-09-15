@@ -7,13 +7,13 @@ const auth=getAuth(app);
 const TOTAL_ROUNDS=5;
 const CODE_LENGTH=5;
 const ROUND_DURATION=120*1000;
-const CLUE_INTERVAL=10*1000;
+const CLUE_INTERVAL=20*1000;
 const BREAK_DURATION=5*1000;
 
 const TOP_REWARDS={
-    1:100,
-    2:75,
-    3:50
+    1:500,
+    2:250,
+    3:100
 };
 
 const roomCodeDisplay=document.getElementById("roomCodeDisplay");
