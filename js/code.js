@@ -1,366 +1,121 @@
-import {
-    ref,
-    set,
-    get,
-    update,
-    onValue,
-    runTransaction,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+import{ref,set,get,update,onValue,runTransaction,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{app,database}from"../firebase.js";
 
-import {
-    getAuth,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+const auth=getAuth(app);
 
-import {
-    app,
-    database
-} from "../firebase.js";
+const TOTAL_ROUNDS=5;
+const CODE_LENGTH=5;
+const ROUND_DURATION=120*1000;
+const CLUE_INTERVAL=10*1000;
+const BREAK_DURATION=5*1000;
 
-
-/* =========================================================
-   CHAOS CODE
-========================================================= */
-
-const auth = getAuth(app);
-
-
-/* =========================================================
-   GAME SETTINGS
-========================================================= */
-
-const TOTAL_ROUNDS = 5;
-
-const CODE_LENGTH = 5;
-
-const ROUND_DURATION =
-    120 * 1000;
-
-const CLUE_INTERVAL =
-    10 * 1000;
-
-const BREAK_DURATION =
-    5 * 1000;
-
-
-/* =========================================================
-   CHAOS POINT REWARDS
-========================================================= */
-
-const TOP_REWARDS = {
-
-    1: 100,
-
-    2: 75,
-
-    3: 50
-
+const TOP_REWARDS={
+    1:100,
+    2:75,
+    3:50
 };
 
+const roomCodeDisplay=document.getElementById("roomCodeDisplay");
+const exitButton=document.getElementById("exitButton");
+const roundDisplay=document.getElementById("roundDisplay");
+const timerDisplay=document.getElementById("timerDisplay");
+const scoreDisplay=document.getElementById("scoreDisplay");
+const codeDigits=document.getElementById("codeDigits");
+const clueCounter=document.getElementById("clueCounter");
+const cluesList=document.getElementById("cluesList");
+const submitButton=document.getElementById("submitButton");
+const answerStatus=document.getElementById("answerStatus");
+const standingsList=document.getElementById("standingsList");
+const gameSection=document.getElementById("gameSection");
+const roundBreak=document.getElementById("roundBreak");
+const breakTitle=document.getElementById("breakTitle");
+const roundResultList=document.getElementById("roundResultList");
+const breakCountdown=document.getElementById("breakCountdown");
+const finalResults=document.getElementById("finalResults");
+const winnerDisplay=document.getElementById("winnerDisplay");
+const finalLeaderboard=document.getElementById("finalLeaderboard");
+const lobbyButton=document.getElementById("lobbyButton");
+const dashboardButton=document.getElementById("dashboardButton");
 
-/* =========================================================
-   DOM ELEMENTS
-========================================================= */
-
-const roomCodeDisplay =
-    document.getElementById(
-        "roomCodeDisplay"
-    );
-
-const exitButton =
-    document.getElementById(
-        "exitButton"
-    );
-
-const roundDisplay =
-    document.getElementById(
-        "roundDisplay"
-    );
-
-const timerDisplay =
-    document.getElementById(
-        "timerDisplay"
-    );
-
-const scoreDisplay =
-    document.getElementById(
-        "scoreDisplay"
-    );
-
-const codeDigits =
-    document.getElementById(
-        "codeDigits"
-    );
-
-const clueCounter =
-    document.getElementById(
-        "clueCounter"
-    );
-
-const cluesList =
-    document.getElementById(
-        "cluesList"
-    );
-
-const submitButton =
-    document.getElementById(
-        "submitButton"
-    );
-
-const answerStatus =
-    document.getElementById(
-        "answerStatus"
-    );
-
-const standingsList =
-    document.getElementById(
-        "standingsList"
-    );
-
-const gameSection =
-    document.getElementById(
-        "gameSection"
-    );
-
-const roundBreak =
-    document.getElementById(
-        "roundBreak"
-    );
-
-const breakTitle =
-    document.getElementById(
-        "breakTitle"
-    );
-
-const roundResultList =
-    document.getElementById(
-        "roundResultList"
-    );
-
-const breakCountdown =
-    document.getElementById(
-        "breakCountdown"
-    );
-
-const finalResults =
-    document.getElementById(
-        "finalResults"
-    );
-
-const winnerDisplay =
-    document.getElementById(
-        "winnerDisplay"
-    );
-
-const finalLeaderboard =
-    document.getElementById(
-        "finalLeaderboard"
-    );
-
-const lobbyButton =
-    document.getElementById(
-        "lobbyButton"
-    );
-
-const dashboardButton =
-    document.getElementById(
-        "dashboardButton"
-    );
-
-
-const digitInputs = [
-
-    document.getElementById(
-        "digit1"
-    ),
-
-    document.getElementById(
-        "digit2"
-    ),
-
-    document.getElementById(
-        "digit3"
-    ),
-
-    document.getElementById(
-        "digit4"
-    ),
-
-    document.getElementById(
-        "digit5"
-    )
-
+const digitInputs=[
+    document.getElementById("digit1"),
+    document.getElementById("digit2"),
+    document.getElementById("digit3"),
+    document.getElementById("digit4"),
+    document.getElementById("digit5")
 ];
 
+const params=new URLSearchParams(window.location.search);
+const roomFromUrl=params.get("room");
 
-/* =========================================================
-   URL
-========================================================= */
+let currentRoomCode=roomFromUrl?.trim().toUpperCase();
 
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const roomFromUrl =
-    params.get("room");
-
-
-let currentRoomCode =
-    roomFromUrl
-        ?.trim()
-        .toUpperCase();
-
-
-if (!currentRoomCode) {
-
-    window.location.href =
-        "clobby.html";
-
+if(!currentRoomCode){
+    window.location.href="clobby.html";
 }
 
+let currentUser=null;
+let currentUsername="Player";
+let currentRoomData=null;
+let roomListenerStarted=false;
+let timerInterval=null;
+let hostRoundTimer=null;
+let hostTransitionTimer=null;
+let countdownTimer=null;
+let hostRoundKey=null;
+let hostTransitionKey=null;
+let currentRoundNumber=null;
+let answerProcessorStarted=false;
 
-/* =========================================================
-   STATE
-========================================================= */
+onAuthStateChanged(auth,async function(user){
 
-let currentUser = null;
-
-let currentUsername =
-    "Player";
-
-let currentRoomData =
-    null;
-
-let roomListenerStarted =
-    false;
-
-let answerProcessorStarted =
-    false;
-
-let timerInterval =
-    null;
-
-let countdownTimer =
-    null;
-
-let hostRoundTimer =
-    null;
-
-let hostTransitionTimer =
-    null;
-
-let hostRoundKey =
-    null;
-
-let hostTransitionKey =
-    null;
-
-let currentRoundNumber =
-    null;
-
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-onAuthStateChanged(
-    auth,
-    async function (user) {
-
-        if (!user) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        currentUser =
-            user;
-
-
-        await loadUserProfile();
-
-
-        if (currentRoomCode) {
-
-            listenToRoom();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   LOAD USER PROFILE
-========================================================= */
-
-async function loadUserProfile() {
-
-    try {
-
-        const userRef =
-            ref(
-                database,
-                `users/${currentUser.uid}`
-            );
-
-
-        const snapshot =
-            await get(userRef);
-
-
-        if (
-            snapshot.exists()
-        ) {
-
-            const data =
-                snapshot.val();
-
-
-            currentUsername =
-                data.username ||
-                "Player";
-
-        }
-
-        else {
-
-            currentUsername =
-                currentUser.displayName ||
-                "Player";
-
-        }
-
+    if(!user){
+        window.location.href="login.html";
+        return;
     }
 
-    catch (error) {
+    currentUser=user;
+
+    await loadUserProfile();
+
+    if(currentRoomCode){
+        listenToRoom();
+    }
+
+});
+
+async function loadUserProfile(){
+
+    try{
+
+        const userRef=ref(
+            database,
+            `users/${currentUser.uid}`
+        );
+
+        const snapshot=await get(userRef);
+
+        if(snapshot.exists()){
+
+            const data=snapshot.val();
+
+            currentUsername=data.username||"Player";
+
+        }
+
+    }catch(error){
 
         console.error(
             "LOAD USER ERROR:",
             error
         );
 
-
-        currentUsername =
-            currentUser.displayName ||
-            "Player";
-
     }
 
 }
 
-
-/* =========================================================
-   ROOM REFERENCE
-========================================================= */
-
-function getRoomRef() {
+function getRoomRef(){
 
     return ref(
         database,
@@ -369,113 +124,76 @@ function getRoomRef() {
 
 }
 
+function listenToRoom(){
 
-/* =========================================================
-   ROOM LISTENER
-========================================================= */
-
-function listenToRoom() {
-
-    if (
-        roomListenerStarted
-    ) {
-
+    if(roomListenerStarted){
         return;
-
     }
 
-
-    roomListenerStarted =
-        true;
-
+    roomListenerStarted=true;
 
     onValue(
         getRoomRef(),
-        async function (snapshot) {
+        async function(snapshot){
 
-            if (
-                !snapshot.exists()
-            ) {
+            if(!snapshot.exists()){
 
-                window.location.href =
-                    "clobby.html";
-
+                window.location.href="clobby.html";
                 return;
 
             }
 
+            currentRoomData=snapshot.val();
 
-            currentRoomData =
-                snapshot.val();
+            const player=
+                currentRoomData.players?.[
+                    currentUser.uid
+                ];
 
+            if(!player){
 
-            const player =
-                currentRoomData
-                    .players?.[
-                        currentUser.uid
-                    ];
-
-
-            if (!player) {
-
-                window.location.href =
-                    "clobby.html";
-
+                window.location.href="clobby.html";
                 return;
 
             }
 
-
-            roomCodeDisplay.textContent =
+            roomCodeDisplay.textContent=
                 currentRoomCode;
 
-
-            scoreDisplay.textContent =
-                Number(
-                    player.score ||
-                    0
-                );
-
+            scoreDisplay.textContent=
+                Number(player.score||0);
 
             renderStandings(
                 currentRoomData
             );
 
-
             ensureAnswerProcessor();
 
-
-            if (
-                currentRoomData.status ===
+            if(
+                currentRoomData.status===
                 "starting"
-            ) {
+            ){
 
                 await handleStartingState();
 
-            }
-
-            else if (
-                currentRoomData.status ===
+            }else if(
+                currentRoomData.status===
                 "playing"
-            ) {
+            ){
 
                 handlePlayingState();
 
-            }
-
-            else if (
-                currentRoomData.status ===
+            }else if(
+                currentRoomData.status===
                 "roundResult"
-            ) {
+            ){
 
                 handleRoundResultState();
 
-            }
-
-            else if (
-                currentRoomData.status ===
+            }else if(
+                currentRoomData.status===
                 "finished"
-            ) {
+            ){
 
                 renderFinalResults(
                     currentRoomData
@@ -483,98 +201,46 @@ function listenToRoom() {
 
             }
 
-        },
-
-        function (error) {
-
-            console.error(
-                "ROOM LISTENER ERROR:",
-                error
-            );
-
         }
     );
 
 }
 
+async function handleStartingState(){
 
-/* =========================================================
-   STARTING STATE
-========================================================= */
-
-async function handleStartingState() {
-
-    /*
-        Only the host creates the first round.
-    */
-
-    if (
-        currentRoomData.hostUid !==
+    if(
+        currentRoomData.hostUid!==
         currentUser.uid
-    ) {
-
+    ){
         return;
-
     }
 
-
-    /*
-        Prevent duplicate round creation.
-    */
-
-    if (
+    if(
         currentRoomData.rounds?.["1"]
-    ) {
-
+    ){
         return;
-
     }
 
+    try{
 
-    try {
-
-        const round =
-            generateRound();
-
-
-        const now =
-            Date.now();
-
+        const round=generateRound();
+        const now=Date.now();
 
         await update(
             getRoomRef(),
             {
-
-                "rounds/1":
-                    round,
-
-                currentRound:
-                    1,
-
-                currentCode:
-                    round.code,
-
-                currentClues:
-                    round.clues,
-
-                roundStartAt:
-                    now,
-
-                roundEndAt:
-                    null,
-
-                roundResultAt:
-                    null,
-
-                status:
-                    "playing"
-
+                "rounds/1":round,
+                currentRound:1,
+                currentCode:round.code,
+                currentClues:round.clues,
+                roundStartAt:now,
+                roundEndAt:null,
+                roundResultAt:null,
+                status:"playing"
             }
         );
 
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "INITIALIZE FIRST ROUND ERROR:",
@@ -585,68 +251,45 @@ async function handleStartingState() {
 
 }
 
+function handlePlayingState(){
 
-/* =========================================================
-   PLAYING STATE
-========================================================= */
-
-function handlePlayingState() {
-
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    if (!roundNumber) {
-
+    if(!roundNumber){
         return;
-
     }
 
+    const round=
+        currentRoomData.rounds?.[
+            roundNumber
+        ];
 
-    const round =
-        currentRoomData
-            .rounds?.[
-                roundNumber
-            ];
-
-
-    if (!round) {
-
+    if(!round){
         return;
-
     }
-
-
-    gameSection.classList.remove(
-        "hidden"
-    );
-
 
     roundBreak.classList.add(
         "hidden"
     );
 
-
-    finalResults.classList.add(
+    gameSection.classList.remove(
         "hidden"
     );
-
 
     renderRound(
         roundNumber,
         round
     );
 
-
     startTimer();
 
-
-    if (
-        currentRoomData.hostUid ===
+    if(
+        currentRoomData.hostUid===
         currentUser.uid
-    ) {
+    ){
 
         scheduleHostRoundEnd();
 
@@ -654,102 +297,74 @@ function handlePlayingState() {
 
 }
 
-
-/* =========================================================
-   RENDER ROUND
-========================================================= */
-
 function renderRound(
     roundNumber,
     round
-) {
+){
 
-    if (
-        currentRoundNumber !==
+    if(
+        currentRoundNumber!==
         roundNumber
-    ) {
+    ){
 
-        currentRoundNumber =
+        currentRoundNumber=
             roundNumber;
 
-
         clearAnswerInputs();
-
 
         resetAnswerStatus();
 
     }
 
-
-    roundDisplay.textContent =
+    roundDisplay.textContent=
         `${roundNumber} / ${TOTAL_ROUNDS}`;
-
 
     renderCodeDigits(
         round.displayDigits
     );
 
-
     renderAvailableClues(
         round
     );
 
-
-    const answers =
+    const answers=
         currentRoomData.answers?.[
             roundNumber
-        ] || {};
+        ]||{};
 
-
-    const myAnswer =
+    const myAnswer=
         answers[
             currentUser.uid
         ];
 
-
-    if (
-        myAnswer?.correct ===
+    if(
+        myAnswer?.correct===
         true
-    ) {
+    ){
 
-        submitButton.disabled =
-            true;
-
+        submitButton.disabled=true;
 
         digitInputs.forEach(
-            function (input) {
-
-                input.disabled =
-                    true;
-
+            function(input){
+                input.disabled=true;
             }
         );
 
+        answerStatus.className=
+            "answer-status correct";
 
-        showAnswerStatus(
-            `✅ CODE CRACKED! +${
-                Number(
-                    myAnswer.points ||
-                    0
-                )
-            } POINTS`,
-            "correct"
-        );
+        answerStatus.textContent=
+            `✅ CODE CRACKED! +${Number(
+                myAnswer.points||0
+            )} POINTS`;
 
-    }
+    }else{
 
-    else {
-
-        submitButton.disabled =
-            false;
-
+        submitButton.disabled=false;
 
         digitInputs.forEach(
-            function (input) {
-
-                input.disabled =
-                    false;
-
+            function(input){
+                input.disabled=false;
             }
         );
 
@@ -757,31 +372,19 @@ function renderRound(
 
 }
 
+function renderCodeDigits(digits){
 
-/* =========================================================
-   DISPLAY CODE DIGITS
-========================================================= */
-
-function renderCodeDigits(
-    digits
-) {
-
-    codeDigits.innerHTML =
-        "";
-
+    codeDigits.innerHTML="";
 
     digits.forEach(
-        function (digit) {
+        function(digit){
 
-            const element =
+            const element=
                 document.createElement(
                     "span"
                 );
 
-
-            element.textContent =
-                digit;
-
+            element.textContent=digit;
 
             codeDigits.appendChild(
                 element
@@ -792,59 +395,33 @@ function renderCodeDigits(
 
 }
 
+function renderAvailableClues(round){
 
-/* =========================================================
-   CLUE DISPLAY
-========================================================= */
-
-function renderAvailableClues(
-    round
-) {
-
-    if (!round) {
-
+    if(!round){
         return;
-
     }
 
-
-    const startAt =
+    const startAt=
         Number(
             currentRoomData.roundStartAt
         );
 
-
-    if (!startAt) {
-
+    if(!startAt){
         return;
-
     }
 
-
-    const elapsed =
+    const elapsed=
         Math.max(
             0,
-            Date.now() -
-            startAt
+            Date.now()-startAt
         );
 
-
-    /*
-        Clue 1 immediately.
-        Clue 2 at 10 seconds.
-        Clue 3 at 20 seconds.
-        Clue 4 at 30 seconds.
-        Clue 5 at 40 seconds.
-    */
-
-    let visibleCount =
+    let visibleCount=
         Math.floor(
-            elapsed /
-            CLUE_INTERVAL
-        ) + 1;
+            elapsed/CLUE_INTERVAL
+        )+1;
 
-
-    visibleCount =
+    visibleCount=
         Math.max(
             1,
             Math.min(
@@ -853,54 +430,41 @@ function renderAvailableClues(
             )
         );
 
+    if(
+        elapsed>=ROUND_DURATION
+    ){
 
-    if (
-        elapsed >=
-        ROUND_DURATION
-    ) {
-
-        visibleCount =
-            5;
+        visibleCount=5;
 
     }
 
-
-    clueCounter.textContent =
+    clueCounter.textContent=
         `${visibleCount} / 5`;
 
+    cluesList.innerHTML="";
 
-    cluesList.innerHTML =
-        "";
-
-
-    for (
-        let i = 0;
-        i < 5;
+    for(
+        let i=0;
+        i<5;
         i++
-    ) {
+    ){
 
-        if (
-            i < visibleCount
-        ) {
+        if(i<visibleCount){
 
-            const clue =
+            const clue=
                 round.clues[i];
 
-
-            const element =
+            const element=
                 document.createElement(
                     "div"
                 );
 
+            element.className="clue";
 
-            element.className =
-                "clue";
-
-
-            element.innerHTML = `
+            element.innerHTML=`
 
                 <div class="clue-number">
-                    🔢 CLUE ${i + 1}
+                    🔢 CLUE ${i+1}
                 </div>
 
                 <div class="clue-guess">
@@ -917,28 +481,22 @@ function renderAvailableClues(
 
             `;
 
-
             cluesList.appendChild(
                 element
             );
 
-        }
+        }else{
 
-        else {
-
-            const element =
+            const element=
                 document.createElement(
                     "div"
                 );
 
-
-            element.className =
+            element.className=
                 "locked-clue";
 
-
-            element.textContent =
-                `🔒 CLUE ${i + 1}`;
-
+            element.textContent=
+                `🔒 CLUE ${i+1}`;
 
             cluesList.appendChild(
                 element
@@ -950,25 +508,19 @@ function renderAvailableClues(
 
 }
 
-
-/* =========================================================
-   PLAYER TIMER
-========================================================= */
-
-function startTimer() {
+function startTimer(){
 
     clearInterval(
         timerInterval
     );
 
+    function tick(){
 
-    function tick() {
-
-        if (
-            !currentRoomData ||
-            currentRoomData.status !==
-                "playing"
-        ) {
+        if(
+            !currentRoomData||
+            currentRoomData.status!==
+            "playing"
+        ){
 
             clearInterval(
                 timerInterval
@@ -978,68 +530,47 @@ function startTimer() {
 
         }
 
-
-        const startAt =
+        const startAt=
             Number(
                 currentRoomData.roundStartAt
             );
 
-
-        if (!startAt) {
-
+        if(!startAt){
             return;
-
         }
 
+        const elapsed=
+            Date.now()-startAt;
 
-        const elapsed =
-            Date.now() -
-            startAt;
-
-
-        const remaining =
+        const remaining=
             Math.max(
                 0,
-                ROUND_DURATION -
-                elapsed
+                ROUND_DURATION-elapsed
             );
 
-
-        const totalSeconds =
+        const totalSeconds=
             Math.ceil(
-                remaining /
-                1000
+                remaining/1000
             );
 
-
-        const minutes =
+        const minutes=
             Math.floor(
-                totalSeconds /
-                60
+                totalSeconds/60
             );
 
+        const seconds=
+            totalSeconds%60;
 
-        const seconds =
-            totalSeconds %
-            60;
-
-
-        timerDisplay.textContent =
-            `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
+        timerDisplay.textContent=
+            `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 
         renderAvailableClues(
-            currentRoomData
-                .rounds?.[
-                    currentRoomData
-                        .currentRound
-                ]
+            currentRoomData.rounds?.[
+                currentRoomData.currentRound
+            ]
         );
 
-
-        if (
-            remaining <= 0
-        ) {
+        if(remaining<=0){
 
             clearInterval(
                 timerInterval
@@ -1049,11 +580,9 @@ function startTimer() {
 
     }
 
-
     tick();
 
-
-    timerInterval =
+    timerInterval=
         setInterval(
             tick,
             250
@@ -1061,163 +590,118 @@ function startTimer() {
 
 }
 
+function scheduleHostRoundEnd(){
 
-/* =========================================================
-   HOST ROUND END
-========================================================= */
-
-function scheduleHostRoundEnd() {
-
-    if (
-        !currentRoomData ||
-        currentRoomData.hostUid !==
-            currentUser.uid
-    ) {
-
+    if(
+        !currentRoomData||
+        !currentUser
+    ){
         return;
-
     }
 
+    if(
+        currentRoomData.hostUid!==
+        currentUser.uid
+    ){
+        return;
+    }
 
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    const startAt =
+    const startAt=
         Number(
             currentRoomData.roundStartAt
         );
 
-
-    if (
-        !roundNumber ||
+    if(
+        !roundNumber||
         !startAt
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const key =
+    const key=
         `${roundNumber}-${startAt}`;
 
-
-    if (
-        hostRoundKey ===
+    if(
+        hostRoundKey===
         key
-    ) {
-
+    ){
         return;
-
     }
 
-
-    hostRoundKey =
-        key;
-
+    hostRoundKey=key;
 
     clearTimeout(
         hostRoundTimer
     );
 
+    const elapsed=
+        Date.now()-startAt;
 
-    const remaining =
+    const remaining=
         Math.max(
             0,
-            ROUND_DURATION -
-            (
-                Date.now() -
-                startAt
-            )
+            ROUND_DURATION-elapsed
         );
 
-
-    hostRoundTimer =
+    hostRoundTimer=
         setTimeout(
-            finishCurrentRound,
-            remaining + 100
+            function(){
+                finishCurrentRound();
+            },
+            remaining+100
         );
 
 }
 
+async function finishCurrentRound(){
 
-/* =========================================================
-   FINISH CURRENT ROUND
-========================================================= */
-
-async function finishCurrentRound() {
-
-    if (
-        !currentRoomData ||
+    if(
+        !currentRoomData||
         !currentUser
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.hostUid !==
-        currentUser.uid
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        currentRoomData.status !==
+    if(
+        currentRoomData.status!==
         "playing"
-    ) {
-
+    ){
         return;
-
     }
 
+    if(
+        currentRoomData.hostUid!==
+        currentUser.uid
+    ){
+        return;
+    }
 
     clearTimeout(
         hostRoundTimer
     );
 
+    hostRoundTimer=null;
+    hostRoundKey=null;
 
-    hostRoundTimer =
-        null;
+    try{
 
-
-    hostRoundKey =
-        null;
-
-
-    try {
-
-        const now =
-            Date.now();
-
+        const now=Date.now();
 
         await update(
             getRoomRef(),
             {
-
-                status:
-                    "roundResult",
-
-                roundEndAt:
-                    now,
-
-                roundResultAt:
-                    now
-
+                status:"roundResult",
+                roundEndAt:now,
+                roundResultAt:now
             }
         );
 
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "FINISH ROUND ERROR:",
@@ -1228,124 +712,103 @@ async function finishCurrentRound() {
 
 }
 
-
-/* =========================================================
-   ROUND RESULT STATE
-========================================================= */
-
-function handleRoundResultState() {
+function handleRoundResultState(){
 
     clearInterval(
         timerInterval
     );
 
-
     clearTimeout(
         hostRoundTimer
     );
 
+    hostRoundTimer=null;
 
-    submitButton.disabled =
-        true;
-
+    submitButton.disabled=true;
 
     digitInputs.forEach(
-        function (input) {
-
-            input.disabled =
-                true;
-
+        function(input){
+            input.disabled=true;
         }
     );
 
-
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    const answers =
+    const answers=
         currentRoomData.answers?.[
             roundNumber
-        ] || {};
+        ]||{};
 
+    const players=
+        currentRoomData.players||{};
 
-    const players =
-        currentRoomData.players ||
-        {};
-
-
-    const results =
+    const results=
         Object.entries(players)
-
             .filter(
-                ([, player]) =>
+                ([,player])=>
                     !player.leftGame
             )
-
             .map(
-                function ([uid, player]) {
+                ([uid,player])=>{
 
-                    const answer =
+                    const answer=
                         answers[uid];
 
-
-                    return {
-
+                    return{
                         uid,
-
                         username:
-                            player.username ||
+                            player.username||
                             "Player",
-
                         points:
                             Number(
-                                answer?.points ||
-                                0
+                                answer?.points||0
                             ),
-
                         correct:
-                            answer?.correct ===
+                            answer?.correct===
                             true,
-
                         totalScore:
                             Number(
-                                player.score ||
-                                0
+                                player.score||0
                             )
-
                     };
 
                 }
             )
-
             .sort(
-                function (a, b) {
+                function(a,b){
 
-                    return (
-                        b.points -
+                    if(
+                        b.points!==
                         a.points
-                    ) ||
-                    (
-                        b.totalScore -
+                    ){
+
+                        return(
+                            b.points-
+                            a.points
+                        );
+
+                    }
+
+                    return(
+                        b.totalScore-
                         a.totalScore
                     );
 
                 }
             );
 
-
     showRoundBreak(
         roundNumber,
         results
     );
 
-
-    if (
-        currentRoomData.hostUid ===
+    if(
+        currentRoomData.hostUid===
         currentUser.uid
-    ) {
+    ){
 
         scheduleNextRound();
 
@@ -1353,78 +816,51 @@ function handleRoundResultState() {
 
 }
 
-
-/* =========================================================
-   ROUND BREAK UI
-========================================================= */
-
 function showRoundBreak(
     roundNumber,
     results
-) {
+){
 
     roundBreak.classList.remove(
         "hidden"
     );
 
-
-    gameSection.classList.add(
-        "hidden"
-    );
-
-
-    breakTitle.textContent =
+    breakTitle.textContent=
         `ROUND ${roundNumber} RESULTS`;
 
-
-    roundResultList.innerHTML =
-        "";
-
+    roundResultList.innerHTML="";
 
     results.forEach(
-        function (result, index) {
+        function(result,index){
 
-            const row =
+            const row=
                 document.createElement(
                     "div"
                 );
 
-
-            row.className =
+            row.className=
                 "round-result";
 
-
-            const left =
+            const left=
                 document.createElement(
                     "span"
                 );
 
+            left.textContent=
+                `${index+1}. ${result.username}`;
 
-            left.textContent =
-                `${index + 1}. ${result.username}`;
-
-
-            const right =
+            const right=
                 document.createElement(
                     "strong"
                 );
 
-
-            right.textContent =
+            right.textContent=
                 result.correct
-                    ? `+${result.points}`
-                    : "+0";
+                    ?`+${result.points}`
+                    :"+0";
 
-
-            row.appendChild(
-                left
-            );
-
-
-            row.appendChild(
-                right
-            );
-
+            row.appendChild(left);
+            row.appendChild(right);
 
             roundResultList.appendChild(
                 row
@@ -1433,68 +869,52 @@ function showRoundBreak(
         }
     );
 
-
     startBreakCountdown();
 
 }
 
-
-/* =========================================================
-   BREAK COUNTDOWN
-========================================================= */
-
-function startBreakCountdown() {
+function startBreakCountdown(){
 
     clearInterval(
         countdownTimer
     );
 
-
-    const resultAt =
+    const resultAt=
         Number(
             currentRoomData.roundResultAt
         );
 
+    if(!resultAt){
 
-    if (!resultAt) {
-
-        breakCountdown.textContent =
+        breakCountdown.textContent=
             "5";
 
         return;
 
     }
 
+    function updateCountdown(){
 
-    function tick() {
+        const elapsed=
+            Date.now()-resultAt;
 
-        const elapsed =
-            Date.now() -
-            resultAt;
-
-
-        const remaining =
+        const remaining=
             Math.max(
                 0,
-                BREAK_DURATION -
-                elapsed
+                BREAK_DURATION-elapsed
             );
 
-
-        const seconds =
+        const seconds=
             Math.ceil(
-                remaining /
-                1000
+                remaining/1000
             );
 
-
-        breakCountdown.textContent =
+        breakCountdown.textContent=
             seconds;
 
-
-        if (
-            remaining <= 0
-        ) {
+        if(
+            remaining<=0
+        ){
 
             clearInterval(
                 countdownTimer
@@ -1504,298 +924,241 @@ function startBreakCountdown() {
 
     }
 
+    updateCountdown();
 
-    tick();
-
-
-    countdownTimer =
+    countdownTimer=
         setInterval(
-            tick,
+            updateCountdown,
             100
         );
 
 }
 
+function scheduleNextRound(){
 
-/* =========================================================
-   NEXT ROUND
-========================================================= */
-
-function scheduleNextRound() {
-
-    if (
-        !currentRoomData ||
-        currentRoomData.hostUid !==
-            currentUser.uid
-    ) {
-
+    if(
+        !currentRoomData||
+        !currentUser
+    ){
         return;
-
     }
 
+    if(
+        currentRoomData.hostUid!==
+        currentUser.uid
+    ){
+        return;
+    }
 
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    const resultAt =
+    const resultAt=
         Number(
             currentRoomData.roundResultAt
         );
 
-
-    if (
-        !roundNumber ||
+    if(
+        !roundNumber||
         !resultAt
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const key =
+    const key=
         `${roundNumber}-${resultAt}`;
 
-
-    if (
-        hostTransitionKey ===
+    if(
+        hostTransitionKey===
         key
-    ) {
-
+    ){
         return;
-
     }
 
-
-    hostTransitionKey =
-        key;
-
+    hostTransitionKey=key;
 
     clearTimeout(
         hostTransitionTimer
     );
 
+    const elapsed=
+        Date.now()-resultAt;
 
-    const remaining =
+    const remaining=
         Math.max(
             0,
-            BREAK_DURATION -
-            (
-                Date.now() -
-                resultAt
-            )
+            BREAK_DURATION-elapsed
         );
 
-
-    hostTransitionTimer =
+    hostTransitionTimer=
         setTimeout(
-            startNextRound,
-            remaining + 100
+            function(){
+                startNextRound();
+            },
+            remaining+100
         );
 
 }
 
+async function startNextRound(){
 
-/* =========================================================
-   START NEXT ROUND
-========================================================= */
-
-async function startNextRound() {
-
-    if (
-        !currentRoomData ||
+    if(
+        !currentRoomData||
         !currentUser
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.hostUid !==
+    if(
+        currentRoomData.hostUid!==
         currentUser.uid
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.status !==
+    if(
+        currentRoomData.status!==
         "roundResult"
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const currentRound =
+    const currentRound=
         Number(
             currentRoomData.currentRound
         );
 
-
-    if (
-        currentRound >=
+    if(
+        currentRound>=
         TOTAL_ROUNDS
-    ) {
+    ){
 
         await finishGame();
-
         return;
 
     }
 
+    const nextRound=
+        currentRound+1;
 
-    const nextRound =
-        currentRound + 1;
+    try{
 
-
-    try {
-
-        const snapshot =
+        const snapshot=
             await get(
                 getRoomRef()
             );
 
-
-        if (
+        if(
             !snapshot.exists()
-        ) {
-
+        ){
             return;
-
         }
 
-
-        const room =
+        const room=
             snapshot.val();
 
-
-        if (
-            room.hostUid !==
+        if(
+            room.hostUid!==
             currentUser.uid
-        ) {
-
+        ){
             return;
-
         }
 
-
-        if (
-            room.status !==
+        if(
+            room.status!==
             "roundResult"
-        ) {
-
+        ){
             return;
-
         }
 
-
-        if (
+        if(
             Number(
                 room.currentRound
-            ) !==
+            )!==
             currentRound
-        ) {
-
+        ){
             return;
-
         }
 
-
-        const round =
+        const round=
             generateRound();
 
+        const now=Date.now();
 
-        const now =
-            Date.now();
+        const updates={};
 
+        const players=
+            room.players||{};
 
-        const updates = {
+        Object.keys(players)
+            .forEach(
+                function(uid){
 
-            [`rounds/${nextRound}`]:
-                round,
+                    updates[
+                        `players/${uid}/currentRoundScore`
+                    ]=0;
 
-            [`answers/${nextRound}`]:
-                null,
+                    updates[
+                        `players/${uid}/lastAnswer`
+                    ]=null;
 
-            currentRound:
-                nextRound,
+                    updates[
+                        `players/${uid}/lastAnsweredRound`
+                    ]=null;
 
-            currentCode:
-                round.code,
+                    updates[
+                        `players/${uid}/submittedAt`
+                    ]=null;
 
-            currentClues:
-                round.clues,
+                }
+            );
 
-            roundStartAt:
-                now,
+        updates[
+            `rounds/${nextRound}`
+        ]=round;
 
-            roundEndAt:
-                null,
+        updates[
+            `answers/${nextRound}`
+        ]=null;
 
-            roundResultAt:
-                null,
+        updates.currentRound=
+            nextRound;
 
-            status:
-                "playing"
+        updates.currentCode=
+            round.code;
 
-        };
+        updates.currentClues=
+            round.clues;
 
+        updates.roundStartAt=
+            now;
 
-        Object.keys(
-            room.players ||
-            {}
-        )
-        .forEach(
-            function (uid) {
+        updates.roundEndAt=
+            null;
 
-                updates[
-                    `players/${uid}/currentRoundScore`
-                ] = 0;
+        updates.roundResultAt=
+            null;
 
-
-                updates[
-                    `players/${uid}/lastAnswer`
-                ] = null;
-
-
-                updates[
-                    `players/${uid}/lastAnsweredRound`
-                ] = null;
-
-
-                updates[
-                    `players/${uid}/submittedAt`
-                ] = null;
-
-            }
-        );
-
+        updates.status=
+            "playing";
 
         await update(
             getRoomRef(),
             updates
         );
 
+        hostTransitionKey=null;
+        hostRoundKey=null;
 
-        hostTransitionKey =
-            null;
+        clearTimeout(
+            hostTransitionTimer
+        );
 
+        hostTransitionTimer=null;
 
-        hostRoundKey =
-            null;
-
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "START NEXT ROUND ERROR:",
@@ -1806,84 +1169,62 @@ async function startNextRound() {
 
 }
 
-
-/* =========================================================
-   SUBMIT ANSWER
-========================================================= */
-
 submitButton.addEventListener(
     "click",
     submitAnswer
 );
 
+async function submitAnswer(){
 
-async function submitAnswer() {
-
-    if (
-        !currentUser ||
+    if(
+        !currentUser||
         !currentRoomData
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.status !==
+    if(
+        currentRoomData.status!==
         "playing"
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    const round =
+    const round=
         currentRoomData.rounds?.[
             roundNumber
         ];
 
-
-    if (!round) {
-
+    if(!round){
         return;
-
     }
 
-
-    const existingAnswer =
+    const existingAnswer=
         currentRoomData.answers?.[
             roundNumber
         ]?.[
             currentUser.uid
         ];
 
-
-    if (
-        existingAnswer?.correct ===
+    if(
+        existingAnswer?.correct===
         true
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const answer =
+    const answer=
         getAnswerFromInputs();
 
-
-    if (
-        answer.length !==
+    if(
+        answer.length!==
         CODE_LENGTH
-    ) {
+    ){
 
         showAnswerStatus(
             "ENTER ALL 5 DIGITS.",
@@ -1894,11 +1235,10 @@ async function submitAnswer() {
 
     }
 
-
-    if (
-        new Set(answer).size !==
+    if(
+        new Set(answer).size!==
         CODE_LENGTH
-    ) {
+    ){
 
         showAnswerStatus(
             "THE CODE USES 5 DIFFERENT DIGITS.",
@@ -1909,32 +1249,23 @@ async function submitAnswer() {
 
     }
 
-
-    const availableDigits =
+    const availableDigits=
         round.displayDigits.map(
-            function (digit) {
-
-                return String(
-                    digit
-                );
-
+            function(digit){
+                return String(digit);
             }
         );
 
-
-    const validDigits =
+    const validDigits=
         availableDigits.every(
-            function (digit) {
-
+            function(digit){
                 return answer.includes(
                     digit
                 );
-
             }
         );
 
-
-    if (!validDigits) {
+    if(!validDigits){
 
         showAnswerStatus(
             "USE ONLY THE FIVE DIGITS SHOWN ABOVE.",
@@ -1945,78 +1276,66 @@ async function submitAnswer() {
 
     }
 
-
-    const correct =
-        answer ===
+    const codeString=
         round.code.join("");
 
+    const isCorrect=
+        answer===codeString;
 
-    const answerRef =
-        ref(
-            database,
-            `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${currentUser.uid}`
-        );
+    submitButton.disabled=true;
 
+    try{
 
-    submitButton.disabled =
-        true;
+        const answerRef=
+            ref(
+                database,
+                `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${currentUser.uid}`
+            );
 
-
-    try {
-
-        const existingSnapshot =
+        const existingSnapshot=
             await get(
                 answerRef
             );
 
-
-        if (
-            existingSnapshot.exists() &&
-            existingSnapshot.val()?.correct ===
-                true
-        ) {
+        if(
+            existingSnapshot.exists()&&
+            existingSnapshot.val()?.correct===
+            true
+        ){
 
             return;
 
         }
 
-
         await set(
             answerRef,
             {
-
                 answer,
-
                 submittedAt:
                     serverTimestamp(),
-
-                correct,
-
-                points:
-                    0
-
+                correct:
+                    isCorrect,
+                points:0
             }
         );
 
-
-        if (!correct) {
+        if(!isCorrect){
 
             showAnswerStatus(
                 "❌ NOT THE CODE. TRY AGAIN.",
                 "wrong"
             );
 
-
             setTimeout(
-                function () {
+                function(){
 
-                    if (
-                        currentRoomData &&
-                        currentRoomData.status ===
-                            "playing"
-                    ) {
+                    if(
+                        currentRoomData&&
+                        currentRoomData.status===
+                        "playing"
+                    ){
 
-                        submitButton.disabled =
+                        submitButton.disabled=
                             false;
 
                     }
@@ -2025,9 +1344,7 @@ async function submitAnswer() {
                 200
             );
 
-        }
-
-        else {
+        }else{
 
             showAnswerStatus(
                 "✅ CORRECT! CALCULATING SPEED...",
@@ -2036,19 +1353,15 @@ async function submitAnswer() {
 
         }
 
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "SUBMIT ANSWER ERROR:",
             error
         );
 
-
-        submitButton.disabled =
+        submitButton.disabled=
             false;
-
 
         showAnswerStatus(
             "COULD NOT SUBMIT. TRY AGAIN.",
@@ -2059,51 +1372,41 @@ async function submitAnswer() {
 
 }
 
-
-/* =========================================================
-   ANSWER INPUTS
-========================================================= */
-
-function getAnswerFromInputs() {
+function getAnswerFromInputs(){
 
     return digitInputs
         .map(
-            function (input) {
-
+            function(input){
                 return input.value.trim();
-
             }
         )
         .join("");
 
 }
 
-
 digitInputs.forEach(
-    function (input, index) {
+    function(input,index){
 
         input.addEventListener(
             "input",
-            function () {
+            function(){
 
-                input.value =
+                input.value=
                     input.value
                         .replace(
                             /[^0-9]/g,
                             ""
                         )
-                        .slice(0, 1);
+                        .slice(0,1);
 
-
-                if (
-                    input.value &&
-                    index <
-                        digitInputs.length -
-                        1
-                ) {
+                if(
+                    input.value&&
+                    index<
+                    digitInputs.length-1
+                ){
 
                     digitInputs[
-                        index + 1
+                        index+1
                     ].focus();
 
                 }
@@ -2111,29 +1414,27 @@ digitInputs.forEach(
             }
         );
 
-
         input.addEventListener(
             "keydown",
-            function (event) {
+            function(event){
 
-                if (
-                    event.key ===
-                    "Backspace" &&
-                    !input.value &&
-                    index > 0
-                ) {
+                if(
+                    event.key===
+                    "Backspace"&&
+                    !input.value&&
+                    index>0
+                ){
 
                     digitInputs[
-                        index - 1
+                        index-1
                     ].focus();
 
                 }
 
-
-                if (
-                    event.key ===
+                if(
+                    event.key===
                     "Enter"
-                ) {
+                ){
 
                     submitAnswer();
 
@@ -2145,57 +1446,41 @@ digitInputs.forEach(
     }
 );
 
+function ensureAnswerProcessor(){
 
-/* =========================================================
-   HOST ANSWER PROCESSOR
-========================================================= */
-
-function ensureAnswerProcessor() {
-
-    if (
+    if(
         answerProcessorStarted
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        !currentUser ||
+    if(
+        !currentUser||
         !currentRoomCode
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData &&
-        currentRoomData.hostUid !==
-            currentUser.uid
-    ) {
-
+    if(
+        currentRoomData&&
+        currentRoomData.hostUid!==
+        currentUser.uid
+    ){
         return;
-
     }
 
-
-    answerProcessorStarted =
+    answerProcessorStarted=
         true;
 
-
-    const answersRef =
+    const answersRef=
         ref(
             database,
             `chaosCodeRooms/${currentRoomCode}/answers`
         );
 
-
     onValue(
         answersRef,
-        async function () {
+        async function(){
 
             await processCorrectAnswers();
 
@@ -2204,141 +1489,103 @@ function ensureAnswerProcessor() {
 
 }
 
+async function processCorrectAnswers(){
 
-/* =========================================================
-   PROCESS CORRECT ANSWERS
-========================================================= */
-
-async function processCorrectAnswers() {
-
-    if (
-        !currentRoomData ||
+    if(
+        !currentRoomData||
         !currentUser
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.hostUid !==
+    if(
+        currentRoomData.hostUid!==
         currentUser.uid
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.status !==
+    if(
+        currentRoomData.status!==
         "playing"
-    ) {
-
+    ){
         return;
-
     }
 
-
-    const roundNumber =
+    const roundNumber=
         Number(
             currentRoomData.currentRound
         );
 
-
-    const round =
+    const round=
         currentRoomData.rounds?.[
             roundNumber
         ];
 
-
-    if (!round) {
-
+    if(!round){
         return;
-
     }
 
-
-    const answers =
+    const answers=
         currentRoomData.answers?.[
             roundNumber
-        ] || {};
+        ]||{};
 
+    for(
+        const[uid,answer]
+        of Object.entries(answers)
+    ){
 
-    for (
-        const [
-            uid,
-            answer
-        ] of Object.entries(
-            answers
-        )
-    ) {
-
-        if (
-            !answer ||
-            answer.correct !==
-                true ||
-            Number(
-                answer.points ||
-                0
-            ) > 0
-        ) {
-
+        if(
+            !answer||
+            answer.correct!==true||
+            Number(answer.points||0)>0
+        ){
             continue;
-
         }
 
-
-        const submittedAt =
+        const submittedAt=
             getTimestamp(
                 answer.submittedAt
             );
 
-
-        const roundStartAt =
+        const roundStartAt=
             Number(
                 currentRoomData.roundStartAt
             );
 
-
-        if (
-            !submittedAt ||
+        if(
+            !submittedAt||
             !roundStartAt
-        ) {
-
+        ){
             continue;
-
         }
 
-
-        const elapsed =
+        const elapsed=
             Math.max(
                 0,
-                submittedAt -
+                submittedAt-
                 roundStartAt
             );
 
-
-        const progress =
+        const progress=
             Math.max(
                 0,
                 Math.min(
                     1,
-                    1 -
+                    1-
                     (
-                        elapsed /
+                        elapsed/
                         ROUND_DURATION
                     )
                 )
             );
 
-
-        const points =
+        const points=
             Math.max(
                 1,
                 Math.round(
-                    100 *
+                    100*
                     Math.pow(
                         progress,
                         1.25
@@ -2346,114 +1593,86 @@ async function processCorrectAnswers() {
                 )
             );
 
-
-        const answerRef =
+        const answerRef=
             ref(
                 database,
                 `chaosCodeRooms/${currentRoomCode}/answers/${roundNumber}/${uid}`
             );
 
-
-        const transaction =
+        const transactionResult=
             await runTransaction(
                 answerRef,
-                function (current) {
+                function(current){
 
-                    if (!current) {
-
+                    if(!current){
                         return current;
-
                     }
 
-
-                    if (
+                    if(
                         Number(
-                            current.points ||
-                            0
-                        ) > 0
-                    ) {
-
+                            current.points||0
+                        )>0
+                    ){
                         return;
-
                     }
 
-
-                    current.points =
+                    current.points=
                         points;
 
-
-                    current.processed =
+                    current.processed=
                         true;
-
 
                     return current;
 
                 }
             );
 
-
-        if (
-            !transaction.committed
-        ) {
-
+        if(
+            !transactionResult.committed
+        ){
             continue;
-
         }
 
-
-        const playerRef =
+        const playerRef=
             ref(
                 database,
                 `chaosCodeRooms/${currentRoomCode}/players/${uid}`
             );
 
-
         await runTransaction(
             playerRef,
-            function (player) {
+            function(player){
 
-                if (!player) {
-
+                if(!player){
                     return player;
-
                 }
 
-
-                if (
+                if(
                     Number(
                         player.lastAnsweredRound
-                    ) ===
+                    )===
                     roundNumber
-                ) {
-
+                ){
                     return;
-
                 }
 
-
-                player.score =
+                player.score=
                     Number(
-                        player.score ||
-                        0
-                    ) +
+                        player.score||0
+                    )+
                     points;
 
-
-                player.currentRoundScore =
+                player.currentRoundScore=
                     points;
 
-
-                player.lastAnsweredRound =
+                player.lastAnsweredRound=
                     roundNumber;
 
-
-                player.lastAnswer =
+                player.lastAnswer=
                     answer.answer;
 
-
-                player.submittedAt =
+                player.submittedAt=
                     answer.submittedAt;
-
 
                 return player;
 
@@ -2464,173 +1683,125 @@ async function processCorrectAnswers() {
 
 }
 
-
-/* =========================================================
-   STANDINGS
-========================================================= */
-
 function renderStandings(
     room
-) {
+){
 
-    const players =
-        room.players ||
-        {};
+    const players=
+        room.players||{};
 
+    const entries=
+        Object.entries(players)
+            .filter(
+                function([,player]){
+                    return !player.leftGame;
+                }
+            )
+            .sort(
+                function(a,b){
 
-    const entries =
-        Object.entries(
-            players
-        )
-        .filter(
-            function ([, player]) {
+                    const scoreA=
+                        Number(
+                            a[1].score||0
+                        );
 
-                return !player.leftGame;
+                    const scoreB=
+                        Number(
+                            b[1].score||0
+                        );
 
-            }
-        )
-        .sort(
-            function (a, b) {
+                    return scoreB-scoreA;
 
-                return (
-                    Number(
-                        b[1].score ||
-                        0
-                    ) -
-                    Number(
-                        a[1].score ||
-                        0
-                    )
-                );
+                }
+            );
 
-            }
-        );
+    standingsList.innerHTML="";
 
+    if(
+        entries.length===0
+    ){
 
-    standingsList.innerHTML =
-        "";
-
-
-    if (
-        entries.length ===
-        0
-    ) {
-
-        standingsList.innerHTML = `
+        standingsList.innerHTML=`
             <div class="empty-standing">
                 Waiting for scores...
             </div>
         `;
 
         return;
-
     }
 
-
     entries.forEach(
-        function ([uid, player], index) {
+        function([uid,player],index){
 
-            const row =
+            const row=
                 document.createElement(
                     "div"
                 );
 
-
-            row.className =
+            row.className=
                 "standing";
 
-
-            const left =
+            const left=
                 document.createElement(
                     "div"
                 );
 
-
-            left.className =
+            left.className=
                 "standing-left";
 
-
-            const rank =
+            const rank=
                 document.createElement(
                     "span"
                 );
 
+            rank.className="rank";
 
-            rank.className =
-                "rank";
+            if(index===0){
 
+                rank.textContent="🥇";
 
-            if (
-                index ===
-                0
-            ) {
+            }else if(index===1){
 
-                rank.textContent =
-                    "🥇";
+                rank.textContent="🥈";
 
-            }
+            }else if(index===2){
 
-            else if (
-                index ===
-                1
-            ) {
+                rank.textContent="🥉";
 
-                rank.textContent =
-                    "🥈";
+            }else{
+
+                rank.textContent=
+                    index+1;
 
             }
 
-            else if (
-                index ===
-                2
-            ) {
-
-                rank.textContent =
-                    "🥉";
-
-            }
-
-            else {
-
-                rank.textContent =
-                    index + 1;
-
-            }
-
-
-            const name =
+            const name=
                 document.createElement(
                     "span"
                 );
 
-
-            name.className =
+            name.className=
                 "standing-name";
 
-
-            name.textContent =
-                player.username ||
+            name.textContent=
+                player.username||
                 "Player";
 
+            if(
+                currentUser&&
+                uid===
+                currentUser.uid
+            ){
 
-            if (
-                uid ===
-                currentUser?.uid
-            ) {
-
-                const you =
+                const you=
                     document.createElement(
                         "span"
                     );
 
-
-                you.className =
+                you.className=
                     "standing-you";
 
-
-                you.textContent =
-                    "YOU";
-
+                you.textContent="YOU";
 
                 name.appendChild(
                     you
@@ -2638,43 +1809,24 @@ function renderStandings(
 
             }
 
+            left.appendChild(rank);
+            left.appendChild(name);
 
-            const score =
+            const score=
                 document.createElement(
                     "span"
                 );
 
-
-            score.className =
+            score.className=
                 "standing-score";
 
-
-            score.textContent =
+            score.textContent=
                 `${Number(
-                    player.score ||
-                    0
+                    player.score||0
                 )} PTS`;
 
-
-            left.appendChild(
-                rank
-            );
-
-
-            left.appendChild(
-                name
-            );
-
-
-            row.appendChild(
-                left
-            );
-
-
-            row.appendChild(
-                score
-            );
-
+            row.appendChild(left);
+            row.appendChild(score);
 
             standingsList.appendChild(
                 row
@@ -2685,216 +1837,164 @@ function renderStandings(
 
 }
 
+async function finishGame(){
 
-/* =========================================================
-   FINISH GAME
-========================================================= */
-
-async function finishGame() {
-
-    if (
-        !currentRoomData ||
+    if(
+        !currentRoomData||
         !currentUser
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.hostUid !==
+    if(
+        currentRoomData.hostUid!==
         currentUser.uid
-    ) {
-
+    ){
         return;
-
     }
 
-
-    if (
-        currentRoomData.status ===
+    if(
+        currentRoomData.status===
         "finished"
-    ) {
-
+    ){
         return;
-
     }
 
-
-    try {
+    try{
 
         clearTimeout(
             hostRoundTimer
         );
 
-
         clearTimeout(
             hostTransitionTimer
         );
 
-
-        const snapshot =
+        const snapshot=
             await get(
                 getRoomRef()
             );
 
-
-        if (
+        if(
             !snapshot.exists()
-        ) {
-
+        ){
             return;
-
         }
 
-
-        const room =
+        const room=
             snapshot.val();
 
-
-        if (
-            room.status ===
+        if(
+            room.status===
             "finished"
-        ) {
-
+        ){
             return;
-
         }
 
+        const players=
+            room.players||{};
 
-        const players =
-            room.players ||
-            {};
+        const entries=
+            Object.entries(players)
+                .filter(
+                    ([,player])=>
+                        !player.leftGame
+                )
+                .sort(
+                    function(a,b){
 
+                        const scoreA=
+                            Number(
+                                a[1].score||0
+                            );
 
-        /*
-            Final ranking includes
-            every player still in the game.
-        */
+                        const scoreB=
+                            Number(
+                                b[1].score||0
+                            );
 
-        const entries =
-            Object.entries(
-                players
-            )
-            .filter(
-                ([, player]) =>
-                    !player.leftGame
-            )
-            .sort(
-                function (a, b) {
+                        return scoreB-scoreA;
 
-                    return (
-                        Number(
-                            b[1].score ||
-                            0
-                        ) -
-                        Number(
-                            a[1].score ||
-                            0
-                        )
-                    );
+                    }
+                );
 
-                }
-            );
-
-
-        /*
-            CP rewards only apply to
-            players who actually scored.
-        */
-
-        const scoringPlayers =
+        const scoringPlayers=
             entries.filter(
-                function ([, player]) {
+                function([,player]){
 
                     return Number(
-                        player.score ||
-                        0
-                    ) > 0;
+                        player.score||0
+                    )>0;
 
                 }
             );
 
-
-        const updates =
-            {};
-
+        const updates={};
 
         entries.forEach(
-            function ([uid, player], index) {
+            function([uid,player],index){
 
-                const scoringPosition =
+                const finalRank=
+                    index+1;
+
+                const scoringPosition=
                     scoringPlayers.findIndex(
-                        function ([scoringUid]) {
+                        function([scoringUid]){
 
-                            return (
-                                scoringUid ===
+                            return(
+                                scoringUid===
                                 uid
                             );
 
                         }
                     );
 
+                let reward=0;
 
-                let reward =
-                    0;
+                if(
+                    scoringPosition>=0&&
+                    scoringPosition<3
+                ){
 
-
-                if (
-                    scoringPosition >= 0 &&
-                    scoringPosition < 3
-                ) {
-
-                    reward =
+                    reward=
                         TOP_REWARDS[
-                            scoringPosition + 1
-                        ] ||
-                        0;
+                            scoringPosition+1
+                        ]||0;
 
                 }
 
-
                 updates[
                     `players/${uid}/finalRank`
-                ] =
-                    index + 1;
-
+                ]=
+                    finalRank;
 
                 updates[
                     `players/${uid}/finalReward`
-                ] =
+                ]=
                     reward;
 
             }
         );
 
-
-        updates.status =
+        updates.status=
             "finished";
 
-
-        updates.finishedAt =
+        updates.finishedAt=
             Date.now();
 
-
-        updates.rewardsCalculated =
+        updates.rewardsCalculated=
             true;
-
 
         await update(
             getRoomRef(),
             updates
         );
 
-
         await distributeRewards(
             scoringPlayers
         );
 
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "FINISH GAME ERROR:",
@@ -2905,116 +2005,83 @@ async function finishGame() {
 
 }
 
-
-/* =========================================================
-   DISTRIBUTE CP
-========================================================= */
-
 async function distributeRewards(
     scoringPlayers
-) {
+){
 
-    try {
+    try{
 
-        const roomRef =
+        const roomRef=
             getRoomRef();
 
+        const snapshot=
+            await get(roomRef);
 
-        const snapshot =
-            await get(
-                roomRef
-            );
-
-
-        if (
+        if(
             !snapshot.exists()
-        ) {
-
+        ){
             return;
-
         }
 
-
-        const room =
+        const room=
             snapshot.val();
 
-
-        if (
-            room.rewardsDistributed ===
+        if(
+            room.rewardsDistributed===
             true
-        ) {
-
+        ){
             return;
-
         }
 
-
-        for (
-            let index = 0;
-
-            index <
-                scoringPlayers.length &&
-            index < 3;
-
+        for(
+            let index=0;
+            index<
+            scoringPlayers.length&&
+            index<3;
             index++
-        ) {
+        ){
 
-            const [
-                uid,
-                player
-            ] =
-                scoringPlayers[index];
+            const uid=
+                scoringPlayers[
+                    index
+                ][0];
 
+            const player=
+                scoringPlayers[
+                    index
+                ][1];
 
-            const score =
+            const score=
                 Number(
-                    player.score ||
-                    0
+                    player.score||0
                 );
 
-
-            if (
-                score <=
-                0
-            ) {
-
+            if(score<=0){
                 continue;
-
             }
 
-
-            const reward =
+            const reward=
                 TOP_REWARDS[
-                    index + 1
-                ] ||
-                0;
+                    index+1
+                ]||0;
 
-
-            if (
-                reward <=
-                0
-            ) {
-
+            if(reward<=0){
                 continue;
-
             }
 
-
-            const chaosPointsRef =
+            const chaosPointsRef=
                 ref(
                     database,
                     `users/${uid}/chaosPoints`
                 );
 
-
             await runTransaction(
                 chaosPointsRef,
-                function (current) {
+                function(current){
 
                     return Number(
-                        current ||
-                        0
-                    ) +
+                        current||0
+                    )+
                     reward;
 
                 }
@@ -3022,20 +2089,15 @@ async function distributeRewards(
 
         }
 
-
         await update(
             roomRef,
             {
-
                 rewardsDistributed:
                     true
-
             }
         );
 
-    }
-
-    catch (error) {
+    }catch(error){
 
         console.error(
             "DISTRIBUTE REWARDS ERROR:",
@@ -3046,88 +2108,70 @@ async function distributeRewards(
 
 }
 
-
-/* =========================================================
-   FINAL RESULTS
-========================================================= */
-
 function renderFinalResults(
     room
-) {
+){
 
     clearInterval(
         timerInterval
     );
 
-
     clearInterval(
         countdownTimer
     );
-
 
     clearTimeout(
         hostRoundTimer
     );
 
-
     clearTimeout(
         hostTransitionTimer
     );
-
 
     gameSection.classList.add(
         "hidden"
     );
 
-
     roundBreak.classList.add(
         "hidden"
     );
-
 
     finalResults.classList.remove(
         "hidden"
     );
 
+    const players=
+        room.players||{};
 
-    const players =
-        room.players ||
-        {};
+    const entries=
+        Object.entries(players)
+            .filter(
+                ([,player])=>
+                    !player.leftGame
+            )
+            .sort(
+                function(a,b){
 
+                    return(
+                        Number(
+                            a[1].finalRank||
+                            999
+                        )-
+                        Number(
+                            b[1].finalRank||
+                            999
+                        )
+                    );
 
-    const entries =
-        Object.entries(
-            players
-        )
-        .filter(
-            ([, player]) =>
-                !player.leftGame
-        )
-        .sort(
-            function (a, b) {
+                }
+            );
 
-                return (
-                    Number(
-                        a[1].finalRank ||
-                        999
-                    ) -
-                    Number(
-                        b[1].finalRank ||
-                        999
-                    )
-                );
-
-            }
-        );
-
-
-    const winner =
+    const winner=
         entries[0];
 
+    if(winner){
 
-    if (winner) {
-
-        winnerDisplay.innerHTML = `
+        winnerDisplay.innerHTML=`
 
             <div class="winner-title">
                 👑 WINNER
@@ -3135,15 +2179,14 @@ function renderFinalResults(
 
             <div class="winner-name">
                 ${escapeHtml(
-                    winner[1].username ||
+                    winner[1].username||
                     "Player"
                 )}
             </div>
 
             <div class="winner-score">
                 ${Number(
-                    winner[1].score ||
-                    0
+                    winner[1].score||0
                 )} POINTS
             </div>
 
@@ -3151,80 +2194,52 @@ function renderFinalResults(
 
     }
 
-
-    finalLeaderboard.innerHTML =
-        "";
-
+    finalLeaderboard.innerHTML="";
 
     entries.forEach(
-        function ([, player], index) {
+        function([,player],index){
 
-            const rank =
+            const rank=
                 Number(
-                    player.finalRank ||
-                    index + 1
+                    player.finalRank||
+                    index+1
                 );
 
-
-            const reward =
+            const reward=
                 Number(
-                    player.finalReward ||
+                    player.finalReward||
                     0
                 );
 
-
-            let rankDisplay;
-
-
-            if (
-                rank ===
-                1
-            ) {
-
-                rankDisplay =
-                    "🥇";
-
-            }
-
-            else if (
-                rank ===
-                2
-            ) {
-
-                rankDisplay =
-                    "🥈";
-
-            }
-
-            else if (
-                rank ===
-                3
-            ) {
-
-                rankDisplay =
-                    "🥉";
-
-            }
-
-            else {
-
-                rankDisplay =
-                    rank;
-
-            }
-
-
-            const row =
+            const row=
                 document.createElement(
                     "div"
                 );
 
-
-            row.className =
+            row.className=
                 "final-player";
 
+            let rankDisplay;
 
-            row.innerHTML = `
+            if(rank===1){
+
+                rankDisplay="🥇";
+
+            }else if(rank===2){
+
+                rankDisplay="🥈";
+
+            }else if(rank===3){
+
+                rankDisplay="🥉";
+
+            }else{
+
+                rankDisplay=rank;
+
+            }
+
+            row.innerHTML=`
 
                 <div class="final-player-left">
 
@@ -3234,7 +2249,7 @@ function renderFinalResults(
 
                     <span class="final-name">
                         ${escapeHtml(
-                            player.username ||
+                            player.username||
                             "Player"
                         )}
                     </span>
@@ -3244,24 +2259,22 @@ function renderFinalResults(
                 <div class="final-score">
 
                     ${Number(
-                        player.score ||
-                        0
+                        player.score||0
                     )} PTS
 
                     ${
-                        reward > 0
-                            ? `
-                                <span class="reward">
-                                    +${reward} CP
-                                </span>
-                              `
-                            : ""
+                        reward>0
+                        ?`
+                            <span class="reward">
+                                +${reward} CP
+                            </span>
+                         `
+                        :""
                     }
 
                 </div>
 
             `;
-
 
             finalLeaderboard.appendChild(
                 row
@@ -3272,54 +2285,41 @@ function renderFinalResults(
 
 }
 
-
-/* =========================================================
-   EXIT
-========================================================= */
-
 exitButton.addEventListener(
     "click",
-    async function () {
+    async function(){
 
-        if (
-            !currentUser ||
+        if(
+            !currentUser||
             !currentRoomCode
-        ) {
+        ){
 
-            window.location.href =
+            window.location.href=
                 "clobby.html";
 
             return;
 
         }
 
+        try{
 
-        try {
-
-            const playerRef =
+            const playerRef=
                 ref(
                     database,
                     `chaosCodeRooms/${currentRoomCode}/players/${currentUser.uid}`
                 );
 
-
             await update(
                 playerRef,
                 {
-
-                    leftGame:
-                        true
-
+                    leftGame:true
                 }
             );
 
-
-            window.location.href =
+            window.location.href=
                 "clobby.html";
 
-        }
-
-        catch (error) {
+        }catch(error){
 
             console.error(
                 "EXIT ERROR:",
@@ -3331,183 +2331,117 @@ exitButton.addEventListener(
     }
 );
 
-
-/* =========================================================
-   LOBBY
-========================================================= */
-
 lobbyButton.addEventListener(
     "click",
-    function () {
+    function(){
 
-        window.location.href =
+        window.location.href=
             "clobby.html";
 
     }
 );
 
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
 dashboardButton.addEventListener(
     "click",
-    function () {
+    function(){
 
-        window.location.href =
+        window.location.href=
             "dashboard.html";
 
     }
 );
 
-
-/* =========================================================
-   ANSWER UI HELPERS
-========================================================= */
-
-function clearAnswerInputs() {
+function clearAnswerInputs(){
 
     digitInputs.forEach(
-        function (input) {
+        function(input){
 
-            input.value =
-                "";
-
-            input.disabled =
-                false;
+            input.value="";
+            input.disabled=false;
 
         }
     );
 
-
-    submitButton.disabled =
-        false;
+    submitButton.disabled=false;
 
 }
-
 
 function showAnswerStatus(
     message,
     type
-) {
+){
 
-    answerStatus.textContent =
+    answerStatus.textContent=
         message;
 
-
-    answerStatus.className =
+    answerStatus.className=
         `answer-status ${type}`;
 
 }
 
+function resetAnswerStatus(){
 
-function resetAnswerStatus() {
+    answerStatus.textContent="";
 
-    answerStatus.textContent =
-        "";
-
-
-    answerStatus.className =
+    answerStatus.className=
         "answer-status";
 
 }
 
 
 /* =========================================================
-   =========================================================
-   SIMPLE CHAOS CODE PUZZLE GENERATOR
-   =========================================================
-
-   THE IMPORTANT RULE:
-
-   Each clue is generated from the remaining
-   possible solutions created by the clues before it.
-
-   We never independently generate:
-
-       clue 1
-       clue 2
-       clue 3
-       clue 4
-       clue 5
-
-   Instead:
-
-       ALL 120
-           ↓
-       clue 1
-           ↓
-       remaining solutions
-           ↓
-       clue 2
-           ↓
-       remaining solutions
-           ↓
-       clue 3
-           ↓
-       remaining solutions
-           ↓
-       clue 4
-           ↓
-       remaining solutions
-           ↓
-       clue 5
-           ↓
-       exactly one
-
-=========================================================
+   SIMPLE DEPENDENT CLUE GENERATOR
 ========================================================= */
 
+/*
+   Rules:
 
-/* =========================================================
-   GENERATE ROUND
-========================================================= */
+   1. Five unique digits are generated.
+   2. Those exact five digits are shown.
+   3. Only the ORDER is hidden.
+   4. Every clue uses only those five digits.
+   5. No "number is not in the code" clue exists.
+   6. Every clue is based on the remaining possibilities
+      left by all clues before it.
+   7. The final five clues must identify exactly one
+      possible code.
+*/
 
-function generateRound() {
+function generateRound(){
 
-    /*
-        Retry a few different secret codes if
-        a clean clue chain cannot be found.
-    */
-
-    for (
-        let attempt = 0;
-        attempt < 100;
+    for(
+        let attempt=0;
+        attempt<100;
         attempt++
-    ) {
+    ){
 
-        const digits =
+        const digits=
             generateUniqueDigits(
                 CODE_LENGTH
             );
 
-
-        const secret =
+        const secret=
             shuffle(
                 [...digits]
             );
 
-
-        const allSolutions =
+        const allSolutions=
             generatePermutations(
                 digits
             );
 
-
-        const clues =
-            buildClueChain(
+        const clues=
+            buildDependentClues(
                 secret,
-                digits,
                 allSolutions
             );
 
+        if(
+            clues.length===
+            5
+        ){
 
-        if (
-            clues.length === 5
-        ) {
-
-            return {
+            return{
 
                 code:
                     secret,
@@ -3525,547 +2459,288 @@ function generateRound() {
 
     }
 
-
-    /*
-        This should be extremely unlikely.
-    */
-
     throw new Error(
-        "Unable to create a valid Chaos Code puzzle."
+        "Unable to generate a valid Chaos Code puzzle."
     );
 
 }
 
-
-/* =========================================================
-   BUILD DEPENDENT CLUE CHAIN
-========================================================= */
-
-function buildClueChain(
+function buildDependentClues(
     secret,
-    digits,
     allSolutions
-) {
+){
 
     /*
-        Start with all 120 possible orders.
+       Start with all 120 possible orders.
     */
 
-    let possibleSolutions =
+    let possibleSolutions=
         [...allSolutions];
 
-
-    const selectedClues =
-        [];
-
-
-    const usedGuesses =
+    const clues=[];
+    const usedGuesses=
         new Set();
 
-
     /*
-        Approximate difficulty targets.
+       Desired exact counts.
 
-        The exact numbers are not mandatory.
-        They simply keep the puzzle comfortable.
+       This gives the player a clear progression
+       without using "unavailable" numbers.
 
-        Clue 1:
-        broad
+       0 exact / 5 misplaced
+       1 exact / 4 misplaced
+       2 exact / 3 misplaced
+       3 exact / 2 misplaced
+       2 exact / 3 misplaced
 
-        Clue 2:
-        narrower
-
-        Clue 3:
-        useful deduction
-
-        Clue 4:
-        very close
-
-        Clue 5:
-        one answer
+       The actual guesses are generated dynamically.
     */
 
-    const targets = [
-
-        {
-            min: 45,
-            max: 90
-        },
-
-        {
-            min: 15,
-            max: 45
-        },
-
-        {
-            min: 5,
-            max: 18
-        },
-
-        {
-            min: 2,
-            max: 6
-        },
-
-        {
-            min: 1,
-            max: 1
-        }
-
+    const targetExact=[
+        0,
+        1,
+        2,
+        3,
+        2
     ];
 
+    /*
+       These are target sizes for the number of
+       possible codes remaining after each clue.
+    */
 
-    for (
-        let clueIndex = 0;
-        clueIndex < 5;
+    const targetSizes=[
+        60,
+        20,
+        8,
+        3,
+        1
+    ];
+
+    for(
+        let clueIndex=0;
+        clueIndex<5;
         clueIndex++
-    ) {
+    ){
 
-        const target =
-            targets[
+        const exactTarget=
+            targetExact[
                 clueIndex
             ];
 
+        const candidates=[];
 
-        /*
-            Create possible guesses.
+        for(
+            const guess of allSolutions
+        ){
 
-            All permutations of the real digits
-            are useful for position clues.
-
-            Random guesses provide unavailable
-            number information.
-        */
-
-        const guesses =
-            createGuessPool(
-                digits
-            );
-
-
-        const candidates =
-            [];
-
-
-        for (
-            const guess of guesses
-        ) {
-
-            const guessKey =
+            const key=
                 guess.join("");
 
-
-            /*
-                Never repeat a guess.
-            */
-
-            if (
-                usedGuesses.has(
-                    guessKey
-                )
-            ) {
-
+            if(
+                usedGuesses.has(key)
+            ){
                 continue;
-
             }
 
-
             /*
-                Never reveal the answer directly.
+               Never display the secret itself
+               as a clue guess.
             */
 
-            if (
-                guessKey ===
+            if(
+                key===
                 secret.join("")
-            ) {
-
+            ){
                 continue;
-
             }
 
-
-            const feedback =
+            const feedback=
                 evaluateGuess(
                     guess,
                     secret
                 );
 
-
-            /*
-                A clue with no matching
-                numbers gives very little
-                useful information here.
-            */
-
-            if (
-                feedback.exact === 0 &&
-                feedback.misplaced === 0
-            ) {
-
+            if(
+                feedback.exact!==
+                exactTarget
+            ){
                 continue;
-
             }
 
-
             /*
-                THIS IS WHERE THE CLUE DEPENDS
-                ON ALL PREVIOUS CLUES.
+               CRITICAL:
 
-                We do not compare against
-                allSolutions anymore.
-
-                We compare against the CURRENT
-                possibleSolutions.
-
-                Therefore each new clue works
-                on what remains after the previous
-                clues.
+               This clue is tested ONLY against
+               the solutions that survived all
+               previous clues.
             */
 
-            const remaining =
+            const remaining=
                 possibleSolutions.filter(
-                    function (candidate) {
+                    function(candidate){
 
-                        const result =
+                        const result=
                             evaluateGuess(
                                 guess,
                                 candidate
                             );
 
-
-                        return (
-
-                            result.exact ===
-                                feedback.exact &&
-
-                            result.misplaced ===
-                                feedback.misplaced &&
-
-                            result.absent ===
-                                feedback.absent
-
+                        return(
+                            result.exact===
+                                feedback.exact&&
+                            result.misplaced===
+                                feedback.misplaced
                         );
 
                     }
                 );
 
-
             /*
-                The actual secret must remain
-                possible.
+               The actual secret must remain possible.
             */
 
-            const secretStillPossible =
-                remaining.some(
-                    function (candidate) {
+            if(
+                !remaining.some(
+                    function(candidate){
 
-                        return (
-                            candidate.join("") ===
+                        return(
+                            candidate.join("")===
                             secret.join("")
                         );
 
                     }
-                );
-
-
-            if (
-                !secretStillPossible
-            ) {
-
+                )
+            ){
                 continue;
-
             }
-
 
             /*
-                Before clue 5, never completely
-                solve the puzzle.
+               Don't let the puzzle become solved
+               before Clue 5.
             */
 
-            if (
-                clueIndex < 4 &&
-                remaining.length <= 1
-            ) {
-
+            if(
+                clueIndex<4&&
+                remaining.length<=1
+            ){
                 continue;
-
             }
 
-
-            /*
-                How close is this clue to the
-                desired difficulty?
-            */
-
-            let targetDistance =
-                0;
-
-
-            if (
-                remaining.length <
-                target.min
-            ) {
-
-                targetDistance =
-                    target.min -
-                    remaining.length;
-
-            }
-
-            else if (
-                remaining.length >
-                target.max
-            ) {
-
-                targetDistance =
-                    remaining.length -
-                    target.max;
-
-            }
-
-
-            const midpoint =
-                (
-                    target.min +
-                    target.max
-                ) / 2;
-
-
-            const midpointDistance =
+            const sizeDistance=
                 Math.abs(
-                    remaining.length -
-                    midpoint
+                    remaining.length-
+                    targetSizes[
+                        clueIndex
+                    ]
                 );
-
-
-            /*
-                Make the clue meaningfully
-                different from the previous one.
-
-                For example, if the previous clue
-                was mostly misplaced digits, prefer
-                something that introduces exact
-                or unavailable information.
-            */
-
-            let diversityBonus =
-                0;
-
-
-            if (
-                selectedClues.length > 0
-            ) {
-
-                const previous =
-                    selectedClues[
-                        selectedClues.length -
-                        1
-                    ];
-
-
-                if (
-                    previous.exact !==
-                    feedback.exact
-                ) {
-
-                    diversityBonus +=
-                        4;
-
-                }
-
-
-                if (
-                    previous.misplaced !==
-                    feedback.misplaced
-                ) {
-
-                    diversityBonus +=
-                        3;
-
-                }
-
-
-                if (
-                    previous.absent !==
-                    feedback.absent
-                ) {
-
-                    diversityBonus +=
-                        2;
-
-                }
-
-            }
-
-
-            const informationScore =
-
-                (
-                    feedback.exact *
-                    4
-                ) +
-
-                (
-                    feedback.misplaced *
-                    2
-                ) +
-
-                feedback.absent;
-
-
-            const candidateScore =
-
-                (
-                    targetDistance *
-                    100
-                ) +
-
-                midpointDistance -
-
-                (
-                    diversityBonus *
-                    5
-                ) -
-
-                informationScore;
-
 
             candidates.push({
 
                 guess,
-
                 feedback,
-
                 remaining,
-
-                score:
-                    candidateScore
+                sizeDistance
 
             });
 
         }
 
+        if(
+            candidates.length===0
+        ){
 
-        if (
-            candidates.length === 0
-        ) {
-
-            return [];
+            return[];
 
         }
 
-
-        /*
-            Best candidates first.
-        */
-
         candidates.sort(
-            function (a, b) {
+            function(a,b){
 
-                return (
-                    a.score -
-                    b.score
+                return(
+                    a.sizeDistance-
+                    b.sizeDistance
                 );
 
             }
         );
 
-
         /*
-            We don't blindly pick the first one.
-
-            We test a small group to ensure the
-            chain can continue.
+           Try several of the best clues.
+           We test the combined clue set,
+           not just the newest clue.
         */
 
-        const choices =
-            candidates.slice(
-                0,
-                Math.min(
-                    15,
-                    candidates.length
-                )
+        const limit=
+            Math.min(
+                25,
+                candidates.length
             );
 
+        let chosen=null;
 
-        let chosen =
-            null;
+        for(
+            let i=0;
+            i<limit;
+            i++
+        ){
 
+            const candidate=
+                candidates[i];
 
-        for (
-            const candidate of choices
-        ) {
-
-            /*
-                Add the candidate clue temporarily.
-            */
-
-            const testClues = [
-
-                ...selectedClues,
-
+            const testClues=[
+                ...clues,
                 {
-
                     guess:
                         candidate.guess,
-
                     exact:
                         candidate.feedback.exact,
-
                     misplaced:
-                        candidate.feedback.misplaced,
-
-                    absent:
-                        candidate.feedback.absent
-
+                        candidate.feedback.misplaced
                 }
-
             ];
 
-
-            const solutionsAfter =
+            const finalSolutions=
                 filterSolutions(
                     allSolutions,
                     testClues
                 );
 
-
             /*
-                Last clue:
-                MUST leave exactly one.
+               Before the final clue:
+               multiple answers must remain.
             */
 
-            if (
-                clueIndex === 4
-            ) {
+            if(
+                clueIndex<4
+            ){
 
-                if (
-                    solutionsAfter.length === 1 &&
-                    solutionsAfter[0].join("") ===
-                        secret.join("")
-                ) {
+                if(
+                    finalSolutions.length>1
+                ){
 
-                    chosen =
+                    chosen=
                         candidate;
 
                     break;
 
                 }
 
-            }
-
-            else {
+            }else{
 
                 /*
-                    Earlier clues must still leave
-                    multiple possibilities.
+                   After all five clues:
+                   exactly ONE answer must remain.
                 */
 
-                if (
-                    solutionsAfter.length > 1
-                ) {
+                if(
+                    finalSolutions.length===
+                        1&&
+                    finalSolutions[0].join("")===
+                        secret.join("")
+                ){
 
-                    chosen =
+                    chosen=
                         candidate;
 
                     break;
@@ -4076,246 +2751,103 @@ function buildClueChain(
 
         }
 
+        if(!chosen){
 
-        if (!chosen) {
-
-            return [];
+            return[];
 
         }
 
+        const clue={
 
-        /*
-            Save the clue.
-        */
+            guess:
+                [...chosen.guess],
 
-        const clue =
-            {
+            exact:
+                chosen.feedback.exact,
 
-                guess:
-                    [...chosen.guess],
+            misplaced:
+                chosen.feedback.misplaced,
 
-                exact:
-                    chosen.feedback.exact,
+            absent:
+                0,
 
-                misplaced:
-                    chosen.feedback.misplaced,
+            text:
+                buildSimpleClueText(
+                    chosen.feedback
+                )
 
-                absent:
-                    chosen.feedback.absent,
+        };
 
-                text:
-                    buildClueText(
-                        chosen.feedback
-                    )
-
-            };
-
-
-        selectedClues.push(
+        clues.push(
             clue
         );
-
 
         usedGuesses.add(
             chosen.guess.join("")
         );
 
-
         /*
-            THIS IS THE KEY:
+           THIS is the dependency:
 
-            Everything from now on uses
-            ONLY the solutions left by this clue.
+           The next clue starts from the
+           solutions left by this clue.
         */
 
-        possibleSolutions =
+        possibleSolutions=
             chosen.remaining;
 
     }
 
-
-    /*
-        Final safety check.
-    */
-
-    const finalSolutions =
+    const finalSolutions=
         filterSolutions(
             allSolutions,
-            selectedClues
+            clues
         );
 
-
-    if (
-        finalSolutions.length !==
+    if(
+        finalSolutions.length!==
         1
-    ) {
+    ){
 
-        return [];
+        return[];
 
     }
 
-
-    if (
-        finalSolutions[0].join("") !==
+    if(
+        finalSolutions[0].join("")!==
         secret.join("")
-    ) {
+    ){
 
-        return [];
+        return[];
 
     }
 
-
-    return selectedClues;
+    return clues;
 
 }
-
-
-/* =========================================================
-   CREATE GUESS POOL
-========================================================= */
-
-function createGuessPool(
-    digits
-) {
-
-    const guesses =
-        [];
-
-
-    const used =
-        new Set();
-
-
-    /*
-        First:
-        all 120 arrangements of the actual
-        visible digits.
-    */
-
-    const permutations =
-        generatePermutations(
-            digits
-        );
-
-
-    for (
-        const guess of permutations
-    ) {
-
-        const key =
-            guess.join("");
-
-
-        if (
-            !used.has(key)
-        ) {
-
-            used.add(key);
-
-            guesses.push(
-                guess
-            );
-
-        }
-
-    }
-
-
-    /*
-        Add decoy guesses.
-
-        These contain one or more numbers
-        that are not in the actual code.
-
-        This allows clues to say:
-
-        "One number is not in the code."
-    */
-
-    let attempts =
-        0;
-
-
-    while (
-        guesses.length <
-            300 &&
-        attempts <
-            3000
-    ) {
-
-        attempts++;
-
-
-        const guess =
-            generateGuess();
-
-
-        const key =
-            guess.join("");
-
-
-        if (
-            used.has(key)
-        ) {
-
-            continue;
-
-        }
-
-
-        used.add(key);
-
-
-        guesses.push(
-            guess
-        );
-
-    }
-
-
-    shuffle(
-        guesses
-    );
-
-
-    return guesses;
-
-}
-
-
-/* =========================================================
-   FILTER POSSIBLE SOLUTIONS
-========================================================= */
 
 function filterSolutions(
     solutions,
     clues
-) {
+){
 
     return solutions.filter(
-        function (candidate) {
+        function(candidate){
 
             return clues.every(
-                function (clue) {
+                function(clue){
 
-                    const feedback =
+                    const result=
                         evaluateGuess(
                             clue.guess,
                             candidate
                         );
 
-
-                    return (
-
-                        feedback.exact ===
-                            clue.exact &&
-
-                        feedback.misplaced ===
-                            clue.misplaced &&
-
-                        feedback.absent ===
-                            clue.absent
-
+                    return(
+                        result.exact===
+                            clue.exact&&
+                        result.misplaced===
+                            clue.misplaced
                     );
 
                 }
@@ -4326,54 +2858,43 @@ function filterSolutions(
 
 }
 
-
-/* =========================================================
-   GUESS EVALUATION
-========================================================= */
-
 function evaluateGuess(
     guess,
     secret
-) {
+){
 
-    let exact =
-        0;
+    let exact=0;
+    let totalCommon=0;
 
-
-    let totalCommon =
-        0;
-
-
-    for (
-        let i = 0;
-        i < CODE_LENGTH;
+    for(
+        let i=0;
+        i<CODE_LENGTH;
         i++
-    ) {
+    ){
 
         /*
-            Correct number AND correct position.
+           Correct number AND correct position.
         */
 
-        if (
-            guess[i] ===
+        if(
+            guess[i]===
             secret[i]
-        ) {
+        ){
 
             exact++;
 
         }
 
-
         /*
-            Correct number somewhere in
-            the secret.
+           Because every digit is unique,
+           includes() is sufficient.
         */
 
-        if (
+        if(
             secret.includes(
                 guess[i]
             )
-        ) {
+        ){
 
             totalCommon++;
 
@@ -4381,157 +2902,118 @@ function evaluateGuess(
 
     }
 
-
-    const misplaced =
-        totalCommon -
+    const misplaced=
+        totalCommon-
         exact;
 
-
-    const absent =
-        CODE_LENGTH -
-        exact -
+    const absent=
+        CODE_LENGTH-
+        exact-
         misplaced;
 
-
-    return {
+    return{
 
         exact,
-
         misplaced,
-
         absent
 
     };
 
 }
 
-
-/* =========================================================
-   CLUE TEXT
-========================================================= */
-
-function buildClueText(
+function buildSimpleClueText(
     feedback
-) {
+){
 
-    const parts =
-        [];
+    if(
+        feedback.exact===
+        0
+    ){
 
+        return(
+            "None of the numbers are in the correct positions. " +
+            "All five numbers are in the wrong positions."
+        );
 
-    /*
-        EXACT
-    */
+    }
 
-    if (
-        feedback.exact ===
+    if(
+        feedback.exact===
         1
-    ) {
+    ){
 
-        parts.push(
-            "One number is correct and in the correct position."
+        return(
+            "One number is in the correct position. " +
+            "The other four numbers are in the wrong positions."
         );
 
     }
 
-    else if (
-        feedback.exact > 1
-    ) {
+    if(
+        feedback.exact===
+        2
+    ){
 
-        parts.push(
-            `${feedback.exact} numbers are correct and in the correct positions.`
+        return(
+            "Two numbers are in the correct positions. " +
+            "The other three numbers are in the wrong positions."
         );
 
     }
 
+    if(
+        feedback.exact===
+        3
+    ){
 
-    /*
-        MISPLACED
-    */
-
-    if (
-        feedback.misplaced ===
-        1
-    ) {
-
-        parts.push(
-            "One number is correct but in the wrong position."
+        return(
+            "Three numbers are in the correct positions. " +
+            "The other two numbers are in the wrong positions."
         );
 
     }
 
-    else if (
-        feedback.misplaced > 1
-    ) {
+    if(
+        feedback.exact===
+        4
+    ){
 
-        parts.push(
-            `${feedback.misplaced} numbers are correct but in the wrong positions.`
+        return(
+            "Four numbers are in the correct positions. " +
+            "One number is in the wrong position."
         );
 
     }
 
-
-    /*
-        ABSENT
-    */
-
-    if (
-        feedback.absent ===
-        1
-    ) {
-
-        parts.push(
-            "One number is not in the code."
-        );
-
-    }
-
-    else if (
-        feedback.absent > 1
-    ) {
-
-        parts.push(
-            `${feedback.absent} numbers are not in the code.`
-        );
-
-    }
-
-
-    return parts.join(
-        " "
+    return(
+        `${feedback.exact} numbers are in the correct positions. `+
+        `${feedback.misplaced} numbers are in the wrong positions.`
     );
 
 }
 
-
-/* =========================================================
-   UNIQUE DIGITS
-========================================================= */
-
 function generateUniqueDigits(
     count
-) {
+){
 
-    const digits =
-        [];
+    const digits=[];
 
-
-    while (
-        digits.length <
+    while(
+        digits.length<
         count
-    ) {
+    ){
 
-        const digit =
+        const digit=
             Math.floor(
-                Math.random() *
+                Math.random()*
                 10
             );
 
-
-        if (
+        if(
             !digits.includes(
                 digit
             )
-        ) {
+        ){
 
             digits.push(
                 digit
@@ -4541,56 +3023,33 @@ function generateUniqueDigits(
 
     }
 
-
     return digits;
 
 }
 
-
-/* =========================================================
-   RANDOM GUESS
-========================================================= */
-
-function generateGuess() {
-
-    return generateUniqueDigits(
-        CODE_LENGTH
-    );
-
-}
-
-
-/* =========================================================
-   PERMUTATIONS
-========================================================= */
-
 function generatePermutations(
     array
-) {
+){
 
-    if (
-        array.length <=
-        1
-    ) {
+    if(
+        array.length<=1
+    ){
 
-        return [
+        return[
             array
         ];
 
     }
 
-
-    const result =
-        [];
-
+    const result=[];
 
     array.forEach(
-        function (
+        function(
             value,
             index
-        ) {
+        ){
 
-            const remaining =
+            const remaining=
                 array
                     .slice(
                         0,
@@ -4598,28 +3057,24 @@ function generatePermutations(
                     )
                     .concat(
                         array.slice(
-                            index + 1
+                            index+1
                         )
                     );
 
-
-            const smaller =
+            const smaller=
                 generatePermutations(
                     remaining
                 );
 
-
             smaller.forEach(
-                function (
+                function(
                     permutation
-                ) {
+                ){
 
-                    result.push(
-                        [
-                            value,
-                            ...permutation
-                        ]
-                    );
+                    result.push([
+                        value,
+                        ...permutation
+                    ]);
 
                 }
             );
@@ -4627,78 +3082,61 @@ function generatePermutations(
         }
     );
 
-
     return result;
 
 }
 
-
-/* =========================================================
-   SHUFFLE
-========================================================= */
-
 function shuffle(
     array
-) {
+){
 
-    for (
-        let i =
-            array.length - 1;
+    for(
+        let i=
+            array.length-1;
 
-        i > 0;
+        i>0;
 
         i--
-    ) {
+    ){
 
-        const j =
+        const j=
             Math.floor(
-                Math.random() *
-                (
-                    i + 1
-                )
+                Math.random()*
+                (i+1)
             );
-
 
         [
             array[i],
             array[j]
-        ] =
-        [
+        ]=[
             array[j],
             array[i]
         ];
 
     }
 
-
     return array;
 
 }
 
-
-/* =========================================================
-   TIMESTAMP
-========================================================= */
-
 function getTimestamp(
     value
-) {
+){
 
-    if (
-        typeof value ===
+    if(
+        typeof value===
         "number"
-    ) {
+    ){
 
         return value;
 
     }
 
-
-    if (
-        value &&
-        typeof value.toDate ===
-            "function"
-    ) {
+    if(
+        value&&
+        typeof value.toDate===
+        "function"
+    ){
 
         return value
             .toDate()
@@ -4706,68 +3144,56 @@ function getTimestamp(
 
     }
 
+    if(
+        value&&
+        typeof value.seconds===
+        "number"
+    ){
 
-    if (
-        value &&
-        typeof value.seconds ===
-            "number"
-    ) {
-
-        return (
-            value.seconds *
+        return(
+            value.seconds*
             1000
-        ) +
+        )+
         Math.floor(
             (
-                value.nanoseconds ||
+                value.nanoseconds||
                 0
-            ) /
+            )/
             1000000
         );
 
     }
 
-
     return null;
 
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
 function escapeHtml(
     value
-) {
+){
 
     return String(
         value
     )
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
