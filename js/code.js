@@ -21,7 +21,6 @@ const exitButton=document.getElementById("exitButton");
 const roundDisplay=document.getElementById("roundDisplay");
 const timerDisplay=document.getElementById("timerDisplay");
 const scoreDisplay=document.getElementById("scoreDisplay");
-const codeDigits=document.getElementById("codeDigits");
 const clueCounter=document.getElementById("clueCounter");
 const cluesList=document.getElementById("cluesList");
 const submitButton=document.getElementById("submitButton");
@@ -319,10 +318,6 @@ function renderRound(
     roundDisplay.textContent=
         `${roundNumber} / ${TOTAL_ROUNDS}`;
 
-    renderCodeDigits(
-        round.displayDigits
-    );
-
     renderAvailableClues(
         round
     );
@@ -369,29 +364,6 @@ function renderRound(
         );
 
     }
-
-}
-
-function renderCodeDigits(digits){
-
-    codeDigits.innerHTML="";
-
-    digits.forEach(
-        function(digit){
-
-            const element=
-                document.createElement(
-                    "span"
-                );
-
-            element.textContent=digit;
-
-            codeDigits.appendChild(
-                element
-            );
-
-        }
-    );
 
 }
 

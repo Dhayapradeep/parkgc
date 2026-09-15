@@ -221,6 +221,7 @@ main {
 ========================= */
 
 .clues-card,
+.answer-card,
 .standings-card {
 
     padding: 24px;
@@ -254,7 +255,6 @@ main {
 }
 
 
-.code-instruction,
 .small-description {
 
     color:
@@ -268,7 +268,7 @@ main {
 
 
 /* =========================
-   CARD HEADING
+   HEADING
 ========================= */
 
 .card-heading {
@@ -298,85 +298,8 @@ main {
 
 
 /* =========================
-   JUMBLED DIGITS
-========================= */
-
-.code-display-section {
-
-    margin-top: 20px;
-
-    padding: 20px 0;
-
-    text-align: center;
-
-    border-top:
-        1px solid
-        rgba(216,173,75,0.12);
-
-    border-bottom:
-        1px solid
-        rgba(216,173,75,0.12);
-
-}
-
-
-.code-digits {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 9px;
-
-    margin-top: 16px;
-
-}
-
-
-.code-digits span {
-
-    width: 57px;
-
-    height: 57px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border:
-        1px solid
-        rgba(216,173,75,0.35);
-
-    background:
-        rgba(216,173,75,0.07);
-
-    border-radius: 9px;
-
-    color: #f3d487;
-
-    font-size: 25px;
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-weight: bold;
-
-}
-
-
-/* =========================
    CLUES
 ========================= */
-
-.clues-section {
-
-    margin-top: 22px;
-
-}
-
 
 .clues-list {
 
@@ -476,15 +399,7 @@ main {
    ANSWER
 ========================= */
 
-.clue-answer-section {
-
-    margin-top: 24px;
-
-    padding-top: 22px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.08);
+.answer-card {
 
     text-align: center;
 
@@ -1264,27 +1179,10 @@ main {
 
 
     .clues-card,
+    .answer-card,
     .standings-card {
 
         padding: 18px;
-
-    }
-
-
-    .code-digits {
-
-        gap: 6px;
-
-    }
-
-
-    .code-digits span {
-
-        width: 44px;
-
-        height: 48px;
-
-        font-size: 20px;
 
     }
 
