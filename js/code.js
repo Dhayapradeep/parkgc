@@ -658,50 +658,133 @@ function scheduleHostRoundEnd(){
 
 }
 
-async function finishCurrentRound(){
+async function finishCurrentRound() {
 
-    if(
-        !currentRoomData||
+    if (
+        !currentRoomData ||
         !currentUser
-    ){
+    ) {
         return;
     }
 
-    if(
-        currentRoomData.status!==
+
+    if (
+        currentRoomData.status !==
         "playing"
-    ){
+    ) {
         return;
     }
 
-    if(
-        currentRoomData.hostUid!==
+
+    if (
+        currentRoomData.hostUid !==
         currentUser.uid
-    ){
+    ) {
         return;
     }
+
 
     clearTimeout(
         hostRoundTimer
     );
 
-    hostRoundTimer=null;
-    hostRoundKey=null;
+    hostRoundTimer = null;
 
-    try{
+    hostRoundKey = null;
 
-        const now=Date.now();
+
+    try {
+
+        /*
+         * Get the freshest Firebase data first.
+         * This is important because a player may have
+         * answered very close to the end of the round.
+         */
+
+        const snapshot =
+            await get(
+                getRoomRef()
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+            return;
+        }
+
+
+        /*
+         * Refresh local room data.
+         */
+
+        currentRoomData =
+            snapshot.val();
+
+
+        /*
+         * IMPORTANT:
+         *
+         * Score every correct answer while the
+         * room is still "playing".
+         *
+         * We do this BEFORE changing the status
+         * to "roundResult".
+         */
+
+        await processCorrectAnswers();
+
+
+        /*
+         * Read Firebase one more time so that
+         * all score/points transactions are reflected
+         * before the round-result screen appears.
+         */
+
+        const finalSnapshot =
+            await get(
+                getRoomRef()
+            );
+
+
+        if (
+            !finalSnapshot.exists()
+        ) {
+            return;
+        }
+
+
+        currentRoomData =
+            finalSnapshot.val();
+
+
+        const now =
+            Date.now();
+
+
+        /*
+         * NOW end the round.
+         */
 
         await update(
             getRoomRef(),
             {
-                status:"roundResult",
-                roundEndAt:now,
-                roundResultAt:now
+
+                status:
+                    "roundResult",
+
+                roundEndAt:
+                    now,
+
+                roundResultAt:
+                    now
+
             }
         );
 
-    }catch(error){
+    }
+
+    catch (error) {
 
         console.error(
             "FINISH ROUND ERROR:",
@@ -1308,16 +1391,20 @@ async function submitAnswer(){
         }
 
         await set(
-            answerRef,
-            {
-                answer,
-                submittedAt:
-                    serverTimestamp(),
-                correct:
-                    isCorrect,
-                points:0
-            }
-        );
+    answerRef,
+    {
+        answer,
+
+        submittedAt:
+            Date.now(),
+
+        correct:
+            isCorrect,
+
+        points:
+            0
+    }
+);
 
         if(!isCorrect){
 
@@ -1497,6 +1584,13 @@ async function processCorrectAnswers(){
     ){
         return;
     }
+
+    if (
+    currentRoomData.status !==
+    "playing"
+) {
+    return;
+}
 
     if(
         currentRoomData.hostUid!==
