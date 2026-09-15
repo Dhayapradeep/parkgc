@@ -3055,7 +3055,23 @@ function resetAnswerStatus() {
 */
 
 
-function generateRound() {
+/* =========================================================
+   CHAOS CODE PUZZLE GENERATION
+   ========================================================= */
+
+
+/* =========================================================
+   GENERATE ROUND
+   ========================================================= */
+
+function generateRound(){
+
+    /*
+       Generate five unique digits.
+
+       These are the five real digits that
+       belong to the answer.
+    */
 
     const digits =
         generateUniqueDigits(
@@ -3063,11 +3079,20 @@ function generateRound() {
         );
 
 
+    /*
+       Shuffle them to create the real
+       secret code.
+    */
+
     const secret =
         shuffle(
             [...digits]
         );
 
+
+    /*
+       Build the five clues.
+    */
 
     const clues =
         buildProgressiveClues(
@@ -3080,6 +3105,11 @@ function generateRound() {
 
         code:
             secret,
+
+        /*
+           These are used internally to validate
+           the player's answer.
+        */
 
         displayDigits:
             shuffle(
@@ -3097,51 +3127,216 @@ function generateRound() {
    BUILD PROGRESSIVE CLUES
    ========================================================= */
 
+/*
+
+   THE CLUE STRUCTURE
+
+   CLUE 1
+   -------
+   Shows all five real digits.
+   Their order is shuffled.
+
+   CLUE 2
+   -------
+   Uses the five real digits.
+   Exactly ONE position is correct.
+
+   CLUE 3
+   -------
+   Uses the five real digits.
+   Exactly TWO positions are correct.
+   Neither correct position is the one from Clue 2.
+
+   CLUE 4
+   -------
+   Uses the five real digits.
+   Exactly THREE positions are correct.
+   The two correct positions from Clue 3
+   remain correct.
+   One NEW correct position is added.
+
+   CLUE 5
+   -------
+   Uses FOUR real digits + ONE decoy.
+   Exactly FOUR positions are correct.
+   The four correct positions correspond to
+   the four positions established through the
+   previous clue structure.
+
+   IMPORTANT:
+   None of the clue text tells the player
+   which specific positions are correct.
+*/
+
+
 function buildProgressiveClues(
     secret,
     digits
-) {
+){
 
     /*
-       Random reveal order.
-
-       Example:
-
-       [4, 1, 3, 0, 2]
-
-       This means:
-
-       Clue 2 reveals position 5
-       Clue 3 adds position 2
-       Clue 4 adds position 4
-       Clue 5 adds position 1
-
-       So the player can't simply
-       follow a left-to-right pattern.
+       Randomly choose the position revealed
+       by Clue 2.
     */
 
-    const revealOrder =
-        shuffle(
-            [0, 1, 2, 3, 4]
+    const allPositions = [
+        0,
+        1,
+        2,
+        3,
+        4
+    ];
+
+
+    const clue2Position =
+        randomItem(
+            allPositions
         );
 
 
-    const clues = [];
+    /*
+       Clue 3 must use TWO positions that
+       are completely different from Clue 2.
+
+       There are four positions left.
+    */
+
+    const remainingAfterClue2 =
+        allPositions.filter(
+            function(position){
+
+                return(
+                    position !==
+                    clue2Position
+                );
+
+            }
+        );
+
+
+    const clue3NewPositions =
+        shuffle(
+            [
+                ...remainingAfterClue2
+            ]
+        ).slice(
+            0,
+            2
+        );
+
+
+    /*
+       Clue 3 has two correct positions.
+    */
+
+    const clue3CorrectPositions =
+        [
+            ...clue3NewPositions
+        ];
+
+
+    /*
+       Clue 4 must keep both positions
+       from Clue 3 and add ONE new position.
+
+       This gives THREE correct positions.
+    */
+
+    const remainingAfterClue3 =
+        allPositions.filter(
+            function(position){
+
+                return(
+                    !clue3CorrectPositions.includes(
+                        position
+                    )
+                );
+
+            }
+        );
+
+
+    const clue4NewPosition =
+        randomItem(
+            remainingAfterClue3
+        );
+
+
+    const clue4CorrectPositions =
+        [
+            ...clue3CorrectPositions,
+            clue4NewPosition
+        ];
+
+
+    /*
+       We now have FOUR known positions
+       after Clue 4:
+
+       Clue 2 -> 1
+       Clue 3 -> +2
+       Clue 4 -> +1
+
+       Total = 4
+
+       One position is still not part of
+       the revealed structure.
+    */
+
+    const clue5CorrectPositions =
+        [
+            ...clue4CorrectPositions
+        ];
+
+
+    /*
+       The remaining position is the one
+       we will use for the decoy in Clue 5.
+    */
+
+    const finalUnknownPosition =
+        allPositions.find(
+            function(position){
+
+                return(
+                    !clue5CorrectPositions.includes(
+                        position
+                    )
+                );
+
+            }
+        );
 
 
     /* =====================================================
        CLUE 1
        ===================================================== */
 
+    const clue1Guess =
+        shuffle(
+            [...digits]
+        );
+
+
+    const clues = [];
+
+
     clues.push({
 
+        number:
+            1,
+
         guess:
-            shuffle(
-                [...digits]
-            ),
+            clue1Guess,
+
+        exact:
+            null,
+
+        misplaced:
+            null,
 
         text:
-            "These are the five numbers in the code. Their positions are hidden."
+            "These are the five numbers in the code. Their order is hidden."
 
     });
 
@@ -3150,78 +3345,172 @@ function buildProgressiveClues(
        CLUE 2
        ===================================================== */
 
-    const clue2Positions = [
-        revealOrder[0]
-    ];
-
-
-    clues.push(
-        createPositionClue(
+    const clue2Guess =
+        createGuessWithExactPositions(
             secret,
-            clue2Positions,
-            "One number is in its correct position."
-        )
-    );
+            clue2CorrectPositions(
+                clue2Position
+            )
+        );
+
+
+    const clue2Feedback =
+        evaluateGuess(
+            clue2Guess,
+            secret
+        );
+
+
+    clues.push({
+
+        number:
+            2,
+
+        guess:
+            clue2Guess,
+
+        exact:
+            clue2Feedback.exact,
+
+        misplaced:
+            clue2Feedback.misplaced,
+
+        text:
+            "Exactly 1 number is in the correct position."
+
+    });
 
 
     /* =====================================================
        CLUE 3
        ===================================================== */
 
-    const clue3Positions = [
-        revealOrder[0],
-        revealOrder[1]
-    ];
-
-
-    clues.push(
-        createPositionClue(
+    const clue3Guess =
+        createGuessWithExactPositions(
             secret,
-            clue3Positions,
-            "Two numbers are now in their correct positions."
-        )
-    );
+            clue3CorrectPositions
+        );
+
+
+    const clue3Feedback =
+        evaluateGuess(
+            clue3Guess,
+            secret
+        );
+
+
+    clues.push({
+
+        number:
+            3,
+
+        guess:
+            clue3Guess,
+
+        exact:
+            clue3Feedback.exact,
+
+        misplaced:
+            clue3Feedback.misplaced,
+
+        text:
+            "Exactly 2 numbers are in the correct positions."
+
+    });
 
 
     /* =====================================================
        CLUE 4
        ===================================================== */
 
-    const clue4Positions = [
-        revealOrder[0],
-        revealOrder[1],
-        revealOrder[2]
-    ];
-
-
-    clues.push(
-        createPositionClue(
+    const clue4Guess =
+        createGuessWithExactPositions(
             secret,
-            clue4Positions,
-            "Three numbers are now in their correct positions."
-        )
-    );
+            clue4CorrectPositions
+        );
+
+
+    const clue4Feedback =
+        evaluateGuess(
+            clue4Guess,
+            secret
+        );
+
+
+    clues.push({
+
+        number:
+            4,
+
+        guess:
+            clue4Guess,
+
+        exact:
+            clue4Feedback.exact,
+
+        misplaced:
+            clue4Feedback.misplaced,
+
+        text:
+            "Exactly 3 numbers are in the correct positions."
+
+    });
 
 
     /* =====================================================
        CLUE 5
        ===================================================== */
 
-    const clue5Positions = [
-        revealOrder[0],
-        revealOrder[1],
-        revealOrder[2],
-        revealOrder[3]
-    ];
+    /*
+       Clue 5 needs FOUR correct positions.
+
+       The remaining position receives a decoy
+       digit that is NOT part of the real code.
+
+       This makes "4 correct" mathematically possible
+       without revealing which four are correct.
+    */
+
+    const decoy =
+        generateDecoyDigit(
+            digits
+        );
 
 
-    clues.push(
-        createPositionClue(
+    const clue5Guess =
+        createFinalGuess(
             secret,
-            clue5Positions,
-            "Four numbers are now in their correct positions. One position is still unknown."
-        )
-    );
+            clue5CorrectPositions,
+            finalUnknownPosition,
+            decoy
+        );
+
+
+    const clue5Feedback =
+        evaluateGuessWithPossibleDecoy(
+            clue5Guess,
+            secret
+        );
+
+
+    clues.push({
+
+        number:
+            5,
+
+        guess:
+            clue5Guess,
+
+        exact:
+            clue5Feedback.exact,
+
+        misplaced:
+            clue5Feedback.misplaced,
+
+        text:
+            "Exactly 4 numbers are in the correct positions."
+
+    });
 
 
     return clues;
@@ -3230,37 +3519,333 @@ function buildProgressiveClues(
 
 
 /* =========================================================
-   POSITION CLUE CREATOR
+   CLUE 2 POSITION
    ========================================================= */
 
-function createPositionClue(
+function clue2CorrectPositions(
+    position
+){
+
+    return [
+        position
+    ];
+
+}
+
+
+/* =========================================================
+   CREATE NORMAL CLUE GUESS
+   ========================================================= */
+
+/*
+
+   The guess contains the SAME five real digits.
+
+   Some positions are forced to be correct.
+
+   The remaining digits are rearranged so they
+   don't accidentally create additional correct
+   positions.
+*/
+
+
+function createGuessWithExactPositions(
     secret,
-    revealedPositions,
-    text
-) {
+    exactPositions
+){
 
-    const guess = [];
+    const fixed =
+        new Set(
+            exactPositions
+        );
 
 
-    for (
+    const guess =
+        new Array(
+            CODE_LENGTH
+        );
+
+
+    /*
+       Put the known-correct numbers
+       into their correct positions.
+    */
+
+    exactPositions.forEach(
+        function(position){
+
+            guess[position] =
+                secret[position];
+
+        }
+    );
+
+
+    /*
+       Collect the remaining digits.
+    */
+
+    const remainingDigits =
+        [];
+
+
+    for(
         let i = 0;
         i < CODE_LENGTH;
         i++
-    ) {
+    ){
 
-        if (
-            revealedPositions.includes(i)
-        ) {
+        if(
+            !fixed.has(i)
+        ){
 
-            guess.push(
+            remainingDigits.push(
                 secret[i]
             );
 
-        } else {
+        }
 
-            guess.push(
-                "?"
+    }
+
+
+    /*
+       Find a permutation where NONE of the
+       remaining positions accidentally become
+       correct.
+    */
+
+    const permutations =
+        generatePermutations(
+            remainingDigits
+        );
+
+
+    const freePositions =
+        [];
+
+
+    for(
+        let i = 0;
+        i < CODE_LENGTH;
+        i++
+    ){
+
+        if(
+            !fixed.has(i)
+        ){
+
+            freePositions.push(
+                i
             );
+
+        }
+
+    }
+
+
+    for(
+        const permutation
+        of permutations
+    ){
+
+        let valid = true;
+
+
+        for(
+            let i = 0;
+            i < freePositions.length;
+            i++
+        ){
+
+            const position =
+                freePositions[i];
+
+
+            if(
+                permutation[i] ===
+                secret[position]
+            ){
+
+                valid = false;
+
+                break;
+
+            }
+
+        }
+
+
+        if(!valid){
+            continue;
+        }
+
+
+        for(
+            let i = 0;
+            i < freePositions.length;
+            i++
+        ){
+
+            guess[
+                freePositions[i]
+            ] =
+                permutation[i];
+
+        }
+
+
+        return guess;
+
+    }
+
+
+    /*
+       Extremely unlikely fallback.
+    */
+
+    return createFallbackPermutation(
+        secret,
+        exactPositions
+    );
+
+}
+
+
+/* =========================================================
+   FINAL CLUE
+   ========================================================= */
+
+function createFinalGuess(
+    secret,
+    correctPositions,
+    unknownPosition,
+    decoy
+){
+
+    const guess =
+        new Array(
+            CODE_LENGTH
+        );
+
+
+    /*
+       Put the four real digits
+       in their correct positions.
+    */
+
+    correctPositions.forEach(
+        function(position){
+
+            guess[position] =
+                secret[position];
+
+        }
+    );
+
+
+    /*
+       Put the decoy in the remaining position.
+
+       The player sees the decoy,
+       but is not told which number it is.
+    */
+
+    guess[
+        unknownPosition
+    ] =
+        decoy;
+
+
+    return guess;
+
+}
+
+
+/* =========================================================
+   DECOY DIGIT
+   ========================================================= */
+
+function generateDecoyDigit(
+    realDigits
+){
+
+    const available = [];
+
+
+    for(
+        let digit = 0;
+        digit <= 9;
+        digit++
+    ){
+
+        if(
+            !realDigits.includes(
+                digit
+            )
+        ){
+
+            available.push(
+                digit
+            );
+
+        }
+
+    }
+
+
+    return randomItem(
+        available
+    );
+
+}
+
+
+/* =========================================================
+   FINAL CLUE FEEDBACK
+   ========================================================= */
+
+/*
+   The normal evaluateGuess() function assumes every
+   displayed digit exists in the secret.
+
+   Clue 5 contains ONE decoy, so this function
+   handles it safely.
+*/
+
+
+function evaluateGuessWithPossibleDecoy(
+    guess,
+    secret
+){
+
+    let exact = 0;
+
+    let common = 0;
+
+
+    for(
+        let i = 0;
+        i < CODE_LENGTH;
+        i++
+    ){
+
+        if(
+            guess[i] ===
+            secret[i]
+        ){
+
+            exact++;
+
+        }
+
+
+        if(
+            secret.includes(
+                guess[i]
+            )
+        ){
+
+            common++;
 
         }
 
@@ -3269,44 +3854,275 @@ function createPositionClue(
 
     return {
 
-        guess,
+        exact,
 
-        text,
+        misplaced:
+            common - exact,
 
-        revealedPositions:
-            [...revealedPositions]
+        absent:
+            CODE_LENGTH -
+            common
 
     };
 
 }
 
+
 /* =========================================================
-   DIGIT GENERATION
+   NORMAL FEEDBACK
+   ========================================================= */
+
+function evaluateGuess(
+    guess,
+    secret
+){
+
+    let exact = 0;
+
+    let totalCommon = 0;
+
+
+    for(
+        let i = 0;
+        i < CODE_LENGTH;
+        i++
+    ){
+
+        if(
+            guess[i] ===
+            secret[i]
+        ){
+
+            exact++;
+
+        }
+
+
+        if(
+            secret.includes(
+                guess[i]
+            )
+        ){
+
+            totalCommon++;
+
+        }
+
+    }
+
+
+    const misplaced =
+        totalCommon -
+        exact;
+
+
+    const absent =
+        CODE_LENGTH -
+        exact -
+        misplaced;
+
+
+    return {
+
+        exact,
+
+        misplaced,
+
+        absent
+
+    };
+
+}
+
+
+/* =========================================================
+   GENERATE PERMUTATIONS
+   ========================================================= */
+
+function generatePermutations(
+    array
+){
+
+    if(
+        array.length <= 1
+    ){
+
+        return [
+            array
+        ];
+
+    }
+
+
+    const result = [];
+
+
+    array.forEach(
+        function(
+            value,
+            index
+        ){
+
+            const remaining =
+                array
+                    .slice(
+                        0,
+                        index
+                    )
+                    .concat(
+                        array.slice(
+                            index + 1
+                        )
+                    );
+
+
+            const smaller =
+                generatePermutations(
+                    remaining
+                );
+
+
+            smaller.forEach(
+                function(
+                    permutation
+                ){
+
+                    result.push(
+                        [
+                            value,
+                            ...permutation
+                        ]
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   FALLBACK PERMUTATION
+   ========================================================= */
+
+function createFallbackPermutation(
+    secret,
+    exactPositions
+){
+
+    const guess =
+        [...secret];
+
+
+    const fixed =
+        new Set(
+            exactPositions
+        );
+
+
+    const freePositions =
+        [];
+
+
+    for(
+        let i = 0;
+        i < CODE_LENGTH;
+        i++
+    ){
+
+        if(
+            !fixed.has(i)
+        ){
+
+            freePositions.push(
+                i
+            );
+
+        }
+
+    }
+
+
+    if(
+        freePositions.length >= 2
+    ){
+
+        const first =
+            freePositions[0];
+
+
+        const second =
+            freePositions[1];
+
+
+        [
+            guess[first],
+            guess[second]
+        ] =
+        [
+            guess[second],
+            guess[first]
+        ];
+
+    }
+
+
+    return guess;
+
+}
+
+
+/* =========================================================
+   RANDOM ITEM
+   ========================================================= */
+
+function randomItem(
+    array
+){
+
+    return array[
+        Math.floor(
+            Math.random() *
+            array.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   UNIQUE DIGITS
    ========================================================= */
 
 function generateUniqueDigits(
     count
-) {
+){
 
     const digits = [];
 
 
-    while (
+    while(
         digits.length <
         count
-    ) {
+    ){
 
         const digit =
             Math.floor(
-                Math.random() * 10
+                Math.random() *
+                10
             );
 
 
-        if (
+        if(
             !digits.includes(
                 digit
             )
-        ) {
+        ){
 
             digits.push(
                 digit
@@ -3326,13 +4142,18 @@ function generateUniqueDigits(
    SHUFFLE
    ========================================================= */
 
-function shuffle(array) {
+function shuffle(
+    array
+){
 
-    for (
-        let i = array.length - 1;
+    for(
+        let i =
+            array.length - 1;
+
         i > 0;
+
         i--
-    ) {
+    ){
 
         const j =
             Math.floor(
@@ -3344,7 +4165,8 @@ function shuffle(array) {
         [
             array[i],
             array[j]
-        ] = [
+        ] =
+        [
             array[j],
             array[i]
         ];
@@ -3358,26 +4180,28 @@ function shuffle(array) {
 
 
 /* =========================================================
-   TIMESTAMP HELPER
+   TIMESTAMP
    ========================================================= */
 
-function getTimestamp(value) {
+function getTimestamp(
+    value
+){
 
-    if (
+    if(
         typeof value ===
         "number"
-    ) {
+    ){
 
         return value;
 
     }
 
 
-    if (
+    if(
         value &&
         typeof value.toDate ===
         "function"
-    ) {
+    ){
 
         return value
             .toDate()
@@ -3386,14 +4210,15 @@ function getTimestamp(value) {
     }
 
 
-    if (
+    if(
         value &&
         typeof value.seconds ===
         "number"
-    ) {
+    ){
 
         return (
-            value.seconds * 1000
+            value.seconds *
+            1000
         ) +
         Math.floor(
             (
@@ -3411,31 +4236,35 @@ function getTimestamp(value) {
 
 
 /* =========================================================
-   HTML ESCAPE
+   ESCAPE HTML
    ========================================================= */
 
-function escapeHtml(value) {
+function escapeHtml(
+    value
+){
 
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return String(
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
