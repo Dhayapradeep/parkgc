@@ -1,0 +1,978 @@
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(216, 173, 75, 0.10),
+            transparent 30%
+        ),
+
+        #050505;
+
+    color: white;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    padding-bottom: 60px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    width: 100%;
+
+    padding: 20px 5%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+}
+
+
+.brand {
+
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+
+.game-title {
+
+    position: absolute;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+}
+
+
+.leave-button {
+
+    padding: 8px 12px;
+
+    background: transparent;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 5px;
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.leave-button:hover {
+
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+
+    width: min(760px, 94%);
+
+    margin: auto;
+
+}
+
+
+/* =========================
+   GAME HEADER
+========================= */
+
+.game-header {
+
+    text-align: center;
+
+    padding: 35px 0 20px;
+
+}
+
+
+.small-title {
+
+    color: #d8ad4b;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 9px;
+
+}
+
+
+.game-header h1 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 38px;
+
+    font-weight: 500;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.subtitle {
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================
+   GAME INFO
+========================= */
+
+.game-info {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        auto
+        1fr;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.player-panel {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 9px;
+
+}
+
+
+.player-panel.active {
+
+    border-color:
+        rgba(216, 173, 75, 0.5);
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.06);
+
+}
+
+
+.piece {
+
+    width: 27px;
+
+    height: 27px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+
+}
+
+
+.black-piece {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #444,
+            #080808 65%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.2);
+
+    box-shadow:
+        inset 0 2px 3px
+        rgba(255, 255, 255, 0.1);
+
+}
+
+
+.white-piece {
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            white,
+            #bdbdbd 70%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.3);
+
+}
+
+
+.player-label {
+
+    display: block;
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 3px;
+
+}
+
+
+.player-panel strong {
+
+    display: block;
+
+    color:
+        rgba(255, 255, 255, 0.75);
+
+    font-size: 10px;
+
+    max-width: 120px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+.score {
+
+    margin-left: auto;
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 22px;
+
+}
+
+
+.turn-indicator {
+
+    min-width: 100px;
+
+    text-align: center;
+
+}
+
+
+.turn-label {
+
+    display: block;
+
+    color:
+        rgba(255, 255, 255, 0.25);
+
+    font-size: 6px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 5px;
+
+}
+
+
+.turn-indicator strong {
+
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.game-status {
+
+    text-align: center;
+
+    min-height: 18px;
+
+    margin-bottom: 12px;
+
+    color:
+        rgba(255, 255, 255, 0.45);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================
+   BOARD
+========================= */
+
+.board-wrapper {
+
+    width: min(620px, 92vw);
+
+    margin: auto;
+
+    padding: 10px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 15px 50px
+        rgba(0, 0, 0, 0.5);
+
+}
+
+
+.board {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(8, 1fr);
+
+    grid-template-rows:
+        repeat(8, 1fr);
+
+    background: #171717;
+
+    border:
+        2px solid
+        #2b2b2b;
+
+}
+
+
+/* =========================
+   CELLS
+========================= */
+
+.cell {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        #151515;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    cursor: default;
+
+}
+
+
+.cell.valid {
+
+    cursor: pointer;
+
+}
+
+
+.cell.valid::after {
+
+    content: "";
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(216, 173, 75, 0.55);
+
+    box-shadow:
+        0 0 10px
+        rgba(216, 173, 75, 0.3);
+
+}
+
+
+.cell.valid:hover {
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+}
+
+
+/* =========================
+   DISCS
+========================= */
+
+.disc {
+
+    width: 72%;
+
+    height: 72%;
+
+    border-radius: 50%;
+
+    transition:
+        transform 0.18s ease;
+
+}
+
+
+.disc.black {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #454545,
+            #050505 65%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.2);
+
+    box-shadow:
+        inset 0 2px 4px
+        rgba(255, 255, 255, 0.12),
+        0 2px 5px
+        rgba(0, 0, 0, 0.5);
+
+}
+
+
+.disc.white {
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #ffffff,
+            #c2c2c2 70%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.3);
+
+    box-shadow:
+        inset 0 2px 4px
+        rgba(255, 255, 255, 0.3),
+        0 2px 5px
+        rgba(0, 0, 0, 0.5);
+
+}
+
+
+.disc.flip {
+
+    animation:
+        flipDisc 0.35s ease;
+
+}
+
+
+@keyframes flipDisc {
+
+    0% {
+
+        transform:
+            rotateY(0deg)
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            rotateY(90deg)
+            scale(0.85);
+
+    }
+
+    100% {
+
+        transform:
+            rotateY(0deg)
+            scale(1);
+
+    }
+
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+}
+
+
+.control-button {
+
+    padding: 10px 18px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 6px;
+
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+}
+
+
+.control-button:hover {
+
+    border-color: #d8ad4b;
+
+    color: #d8ad4b;
+
+}
+
+
+.control-button:disabled {
+
+    opacity: 0.3;
+
+    cursor: not-allowed;
+
+}
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+/* =========================
+   RESULT CARD
+========================= */
+
+.result-card {
+
+    width: min(450px, 100%);
+
+    margin: 25px auto 0;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 12px;
+
+}
+
+
+.result-icon {
+
+    font-size: 28px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.result-label {
+
+    color: #d8ad4b;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.result-card h2 {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 24px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+}
+
+
+.result-card > p:not(.result-label) {
+
+    margin-top: 8px;
+
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 10px;
+
+}
+
+
+.final-score {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    margin-top: 20px;
+
+}
+
+
+.final-score div:not(.score-divider) {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+}
+
+
+.final-score span {
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.final-score strong {
+
+    color: #f3d487;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 25px;
+
+}
+
+
+.score-divider {
+
+    color:
+        rgba(255, 255, 255, 0.2);
+
+    font-size: 20px;
+
+}
+
+
+/* =========================
+   ROOM
+========================= */
+
+.room-info {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+    color:
+        rgba(255, 255, 255, 0.2);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.room-info span {
+
+    color:
+        rgba(216, 173, 75, 0.5);
+
+    margin-left: 5px;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+
+        padding: 17px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 11px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .game-title {
+
+        display: none;
+
+    }
+
+
+    .leave-button {
+
+        padding: 7px 8px;
+
+        font-size: 7px;
+
+    }
+
+
+    .game-header {
+
+        padding-top: 30px;
+
+    }
+
+
+    .game-header h1 {
+
+        font-size: 29px;
+
+    }
+
+
+    .game-info {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 7px;
+
+    }
+
+
+    .turn-indicator {
+
+        grid-column:
+            1 / -1;
+
+        grid-row: 1;
+
+        order: -1;
+
+        margin-bottom: 3px;
+
+    }
+
+
+    .player-panel {
+
+        padding: 9px;
+
+    }
+
+
+    .player-panel strong {
+
+        max-width: 75px;
+
+    }
+
+
+    .board-wrapper {
+
+        padding: 6px;
+
+    }
+
+
+    .cell.valid::after {
+
+        width: 5px;
+
+        height: 5px;
+
+    }
+
+
+    .controls {
+
+        flex-wrap: wrap;
+
+    }
+
+}

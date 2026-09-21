@@ -64,8 +64,8 @@ const ghostModeButton =
 const lastWordButton =
     document.getElementById("lastWordButton");
 
-const chaosAuctionButton =
-    document.getElementById("chaosAuctionButton");
+const othelloButton =
+    document.getElementById("othelloButton");
 
 const chaosCodeButton =
     document.getElementById("chaosCodeButton");
@@ -752,14 +752,14 @@ if (lastWordButton) {
 }
 
 
-if (unoParkButton) {
+if (othelloButton) {
 
-    unoParkButton.addEventListener(
+    othelloButton.addEventListener(
         "click",
         function () {
 
             window.location.href =
-                "ulobby.html";
+                "olobby.html";
 
         }
     );
