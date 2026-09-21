@@ -18,6 +18,7 @@ import {
 } from "../firebase.js";
 
 
+
 /* =========================
    FIREBASE
 ========================= */
@@ -26,12 +27,13 @@ const auth =
     getAuth(app);
 
 
+
 /* =========================
    GAME SETTINGS
 ========================= */
 
-const MAX_PLAYERS =
-    2;
+const MAX_PLAYERS = 2;
+
 
 
 /* =========================
@@ -119,24 +121,21 @@ const leaveRoomButton =
     );
 
 
+
 /* =========================
    VARIABLES
 ========================= */
 
-let currentUser =
-    null;
+let currentUser = null;
 
-let currentUsername =
-    "Player";
+let currentUsername = "Player";
 
-let currentRoomCode =
-    null;
+let currentRoomCode = null;
 
-let currentRoomData =
-    null;
+let currentRoomData = null;
 
-let roomListenerStarted =
-    false;
+let roomListenerStarted = false;
+
 
 
 /* =========================
@@ -156,8 +155,10 @@ onAuthStateChanged(
 
         }
 
+
         currentUser =
             user;
+
 
         await loadUserProfile();
 
@@ -165,8 +166,9 @@ onAuthStateChanged(
 );
 
 
+
 /* =========================
-   LOAD USER
+   LOAD USER PROFILE
 ========================= */
 
 async function loadUserProfile() {
@@ -210,6 +212,7 @@ async function loadUserProfile() {
 }
 
 
+
 /* =========================
    BACK BUTTON
 ========================= */
@@ -239,6 +242,7 @@ if (backButton) {
 }
 
 
+
 /* =========================
    CREATE ROOM
 ========================= */
@@ -253,6 +257,7 @@ if (createRoomButton) {
 }
 
 
+
 async function createRoom() {
 
     if (!currentUser) {
@@ -265,6 +270,7 @@ async function createRoom() {
     createRoomButton.disabled =
         true;
 
+
     setupStatus.textContent =
         "CREATING ROOM...";
 
@@ -273,8 +279,7 @@ async function createRoom() {
 
         let roomCode;
 
-        let exists =
-            true;
+        let exists = true;
 
 
         while (exists) {
@@ -344,7 +349,10 @@ async function createRoom() {
                             true,
 
                         symbol:
-                            "X",
+                            "⚫",
+
+                        color:
+                            null,
 
                         connected:
                             true
@@ -364,6 +372,7 @@ async function createRoom() {
         setupCard.classList.add(
             "hidden"
         );
+
 
         roomCard.classList.remove(
             "hidden"
@@ -394,6 +403,7 @@ async function createRoom() {
 }
 
 
+
 /* =========================
    JOIN ROOM
 ========================= */
@@ -406,6 +416,7 @@ if (joinRoomButton) {
     );
 
 }
+
 
 
 async function joinRoom() {
@@ -435,6 +446,7 @@ async function joinRoom() {
 
     joinRoomButton.disabled =
         true;
+
 
     setupStatus.textContent =
         "CHECKING ROOM...";
@@ -503,6 +515,7 @@ async function joinRoom() {
                 "hidden"
             );
 
+
             roomCard.classList.remove(
                 "hidden"
             );
@@ -553,7 +566,10 @@ async function joinRoom() {
                     false,
 
                 symbol:
-                    "O",
+                    "⚪",
+
+                color:
+                    null,
 
                 connected:
                     true
@@ -569,6 +585,7 @@ async function joinRoom() {
         setupCard.classList.add(
             "hidden"
         );
+
 
         roomCard.classList.remove(
             "hidden"
@@ -602,6 +619,7 @@ async function joinRoom() {
 }
 
 
+
 /* =========================
    ROOM LISTENER
 ========================= */
@@ -631,12 +649,13 @@ function listenToRoom() {
 
     onValue(
         roomRef,
-        async function (snapshot) {
+        function (snapshot) {
 
             if (!snapshot.exists()) {
 
                 roomStatusText.textContent =
                     "ROOM NO LONGER EXISTS.";
+
 
                 setTimeout(
                     function () {
@@ -647,6 +666,7 @@ function listenToRoom() {
                     },
                     1200
                 );
+
 
                 return;
 
@@ -662,9 +682,15 @@ function listenToRoom() {
             );
 
 
+            /*
+            =================================
+            GAME HAS STARTED
+            =================================
+            */
+
             if (
                 currentRoomData.status ===
-                "starting"
+                "playing"
             ) {
 
                 window.location.href =
@@ -676,6 +702,7 @@ function listenToRoom() {
     );
 
 }
+
 
 
 /* =========================
@@ -707,7 +734,8 @@ function renderRoom(room) {
     ) {
 
         if (
-            playerEntries.length < 2
+            playerEntries.length <
+            MAX_PLAYERS
         ) {
 
             roomStatus.textContent =
@@ -737,7 +765,8 @@ function renderRoom(room) {
 
 
     if (
-        playerEntries.length === 0
+        playerEntries.length ===
+        0
     ) {
 
         playersList.innerHTML = `
@@ -791,10 +820,33 @@ function renderRoom(room) {
                     "player-symbol";
 
 
-                symbol.textContent =
-                    player.symbol === "X"
-                        ? "⚫"
-                        : "⚪";
+                if (
+                    player.color ===
+                    "black"
+                ) {
+
+                    symbol.textContent =
+                        "⚫";
+
+                }
+
+                else if (
+                    player.color ===
+                    "white"
+                ) {
+
+                    symbol.textContent =
+                        "⚪";
+
+                }
+
+                else {
+
+                    symbol.textContent =
+                        player.symbol ||
+                        "●";
+
+                }
 
 
                 left.appendChild(
@@ -859,6 +911,7 @@ function renderRoom(room) {
     }
 
 
+
     /* =========================
        HOST CONTROLS
     ========================= */
@@ -914,6 +967,7 @@ function renderRoom(room) {
 }
 
 
+
 /* =========================
    START GAME
 ========================= */
@@ -926,6 +980,7 @@ if (startGameButton) {
     );
 
 }
+
 
 
 async function startGame() {
@@ -980,6 +1035,61 @@ async function startGame() {
 
     try {
 
+        /*
+        =================================
+        CREATE INITIAL OTHELLO BOARD
+        =================================
+        */
+
+        const board =
+            Array.from(
+                {
+                    length: 8
+                },
+                function () {
+
+                    return Array(
+                        8
+                    ).fill(0);
+
+                }
+            );
+
+
+        /*
+        0 = EMPTY
+        1 = BLACK
+        2 = WHITE
+        */
+
+
+        board[3][3] = 2;
+        board[3][4] = 1;
+        board[4][3] = 1;
+        board[4][4] = 2;
+
+
+
+        /*
+        =================================
+        PLAYER COLORS
+        =================================
+        */
+
+        const blackUid =
+            playerIds[0];
+
+        const whiteUid =
+            playerIds[1];
+
+
+
+        /*
+        =================================
+        START GAME
+        =================================
+        */
+
         const now =
             Date.now();
 
@@ -987,13 +1097,38 @@ async function startGame() {
         const updates = {
 
             status:
-                "starting",
+                "playing",
 
             startedAt:
-                now + 2000,
+                now,
 
             finishedAt:
-                null
+                null,
+
+            board:
+                board,
+
+            turn:
+                1,
+
+            lastAction:
+                "start",
+
+
+            [`players/${blackUid}/color`]:
+                "black",
+
+
+            [`players/${blackUid}/symbol`]:
+                "⚫",
+
+
+            [`players/${whiteUid}/color`]:
+                "white",
+
+
+            [`players/${whiteUid}/symbol`]:
+                "⚪"
 
         };
 
@@ -1026,6 +1161,7 @@ async function startGame() {
     }
 
 }
+
 
 
 /* =========================
@@ -1083,6 +1219,7 @@ if (copyRoomButton) {
 }
 
 
+
 /* =========================
    LEAVE ROOM
 ========================= */
@@ -1095,6 +1232,7 @@ if (leaveRoomButton) {
     );
 
 }
+
 
 
 async function leaveRoom() {
@@ -1130,8 +1268,10 @@ async function leaveRoom() {
             currentRoomCode =
                 null;
 
+
             window.location.href =
                 "dashboard.html";
+
 
             return;
 
@@ -1204,7 +1344,7 @@ async function leaveRoom() {
                 const [
                     newHostUid
                 ] =
-                remainingPlayers[0];
+                    remainingPlayers[0];
 
 
                 await update(
@@ -1248,6 +1388,7 @@ async function leaveRoom() {
     }
 
 }
+
 
 
 /* =========================

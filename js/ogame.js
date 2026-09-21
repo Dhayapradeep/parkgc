@@ -3,8 +3,7 @@ import {
     get,
     update,
     runTransaction,
-    onValue,
-    remove
+    onValue
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 import {
@@ -23,7 +22,8 @@ import {
    FIREBASE
 ========================= */
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
 
 
@@ -46,61 +46,99 @@ const WHITE = 2;
 ========================= */
 
 const boardElement =
-    document.getElementById("board");
+    document.getElementById(
+        "board"
+    );
 
 const blackPlayerName =
-    document.getElementById("blackPlayerName");
+    document.getElementById(
+        "blackPlayerName"
+    );
 
 const whitePlayerName =
-    document.getElementById("whitePlayerName");
+    document.getElementById(
+        "whitePlayerName"
+    );
 
 const blackScore =
-    document.getElementById("blackScore");
+    document.getElementById(
+        "blackScore"
+    );
 
 const whiteScore =
-    document.getElementById("whiteScore");
+    document.getElementById(
+        "whiteScore"
+    );
 
 const turnText =
-    document.getElementById("turnText");
+    document.getElementById(
+        "turnText"
+    );
 
 const gameStatus =
-    document.getElementById("gameStatus");
+    document.getElementById(
+        "gameStatus"
+    );
 
 const blackPlayerPanel =
-    document.getElementById("blackPlayerPanel");
+    document.getElementById(
+        "blackPlayerPanel"
+    );
 
 const whitePlayerPanel =
-    document.getElementById("whitePlayerPanel");
+    document.getElementById(
+        "whitePlayerPanel"
+    );
 
 const passButton =
-    document.getElementById("passButton");
+    document.getElementById(
+        "passButton"
+    );
 
 const restartButton =
-    document.getElementById("restartButton");
+    document.getElementById(
+        "restartButton"
+    );
 
 const dashboardButton =
-    document.getElementById("dashboardButton");
+    document.getElementById(
+        "dashboardButton"
+    );
 
 const leaveButton =
-    document.getElementById("leaveButton");
+    document.getElementById(
+        "leaveButton"
+    );
 
 const resultCard =
-    document.getElementById("resultCard");
+    document.getElementById(
+        "resultCard"
+    );
 
 const resultTitle =
-    document.getElementById("resultTitle");
+    document.getElementById(
+        "resultTitle"
+    );
 
 const resultMessage =
-    document.getElementById("resultMessage");
+    document.getElementById(
+        "resultMessage"
+    );
 
 const finalBlackScore =
-    document.getElementById("finalBlackScore");
+    document.getElementById(
+        "finalBlackScore"
+    );
 
 const finalWhiteScore =
-    document.getElementById("finalWhiteScore");
+    document.getElementById(
+        "finalWhiteScore"
+    );
 
 const roomCodeDisplay =
-    document.getElementById("roomCodeDisplay");
+    document.getElementById(
+        "roomCodeDisplay"
+    );
 
 
 
@@ -131,6 +169,7 @@ const urlParams =
         window.location.search
     );
 
+
 currentRoomCode =
     urlParams.get("room");
 
@@ -154,7 +193,8 @@ onAuthStateChanged(
         }
 
 
-        currentUser = user;
+        currentUser =
+            user;
 
 
         await loadUserProfile();
@@ -182,7 +222,7 @@ onAuthStateChanged(
 
 
 /* =========================
-   LOAD USER
+   LOAD USER PROFILE
 ========================= */
 
 async function loadUserProfile() {
@@ -284,7 +324,7 @@ function listenToGame() {
 
 
 /* =========================
-   DETERMINE COLOR
+   DETERMINE PLAYER COLOR
 ========================= */
 
 function determinePlayerColor() {
@@ -317,7 +357,8 @@ function determinePlayerColor() {
 
 
     currentPlayerColor =
-        player.color || null;
+        player.color ||
+        null;
 
 }
 
@@ -355,7 +396,8 @@ function renderGame() {
 function renderPlayers() {
 
     const players =
-        currentRoom.players || {};
+        currentRoom.players ||
+        {};
 
 
     let blackPlayer =
@@ -374,7 +416,8 @@ function renderPlayers() {
                     "black"
                 ) {
 
-                    blackPlayer = player;
+                    blackPlayer =
+                        player;
 
                 }
 
@@ -384,7 +427,8 @@ function renderPlayers() {
                     "white"
                 ) {
 
-                    whitePlayer = player;
+                    whitePlayer =
+                        player;
 
                 }
 
@@ -406,7 +450,7 @@ function renderPlayers() {
 
 
 /* =========================
-   CREATE BOARD
+   CREATE INITIAL BOARD
 ========================= */
 
 function createInitialBoard() {
@@ -414,7 +458,8 @@ function createInitialBoard() {
     const board =
         Array.from(
             {
-                length: BOARD_SIZE
+                length:
+                    BOARD_SIZE
             },
             function () {
 
@@ -426,13 +471,17 @@ function createInitialBoard() {
         );
 
 
-    board[3][3] = WHITE;
+    board[3][3] =
+        WHITE;
 
-    board[3][4] = BLACK;
+    board[3][4] =
+        BLACK;
 
-    board[4][3] = BLACK;
+    board[4][3] =
+        BLACK;
 
-    board[4][4] = WHITE;
+    board[4][4] =
+        WHITE;
 
 
     return board;
@@ -442,13 +491,26 @@ function createInitialBoard() {
 
 
 /* =========================
-   BOARD NORMALIZATION
+   NORMALIZE BOARD
 ========================= */
 
 function normalizeBoard(board) {
 
     if (
-        Array.isArray(board)
+        Array.isArray(board) &&
+        board.length ===
+            BOARD_SIZE &&
+        board.every(
+            function (row) {
+
+                return (
+                    Array.isArray(row) &&
+                    row.length ===
+                        BOARD_SIZE
+                );
+
+            }
+        )
     ) {
 
         return board;
@@ -522,7 +584,8 @@ function renderBoard() {
 
 
             if (
-                value !== EMPTY
+                value !==
+                EMPTY
             ) {
 
                 const disc =
@@ -552,8 +615,10 @@ function renderBoard() {
                     function (move) {
 
                         return (
-                            move.row === row &&
-                            move.col === col
+                            move.row ===
+                                row &&
+                            move.col ===
+                                col
                         );
 
                     }
@@ -592,7 +657,9 @@ function renderBoard() {
 
 
     const scores =
-        calculateScores(board);
+        calculateScores(
+            board
+        );
 
 
     blackScore.textContent =
@@ -683,7 +750,8 @@ function getLegalMoves(
 
 
             if (
-                flips.length > 0
+                flips.length >
+                0
             ) {
 
                 moves.push(
@@ -740,7 +808,8 @@ function getFlips(
                 r < BOARD_SIZE &&
                 c >= 0 &&
                 c < BOARD_SIZE &&
-                board[r][c] === opponent
+                board[r][c] ===
+                    opponent
             ) {
 
                 directionFlips.push(
@@ -759,12 +828,14 @@ function getFlips(
 
 
             if (
-                directionFlips.length > 0 &&
+                directionFlips.length >
+                    0 &&
                 r >= 0 &&
                 r < BOARD_SIZE &&
                 c >= 0 &&
                 c < BOARD_SIZE &&
-                board[r][c] === player
+                board[r][c] ===
+                    player
             ) {
 
                 flips.push(
@@ -831,14 +902,16 @@ async function makeMove(
             row,
             col,
             playerNumber,
-            playerNumber === BLACK
+            playerNumber ===
+                BLACK
                 ? WHITE
                 : BLACK
         );
 
 
     if (
-        board[row][col] !== EMPTY ||
+        board[row][col] !==
+            EMPTY ||
         flips.length === 0
     ) {
 
@@ -868,7 +941,8 @@ async function makeMove(
 
 
                 const players =
-                    room.players || {};
+                    room.players ||
+                    {};
 
 
                 const player =
@@ -926,14 +1000,16 @@ async function makeMove(
                         row,
                         col,
                         turnNumber,
-                        turnNumber === BLACK
+                        turnNumber ===
+                            BLACK
                             ? WHITE
                             : BLACK
                     );
 
 
                 if (
-                    currentFlips.length === 0
+                    currentFlips.length ===
+                    0
                 ) {
 
                     return;
@@ -960,7 +1036,8 @@ async function makeMove(
 
 
                 const opponent =
-                    turnNumber === BLACK
+                    turnNumber ===
+                        BLACK
                         ? WHITE
                         : BLACK;
 
@@ -986,8 +1063,10 @@ async function makeMove(
                             return boardRow.every(
                                 function (cell) {
 
-                                    return cell !==
-                                        EMPTY;
+                                    return (
+                                        cell !==
+                                        EMPTY
+                                    );
 
                                 }
                             );
@@ -1003,8 +1082,10 @@ async function makeMove(
                 if (
                     boardFull ||
                     (
-                        opponentMoves.length === 0 &&
-                        playerMoves.length === 0
+                        opponentMoves.length ===
+                            0 &&
+                        playerMoves.length ===
+                            0
                     )
                 ) {
 
@@ -1017,7 +1098,8 @@ async function makeMove(
                 }
 
                 else if (
-                    opponentMoves.length === 0
+                    opponentMoves.length ===
+                    0
                 ) {
 
                     room.turn =
@@ -1076,6 +1158,7 @@ if (passButton) {
 }
 
 
+
 async function passTurn() {
 
     if (
@@ -1118,7 +1201,8 @@ async function passTurn() {
 
 
     if (
-        legalMoves.length > 0
+        legalMoves.length >
+        0
     ) {
 
         return;
@@ -1127,7 +1211,8 @@ async function passTurn() {
 
 
     const opponent =
-        playerNumber === BLACK
+        playerNumber ===
+            BLACK
             ? WHITE
             : BLACK;
 
@@ -1140,7 +1225,8 @@ async function passTurn() {
 
 
     if (
-        opponentMoves.length === 0
+        opponentMoves.length ===
+        0
     ) {
 
         await finishGame();
@@ -1248,16 +1334,20 @@ function updateTurnUI() {
         turnText.textContent =
             "GAME OVER";
 
+
         blackPlayerPanel.classList.remove(
             "active"
         );
+
 
         whitePlayerPanel.classList.remove(
             "active"
         );
 
+
         passButton.disabled =
             true;
+
 
         return;
 
@@ -1289,13 +1379,14 @@ function updateTurnUI() {
     passButton.disabled =
         !(
             currentPlayerColor ===
-            turnName &&
+                turnName &&
             getLegalMoves(
                 normalizeBoard(
                     currentRoom.board
                 ),
                 turn
-            ).length === 0
+            ).length ===
+                0
         );
 
 }
@@ -1332,7 +1423,9 @@ function updateGameStatus() {
 
     if (
         currentTurn ===
-        null
+        null ||
+        currentTurn ===
+        undefined
     ) {
 
         return;
@@ -1355,7 +1448,8 @@ function updateGameStatus() {
     ) {
 
         if (
-            legalMoves.length === 0
+            legalMoves.length ===
+            0
         ) {
 
             gameStatus.textContent =
@@ -1398,7 +1492,9 @@ function showResult() {
 
 
     const scores =
-        calculateScores(board);
+        calculateScores(
+            board
+        );
 
 
     finalBlackScore.textContent =
@@ -1419,7 +1515,7 @@ function showResult() {
 
 
         resultMessage.textContent =
-            "Black controlled more territory.";
+            "Black controlled more discs.";
 
     }
 
@@ -1433,7 +1529,7 @@ function showResult() {
 
 
         resultMessage.textContent =
-            "White controlled more territory.";
+            "White controlled more discs.";
 
     }
 
@@ -1536,7 +1632,8 @@ function colorNameToNumber(
 ) {
 
     if (
-        color === "black"
+        color ===
+        "black"
     ) {
 
         return BLACK;
@@ -1545,7 +1642,8 @@ function colorNameToNumber(
 
 
     if (
-        color === "white"
+        color ===
+        "white"
     ) {
 
         return WHITE;
@@ -1558,12 +1656,14 @@ function colorNameToNumber(
 }
 
 
+
 function colorNumberToName(
     number
 ) {
 
     if (
-        number === BLACK
+        number ===
+        BLACK
     ) {
 
         return "black";
@@ -1572,7 +1672,8 @@ function colorNumberToName(
 
 
     if (
-        number === WHITE
+        number ===
+        WHITE
     ) {
 
         return "white";
@@ -1660,7 +1761,10 @@ if (restartButton) {
                         "playing",
 
                     lastAction:
-                        "restart"
+                        "restart",
+
+                    finishedAt:
+                        null
 
                 }
             );
