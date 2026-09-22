@@ -17,14 +17,12 @@ import {
 } from "../firebase.js";
 
 
-
 /* =========================
    FIREBASE
 ========================= */
 
 const auth =
     getAuth(app);
-
 
 
 /* =========================
@@ -39,8 +37,15 @@ const BLACK = 1;
 
 const WHITE = 2;
 
-const WIN_REWARD = 100;
 
+/*
+ * Winner reward.
+ *
+ * Change this number later if
+ * you want a different reward.
+ */
+
+const WINNER_CP_REWARD = 100;
 
 
 /* =========================
@@ -101,54 +106,29 @@ const finalBlackScore =
 const finalWhiteScore =
     document.getElementById("finalWhiteScore");
 
-const rewardMessage =
-    document.getElementById("rewardMessage");
-
 const roomCodeDisplay =
     document.getElementById("roomCodeDisplay");
-
-const opponentLeftCard =
-    document.getElementById("opponentLeftCard");
-
-const opponentLeftMessage =
-    document.getElementById("opponentLeftMessage");
-
-const opponentLeftDashboardButton =
-    document.getElementById(
-        "opponentLeftDashboardButton"
-    );
-
 
 
 /* =========================
    VARIABLES
 ========================= */
 
-let currentUser =
-    null;
+let currentUser = null;
 
-let currentUsername =
-    "Player";
+let currentUsername = "Player";
 
-let currentRoomCode =
-    null;
+let currentRoomCode = null;
 
-let currentRoom =
-    null;
+let currentRoom = null;
 
-let currentPlayerColor =
-    null;
+let currentPlayerColor = null;
 
-let roomListenerStarted =
-    false;
-
-let opponentLeft =
-    false;
-
+let roomListenerStarted = false;
 
 
 /* =========================
-   GET ROOM CODE
+   ROOM CODE
 ========================= */
 
 const urlParams =
@@ -158,7 +138,6 @@ const urlParams =
 
 currentRoomCode =
     urlParams.get("room");
-
 
 
 /* =========================
@@ -179,8 +158,7 @@ onAuthStateChanged(
         }
 
 
-        currentUser =
-            user;
+        currentUser = user;
 
 
         await loadUserProfile();
@@ -206,9 +184,8 @@ onAuthStateChanged(
 );
 
 
-
 /* =========================
-   LOAD USER PROFILE
+   LOAD USER
 ========================= */
 
 async function loadUserProfile() {
@@ -239,7 +216,6 @@ async function loadUserProfile() {
         }
 
     }
-
     catch (error) {
 
         console.error(
@@ -252,24 +228,18 @@ async function loadUserProfile() {
 }
 
 
-
 /* =========================
    GAME LISTENER
 ========================= */
 
 function listenToGame() {
 
-    if (
-        roomListenerStarted
-    ) {
-
+    if (roomListenerStarted) {
         return;
-
     }
 
 
-    roomListenerStarted =
-        true;
+    roomListenerStarted = true;
 
 
     const roomRef =
@@ -281,7 +251,7 @@ function listenToGame() {
 
     onValue(
         roomRef,
-        function (snapshot) {
+        async function (snapshot) {
 
             if (!snapshot.exists()) {
 
@@ -297,7 +267,24 @@ function listenToGame() {
                 snapshot.val();
 
 
-            handleRoomState();
+            /*
+             * Reconnect this player.
+             */
+
+            await markPlayerConnected();
+
+
+            determinePlayerColor();
+
+
+            renderGame();
+
+
+            /*
+             * Detect opponent leaving.
+             */
+
+            await checkOpponentConnection();
 
         }
     );
@@ -305,14 +292,14 @@ function listenToGame() {
 }
 
 
-
 /* =========================
-   HANDLE ROOM STATE
+   MARK PLAYER CONNECTED
 ========================= */
 
-function handleRoomState() {
+async function markPlayerConnected() {
 
     if (
+        !currentUser ||
         !currentRoom ||
         !currentRoom.players
     ) {
@@ -322,79 +309,55 @@ function handleRoomState() {
     }
 
 
-    const players =
-        currentRoom.players;
+    const player =
+        currentRoom.players[
+            currentUser.uid
+        ];
 
 
-    const playerIds =
-        Object.keys(players);
+    if (!player) {
 
-
-
-    /*
-       If the game was already
-       completed normally, do not
-       treat the missing player as
-       someone leaving.
-    */
-
-    if (
-        currentRoom.status ===
-        "finished"
-    ) {
-
-        determinePlayerColor();
-
-        renderGame();
+        gameStatus.textContent =
+            "YOU ARE NOT PART OF THIS GAME.";
 
         return;
 
     }
 
 
-
-    /*
-       A valid Othello game requires
-       exactly two players.
-    */
-
     if (
-        playerIds.length < 2
+        player.connected !== true
     ) {
 
-        /*
-           If we were previously playing
-           and now only one player remains,
-           the opponent has left.
-        */
+        try {
 
-        if (
-            currentRoom.status ===
-                "playing" ||
-            currentRoom.status ===
-                "starting"
-        ) {
+            await update(
+                ref(
+                    database,
+                    `othelloRooms/${currentRoomCode}/players/${currentUser.uid}`
+                ),
+                {
+                    connected: true
+                }
+            );
 
-            handleOpponentLeft();
+        }
+        catch (error) {
 
-            return;
+            console.error(
+                "Reconnect error:",
+                error
+            );
 
         }
 
     }
 
-
-
-    determinePlayerColor();
-
-    renderGame();
-
 }
 
 
-
 /* =========================
-   DETERMINE PLAYER COLOR
+   DETERMINE COLOR
 ========================= */
 
 function determinePlayerColor() {
@@ -418,8 +381,7 @@ function determinePlayerColor() {
 
     if (!player) {
 
-        currentPlayerColor =
-            null;
+        currentPlayerColor = null;
 
         return;
 
@@ -427,45 +389,18 @@ function determinePlayerColor() {
 
 
     /*
-       New lobby uses color.
-       This also supports the old
-       symbol structure if it exists.
-    */
+     * IMPORTANT:
+     *
+     * Lobby now stores:
+     *
+     * color: "black"
+     * color: "white"
+     */
 
-    if (player.color) {
-
-        currentPlayerColor =
-            player.color;
-
-    }
-
-    else if (
-        player.symbol === "X"
-    ) {
-
-        currentPlayerColor =
-            "black";
-
-    }
-
-    else if (
-        player.symbol === "O"
-    ) {
-
-        currentPlayerColor =
-            "white";
-
-    }
-
-    else {
-
-        currentPlayerColor =
-            null;
-
-    }
+    currentPlayerColor =
+        player.color || null;
 
 }
-
 
 
 /* =========================
@@ -474,12 +409,8 @@ function determinePlayerColor() {
 
 function renderGame() {
 
-    if (
-        !currentRoom
-    ) {
-
+    if (!currentRoom) {
         return;
-
     }
 
 
@@ -494,7 +425,6 @@ function renderGame() {
 }
 
 
-
 /* =========================
    RENDER PLAYERS
 ========================= */
@@ -505,60 +435,29 @@ function renderPlayers() {
         currentRoom.players || {};
 
 
-    let blackPlayer =
-        null;
+    let blackPlayer = null;
 
-    let whitePlayer =
-        null;
+    let whitePlayer = null;
 
 
     Object.entries(players)
         .forEach(
             function ([uid, player]) {
 
-                let color =
-                    player.color;
+                if (
+                    player.color === "black"
+                ) {
 
-
-                if (!color) {
-
-                    if (
-                        player.symbol === "X"
-                    ) {
-
-                        color =
-                            "black";
-
-                    }
-
-                    else if (
-                        player.symbol === "O"
-                    ) {
-
-                        color =
-                            "white";
-
-                    }
+                    blackPlayer = player;
 
                 }
 
 
                 if (
-                    color === "black"
+                    player.color === "white"
                 ) {
 
-                    blackPlayer =
-                        player;
-
-                }
-
-
-                if (
-                    color === "white"
-                ) {
-
-                    whitePlayer =
-                        player;
+                    whitePlayer = player;
 
                 }
 
@@ -578,9 +477,8 @@ function renderPlayers() {
 }
 
 
-
 /* =========================
-   CREATE INITIAL BOARD
+   INITIAL BOARD
 ========================= */
 
 function createInitialBoard() {
@@ -588,38 +486,30 @@ function createInitialBoard() {
     const board =
         Array.from(
             {
-                length:
-                    BOARD_SIZE
+                length: BOARD_SIZE
             },
             function () {
 
                 return Array(
                     BOARD_SIZE
-                ).fill(
-                    EMPTY
-                );
+                ).fill(EMPTY);
 
             }
         );
 
 
-    board[3][3] =
-        WHITE;
+    board[3][3] = WHITE;
 
-    board[3][4] =
-        BLACK;
+    board[3][4] = BLACK;
 
-    board[4][3] =
-        BLACK;
+    board[4][3] = BLACK;
 
-    board[4][4] =
-        WHITE;
+    board[4][4] = WHITE;
 
 
     return board;
 
 }
-
 
 
 /* =========================
@@ -643,12 +533,188 @@ function normalizeBoard(board) {
 }
 
 
+/* =========================
+   DIRECTIONS
+========================= */
+
+const DIRECTIONS = [
+
+    [-1, -1],
+
+    [-1, 0],
+
+    [-1, 1],
+
+    [0, -1],
+
+    [0, 1],
+
+    [1, -1],
+
+    [1, 0],
+
+    [1, 1]
+
+];
+
+
+/* =========================
+   LEGAL MOVES
+========================= */
+
+function getLegalMoves(
+    board,
+    player
+) {
+
+    const opponent =
+        player === BLACK
+            ? WHITE
+            : BLACK;
+
+
+    const moves = [];
+
+
+    for (
+        let row = 0;
+        row < BOARD_SIZE;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < BOARD_SIZE;
+            col++
+        ) {
+
+            if (
+                board[row][col] !== EMPTY
+            ) {
+
+                continue;
+
+            }
+
+
+            const flips =
+                getFlips(
+                    board,
+                    row,
+                    col,
+                    player,
+                    opponent
+                );
+
+
+            if (
+                flips.length > 0
+            ) {
+
+                moves.push(
+                    {
+                        row,
+                        col
+                    }
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return moves;
+
+}
+
+
+/* =========================
+   GET FLIPS
+========================= */
+
+function getFlips(
+    board,
+    row,
+    col,
+    player,
+    opponent
+) {
+
+    const flips = [];
+
+
+    DIRECTIONS.forEach(
+        function ([dr, dc]) {
+
+            const directionFlips = [];
+
+
+            let r =
+                row + dr;
+
+            let c =
+                col + dc;
+
+
+            while (
+                r >= 0 &&
+                r < BOARD_SIZE &&
+                c >= 0 &&
+                c < BOARD_SIZE &&
+                board[r][c] === opponent
+            ) {
+
+                directionFlips.push(
+                    {
+                        row: r,
+                        col: c
+                    }
+                );
+
+
+                r += dr;
+
+                c += dc;
+
+            }
+
+
+            if (
+                directionFlips.length > 0 &&
+                r >= 0 &&
+                r < BOARD_SIZE &&
+                c >= 0 &&
+                c < BOARD_SIZE &&
+                board[r][c] === player
+            ) {
+
+                flips.push(
+                    ...directionFlips
+                );
+
+            }
+
+        }
+    );
+
+
+    return flips;
+
+}
+
 
 /* =========================
    RENDER BOARD
 ========================= */
 
 function renderBoard() {
+
+    if (!boardElement) {
+        return;
+    }
+
 
     const board =
         normalizeBoard(
@@ -664,26 +730,17 @@ function renderBoard() {
         currentRoom.turn;
 
 
-    let legalMoves =
-        [];
-
-
-    if (
+    const legalMoves =
         currentTurn &&
         currentPlayerColor ===
             colorNumberToName(
                 currentTurn
             )
-    ) {
-
-        legalMoves =
-            getLegalMoves(
+            ? getLegalMoves(
                 board,
                 currentTurn
-            );
-
-    }
-
+            )
+            : [];
 
 
     for (
@@ -751,10 +808,7 @@ function renderBoard() {
                 );
 
 
-            if (
-                isLegal &&
-                !opponentLeft
-            ) {
+            if (isLegal) {
 
                 cell.classList.add(
                     "valid"
@@ -799,186 +853,6 @@ function renderBoard() {
 }
 
 
-
-/* =========================
-   DIRECTIONS
-========================= */
-
-const DIRECTIONS = [
-
-    [-1, -1],
-
-    [-1, 0],
-
-    [-1, 1],
-
-    [0, -1],
-
-    [0, 1],
-
-    [1, -1],
-
-    [1, 0],
-
-    [1, 1]
-
-];
-
-
-
-/* =========================
-   GET LEGAL MOVES
-========================= */
-
-function getLegalMoves(
-    board,
-    player
-) {
-
-    const opponent =
-        player === BLACK
-            ? WHITE
-            : BLACK;
-
-
-    const moves = [];
-
-
-    for (
-        let row = 0;
-        row < BOARD_SIZE;
-        row++
-    ) {
-
-        for (
-            let col = 0;
-            col < BOARD_SIZE;
-            col++
-        ) {
-
-            if (
-                board[row][col] !==
-                EMPTY
-            ) {
-
-                continue;
-
-            }
-
-
-            const flips =
-                getFlips(
-                    board,
-                    row,
-                    col,
-                    player,
-                    opponent
-                );
-
-
-            if (
-                flips.length > 0
-            ) {
-
-                moves.push(
-                    {
-                        row,
-                        col
-                    }
-                );
-
-            }
-
-        }
-
-    }
-
-
-    return moves;
-
-}
-
-
-
-/* =========================
-   GET FLIPS
-========================= */
-
-function getFlips(
-    board,
-    row,
-    col,
-    player,
-    opponent
-) {
-
-    const flips = [];
-
-
-    DIRECTIONS.forEach(
-        function ([dr, dc]) {
-
-            const directionFlips =
-                [];
-
-
-            let r =
-                row + dr;
-
-            let c =
-                col + dc;
-
-
-            while (
-                r >= 0 &&
-                r < BOARD_SIZE &&
-                c >= 0 &&
-                c < BOARD_SIZE &&
-                board[r][c] ===
-                    opponent
-            ) {
-
-                directionFlips.push(
-                    {
-                        row: r,
-                        col: c
-                    }
-                );
-
-
-                r += dr;
-
-                c += dc;
-
-            }
-
-
-            if (
-                directionFlips.length > 0 &&
-                r >= 0 &&
-                r < BOARD_SIZE &&
-                c >= 0 &&
-                c < BOARD_SIZE &&
-                board[r][c] ===
-                    player
-            ) {
-
-                flips.push(
-                    ...directionFlips
-                );
-
-            }
-
-        }
-    );
-
-
-    return flips;
-
-}
-
-
-
 /* =========================
    MAKE MOVE
 ========================= */
@@ -991,14 +865,20 @@ async function makeMove(
     if (
         !currentRoom ||
         !currentUser ||
-        !currentPlayerColor ||
-        opponentLeft
+        !currentPlayerColor
     ) {
 
         return;
 
     }
 
+
+    /*
+     * Convert:
+     *
+     * black -> 1
+     * white -> 2
+     */
 
     const playerNumber =
         colorNameToNumber(
@@ -1009,6 +889,38 @@ async function makeMove(
     if (
         currentRoom.turn !==
         playerNumber
+    ) {
+
+        return;
+
+    }
+
+
+    const board =
+        normalizeBoard(
+            currentRoom.board
+        );
+
+
+    const opponent =
+        playerNumber === BLACK
+            ? WHITE
+            : BLACK;
+
+
+    const flips =
+        getFlips(
+            board,
+            row,
+            col,
+            playerNumber,
+            opponent
+        );
+
+
+    if (
+        board[row][col] !== EMPTY ||
+        flips.length === 0
     ) {
 
         return;
@@ -1030,9 +942,7 @@ async function makeMove(
             function (room) {
 
                 if (!room) {
-
                     return;
-
                 }
 
 
@@ -1047,41 +957,9 @@ async function makeMove(
 
 
                 if (
-                    !player
-                ) {
-
-                    return;
-
-                }
-
-
-                let playerColor =
-                    player.color;
-
-
-                if (!playerColor) {
-
-                    playerColor =
-                        player.symbol === "X"
-                            ? "black"
-                            : "white";
-
-                }
-
-
-                if (
-                    playerColor !==
+                    !player ||
+                    player.color !==
                     currentPlayerColor
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    room.status !==
-                        "playing"
                 ) {
 
                     return;
@@ -1091,7 +969,7 @@ async function makeMove(
 
                 const turnNumber =
                     colorNameToNumber(
-                        playerColor
+                        player.color
                     );
 
 
@@ -1121,7 +999,7 @@ async function makeMove(
                 }
 
 
-                const opponent =
+                const currentOpponent =
                     turnNumber === BLACK
                         ? WHITE
                         : BLACK;
@@ -1133,7 +1011,7 @@ async function makeMove(
                         row,
                         col,
                         turnNumber,
-                        opponent
+                        currentOpponent
                     );
 
 
@@ -1146,9 +1024,17 @@ async function makeMove(
                 }
 
 
+                /*
+                 * Place disc.
+                 */
+
                 currentBoard[row][col] =
                     turnNumber;
 
+
+                /*
+                 * Flip opponent discs.
+                 */
 
                 currentFlips.forEach(
                     function (position) {
@@ -1167,7 +1053,7 @@ async function makeMove(
                 const opponentMoves =
                     getLegalMoves(
                         currentBoard,
-                        opponent
+                        currentOpponent
                     );
 
 
@@ -1201,6 +1087,10 @@ async function makeMove(
                     currentBoard;
 
 
+                /*
+                 * GAME OVER
+                 */
+
                 if (
                     boardFull ||
                     (
@@ -1220,15 +1110,14 @@ async function makeMove(
 
                 }
 
+
+                /*
+                 * OPPONENT HAS NO MOVE
+                 */
+
                 else if (
                     opponentMoves.length === 0
                 ) {
-
-                    /*
-                       Opponent has no legal
-                       move, so they automatically
-                       lose their turn.
-                    */
 
                     room.turn =
                         turnNumber;
@@ -1241,16 +1130,18 @@ async function makeMove(
 
                 }
 
+
+                /*
+                 * NORMAL TURN
+                 */
+
                 else {
 
                     room.turn =
-                        opponent;
+                        currentOpponent;
 
                     room.status =
                         "playing";
-
-                    room.lastAction =
-                        "move";
 
                 }
 
@@ -1261,7 +1152,6 @@ async function makeMove(
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -1274,9 +1164,8 @@ async function makeMove(
 }
 
 
-
 /* =========================
-   PASS TURN
+   PASS
 ========================= */
 
 if (passButton) {
@@ -1293,8 +1182,7 @@ async function passTurn() {
 
     if (
         !currentRoom ||
-        !currentPlayerColor ||
-        opponentLeft
+        !currentPlayerColor
     ) {
 
         return;
@@ -1332,9 +1220,9 @@ async function passTurn() {
 
 
     /*
-       You can only pass if
-       you genuinely have no move.
-    */
+     * You may only pass when
+     * you have no legal move.
+     */
 
     if (
         legalMoves.length > 0
@@ -1358,56 +1246,36 @@ async function passTurn() {
         );
 
 
-    try {
+    if (
+        opponentMoves.length === 0
+    ) {
 
-        const roomRef =
-            ref(
-                database,
-                `othelloRooms/${currentRoomCode}`
-            );
+        await finishGame();
 
-
-        if (
-            opponentMoves.length === 0
-        ) {
-
-            await update(
-                roomRef,
-                {
-
-                    status:
-                        "finished",
-
-                    turn:
-                        null,
-
-                    finishedAt:
-                        Date.now()
-
-                }
-            );
-
-        }
-
-        else {
-
-            await update(
-                roomRef,
-                {
-
-                    turn:
-                        opponent,
-
-                    lastAction:
-                        "pass"
-
-                }
-            );
-
-        }
+        return;
 
     }
 
+
+    try {
+
+        await update(
+            ref(
+                database,
+                `othelloRooms/${currentRoomCode}`
+            ),
+            {
+
+                turn:
+                    opponent,
+
+                lastAction:
+                    "pass"
+
+            }
+        );
+
+    }
     catch (error) {
 
         console.error(
@@ -1420,33 +1288,208 @@ async function passTurn() {
 }
 
 
+/* =========================
+   FINISH GAME
+========================= */
+
+async function finishGame() {
+
+    try {
+
+        await update(
+            ref(
+                database,
+                `othelloRooms/${currentRoomCode}`
+            ),
+            {
+
+                status:
+                    "finished",
+
+                turn:
+                    null,
+
+                finishedAt:
+                    Date.now()
+
+            }
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Finish game error:",
+            error
+        );
+
+    }
+
+}
+
 
 /* =========================
-   UPDATE TURN UI
+   OPPONENT CONNECTION
+========================= */
+
+async function checkOpponentConnection() {
+
+    if (
+        !currentRoom ||
+        !currentRoom.players ||
+        !currentUser
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Only check while the game
+     * is actually running.
+     */
+
+    if (
+        currentRoom.status !== "playing"
+    ) {
+
+        return;
+
+    }
+
+
+    const players =
+        Object.entries(
+            currentRoom.players
+        );
+
+
+    const opponent =
+        players.find(
+            function ([uid]) {
+
+                return (
+                    uid !==
+                    currentUser.uid
+                );
+
+            }
+        );
+
+
+    if (!opponent) {
+
+        return;
+
+    }
+
+
+    const opponentData =
+        opponent[1];
+
+
+    /*
+     * Opponent disconnected.
+     *
+     * We finish the game and give
+     * the remaining connected player
+     * the win.
+     */
+
+    if (
+        opponentData.connected === false
+    ) {
+
+        const roomRef =
+            ref(
+                database,
+                `othelloRooms/${currentRoomCode}`
+            );
+
+
+        try {
+
+            await runTransaction(
+                roomRef,
+                function (room) {
+
+                    if (!room) {
+                        return;
+                    }
+
+
+                    if (
+                        room.status !==
+                        "playing"
+                    ) {
+
+                        return room;
+
+                    }
+
+
+                    const opponentStillThere =
+                        room.players?.[
+                            opponent[0]
+                        ];
+
+
+                    if (
+                        !opponentStillThere ||
+                        opponentStillThere.connected !==
+                        false
+                    ) {
+
+                        return room;
+
+                    }
+
+
+                    room.status =
+                        "finished";
+
+                    room.turn =
+                        null;
+
+                    room.finishedAt =
+                        Date.now();
+
+                    room.winnerUid =
+                        currentUser.uid;
+
+                    room.finishedByDisconnect =
+                        true;
+
+
+                    return room;
+
+                }
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Opponent disconnect error:",
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================
+   TURN UI
 ========================= */
 
 function updateTurnUI() {
 
-    if (
-        opponentLeft
-    ) {
-
-        turnText.textContent =
-            "ENDED";
-
-        blackPlayerPanel.classList.remove(
-            "active"
-        );
-
-        whitePlayerPanel.classList.remove(
-            "active"
-        );
-
-        passButton.disabled =
-            true;
-
+    if (!currentRoom) {
         return;
-
     }
 
 
@@ -1462,16 +1505,20 @@ function updateTurnUI() {
         turnText.textContent =
             "GAME OVER";
 
+
         blackPlayerPanel.classList.remove(
             "active"
         );
+
 
         whitePlayerPanel.classList.remove(
             "active"
         );
 
+
         passButton.disabled =
             true;
+
 
         return;
 
@@ -1515,7 +1562,6 @@ function updateTurnUI() {
 }
 
 
-
 /* =========================
    GAME STATUS
 ========================= */
@@ -1523,21 +1569,11 @@ function updateTurnUI() {
 function updateGameStatus() {
 
     if (
-        opponentLeft
-    ) {
-
-        return;
-
-    }
-
-
-    if (
         currentRoom.status ===
         "finished"
     ) {
 
-        gameStatus.textContent =
-            "GAME FINISHED";
+        showResult();
 
         return;
 
@@ -1586,7 +1622,6 @@ function updateGameStatus() {
                 "NO VALID MOVES — YOU MUST PASS.";
 
         }
-
         else {
 
             gameStatus.textContent =
@@ -1595,7 +1630,6 @@ function updateGameStatus() {
         }
 
     }
-
     else {
 
         gameStatus.textContent =
@@ -1608,21 +1642,11 @@ function updateGameStatus() {
 }
 
 
-
 /* =========================
    SHOW RESULT
 ========================= */
 
 async function showResult() {
-
-    if (
-        !currentRoom
-    ) {
-
-        return;
-
-    }
-
 
     const board =
         normalizeBoard(
@@ -1642,17 +1666,46 @@ async function showResult() {
         scores.white;
 
 
-    restartButton.classList.remove(
-        "hidden"
-    );
-
-
-    passButton.classList.add(
-        "hidden"
-    );
-
+    /*
+     * DISCONNECT WIN
+     */
 
     if (
+        currentRoom.finishedByDisconnect
+    ) {
+
+        if (
+            currentRoom.winnerUid ===
+            currentUser.uid
+        ) {
+
+            resultTitle.textContent =
+                "YOU WIN";
+
+
+            resultMessage.textContent =
+                `Your opponent left the game. +${WINNER_CP_REWARD} CHAOS POINTS`;
+
+        }
+        else {
+
+            resultTitle.textContent =
+                "OPPONENT LEFT";
+
+
+            resultMessage.textContent =
+                "The opponent has left the game.";
+
+        }
+
+    }
+
+
+    /*
+     * NORMAL GAME
+     */
+
+    else if (
         scores.black >
         scores.white
     ) {
@@ -1664,12 +1717,8 @@ async function showResult() {
         resultMessage.textContent =
             "Black controlled more discs.";
 
-
-        await processWinnerReward(
-            "black"
-        );
-
     }
+
 
     else if (
         scores.white >
@@ -1683,12 +1732,8 @@ async function showResult() {
         resultMessage.textContent =
             "White controlled more discs.";
 
-
-        await processWinnerReward(
-            "white"
-        );
-
     }
+
 
     else {
 
@@ -1699,14 +1744,63 @@ async function showResult() {
         resultMessage.textContent =
             "The board ended perfectly balanced.";
 
+    }
 
-        rewardMessage.textContent =
-            "NO WINNER • NO CHAOS POINT REWARD";
+
+    /*
+     * AWARD WINNER
+     */
+
+    await awardWinnerReward();
+
+
+    /*
+     * Show result.
+     */
+
+    resultCard.classList.remove(
+        "hidden"
+    );
+
+
+    if (restartButton) {
+
+        /*
+         * Only the host gets
+         * the restart button.
+         */
+
+        if (
+            currentRoom.hostUid ===
+            currentUser.uid
+        ) {
+
+            restartButton.classList.remove(
+                "hidden"
+            );
+
+        }
+        else {
+
+            restartButton.classList.add(
+                "hidden"
+            );
+
+        }
 
     }
 
 
-    resultCard.classList.remove(
+    if (dashboardButton) {
+
+        dashboardButton.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    passButton.classList.add(
         "hidden"
     );
 
@@ -1717,14 +1811,11 @@ async function showResult() {
 }
 
 
-
 /* =========================
-   WINNER REWARD
+   REWARD WINNER
 ========================= */
 
-async function processWinnerReward(
-    winnerColor
-) {
+async function awardWinnerReward() {
 
     if (
         !currentRoom ||
@@ -1736,95 +1827,118 @@ async function processWinnerReward(
     }
 
 
-    const players =
-        currentRoom.players || {};
-
+    /*
+     * Determine winner.
+     */
 
     let winnerUid =
+        currentRoom.winnerUid ||
         null;
 
 
-    Object.entries(players)
-        .forEach(
-            function ([uid, player]) {
+    /*
+     * If this wasn't a disconnect,
+     * determine winner from score.
+     */
 
-                let color =
-                    player.color;
+    if (
+        !winnerUid &&
+        !currentRoom.finishedByDisconnect
+    ) {
 
-
-                if (!color) {
-
-                    color =
-                        player.symbol === "X"
-                            ? "black"
-                            : "white";
-
-                }
+        const board =
+            normalizeBoard(
+                currentRoom.board
+            );
 
 
-                if (
-                    color ===
-                    winnerColor
-                ) {
-
-                    winnerUid =
-                        uid;
-
-                }
-
-            }
-        );
+        const scores =
+            calculateScores(board);
 
 
-    if (!winnerUid) {
+        if (
+            scores.black >
+            scores.white
+        ) {
 
-        return;
+            winnerUid =
+                getPlayerUidByColor(
+                    "black"
+                );
+
+        }
+        else if (
+            scores.white >
+            scores.black
+        ) {
+
+            winnerUid =
+                getPlayerUidByColor(
+                    "white"
+                );
+
+        }
 
     }
 
 
-
     /*
-       The reward flag is stored inside
-       the room so refreshing the page
-       cannot award CP twice.
-    */
+     * Draw = no reward.
+     */
 
-    const rewardRef =
+    if (!winnerUid) {
+        return;
+    }
+
+
+    const roomRef =
         ref(
             database,
-            `othelloRooms/${currentRoomCode}/rewardGiven`
+            `othelloRooms/${currentRoomCode}`
         );
 
 
     try {
 
-        const result =
+        const rewardResult =
             await runTransaction(
-                rewardRef,
-                function (value) {
+                roomRef,
+                function (room) {
+
+                    if (!room) {
+                        return;
+                    }
+
+
+                    /*
+                     * Prevent duplicate rewards.
+                     */
 
                     if (
-                        value === true
+                        room.rewardGiven === true
                     ) {
 
-                        return;
+                        return room;
 
                     }
 
 
-                    return true;
+                    room.rewardGiven =
+                        true;
+
+
+                    room.winnerUid =
+                        winnerUid;
+
+
+                    return room;
 
                 }
             );
 
 
-        /*
-           Another browser already awarded it.
-        */
-
         if (
-            !result.committed
+            !rewardResult.committed
         ) {
 
             return;
@@ -1832,15 +1946,30 @@ async function processWinnerReward(
         }
 
 
-        const winnerUserRef =
+        /*
+         * Only the winner updates
+         * their own user account.
+         */
+
+        if (
+            winnerUid !==
+            currentUser.uid
+        ) {
+
+            return;
+
+        }
+
+
+        const userRef =
             ref(
                 database,
-                `users/${winnerUid}`
+                `users/${currentUser.uid}`
             );
 
 
         await runTransaction(
-            winnerUserRef,
+            userRef,
             function (userData) {
 
                 if (!userData) {
@@ -1855,7 +1984,7 @@ async function processWinnerReward(
                         userData.chaosPoints ||
                         0
                     ) +
-                    WIN_REWARD;
+                    WINNER_CP_REWARD;
 
 
                 return userData;
@@ -1864,29 +1993,7 @@ async function processWinnerReward(
         );
 
 
-        /*
-           Show reward only to the winner.
-        */
-
-        if (
-            winnerUid ===
-            currentUser.uid
-        ) {
-
-            rewardMessage.textContent =
-                `🏆 YOU WIN • +${WIN_REWARD} CHAOS POINTS`;
-
-        }
-
-        else {
-
-            rewardMessage.textContent =
-                `🏆 ${winnerColor.toUpperCase()} WINS • +${WIN_REWARD} CHAOS POINTS`;
-
-        }
-
     }
-
     catch (error) {
 
         console.error(
@@ -1894,141 +2001,62 @@ async function processWinnerReward(
             error
         );
 
-        rewardMessage.textContent =
-            "🏆 WINNER • REWARD PROCESSING ERROR";
-
     }
 
 }
 
 
-
 /* =========================
-   HANDLE OPPONENT LEFT
+   FIND PLAYER BY COLOR
 ========================= */
 
-function handleOpponentLeft() {
+function getPlayerUidByColor(
+    color
+) {
 
     if (
-        opponentLeft
+        !currentRoom ||
+        !currentRoom.players
     ) {
 
-        return;
+        return null;
 
     }
 
 
-    opponentLeft =
-        true;
+    const entry =
+        Object.entries(
+            currentRoom.players
+        ).find(
+            function ([uid, player]) {
 
-
-    /*
-       Find the remaining player.
-       This means the departed player's
-       name is no longer rendered.
-    */
-
-    const players =
-        currentRoom.players || {};
-
-
-    const remainingPlayer =
-        Object.values(players)
-            .find(
-                function (player) {
-
-                    return true;
-
-                }
-            );
-
-
-    if (
-        remainingPlayer
-    ) {
-
-        opponentLeftMessage.textContent =
-            `${remainingPlayer.username || "Player"}, your opponent left the game.`;
-
-    }
-
-    else {
-
-        opponentLeftMessage.textContent =
-            "Your opponent left the game.";
-
-    }
-
-
-    /*
-       Completely stop game controls.
-    */
-
-    passButton.disabled =
-        true;
-
-    passButton.classList.add(
-        "hidden"
-    );
-
-
-    restartButton.classList.add(
-        "hidden"
-    );
-
-
-    boardElement
-        .querySelectorAll(".cell")
-        .forEach(
-            function (cell) {
-
-                cell.classList.remove(
-                    "valid"
+                return (
+                    player.color ===
+                    color
                 );
 
             }
         );
 
 
-    blackPlayerPanel.classList.remove(
-        "active"
-    );
-
-
-    whitePlayerPanel.classList.remove(
-        "active"
-    );
-
-
-    turnText.textContent =
-        "ENDED";
-
-
-    gameStatus.textContent =
-        "YOUR OPPONENT LEFT THE GAME.";
-
-
-    opponentLeftCard.classList.remove(
-        "hidden"
-    );
+    return entry
+        ? entry[0]
+        : null;
 
 }
 
 
-
 /* =========================
-   CALCULATE SCORE
+   SCORE
 ========================= */
 
 function calculateScores(
     board
 ) {
 
-    let black =
-        0;
+    let black = 0;
 
-    let white =
-        0;
+    let white = 0;
 
 
     board.forEach(
@@ -2044,7 +2072,6 @@ function calculateScores(
                         black++;
 
                     }
-
                     else if (
                         cell === WHITE
                     ) {
@@ -2066,7 +2093,6 @@ function calculateScores(
     };
 
 }
-
 
 
 /* =========================
@@ -2127,7 +2153,6 @@ function colorNumberToName(
 }
 
 
-
 /* =========================
    DASHBOARD
 ========================= */
@@ -2147,24 +2172,6 @@ if (dashboardButton) {
 }
 
 
-if (
-    opponentLeftDashboardButton
-) {
-
-    opponentLeftDashboardButton.addEventListener(
-        "click",
-        function () {
-
-            window.location.href =
-                "dashboard.html";
-
-        }
-    );
-
-}
-
-
-
 /* =========================
    RESTART
 ========================= */
@@ -2177,8 +2184,7 @@ if (restartButton) {
 
             if (
                 !currentRoom ||
-                !currentUser ||
-                opponentLeft
+                !currentUser
             ) {
 
                 return;
@@ -2186,15 +2192,9 @@ if (restartButton) {
             }
 
 
-            if (
-                currentRoom.status !==
-                "finished"
-            ) {
-
-                return;
-
-            }
-
+            /*
+             * Only host can restart.
+             */
 
             if (
                 currentRoom.hostUid !==
@@ -2209,11 +2209,66 @@ if (restartButton) {
             }
 
 
+            /*
+             * Both players must still
+             * exist in the room.
+             */
+
+            const players =
+                currentRoom.players || {};
+
+
+            const playerEntries =
+                Object.entries(players);
+
+
+            if (
+                playerEntries.length !==
+                2
+            ) {
+
+                gameStatus.textContent =
+                    "WAITING FOR BOTH PLAYERS.";
+
+                return;
+
+            }
+
+
+            const blackPlayer =
+                playerEntries.find(
+                    ([uid, player]) =>
+                        player.color ===
+                        "black"
+                );
+
+
+            const whitePlayer =
+                playerEntries.find(
+                    ([uid, player]) =>
+                        player.color ===
+                        "white"
+                );
+
+
+            if (
+                !blackPlayer ||
+                !whitePlayer
+            ) {
+
+                gameStatus.textContent =
+                    "PLAYERS ARE NOT READY.";
+
+                return;
+
+            }
+
+
+            const newBoard =
+                createInitialBoard();
+
+
             try {
-
-                const newBoard =
-                    createInitialBoard();
-
 
                 await update(
                     ref(
@@ -2231,14 +2286,20 @@ if (restartButton) {
                         status:
                             "playing",
 
-                        lastAction:
-                            "restart",
-
                         finishedAt:
                             null,
 
+                        winnerUid:
+                            null,
+
                         rewardGiven:
-                            false
+                            false,
+
+                        finishedByDisconnect:
+                            false,
+
+                        lastAction:
+                            "restart"
 
                     }
                 );
@@ -2254,16 +2315,7 @@ if (restartButton) {
                 );
 
 
-                restartButton.classList.remove(
-                    "hidden"
-                );
-
-
-                gameStatus.textContent =
-                    "NEW GAME STARTED.";
-
             }
-
             catch (error) {
 
                 console.error(
@@ -2271,16 +2323,12 @@ if (restartButton) {
                     error
                 );
 
-                gameStatus.textContent =
-                    "UNABLE TO RESTART GAME.";
-
             }
 
         }
     );
 
 }
-
 
 
 /* =========================
@@ -2300,6 +2348,17 @@ if (leaveButton) {
 
 
             if (!confirmed) {
+                return;
+            }
+
+
+            if (
+                !currentUser ||
+                !currentRoomCode
+            ) {
+
+                window.location.href =
+                    "dashboard.html";
 
                 return;
 
@@ -2308,110 +2367,35 @@ if (leaveButton) {
 
             try {
 
-                const roomRef =
+                /*
+                 * IMPORTANT:
+                 *
+                 * We do NOT delete the player.
+                 *
+                 * We mark them disconnected so
+                 * the opponent can receive the win,
+                 * while the player can still
+                 * reconnect later.
+                 */
+
+                await update(
                     ref(
                         database,
-                        `othelloRooms/${currentRoomCode}`
-                    );
+                        `othelloRooms/${currentRoomCode}/players/${currentUser.uid}`
+                    ),
+                    {
 
-
-                /*
-                   Remove THIS player from the room.
-                   The remaining browser will detect
-                   that only one player remains.
-                */
-
-                await runTransaction(
-                    roomRef,
-                    function (room) {
-
-                        if (!room) {
-
-                            return room;
-
-                        }
-
-
-                        if (
-                            room.players &&
-                            room.players[
-                                currentUser.uid
-                            ]
-                        ) {
-
-                            delete room.players[
-                                currentUser.uid
-                            ];
-
-                        }
-
-
-                        /*
-                           If nobody remains,
-                           remove the room logically.
-                        */
-
-                        const remaining =
-                            Object.keys(
-                                room.players || {}
-                            );
-
-
-                        if (
-                            remaining.length === 0
-                        ) {
-
-                            return null;
-
-                        }
-
-
-                        /*
-                           If the host leaves,
-                           transfer host to the
-                           remaining player.
-                        */
-
-                        if (
-                            room.hostUid ===
-                            currentUser.uid
-                        ) {
-
-                            room.hostUid =
-                                remaining[0];
-
-                            room.players[
-                                remaining[0]
-                            ].isHost =
-                                true;
-
-                        }
-
-
-                        /*
-                           Mark game as abandoned.
-                        */
-
-                        if (
-                            room.status ===
-                                "playing" ||
-                            room.status ===
-                                "starting"
-                        ) {
-
-                            room.status =
-                                "abandoned";
-
-                        }
-
-
-                        return room;
+                        connected:
+                            false
 
                     }
                 );
 
-            }
 
+                window.location.href =
+                    "dashboard.html";
+
+            }
             catch (error) {
 
                 console.error(
@@ -2419,11 +2403,11 @@ if (leaveButton) {
                     error
                 );
 
+
+                window.location.href =
+                    "dashboard.html";
+
             }
-
-
-            window.location.href =
-                "dashboard.html";
 
         }
     );
