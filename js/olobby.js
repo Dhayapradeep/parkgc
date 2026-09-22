@@ -7,10 +7,12 @@ import {
     remove
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
+
 import {
     getAuth,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
 
 import {
     app,
@@ -34,6 +36,14 @@ const auth =
 
 const MAX_PLAYERS = 2;
 
+const BOARD_SIZE = 8;
+
+const EMPTY = 0;
+
+const BLACK = 1;
+
+const WHITE = 2;
+
 
 
 /* =========================
@@ -45,75 +55,96 @@ const backButton =
         "backButton"
     );
 
+
 const createRoomButton =
     document.getElementById(
         "createRoomButton"
     );
+
 
 const joinRoomButton =
     document.getElementById(
         "joinRoomButton"
     );
 
+
 const roomCodeInput =
     document.getElementById(
         "roomCodeInput"
     );
+
 
 const setupCard =
     document.getElementById(
         "setupCard"
     );
 
+
 const roomCard =
     document.getElementById(
         "roomCard"
     );
+
 
 const setupStatus =
     document.getElementById(
         "setupStatus"
     );
 
+
 const roomCodeDisplay =
     document.getElementById(
         "roomCodeDisplay"
     );
+
 
 const copyRoomButton =
     document.getElementById(
         "copyRoomButton"
     );
 
+
 const roomStatus =
     document.getElementById(
         "roomStatus"
     );
+
 
 const roomStatusText =
     document.getElementById(
         "roomStatusText"
     );
 
+
 const playersList =
     document.getElementById(
         "playersList"
     );
+
 
 const playerCount =
     document.getElementById(
         "playerCount"
     );
 
+
 const hostControls =
     document.getElementById(
         "hostControls"
     );
 
+
 const startGameButton =
     document.getElementById(
         "startGameButton"
     );
+
+
+const hostHint =
+    document.getElementById(
+        "hostHint"
+    );
+
 
 const leaveRoomButton =
     document.getElementById(
@@ -126,15 +157,28 @@ const leaveRoomButton =
    VARIABLES
 ========================= */
 
-let currentUser = null;
+let currentUser =
+    null;
 
-let currentUsername = "Player";
 
-let currentRoomCode = null;
+let currentUsername =
+    "Player";
 
-let currentRoomData = null;
 
-let roomListenerStarted = false;
+let currentRoomCode =
+    null;
+
+
+let currentRoomData =
+    null;
+
+
+let roomListenerStarted =
+    false;
+
+
+let leavingRoom =
+    false;
 
 
 
@@ -203,7 +247,7 @@ async function loadUserProfile() {
     catch (error) {
 
         console.error(
-            "Unable to load user:",
+            "Unable to load user profile:",
             error
         );
 
@@ -262,6 +306,9 @@ async function createRoom() {
 
     if (!currentUser) {
 
+        setupStatus.textContent =
+            "PLEASE WAIT FOR LOGIN.";
+
         return;
 
     }
@@ -305,15 +352,15 @@ async function createRoom() {
         }
 
 
+        const now =
+            Date.now();
+
+
         const roomRef =
             ref(
                 database,
                 `othelloRooms/${roomCode}`
             );
-
-
-        const now =
-            Date.now();
 
 
         await set(
@@ -335,6 +382,15 @@ async function createRoom() {
                 finishedAt:
                     null,
 
+                board:
+                    null,
+
+                turn:
+                    null,
+
+                rewardClaimed:
+                    false,
+
                 players: {
 
                     [currentUser.uid]: {
@@ -348,14 +404,8 @@ async function createRoom() {
                         isHost:
                             true,
 
-                        symbol:
-                            "⚫",
-
                         color:
-                            null,
-
-                        connected:
-                            true
+                            "black"
 
                     }
 
@@ -422,6 +472,9 @@ if (joinRoomButton) {
 async function joinRoom() {
 
     if (!currentUser) {
+
+        setupStatus.textContent =
+            "PLEASE WAIT FOR LOGIN.";
 
         return;
 
@@ -501,6 +554,10 @@ async function joinRoom() {
             Object.keys(players);
 
 
+        /* =========================
+           ALREADY IN ROOM
+        ========================== */
+
         if (
             playerIds.includes(
                 currentUser.uid
@@ -528,6 +585,10 @@ async function joinRoom() {
         }
 
 
+        /* =========================
+           ROOM FULL
+        ========================== */
+
         if (
             playerIds.length >=
             MAX_PLAYERS
@@ -540,6 +601,10 @@ async function joinRoom() {
 
         }
 
+
+        /* =========================
+           SECOND PLAYER
+        ========================== */
 
         const playerRef =
             ref(
@@ -565,14 +630,8 @@ async function joinRoom() {
                 isHost:
                     false,
 
-                symbol:
-                    "⚪",
-
                 color:
-                    null,
-
-                connected:
-                    true
+                    "white"
 
             }
         );
@@ -653,20 +712,12 @@ function listenToRoom() {
 
             if (!snapshot.exists()) {
 
-                roomStatusText.textContent =
-                    "ROOM NO LONGER EXISTS.";
+                if (!leavingRoom) {
 
+                    roomStatusText.textContent =
+                        "ROOM NO LONGER EXISTS.";
 
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            "dashboard.html";
-
-                    },
-                    1200
-                );
-
+                }
 
                 return;
 
@@ -682,15 +733,13 @@ function listenToRoom() {
             );
 
 
-            /*
-            =================================
-            GAME HAS STARTED
-            =================================
-            */
+            /* =========================
+               GAME STARTED
+            ========================== */
 
             if (
                 currentRoomData.status ===
-                "playing"
+                "starting"
             ) {
 
                 window.location.href =
@@ -728,6 +777,10 @@ function renderRoom(room) {
         `${playerEntries.length} / ${MAX_PLAYERS}`;
 
 
+    /* =========================
+       ROOM STATUS
+    ========================== */
+
     if (
         room.status ===
         "waiting"
@@ -760,6 +813,11 @@ function renderRoom(room) {
     }
 
 
+
+    /* =========================
+       PLAYERS LIST
+    ========================== */
+
     playersList.innerHTML =
         "";
 
@@ -779,134 +837,126 @@ function renderRoom(room) {
 
     else {
 
-        playerEntries.forEach(
-            function ([uid, player]) {
+        playerEntries
+            .sort(
+                function (a, b) {
 
-                const playerElement =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                playerElement.className =
-                    "player";
-
-
-                if (
-                    uid ===
-                    room.hostUid
-                ) {
-
-                    playerElement.classList.add(
-                        "host"
+                    return (
+                        (a[1].joinedAt || 0) -
+                        (b[1].joinedAt || 0)
                     );
 
                 }
+            )
+            .forEach(
+                function ([uid, player]) {
+
+                    const playerElement =
+                        document.createElement(
+                            "div"
+                        );
 
 
-                const left =
-                    document.createElement(
-                        "span"
-                    );
+                    playerElement.className =
+                        "player";
 
 
-                const symbol =
-                    document.createElement(
-                        "span"
-                    );
+                    if (
+                        uid ===
+                        room.hostUid
+                    ) {
+
+                        playerElement.classList.add(
+                            "host"
+                        );
+
+                    }
 
 
-                symbol.className =
-                    "player-symbol";
+                    const left =
+                        document.createElement(
+                            "div"
+                        );
 
 
-                if (
-                    player.color ===
-                    "black"
-                ) {
-
-                    symbol.textContent =
-                        "⚫";
-
-                }
-
-                else if (
-                    player.color ===
-                    "white"
-                ) {
-
-                    symbol.textContent =
-                        "⚪";
-
-                }
-
-                else {
-
-                    symbol.textContent =
-                        player.symbol ||
-                        "●";
-
-                }
+                    left.className =
+                        "player-left";
 
 
-                left.appendChild(
-                    symbol
-                );
-
-
-                const name =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                name.textContent =
-                    player.username ||
-                    "Player";
-
-
-                left.appendChild(
-                    name
-                );
-
-
-                playerElement.appendChild(
-                    left
-                );
-
-
-                if (
-                    uid ===
-                    room.hostUid
-                ) {
-
-                    const hostBadge =
+                    const disc =
                         document.createElement(
                             "span"
                         );
 
 
-                    hostBadge.className =
-                        "host-badge";
+                    disc.className =
+                        "player-disc " +
+                        (
+                            player.color ===
+                            "black"
+                                ? "black"
+                                : "white"
+                        );
 
 
-                    hostBadge.textContent =
-                        "👑 HOST";
+                    const name =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    name.textContent =
+                        player.username ||
+                        "Player";
+
+
+                    left.appendChild(
+                        disc
+                    );
+
+
+                    left.appendChild(
+                        name
+                    );
 
 
                     playerElement.appendChild(
-                        hostBadge
+                        left
+                    );
+
+
+                    if (
+                        uid ===
+                        room.hostUid
+                    ) {
+
+                        const hostBadge =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        hostBadge.className =
+                            "host-badge";
+
+
+                        hostBadge.textContent =
+                            "👑 HOST";
+
+
+                        playerElement.appendChild(
+                            hostBadge
+                        );
+
+                    }
+
+
+                    playersList.appendChild(
+                        playerElement
                     );
 
                 }
-
-
-                playersList.appendChild(
-                    playerElement
-                );
-
-            }
-        );
+            );
 
     }
 
@@ -914,7 +964,7 @@ function renderRoom(room) {
 
     /* =========================
        HOST CONTROLS
-    ========================= */
+    ========================== */
 
     if (
         currentUser &&
@@ -941,6 +991,10 @@ function renderRoom(room) {
             startGameButton.textContent =
                 "⚫ WAITING FOR OPPONENT";
 
+
+            hostHint.textContent =
+                "Waiting for another player to join.";
+
         }
 
         else {
@@ -951,6 +1005,10 @@ function renderRoom(room) {
 
             startGameButton.textContent =
                 "⚫ START GAME";
+
+
+            hostHint.textContent =
+                "Both players are ready.";
 
         }
 
@@ -969,7 +1027,7 @@ function renderRoom(room) {
 
 
 /* =========================
-   START GAME
+   START GAME BUTTON
 ========================= */
 
 if (startGameButton) {
@@ -1035,60 +1093,9 @@ async function startGame() {
 
     try {
 
-        /*
-        =================================
-        CREATE INITIAL OTHELLO BOARD
-        =================================
-        */
-
         const board =
-            Array.from(
-                {
-                    length: 8
-                },
-                function () {
+            createInitialBoard();
 
-                    return Array(
-                        8
-                    ).fill(0);
-
-                }
-            );
-
-
-        /*
-        0 = EMPTY
-        1 = BLACK
-        2 = WHITE
-        */
-
-
-        board[3][3] = 2;
-        board[3][4] = 1;
-        board[4][3] = 1;
-        board[4][4] = 2;
-
-
-
-        /*
-        =================================
-        PLAYER COLORS
-        =================================
-        */
-
-        const blackUid =
-            playerIds[0];
-
-        const whiteUid =
-            playerIds[1];
-
-
-
-        /*
-        =================================
-        START GAME
-        =================================
-        */
 
         const now =
             Date.now();
@@ -1097,7 +1104,7 @@ async function startGame() {
         const updates = {
 
             status:
-                "playing",
+                "starting",
 
             startedAt:
                 now,
@@ -1109,26 +1116,13 @@ async function startGame() {
                 board,
 
             turn:
-                1,
+                BLACK,
+
+            rewardClaimed:
+                false,
 
             lastAction:
-                "start",
-
-
-            [`players/${blackUid}/color`]:
-                "black",
-
-
-            [`players/${blackUid}/symbol`]:
-                "⚫",
-
-
-            [`players/${whiteUid}/color`]:
-                "white",
-
-
-            [`players/${whiteUid}/symbol`]:
-                "⚪"
+                "game_started"
 
         };
 
@@ -1159,6 +1153,52 @@ async function startGame() {
             false;
 
     }
+
+}
+
+
+
+/* =========================
+   CREATE INITIAL BOARD
+========================= */
+
+function createInitialBoard() {
+
+    const board =
+        Array.from(
+            {
+                length:
+                    BOARD_SIZE
+            },
+            function () {
+
+                return Array(
+                    BOARD_SIZE
+                ).fill(
+                    EMPTY
+                );
+
+            }
+        );
+
+
+    board[3][3] =
+        WHITE;
+
+
+    board[3][4] =
+        BLACK;
+
+
+    board[4][3] =
+        BLACK;
+
+
+    board[4][4] =
+        WHITE;
+
+
+    return board;
 
 }
 
@@ -1238,6 +1278,19 @@ if (leaveRoomButton) {
 async function leaveRoom() {
 
     if (
+        leavingRoom
+    ) {
+
+        return;
+
+    }
+
+
+    leavingRoom =
+        true;
+
+
+    if (
         !currentUser ||
         !currentRoomCode
     ) {
@@ -1282,13 +1335,18 @@ async function leaveRoom() {
             snapshot.val();
 
 
+        /* =========================
+           DON'T LEAVE A STARTED GAME
+           THROUGH LOBBY
+        ========================== */
+
         if (
             room.status !==
             "waiting"
         ) {
 
-            roomStatusText.textContent =
-                "THE GAME HAS ALREADY STARTED.";
+            window.location.href =
+                "dashboard.html";
 
             return;
 
@@ -1312,55 +1370,76 @@ async function leaveRoom() {
 
 
         if (
-            updatedSnapshot.exists()
+            !updatedSnapshot.exists()
         ) {
 
-            const updatedRoom =
-                updatedSnapshot.val();
+            currentRoomCode =
+                null;
 
 
-            const remainingPlayers =
-                Object.entries(
-                    updatedRoom.players || {}
-                );
+            window.location.href =
+                "dashboard.html";
 
 
-            if (
-                remainingPlayers.length ===
-                0
-            ) {
+            return;
 
-                await remove(
-                    roomRef
-                );
-
-            }
-
-            else if (
-                updatedRoom.hostUid ===
-                currentUser.uid
-            ) {
-
-                const [
-                    newHostUid
-                ] =
-                    remainingPlayers[0];
+        }
 
 
-                await update(
-                    roomRef,
-                    {
+        const updatedRoom =
+            updatedSnapshot.val();
 
-                        hostUid:
-                            newHostUid,
 
-                        [`players/${newHostUid}/isHost`]:
-                            true
+        const remainingPlayers =
+            Object.entries(
+                updatedRoom.players || {}
+            );
 
-                    }
-                );
 
-            }
+        /* =========================
+           NO PLAYERS LEFT
+        ========================== */
+
+        if (
+            remainingPlayers.length ===
+            0
+        ) {
+
+            await remove(
+                roomRef
+            );
+
+        }
+
+
+        /* =========================
+           HOST LEFT
+           TRANSFER HOST
+        ========================== */
+
+        else if (
+            updatedRoom.hostUid ===
+            currentUser.uid
+        ) {
+
+            const [
+                newHostUid
+            ] =
+                remainingPlayers[0];
+
+
+            await update(
+                roomRef,
+                {
+
+                    hostUid:
+                        newHostUid,
+
+                    [`players/${newHostUid}/isHost`]:
+                        true
+
+                }
+            );
 
         }
 
@@ -1382,6 +1461,10 @@ async function leaveRoom() {
         );
 
 
+        leavingRoom =
+            false;
+
+
         roomStatusText.textContent =
             "FAILED TO LEAVE ROOM.";
 
@@ -1392,7 +1475,7 @@ async function leaveRoom() {
 
 
 /* =========================
-   ROOM CODE
+   ROOM CODE GENERATOR
 ========================= */
 
 function generateRoomCode() {

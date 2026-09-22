@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 
 <head>
 
@@ -12,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Othello</title>
+    <title>Othello | Abusement Park</title>
 
     <link
         rel="stylesheet"
@@ -28,27 +26,24 @@
 <header>
 
     <div class="brand">
-
         ABUSEMENT PARK
-
     </div>
 
 
-    <div class="game-title">
+    <div class="header-right">
 
-        OTHELLO
+        <span class="room-label">
+            ROOM
+        </span>
+
+        <span
+            id="roomCodeDisplay"
+            class="room-code"
+        >
+            ------
+        </span>
 
     </div>
-
-
-    <button
-        id="leaveButton"
-        class="leave-button"
-    >
-
-        ← LEAVE GAME
-
-    </button>
 
 </header>
 
@@ -58,29 +53,25 @@
 
 
     <!-- =========================
-         GAME HERO
+         GAME TITLE
     ========================== -->
 
-    <section class="game-header">
+    <section class="hero">
+
+        <div class="game-icon">
+            ⚫⚪
+        </div>
 
         <p class="small-title">
-
-            STRATEGY MODE
-
+            CHAOS BOARD
         </p>
 
-
         <h1>
-
             OTHELLO
-
         </h1>
 
-
         <p class="subtitle">
-
-            Surround. Capture. Control the board.
-
+            Place. Surround. Flip. Control the board.
         </p>
 
     </section>
@@ -88,110 +79,94 @@
 
 
     <!-- =========================
-         GAME INFO
+         PLAYERS
     ========================== -->
 
-    <section class="game-info">
+    <section class="players">
 
+
+        <!-- BLACK -->
 
         <div
-            class="player-panel"
             id="blackPlayerPanel"
+            class="player-panel"
         >
 
-            <div class="piece black-piece"></div>
+            <div class="player-disc black-disc">
+                ⚫
+            </div>
 
+            <div class="player-info">
 
-            <div>
-
-                <span class="player-label">
-
+                <span class="player-color">
                     BLACK
-
                 </span>
 
-
-                <strong
-                    id="blackPlayerName"
-                >
-
+                <strong id="blackPlayerName">
                     Waiting...
-
                 </strong>
 
             </div>
 
-
-            <span
+            <div
                 id="blackScore"
                 class="score"
             >
-
                 2
-
-            </span>
+            </div>
 
         </div>
 
 
 
-        <div class="turn-indicator">
+        <!-- TURN -->
+
+        <div class="turn-area">
 
             <span class="turn-label">
-
                 CURRENT TURN
-
             </span>
-
 
             <strong
                 id="turnText"
+                class="turn-text"
             >
-
-                BLACK
-
+                WAITING
             </strong>
 
         </div>
 
 
 
+        <!-- WHITE -->
+
         <div
-            class="player-panel"
             id="whitePlayerPanel"
+            class="player-panel"
         >
 
-            <div class="piece white-piece"></div>
+            <div class="player-disc white-disc">
+                ⚪
+            </div>
 
+            <div class="player-info">
 
-            <div>
-
-                <span class="player-label">
-
+                <span class="player-color">
                     WHITE
-
                 </span>
 
-
-                <strong
-                    id="whitePlayerName"
-                >
-
+                <strong id="whitePlayerName">
                     Waiting...
-
                 </strong>
 
             </div>
 
-
-            <span
+            <div
                 id="whiteScore"
                 class="score"
             >
-
                 2
-
-            </span>
+            </div>
 
         </div>
 
@@ -201,17 +176,15 @@
 
 
     <!-- =========================
-         STATUS
+         GAME STATUS
     ========================== -->
 
-    <div
+    <section
         id="gameStatus"
         class="game-status"
     >
-
-        Connecting to game...
-
-    </div>
+        CONNECTING TO GAME...
+    </section>
 
 
 
@@ -221,34 +194,27 @@
 
     <section class="board-wrapper">
 
-
         <div
             id="board"
             class="board"
-        >
-
-        </div>
-
+        ></div>
 
     </section>
 
 
 
     <!-- =========================
-         GAME CONTROLS
+         CONTROLS
     ========================== -->
 
     <section class="controls">
-
 
         <button
             id="passButton"
             class="control-button"
             disabled
         >
-
             PASS TURN
-
         </button>
 
 
@@ -256,21 +222,24 @@
             id="restartButton"
             class="control-button hidden"
         >
-
             PLAY AGAIN
-
         </button>
 
 
         <button
             id="dashboardButton"
-            class="control-button hidden"
+            class="control-button secondary"
         >
-
             DASHBOARD
-
         </button>
 
+
+        <button
+            id="leaveButton"
+            class="leave-button"
+        >
+            LEAVE GAME
+        </button>
 
     </section>
 
@@ -285,105 +254,100 @@
         class="result-card hidden"
     >
 
-        <div class="result-icon">
-
-            ♟
-
-        </div>
-
-
-        <p class="result-label">
-
+        <p class="result-small">
             GAME OVER
-
         </p>
 
-
-        <h2
-            id="resultTitle"
-        >
-
+        <h2 id="resultTitle">
             BLACK WINS
-
         </h2>
-
 
         <p
             id="resultMessage"
+            class="result-message"
         >
-
-            Black controlled the board.
-
+            Black controlled more discs.
         </p>
 
 
-        <div class="final-score">
 
-            <div>
+        <div class="final-scores">
+
+            <div class="final-score-box">
 
                 <span>
-
-                    BLACK
-
+                    ⚫ BLACK
                 </span>
 
-                <strong
-                    id="finalBlackScore"
-                >
-
+                <strong id="finalBlackScore">
                     0
-
                 </strong>
 
             </div>
 
 
-            <div class="score-divider">
-
-                :
-
-            </div>
-
-
-            <div>
+            <div class="final-score-box">
 
                 <span>
-
-                    WHITE
-
+                    ⚪ WHITE
                 </span>
 
-                <strong
-                    id="finalWhiteScore"
-                >
-
+                <strong id="finalWhiteScore">
                     0
-
                 </strong>
 
             </div>
 
         </div>
+
+
+
+        <div
+            id="rewardMessage"
+            class="reward-message"
+        >
+            🏆 WINNER +100 CHAOS POINTS
+        </div>
+
 
     </section>
 
 
 
     <!-- =========================
-         ROOM INFORMATION
+         OPPONENT LEFT
     ========================== -->
 
-    <div class="room-info">
+    <section
+        id="opponentLeftCard"
+        class="result-card opponent-left hidden"
+    >
 
-        ROOM
+        <p class="result-small">
+            GAME ENDED
+        </p>
 
-        <span id="roomCodeDisplay">
+        <h2>
+            OPPONENT LEFT
+        </h2>
 
-            ------
+        <p
+            id="opponentLeftMessage"
+            class="result-message"
+        >
+            Your opponent left the game.
+        </p>
 
-        </span>
 
-    </div>
+        <button
+            id="opponentLeftDashboardButton"
+            class="control-button secondary"
+        >
+            RETURN TO DASHBOARD
+        </button>
+
+    </section>
+
 
 
 </main>

@@ -2,7 +2,6 @@
 
 <html lang="en">
 
-
 <head>
 
     <meta charset="UTF-8">
@@ -28,9 +27,7 @@
 <header>
 
     <div class="brand">
-
         ABUSEMENT PARK
-
     </div>
 
 
@@ -38,9 +35,7 @@
         id="backButton"
         class="back-button"
     >
-
         ← DASHBOARD
-
     </button>
 
 </header>
@@ -57,30 +52,22 @@
     <section class="hero">
 
         <div class="game-icon">
-
-            ⚫
-
+            ⚫⚪
         </div>
 
 
         <p class="small-title">
-
-            BOARD DUEL
-
+            STRATEGY MODE
         </p>
 
 
         <h1>
-
             OTHELLO
-
         </h1>
 
 
         <p class="subtitle">
-
-            Surround. Flip. Outplay.
-
+            Capture. Flip. Control the board.
         </p>
 
     </section>
@@ -97,16 +84,12 @@
     >
 
         <h2>
-
-            ⚫ ENTER THE BOARD
-
+            ⚫ ENTER THE GAME
         </h2>
 
 
         <p>
-
-            Create a new room or join an existing one.
-
+            Create a room or join a friend's room.
         </p>
 
 
@@ -114,18 +97,14 @@
             id="createRoomButton"
             class="primary-button"
         >
-
             CREATE ROOM
-
         </button>
 
 
         <div class="divider">
 
             <span>
-
                 OR
-
             </span>
 
         </div>
@@ -146,9 +125,7 @@
                 id="joinRoomButton"
                 class="secondary-button"
             >
-
                 JOIN ROOM
-
             </button>
 
         </div>
@@ -179,9 +156,7 @@
             <div>
 
                 <p class="room-label">
-
                     ROOM CODE
-
                 </p>
 
 
@@ -189,9 +164,7 @@
                     id="roomCodeDisplay"
                     class="room-code"
                 >
-
                     ------
-
                 </strong>
 
             </div>
@@ -201,9 +174,7 @@
                 id="copyRoomButton"
                 class="copy-button"
             >
-
                 📋 COPY
-
             </button>
 
         </div>
@@ -212,12 +183,8 @@
 
         <div class="room-status">
 
-            <span
-                id="roomStatus"
-            >
-
+            <span id="roomStatus">
                 WAITING FOR OPPONENT
-
             </span>
 
         </div>
@@ -234,18 +201,12 @@
             <div class="section-heading">
 
                 <h2>
-
-                    ⚫ PLAYERS
-
+                    👥 PLAYERS
                 </h2>
 
 
-                <span
-                    id="playerCount"
-                >
-
+                <span id="playerCount">
                     0 / 2
-
                 </span>
 
             </div>
@@ -258,9 +219,7 @@
             >
 
                 <div class="empty-player">
-
                     Waiting for opponent...
-
                 </div>
 
             </div>
@@ -282,17 +241,14 @@
             <button
                 id="startGameButton"
                 class="primary-button"
+                disabled
             >
-
-                ⚫ START GAME
-
+                ⚫ WAITING FOR OPPONENT
             </button>
 
 
-            <p>
-
-                Two players are required to begin.
-
+            <p id="hostHint">
+                Waiting for another player to join.
             </p>
 
         </div>
@@ -310,9 +266,7 @@
             id="leaveRoomButton"
             class="leave-button"
         >
-
             LEAVE ROOM
-
         </button>
 
 
@@ -328,9 +282,7 @@
 
 
         <h2>
-
             HOW TO PLAY
-
         </h2>
 
 
@@ -338,17 +290,12 @@
         <div class="rule">
 
             <span>
-
                 1
-
             </span>
 
-
             <p>
-
-                Two players enter the room.
-                Black moves first.
-
+                Two players battle on an
+                8 × 8 board.
             </p>
 
         </div>
@@ -358,17 +305,11 @@
         <div class="rule">
 
             <span>
-
                 2
-
             </span>
 
-
             <p>
-
-                Place your piece beside your opponent's
-                pieces to surround them.
-
+                Black moves first, followed by White.
             </p>
 
         </div>
@@ -378,17 +319,13 @@
         <div class="rule">
 
             <span>
-
                 3
-
             </span>
 
-
             <p>
-
-                Surrounded opponent pieces are flipped
-                to your colour.
-
+                Place your disc so that one or more
+                opponent discs are trapped between
+                your discs.
             </p>
 
         </div>
@@ -398,17 +335,12 @@
         <div class="rule">
 
             <span>
-
                 4
-
             </span>
 
-
             <p>
-
-                Players take turns placing one piece
-                on every valid move.
-
+                Every trapped opponent disc is flipped
+                to your color.
             </p>
 
         </div>
@@ -418,17 +350,12 @@
         <div class="rule">
 
             <span>
-
                 5
-
             </span>
 
-
             <p>
-
-                If you have no legal move, your turn
-                is automatically skipped.
-
+                If you have no legal move, you must
+                pass your turn.
             </p>
 
         </div>
@@ -438,17 +365,13 @@
         <div class="rule">
 
             <span>
-
                 6
-
             </span>
 
-
             <p>
-
-                When neither player can move,
-                the player with the most pieces wins.
-
+                When the game ends, the player with
+                the most discs wins and receives
+                Chaos Points.
             </p>
 
         </div>
@@ -468,6 +391,5 @@
 
 
 </body>
-
 
 </html>
