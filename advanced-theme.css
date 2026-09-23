@@ -1,0 +1,407 @@
+/* ===================================================================
+   ABUSEMENT PARK - ADVANCED LUXURY GOLD & OBSIDIAN DESIGN SYSTEM
+   Modern Cyber-Luxury Theme with Glassmorphism, Glowing Micro-Effects,
+   and Responsive Craftsmanship.
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+    /* Color Palette: Golds */
+    --gold-100: #fff9e6;
+    --gold-200: #ffecb3;
+    --gold-300: #fbe3a1;
+    --gold-400: #f3d487;
+    --gold-500: #d8ad4b;
+    --gold-600: #b88d30;
+    --gold-700: #8c691a;
+    --gold-800: #5c430d;
+
+    /* Metallic Gold Gradients */
+    --gold-gradient: linear-gradient(135deg, #fcedc2 0%, #f3d487 35%, #d8ad4b 70%, #9e7520 100%);
+    --gold-gradient-bright: linear-gradient(135deg, #ffffff 0%, #fae6b2 30%, #f3d487 65%, #d8ad4b 100%);
+    --gold-gradient-subtle: linear-gradient(135deg, rgba(243, 212, 135, 0.15) 0%, rgba(216, 173, 75, 0.05) 100%);
+    --gold-gradient-dark: linear-gradient(135deg, #2a2211 0%, #151109 100%);
+
+    /* Color Palette: Obsidian / Voids */
+    --bg-void: #050508;
+    --bg-darker: #08080c;
+    --bg-dark: #0d0d12;
+    --bg-surface: #121218;
+    --bg-card: rgba(16, 16, 22, 0.75);
+    --bg-card-hover: rgba(24, 24, 34, 0.88);
+    --bg-card-active: rgba(30, 30, 44, 0.95);
+
+    /* Glass & Borders */
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-medium: rgba(255, 255, 255, 0.12);
+    --border-gold-subtle: rgba(216, 173, 75, 0.22);
+    --border-gold-medium: rgba(216, 173, 75, 0.45);
+    --border-gold-bright: rgba(243, 212, 135, 0.8);
+
+    /* Glows & Shadows */
+    --glow-gold-sm: 0 0 10px rgba(216, 173, 75, 0.25);
+    --glow-gold-md: 0 0 20px rgba(216, 173, 75, 0.35);
+    --glow-gold-lg: 0 0 35px rgba(216, 173, 75, 0.5);
+    --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-card-gold: 0 12px 35px -5px rgba(0, 0, 0, 0.8), 0 0 25px rgba(216, 173, 75, 0.15);
+
+    /* Accents */
+    --accent-green: #00e676;
+    --accent-green-glow: rgba(0, 230, 118, 0.3);
+    --accent-red: #ff5252;
+    --accent-red-glow: rgba(255, 82, 82, 0.3);
+    --accent-blue: #00b0ff;
+
+    /* Typography */
+    --font-heading: 'Cinzel', Georgia, serif;
+    --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Transitions */
+    --trans-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --trans-smooth: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --trans-spring: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ===================================================================
+   BASE & AMBIENT EFFECTS
+   =================================================================== */
+
+html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-void);
+    color: #e5e5e7;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(216, 173, 75, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 10% 40%, rgba(216, 173, 75, 0.04) 0%, transparent 30%),
+        radial-gradient(circle at 90% 70%, rgba(216, 173, 75, 0.05) 0%, transparent 35%);
+    background-attachment: fixed;
+}
+
+/* Luxury Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #09090d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(216, 173, 75, 0.25);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-500);
+    box-shadow: 0 0 10px rgba(216, 173, 75, 0.5);
+}
+
+/* ===================================================================
+   LUXURY UTILITIES & MICRO-INTERACTIONS
+   =================================================================== */
+
+/* Golden Gradient Text */
+.gold-text-gradient,
+h1.gold-title,
+.brand-gold {
+    background: var(--gold-gradient-bright);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(216, 173, 75, 0.25);
+}
+
+/* Glassmorphism Panel / Card */
+.glass-card,
+.game-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--trans-smooth), border-color var(--trans-smooth), box-shadow var(--trans-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before,
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(243, 212, 135, 0.35), transparent);
+    pointer-events: none;
+}
+
+.glass-card:hover,
+.game-card:hover {
+    border-color: var(--border-gold-medium);
+    box-shadow: var(--shadow-card-gold);
+}
+
+/* Primary Luxury Gold Button */
+.primary-btn,
+.gold-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 22px;
+    background: var(--gold-gradient);
+    color: #08080c !important;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform var(--trans-fast), box-shadow var(--trans-smooth), filter var(--trans-fast);
+    box-shadow: 0 4px 15px rgba(216, 173, 75, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    z-index: 1;
+}
+
+/* Shimmer Light Sweep on Hover */
+.primary-btn::after,
+.gold-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transform: rotate(25deg);
+    transition: left 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.primary-btn:hover::after,
+.gold-btn:hover::after {
+    left: 130%;
+}
+
+.primary-btn:hover,
+.gold-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(216, 173, 75, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    filter: brightness(1.05);
+}
+
+.primary-btn:active,
+.gold-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.primary-btn:disabled,
+.gold-btn:disabled {
+    background: #252528;
+    color: #666 !important;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Secondary Obsidian Button */
+.secondary-btn,
+.ghost-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(18, 18, 24, 0.65);
+    backdrop-filter: blur(8px);
+    color: var(--gold-400) !important;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--trans-smooth);
+}
+
+.secondary-btn:hover,
+.ghost-btn:hover {
+    background: rgba(216, 173, 75, 0.1);
+    border-color: var(--gold-400);
+    color: #fff !important;
+    box-shadow: 0 0 18px rgba(216, 173, 75, 0.25);
+    transform: translateY(-2px);
+}
+
+.secondary-btn:active,
+.ghost-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Danger / Exit Button */
+.danger-btn,
+.exit-button {
+    background: rgba(255, 82, 82, 0.08);
+    color: #ff7676 !important;
+    border: 1px solid rgba(255, 82, 82, 0.25);
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all var(--trans-smooth);
+}
+
+.danger-btn:hover,
+.exit-button:hover {
+    background: rgba(255, 82, 82, 0.2);
+    border-color: #ff5252;
+    color: #fff !important;
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.35);
+}
+
+/* ===================================================================
+   HEADER & NAVBAR
+   =================================================================== */
+
+header {
+    background: rgba(8, 8, 12, 0.82) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-gold-subtle) !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: border-color var(--trans-smooth);
+}
+
+.brand {
+    font-family: var(--font-heading) !important;
+    color: var(--gold-400) !important;
+    letter-spacing: 4px !important;
+    text-shadow: 0 0 14px rgba(216, 173, 75, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===================================================================
+   MODALS & OVERLAYS
+   =================================================================== */
+
+.canvas-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 8, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(8px);
+    }
+}
+
+.modal-box,
+.choice-modal,
+.waiting-modal,
+.recap-modal,
+.gameover-modal {
+    background: linear-gradient(145deg, #111117 0%, #08080c 100%) !important;
+    border: 1px solid var(--border-gold-medium) !important;
+    border-radius: 16px !important;
+    padding: 28px !important;
+    text-align: center;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(216, 173, 75, 0.15) !important;
+    position: relative;
+    animation: zoomInModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zoomInModal {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-box::before,
+.choice-modal::before,
+.waiting-modal::before,
+.recap-modal::before,
+.gameover-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-400), transparent);
+}
+
+/* ===================================================================
+   PULSE & BEACON ANIMATIONS
+   =================================================================== */
+
+@keyframes goldPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(216, 173, 75, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(216, 173, 75, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(216, 173, 75, 0);
+    }
+}
+
+.pulse-gold {
+    animation: goldPulse 2s infinite;
+}
+
+@keyframes urgentPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255, 82, 82, 0.6)); }
+    100% { transform: scale(1.12); filter: drop-shadow(0 0 14px rgba(255, 82, 82, 0.9)); }
+}
+
+/* Hidden Utility */
+.hidden {
+    display: none !important;
+}
