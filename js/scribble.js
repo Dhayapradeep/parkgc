@@ -59,7 +59,7 @@ const WORD_BANK = {
 ========================================================= */
 const roundDisplay = document.getElementById("roundDisplay");
 const timerDisplay = document.getElementById("timerDisplay");
-const timerContainer = document.getElementById("timerContainer");
+const timerBox = document.getElementById("timerBox");
 const wordStatusLabel = document.getElementById("wordStatusLabel");
 const wordDisplay = document.getElementById("wordDisplay");
 const wordLengthHint = document.getElementById("wordLengthHint");
@@ -86,14 +86,15 @@ const recapScoresList = document.getElementById("recapScoresList");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const podiumContainer = document.getElementById("podiumContainer");
 const finalScoreboard = document.getElementById("finalScoreboard");
+const viewLeaderboardBtn = document.getElementById("viewLeaderboardBtn");
 const returnLobbyButton = document.getElementById("returnLobbyButton");
+const exitToNewRoomBtn = document.getElementById("exitToNewRoomBtn");
 
 const drawingToolbar = document.getElementById("drawingToolbar");
 const activeColorPreview = document.getElementById("activeColorPreview");
 const toolBrush = document.getElementById("toolBrush");
 const toolBucket = document.getElementById("toolBucket");
 const toolEraser = document.getElementById("toolEraser");
-const toolUndo = document.getElementById("toolUndo");
 const toolClear = document.getElementById("toolClear");
 
 const chatMessages = document.getElementById("chatMessages");
@@ -112,43 +113,38 @@ let currentRoomCode = null;
 let currentRoomData = null;
 
 let isDrawing = false;
-let currentTool = "brush"; // "brush", "eraser", "bucket"
+let currentTool = "brush";
 let currentColor = "#000000";
 let currentSize = 7;
 let activeStrokePoints = [];
 
-let choiceTimerInterval = null;
-let turnTimerInterval = null;
-let roomUnsubscribe = null;
-let strokesUnsubscribe = null;
-let chatUnsubscribe = null;
-
-let audioCtx = null;
+let gameTickInterval = null;
+let isAdvancingTurn = false;
+let isPickingWord = false;
+let lastRenderedState = null;
+let lastRenderedDrawer = null;
 
 /* =========================================================
-   SOUND FX (WEB AUDIO API)
+   SOUND FX
 ========================================================= */
+let audioCtx = null;
 function playTone(freq, type = "sine", duration = 0.15) {
     try {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (audioCtx.state === "suspended") {
-            audioCtx.resume();
-        }
+        if (audioCtx.state === "suspended") audioCtx.resume();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
-    } catch (e) {
-        // Audio error silently ignored
-    }
+    } catch (e) {}
 }
 
 function playSuccessChime() {
@@ -173,7 +169,6 @@ if (!currentRoomCode) {
     roomCodeDisplay.textContent = currentRoomCode;
 }
 
-// Setup canvas background
 clearLocalCanvas();
 
 onAuthStateChanged(auth, async (user) => {
@@ -205,7 +200,7 @@ async function loadUserProfile() {
 function initRoom() {
     const roomRef = ref(database, `scribbleRooms/${currentRoomCode}`);
 
-    roomUnsubscribe = onValue(roomRef, (snapshot) => {
+    onValue(roomRef, (snapshot) => {
         if (!snapshot.exists()) {
             alert("This room no longer exists.");
             window.location.href = "slobby.html";
@@ -215,7 +210,6 @@ function initRoom() {
         const room = snapshot.val();
         currentRoomData = room;
 
-        // If game was reset to waiting or finished, return to lobby if needed
         if (room.state === "waiting") {
             window.location.href = `slobby.html?room=${encodeURIComponent(currentRoomCode)}`;
             return;
@@ -226,31 +220,133 @@ function initRoom() {
 
     listenToStrokes();
     listenToChat();
+    startGameTicker();
+}
+
+/* =========================================================
+   MAIN GAME TICKER (RUNS EVERY SECOND ON ALL CLIENTS)
+   Handles all timer countdowns and host-driven transitions
+========================================================= */
+function startGameTicker() {
+    if (gameTickInterval) clearInterval(gameTickInterval);
+
+    gameTickInterval = setInterval(async () => {
+        if (!currentRoomData || !currentUser) return;
+
+        const room = currentRoomData;
+        const isHost = room.hostId === currentUser.uid;
+        const now = Date.now();
+
+        // 0. GAME OVER STATE
+        if (room.turnState === "game_over" || room.state === "game_over") {
+            timerDisplay.textContent = "—";
+            return;
+        }
+
+        // 1. CHOOSING WORD TIMER
+        if (room.turnState === "choosing") {
+            const deadline = room.choiceDeadline || (now + 15000);
+            const remaining = Math.max(0, Math.ceil((deadline - now) / 1000));
+            timerDisplay.textContent = remaining;
+            if (choiceCountdown) choiceCountdown.textContent = remaining;
+
+            // If time expires and word not picked: Host auto-selects word 1!
+            if (remaining <= 0 && isHost && !isAdvancingTurn) {
+                isAdvancingTurn = true;
+                const rawChoices = room.wordChoices;
+                const choices = Array.isArray(rawChoices)
+                    ? rawChoices
+                    : (rawChoices && typeof rawChoices === "object" ? Object.values(rawChoices) : []);
+                const defaultWord = choices[0] || getRandomWord(WORD_BANK.easy);
+                await hostCommitWordSelection(defaultWord);
+                isAdvancingTurn = false;
+            }
+        }
+
+        // 2. DRAWING TIMER
+        else if (room.turnState === "drawing") {
+            const endTime = room.turnEndTime || (now + 60000);
+            const totalDuration = (room.settings?.drawTime || 60) * 1000;
+            const remainingMs = endTime - now;
+            const remainingSec = Math.max(0, Math.ceil(remainingMs / 1000));
+
+            timerDisplay.textContent = remainingSec;
+
+            if (remainingSec <= 10) {
+                timerBox.classList.add("timer-urgent");
+                if (remainingSec <= 5 && remainingSec > 0) playTickSound();
+            } else {
+                timerBox.classList.remove("timer-urgent");
+            }
+
+            // Progressive letter hints at 50% and 25% remaining time
+            if (isHost && room.currentWord) {
+                const elapsed = totalDuration - remainingMs;
+                const progress = elapsed / totalDuration;
+
+                if (progress >= 0.5 && !room.hintRevealed1) {
+                    await revealLetterHint(1);
+                }
+                if (progress >= 0.75 && !room.hintRevealed2) {
+                    await revealLetterHint(2);
+                }
+            }
+
+            // Host safeguard: check if all eligible guessers have guessed
+            if (isHost && !isAdvancingTurn) {
+                const players = room.players ? Object.values(room.players) : [];
+                const nonDrawers = players.filter(p => p.id !== room.turnDrawerId);
+                const guesses = room.guesses ? Object.keys(room.guesses) : [];
+                if (nonDrawers.length > 0 && guesses.length >= nonDrawers.length) {
+                    isAdvancingTurn = true;
+                    await endTurn("Everyone guessed the word!");
+                    isAdvancingTurn = false;
+                    return;
+                }
+            }
+
+            // Time expired
+            if (remainingSec <= 0 && isHost && !isAdvancingTurn) {
+                isAdvancingTurn = true;
+                await endTurn("Time's up!");
+                isAdvancingTurn = false;
+            }
+        }
+
+        // 3. TURN END RECAP TIMER (EXACTLY 4 SECONDS)
+        else if (room.turnState === "turn_end") {
+            const recapUntil = room.recapUntil || (now + 4000);
+            const remaining = Math.max(0, Math.ceil((recapUntil - now) / 1000));
+            timerDisplay.textContent = remaining;
+
+            if (now >= recapUntil && isHost && !isAdvancingTurn) {
+                isAdvancingTurn = true;
+                await advanceToNextTurn();
+                isAdvancingTurn = false;
+            }
+        }
+    }, 1000);
 }
 
 /* =========================================================
    RENDER GAME STATE
 ========================================================= */
 function renderRoomState(room) {
-    const isHost = room.hostId === currentUser.uid;
     const isDrawer = room.turnDrawerId === currentUser.uid;
     const totalRounds = room.settings?.rounds || 3;
     const currentRound = room.currentRound || 1;
 
-    // 1. Top bar updates
     roundDisplay.textContent = `${currentRound} / ${totalRounds}`;
-
-    // 2. Player roster & leaderboard
     renderPlayerLeaderboard(room);
 
-    // 3. Toolbar state
+    // Toolbar state
     if (isDrawer && room.turnState === "drawing") {
         drawingToolbar.classList.remove("disabled");
     } else {
         drawingToolbar.classList.add("disabled");
     }
 
-    // 4. Input bar state
+    // Input state
     const myGuess = room.guesses?.[currentUser.uid];
     if (isDrawer) {
         guessInput.disabled = true;
@@ -274,62 +370,60 @@ function renderRoomState(room) {
         guessFeedback.textContent = "";
     }
 
-    // 5. State Handling
+    // State render switches
     switch (room.turnState) {
         case "choosing":
-            handleChoosingState(room, isDrawer, isHost);
+            renderChoosingView(room, isDrawer);
             break;
         case "drawing":
-            handleDrawingState(room, isDrawer, isHost);
+            renderDrawingView(room, isDrawer);
             break;
         case "turn_end":
-            handleTurnEndState(room, isHost);
+            renderTurnEndView(room);
             break;
         case "game_over":
-            handleGameOverState(room, isHost);
+            renderGameOverView(room);
             break;
     }
 }
 
 /* =========================================================
-   STATE 1: CHOOSING WORD
+   VIEW: CHOOSING WORD
 ========================================================= */
-function handleChoosingState(room, isDrawer, isHost) {
+function renderChoosingView(room, isDrawer) {
     turnRecapOverlay.classList.add("hidden");
     gameOverOverlay.classList.add("hidden");
 
     wordStatusLabel.textContent = "CHOOSING";
-    wordDisplay.innerHTML = `<span class="word-letters">WAITING...</span>`;
+    wordDisplay.textContent = "WAITING...";
     wordLengthHint.textContent = "";
 
-    // Clear canvas when choosing starts
-    clearLocalCanvas();
+    // Clear canvas at start of choosing
+    if (lastRenderedState !== "choosing") {
+        clearLocalCanvas();
+        lastRenderedState = "choosing";
+    }
+
+    const rawChoices = room.wordChoices;
+    const choices = Array.isArray(rawChoices)
+        ? rawChoices
+        : (rawChoices && typeof rawChoices === "object" ? Object.values(rawChoices) : []);
 
     if (isDrawer) {
         waitingForWordOverlay.classList.add("hidden");
         wordChoiceOverlay.classList.remove("hidden");
 
-        // Generate choices if drawer hasn't received choices yet
-        if (!room.wordChoices) {
-            const choices = generateThreeWords();
-            update(ref(database, `scribbleRooms/${currentRoomCode}`), {
-                wordChoices: choices,
-                choiceDeadline: Date.now() + 15000
-            });
+        // Render choices if available
+        if (choices.length > 0) {
             renderWordChoices(choices);
         } else {
-            renderWordChoices(room.wordChoices);
+            wordChoicesContainer.innerHTML = `<p style="color:#d8ad4b;font-size:12px;padding:12px;">Generating words...</p>`;
         }
-
-        startChoiceCountdown(room.choiceDeadline, isDrawer);
     } else {
         wordChoiceOverlay.classList.add("hidden");
         waitingForWordOverlay.classList.remove("hidden");
         const drawerName = room.players?.[room.turnDrawerId]?.name || "Artist";
         waitingDrawerText.textContent = `${drawerName} is choosing a word...`;
-
-        // Check countdown for auto-pick fallback
-        startChoiceCountdown(room.choiceDeadline, isDrawer);
     }
 }
 
@@ -338,145 +432,88 @@ function renderWordChoices(choices) {
     const diffs = ["easy", "medium", "hard"];
 
     choices.forEach((word, index) => {
+        if (!word) return;
         const card = document.createElement("div");
         card.className = "word-choice-card";
         const diff = diffs[index] || "medium";
 
         card.innerHTML = `
-            <span class="choice-word-text">${word.toUpperCase()}</span>
+            <span class="choice-word-text">${escapeHtml(word.toUpperCase())}</span>
             <span class="choice-diff-tag diff-${diff}">${diff}</span>
         `;
 
         card.addEventListener("click", () => {
-            selectWord(word);
+            if (isPickingWord) return;
+            document.querySelectorAll(".word-choice-card").forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            playerPickWord(word);
         });
 
         wordChoicesContainer.appendChild(card);
     });
 }
 
-async function selectWord(word) {
+async function playerPickWord(word) {
     if (!currentRoomCode || currentRoomData?.turnDrawerId !== currentUser.uid) return;
-
-    if (choiceTimerInterval) {
-        clearInterval(choiceTimerInterval);
-        choiceTimerInterval = null;
+    if (isPickingWord) return;
+    isPickingWord = true;
+    try {
+        await hostCommitWordSelection(word);
+    } finally {
+        isPickingWord = false;
     }
+}
+
+async function hostCommitWordSelection(word) {
+    if (!currentRoomCode || !currentRoomData) return;
 
     const drawDuration = (currentRoomData.settings?.drawTime || 60) * 1000;
-    const initialHint = generateWordHint(word, []);
+    const cleanWord = (word || "").toLowerCase().trim();
+    const initialHint = generateWordHint(cleanWord, []);
 
     try {
         await update(ref(database, `scribbleRooms/${currentRoomCode}`), {
             turnState: "drawing",
-            currentWord: word.toLowerCase().trim(),
+            currentWord: cleanWord,
             wordHint: initialHint,
             turnStartTime: Date.now(),
             turnEndTime: Date.now() + drawDuration,
+            choiceDeadline: null,
+            hintRevealed1: null,
+            hintRevealed2: null,
             guesses: null,
             strokes: null
         });
 
-        // Announce in chat
-        await broadcastSystemMessage(`${currentUsername} is now drawing!`);
+        const drawerName = currentRoomData.players?.[currentRoomData.turnDrawerId]?.name || "Artist";
+        await broadcastSystemMessage(`${drawerName} is now drawing!`);
     } catch (e) {
-        console.error("Failed to select word:", e);
+        console.error("Failed to commit word:", e);
     }
 }
 
-function startChoiceCountdown(deadline, isDrawer) {
-    if (choiceTimerInterval) clearInterval(choiceTimerInterval);
-    if (!deadline) return;
-
-    const tick = () => {
-        const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
-        if (choiceCountdown) choiceCountdown.textContent = remaining;
-        timerDisplay.textContent = remaining;
-
-        if (remaining <= 0) {
-            clearInterval(choiceTimerInterval);
-            choiceTimerInterval = null;
-            // Auto pick word 1 if drawer didn't pick
-            if (isDrawer && currentRoomData?.wordChoices?.length) {
-                selectWord(currentRoomData.wordChoices[0]);
-            }
-        }
-    };
-
-    tick();
-    choiceTimerInterval = setInterval(tick, 1000);
-}
-
 /* =========================================================
-   STATE 2: DRAWING & GUESSING
+   VIEW: DRAWING & GUESSING
 ========================================================= */
-function handleDrawingState(room, isDrawer, isHost) {
+function renderDrawingView(room, isDrawer) {
     wordChoiceOverlay.classList.add("hidden");
     waitingForWordOverlay.classList.add("hidden");
     turnRecapOverlay.classList.add("hidden");
     gameOverOverlay.classList.add("hidden");
 
+    lastRenderedState = "drawing";
     const currentWord = room.currentWord || "";
 
     if (isDrawer) {
         wordStatusLabel.textContent = "DRAW THIS";
-        wordDisplay.innerHTML = `<span class="word-letters is-drawer">${currentWord.toUpperCase()}</span>`;
-        wordLengthHint.textContent = `(${currentWord.length})`;
+        wordDisplay.textContent = currentWord.toUpperCase();
+        wordLengthHint.textContent = `(${currentWord.length} letters)`;
     } else {
         wordStatusLabel.textContent = "GUESS WORD";
         const masked = room.wordHint || generateWordHint(currentWord, []);
-        wordDisplay.innerHTML = `<span class="word-letters">${formatHintSpaced(masked)}</span>`;
-        wordLengthHint.textContent = `(${currentWord.length})`;
+        wordDisplay.textContent = formatHintSpaced(masked);
+        wordLengthHint.textContent = `(${currentWord.length} letters)`;
     }
-
-    startTurnCountdown(room, isHost);
-}
-
-function startTurnCountdown(room, isHost) {
-    if (turnTimerInterval) clearInterval(turnTimerInterval);
-    const endTime = room.turnEndTime || (Date.now() + 60000);
-    const totalDuration = (room.settings?.drawTime || 60) * 1000;
-
-    const tick = async () => {
-        const now = Date.now();
-        const remainingMs = endTime - now;
-        const remainingSec = Math.max(0, Math.ceil(remainingMs / 1000));
-
-        timerDisplay.textContent = remainingSec;
-
-        if (remainingSec <= 10) {
-            timerContainer.classList.add("timer-urgent");
-            if (remainingSec <= 5 && remainingSec > 0) {
-                playTickSound();
-            }
-        } else {
-            timerContainer.classList.remove("timer-urgent");
-        }
-
-        // Host updates progressive hints at 50% and 25% time
-        if (isHost && room.currentWord) {
-            const elapsed = totalDuration - remainingMs;
-            const progress = elapsed / totalDuration;
-
-            if (progress >= 0.5 && !room.hintRevealed1) {
-                await revealLetterHint(1);
-            }
-            if (progress >= 0.75 && !room.hintRevealed2) {
-                await revealLetterHint(2);
-            }
-        }
-
-        if (remainingSec <= 0) {
-            clearInterval(turnTimerInterval);
-            turnTimerInterval = null;
-            if (isHost && room.turnState === "drawing") {
-                endTurn("Time's up!");
-            }
-        }
-    };
-
-    tick();
-    turnTimerInterval = setInterval(tick, 1000);
 }
 
 async function revealLetterHint(hintNum) {
@@ -492,7 +529,6 @@ async function revealLetterHint(hintNum) {
     }
 
     if (unrevealedIndices.length > 1) {
-        // Pick random letter to reveal
         const randomIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
         const hintArr = currentHint.split("");
         hintArr[randomIndex] = word[randomIndex].toUpperCase();
@@ -506,7 +542,7 @@ async function revealLetterHint(hintNum) {
 }
 
 /* =========================================================
-   GUESS SUBMISSION & VALIDATION
+   GUESS SUBMISSION & SCORING
 ========================================================= */
 if (guessForm) {
     guessForm.addEventListener("submit", async (e) => {
@@ -516,13 +552,11 @@ if (guessForm) {
 
         guessInput.value = "";
 
-        // If drawer, reject
         if (currentRoomData.turnDrawerId === currentUser.uid) {
             showFeedback("You are drawing! You cannot guess.");
             return;
         }
 
-        // If already guessed, reject
         if (currentRoomData.guesses?.[currentUser.uid]) {
             showFeedback("You already guessed correctly!");
             return;
@@ -531,13 +565,15 @@ if (guessForm) {
         const targetWord = (currentRoomData.currentWord || "").toLowerCase().trim();
         const cleanedGuess = guess.toLowerCase().trim();
 
-        // 1. EXACT MATCH
-        if (cleanedGuess === targetWord) {
+        // 1. EXACT MATCH (with and without spaces for multi-word phrases)
+        const targetNoSpace = targetWord.replace(/\s+/g, "");
+        const guessNoSpace = cleanedGuess.replace(/\s+/g, "");
+        if (cleanedGuess === targetWord || (targetNoSpace.length >= 3 && guessNoSpace === targetNoSpace)) {
             await handleCorrectGuess();
             return;
         }
 
-        // 2. CLOSE GUESS (Levenshtein distance <= 1)
+        // 2. CLOSE GUESS (Levenshtein distance == 1)
         if (levenshteinDistance(cleanedGuess, targetWord) === 1 && targetWord.length >= 4) {
             addLocalChatMessage({
                 isClose: true,
@@ -546,7 +582,7 @@ if (guessForm) {
             return;
         }
 
-        // 3. REGULAR INCORRECT CHAT MESSAGE
+        // 3. REGULAR CHAT MESSAGE
         await pushChatMessage(guess);
     });
 }
@@ -559,11 +595,10 @@ async function handleCorrectGuess() {
     const remainingMs = Math.max(0, endTime - Date.now());
     const scoreRatio = remainingMs / totalDuration;
 
-    // Calculate score: between 100 and 500 points based on speed
     const earnedPoints = Math.max(100, Math.round(scoreRatio * 500));
     const drawerBonus = 75;
 
-    // 1. Record player guess in RTDB
+    // 1. Record player guess
     await update(ref(database, `scribbleRooms/${currentRoomCode}/guesses/${currentUser.uid}`), {
         userId: currentUser.uid,
         userName: currentUsername,
@@ -571,12 +606,12 @@ async function handleCorrectGuess() {
         guessedAt: Date.now()
     });
 
-    // 2. Update player's total score
+    // 2. Add score to guesser
     await runTransaction(ref(database, `scribbleRooms/${currentRoomCode}/players/${currentUser.uid}/score`), (current) => {
         return (Number(current) || 0) + earnedPoints;
     });
 
-    // 3. Award drawer bonus points
+    // 3. Add bonus to drawer
     const drawerId = currentRoomData.turnDrawerId;
     if (drawerId) {
         await runTransaction(ref(database, `scribbleRooms/${currentRoomCode}/players/${drawerId}/score`), (current) => {
@@ -584,7 +619,7 @@ async function handleCorrectGuess() {
         });
     }
 
-    // 4. Send correct guess broadcast in chat
+    // 4. Send chat alert
     await push(ref(database, `scribbleRooms/${currentRoomCode}/chat`), {
         type: "correct",
         userName: currentUsername,
@@ -597,25 +632,28 @@ async function handleCorrectGuess() {
 }
 
 async function checkIfAllGuessed() {
-    const roomRef = ref(database, `scribbleRooms/${currentRoomCode}`);
-    const snap = await get(roomRef);
+    if (!currentRoomCode) return;
+    const snap = await get(ref(database, `scribbleRooms/${currentRoomCode}`));
     if (!snap.exists()) return;
 
     const room = snap.val();
+    if (room.turnState !== "drawing") return;
+
     const players = room.players ? Object.values(room.players) : [];
     const nonDrawers = players.filter(p => p.id !== room.turnDrawerId);
     const guesses = room.guesses ? Object.keys(room.guesses) : [];
 
-    // If every non-drawer guessed, end turn immediately!
     if (nonDrawers.length > 0 && guesses.length >= nonDrawers.length) {
-        if (room.hostId === currentUser.uid) {
-            endTurn("Everyone guessed the word!");
+        if (!isAdvancingTurn) {
+            isAdvancingTurn = true;
+            await endTurn("Everyone guessed the word!");
+            isAdvancingTurn = false;
         }
     }
 }
 
 /* =========================================================
-   STATE 3: TURN END & RECAP
+   VIEW: TURN END & RECAP
 ========================================================= */
 async function endTurn(reasonText = "Round Over!") {
     if (!currentRoomCode) return;
@@ -624,17 +662,15 @@ async function endTurn(reasonText = "Round Over!") {
         await update(ref(database, `scribbleRooms/${currentRoomCode}`), {
             turnState: "turn_end",
             turnEndReason: reasonText,
-            recapUntil: Date.now() + 5000
+            recapUntil: Date.now() + 4000 // Exactly 4 seconds recap
         });
     } catch (e) {
         console.error("Failed to end turn:", e);
     }
 }
 
-function handleTurnEndState(room, isHost) {
-    if (turnTimerInterval) clearInterval(turnTimerInterval);
-    timerContainer.classList.remove("timer-urgent");
-
+function renderTurnEndView(room) {
+    timerBox.classList.remove("timer-urgent");
     wordChoiceOverlay.classList.add("hidden");
     waitingForWordOverlay.classList.add("hidden");
     turnRecapOverlay.classList.remove("hidden");
@@ -642,7 +678,6 @@ function handleTurnEndState(room, isHost) {
     recapTitle.textContent = room.turnEndReason || "ROUND OVER!";
     recapWord.textContent = (room.currentWord || "").toUpperCase();
 
-    // Render scores list for this turn
     recapScoresList.innerHTML = "";
     const guesses = room.guesses ? Object.values(room.guesses) : [];
 
@@ -659,26 +694,29 @@ function handleTurnEndState(room, isHost) {
             recapScoresList.appendChild(row);
         });
     }
+}
 
-    // Host schedules transition to next turn after 5 seconds
-    if (isHost) {
-        scheduleNextTurn(room);
+/* =========================================================
+   TURN & ROUND ADVANCEMENT (HOST ONLY)
+========================================================= */
+async function advanceToNextTurn() {
+    if (!currentRoomCode) return;
+
+    const snap = await get(ref(database, `scribbleRooms/${currentRoomCode}`));
+    if (!snap.exists()) return;
+    const room = snap.val();
+
+    const rawOrder = room.playerOrder;
+    let playerOrder = Array.isArray(rawOrder)
+        ? rawOrder
+        : (rawOrder && typeof rawOrder === "object" ? Object.values(rawOrder) : []);
+
+    if (playerOrder.length === 0 && room.players) {
+        playerOrder = Object.keys(room.players);
     }
-}
 
-let nextTurnTimeout = null;
-function scheduleNextTurn(room) {
-    if (nextTurnTimeout) clearTimeout(nextTurnTimeout);
-
-    nextTurnTimeout = setTimeout(async () => {
-        await advanceToNextTurn(room);
-    }, 5000);
-}
-
-async function advanceToNextTurn(room) {
-    const playerOrder = room.playerOrder || (room.players ? Object.keys(room.players) : []);
-    let nextIndex = (room.turnIndex || 0) + 1;
-    let nextRound = room.currentRound || 1;
+    let nextIndex = (Number(room.turnIndex) || 0) + 1;
+    let nextRound = Number(room.currentRound) || 1;
     const totalRounds = room.settings?.rounds || 3;
 
     // Check if this round of turns is complete
@@ -694,58 +732,69 @@ async function advanceToNextTurn(room) {
     }
 
     const nextDrawerId = playerOrder[nextIndex] || playerOrder[0];
+    const newWordChoices = generateThreeWords();
+    const choiceDeadline = Date.now() + 15000;
 
     await update(ref(database, `scribbleRooms/${currentRoomCode}`), {
         turnIndex: nextIndex,
         currentRound: nextRound,
         turnState: "choosing",
         turnDrawerId: nextDrawerId,
-        wordChoices: null,
+        playerOrder: playerOrder,
+        wordChoices: newWordChoices,
+        choiceDeadline: choiceDeadline,
         currentWord: null,
         wordHint: null,
         hintRevealed1: null,
         hintRevealed2: null,
         guesses: null,
-        strokes: null
+        strokes: null,
+        recapUntil: null,
+        turnEndReason: null
     });
 }
 
 /* =========================================================
-   STATE 4: GAME OVER & PODIUM
+   VIEW: GAME OVER & LEADERBOARD REWARDS (1000, 700, 500 CP)
 ========================================================= */
 async function triggerGameOver(room) {
+    if (!currentRoomCode) return;
+    if (room.rewardsAwarded) return;
+
     const players = room.players ? Object.values(room.players) : [];
-    // Sort by score descending
     players.sort((a, b) => (b.score || 0) - (a.score || 0));
 
-    // Award Chaos Points to top 3
-    const rewards = [100, 50, 25]; // 1st, 2nd, 3rd
+    // Rewards: 1st: 1000 CP, 2nd: 700 CP, 3rd: 500 CP
+    const cpRewards = [1000, 700, 500];
 
     for (let i = 0; i < Math.min(3, players.length); i++) {
-        const player = players[i];
-        const reward = rewards[i];
-        if (player.id && reward) {
+        const p = players[i];
+        const reward = cpRewards[i];
+        if (p?.id && reward) {
             try {
-                const userCpRef = ref(database, `users/${player.id}/chaosPoints`);
-                await runTransaction(userCpRef, (current) => {
+                const userRef = ref(database, `users/${p.id}/chaosPoints`);
+                await runTransaction(userRef, (current) => {
                     return (Number(current) || 0) + reward;
                 });
             } catch (err) {
-                console.error(`Could not award Chaos Points to ${player.id}:`, err);
+                console.error(`Failed to credit Chaos Points to ${p.id}:`, err);
             }
         }
     }
 
+    // Set state: "game_over" so lobby listener won't redirect back!
     await update(ref(database, `scribbleRooms/${currentRoomCode}`), {
+        state: "game_over",
         turnState: "game_over",
+        rewardsAwarded: true,
         podium: players.slice(0, 3)
     });
+
+    await broadcastSystemMessage("🏆 MATCH OVER! Chaos Points awarded: 🥇 1st: +1000 CP, 🥈 2nd: +700 CP, 🥉 3rd: +500 CP! Leaderboard updated.");
 }
 
-function handleGameOverState(room) {
-    if (turnTimerInterval) clearInterval(turnTimerInterval);
-    timerContainer.classList.remove("timer-urgent");
-
+function renderGameOverView(room) {
+    timerBox.classList.remove("timer-urgent");
     wordChoiceOverlay.classList.add("hidden");
     waitingForWordOverlay.classList.add("hidden");
     turnRecapOverlay.classList.add("hidden");
@@ -754,10 +803,9 @@ function handleGameOverState(room) {
     const players = room.players ? Object.values(room.players) : [];
     players.sort((a, b) => (b.score || 0) - (a.score || 0));
 
-    // Render podium
     podiumContainer.innerHTML = "";
     const medals = ["🥇", "🥈", "🥉"];
-    const cpRewards = ["+100 CP", "+50 CP", "+25 CP"];
+    const cpTags = ["+1000 CP", "+700 CP", "+500 CP"];
 
     for (let i = 0; i < Math.min(3, players.length); i++) {
         const p = players[i];
@@ -770,35 +818,88 @@ function handleGameOverState(room) {
             <div class="podium-avatar">${initial}</div>
             <div class="podium-name">${escapeHtml(p.name || "Player")}</div>
             <div class="podium-pillar">
-                <span class="podium-pillar-medal">${medals[i]}</span>
-                <span class="podium-pillar-pts">${p.score || 0} pts</span>
-                <span style="font-size:9px; color:#ffe082;">${cpRewards[i]}</span>
+                <span class="podium-medal">${medals[i]}</span>
+                <span class="podium-pts">${p.score || 0} pts</span>
+                <span class="podium-cp-badge">${cpTags[i]}</span>
             </div>
         `;
         podiumContainer.appendChild(slot);
     }
 
-    // Render remaining scoreboard
     finalScoreboard.innerHTML = "";
     players.forEach((p, idx) => {
         const row = document.createElement("div");
         row.className = "recap-score-row";
         row.innerHTML = `
             <span>#${idx + 1} ${escapeHtml(p.name)}</span>
-            <strong style="color:#d8ad4b;">${p.score || 0} pts</strong>
+            <strong style="color:#f3d487;">${p.score || 0} pts</strong>
         `;
         finalScoreboard.appendChild(row);
     });
 }
 
+if (viewLeaderboardBtn) {
+    viewLeaderboardBtn.addEventListener("click", () => {
+        window.location.href = "hos.html";
+    });
+}
+
 if (returnLobbyButton) {
-    returnLobbyButton.addEventListener("click", () => {
+    returnLobbyButton.addEventListener("click", async () => {
+        if (!currentRoomCode) return;
+        returnLobbyButton.disabled = true;
+        returnLobbyButton.textContent = "RESETTING...";
+
+        try {
+            const snap = await get(ref(database, `scribbleRooms/${currentRoomCode}`));
+            if (snap.exists()) {
+                const room = snap.val();
+                const players = room.players ? Object.values(room.players) : [];
+
+                await update(ref(database, `scribbleRooms/${currentRoomCode}`), {
+                    state: "waiting",
+                    turnState: "waiting",
+                    currentRound: 1,
+                    turnIndex: 0,
+                    currentWord: null,
+                    wordHint: null,
+                    wordChoices: null,
+                    choiceDeadline: null,
+                    strokes: null,
+                    guesses: null,
+                    rewardsAwarded: false,
+                    turnDrawerId: null
+                });
+
+                // Reset player scores for rematch
+                for (const p of players) {
+                    await update(ref(database, `scribbleRooms/${currentRoomCode}/players/${p.id}`), {
+                        score: 0
+                    });
+                }
+            }
+        } catch (e) {
+            console.error("Error resetting room for lobby:", e);
+        }
+
         window.location.href = `slobby.html?room=${encodeURIComponent(currentRoomCode)}`;
     });
 }
 
+if (exitToNewRoomBtn) {
+    exitToNewRoomBtn.addEventListener("click", async () => {
+        localStorage.removeItem("chaosScribbleRoomCode");
+        if (currentRoomCode && currentUser) {
+            try {
+                await remove(ref(database, `scribbleRooms/${currentRoomCode}/players/${currentUser.uid}`));
+            } catch (e) {}
+        }
+        window.location.href = "slobby.html";
+    });
+}
+
 /* =========================================================
-   CANVAS DRAWING ENGINE & TOOLS
+   CANVAS DRAWING ENGINE
 ========================================================= */
 function getCanvasCoords(e) {
     const rect = paintCanvas.getBoundingClientRect();
@@ -818,7 +919,6 @@ function isCurrentDrawer() {
     return currentRoomData?.turnDrawerId === currentUser?.uid && currentRoomData?.turnState === "drawing";
 }
 
-// Canvas Pointer Events
 paintCanvas.addEventListener("pointerdown", (e) => {
     if (!isCurrentDrawer()) return;
     paintCanvas.setPointerCapture(e.pointerId);
@@ -838,7 +938,6 @@ paintCanvas.addEventListener("pointerdown", (e) => {
 
     isDrawing = true;
     activeStrokePoints = [pos.x, pos.y];
-
     drawDot(pos.x, pos.y, currentTool === "eraser" ? "#ffffff" : currentColor, currentSize);
 });
 
@@ -853,8 +952,8 @@ paintCanvas.addEventListener("pointermove", (e) => {
 
     drawLine(prevX, prevY, pos.x, pos.y, currentTool === "eraser" ? "#ffffff" : currentColor, currentSize);
 
-    // Broadcast intermediate chunks if stroke is long (smoother real-time experience)
-    if (activeStrokePoints.length >= 30) {
+    // Broadcast intermediate chunks so guessers see live drawing
+    if (activeStrokePoints.length >= 26) {
         syncStroke({
             type: "stroke",
             tool: currentTool,
@@ -948,7 +1047,6 @@ function floodFill(startX, startY, fillColorHex) {
     const targetB = data[startIndex + 2];
     const targetA = data[startIndex + 3];
 
-    // If already the same color, abort
     if (
         targetR === fillRgb.r &&
         targetG === fillRgb.g &&
@@ -960,10 +1058,10 @@ function floodFill(startX, startY, fillColorHex) {
 
     function matchColor(idx) {
         return (
-            Math.abs(data[idx] - targetR) < 18 &&
-            Math.abs(data[idx + 1] - targetG) < 18 &&
-            Math.abs(data[idx + 2] - targetB) < 18 &&
-            Math.abs(data[idx + 3] - targetA) < 18
+            Math.abs(data[idx] - targetR) < 20 &&
+            Math.abs(data[idx + 1] - targetG) < 20 &&
+            Math.abs(data[idx + 2] - targetB) < 20 &&
+            Math.abs(data[idx + 3] - targetA) < 20
         );
     }
 
@@ -974,7 +1072,6 @@ function floodFill(startX, startY, fillColorHex) {
         data[idx + 3] = 255;
     }
 
-    // Queue-based BFS Flood Fill
     const queue = [[startX, startY]];
     const visited = new Uint8Array(width * height);
 
@@ -1011,7 +1108,7 @@ function hexToRgb(hex) {
 }
 
 /* =========================================================
-   STROKE SYNCHRONIZATION VIA FIREBASE
+   STROKE SYNC VIA RTDB
 ========================================================= */
 async function syncStroke(strokeData) {
     if (!currentRoomCode) return;
@@ -1026,7 +1123,7 @@ async function syncStroke(strokeData) {
 function listenToStrokes() {
     const strokesRef = ref(database, `scribbleRooms/${currentRoomCode}/strokes`);
 
-    strokesUnsubscribe = onChildAdded(strokesRef, (snapshot) => {
+    onChildAdded(strokesRef, (snapshot) => {
         const stroke = snapshot.val();
         if (!stroke) return;
 
@@ -1044,21 +1141,15 @@ function listenToStrokes() {
    TOOLBAR BUTTON EVENTS
 ========================================================= */
 if (toolBrush) {
-    toolBrush.addEventListener("click", () => {
-        setActiveTool("brush");
-    });
+    toolBrush.addEventListener("click", () => setActiveTool("brush"));
 }
 
 if (toolEraser) {
-    toolEraser.addEventListener("click", () => {
-        setActiveTool("eraser");
-    });
+    toolEraser.addEventListener("click", () => setActiveTool("eraser"));
 }
 
 if (toolBucket) {
-    toolBucket.addEventListener("click", () => {
-        setActiveTool("bucket");
-    });
+    toolBucket.addEventListener("click", () => setActiveTool("bucket"));
 }
 
 if (toolClear) {
@@ -1066,14 +1157,6 @@ if (toolClear) {
         if (!isCurrentDrawer()) return;
         clearLocalCanvas();
         await syncStroke({ type: "clear" });
-    });
-}
-
-if (toolUndo) {
-    toolUndo.addEventListener("click", async () => {
-        if (!isCurrentDrawer()) return;
-        // Simple undo clears canvas and redraws strokes minus last
-        showFeedback("Undo applied.");
     });
 }
 
@@ -1086,7 +1169,6 @@ function setActiveTool(tool) {
     if (tool === "eraser") toolEraser?.classList.add("active");
 }
 
-// Brush Size Buttons
 document.querySelectorAll(".size-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
         document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
@@ -1095,23 +1177,18 @@ document.querySelectorAll(".size-btn").forEach((btn) => {
     });
 });
 
-// Color Palette Buttons
 document.querySelectorAll(".color-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
         document.querySelectorAll(".color-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentColor = btn.dataset.color || "#000000";
-        if (activeColorPreview) {
-            activeColorPreview.style.backgroundColor = currentColor;
-        }
-        if (currentTool === "eraser") {
-            setActiveTool("brush");
-        }
+        if (activeColorPreview) activeColorPreview.style.backgroundColor = currentColor;
+        if (currentTool === "eraser") setActiveTool("brush");
     });
 });
 
 /* =========================================================
-   CHAT & FEED EVENTS
+   CHAT & GUESS FEED
 ========================================================= */
 async function pushChatMessage(text) {
     if (!currentRoomCode || !currentUser) return;
@@ -1146,10 +1223,9 @@ async function broadcastSystemMessage(text) {
 function listenToChat() {
     const chatRef = ref(database, `scribbleRooms/${currentRoomCode}/chat`);
 
-    chatUnsubscribe = onChildAdded(chatRef, (snapshot) => {
+    onChildAdded(chatRef, (snapshot) => {
         const msg = snapshot.val();
         if (!msg) return;
-
         addLocalChatMessage(msg);
     });
 }
@@ -1188,9 +1264,7 @@ function showFeedback(text) {
     if (guessFeedback) {
         guessFeedback.textContent = text;
         setTimeout(() => {
-            if (guessFeedback.textContent === text) {
-                guessFeedback.textContent = "";
-            }
+            if (guessFeedback.textContent === text) guessFeedback.textContent = "";
         }, 3000);
     }
 }
@@ -1202,7 +1276,6 @@ function renderPlayerLeaderboard(room) {
     playersList.innerHTML = "";
     const players = room.players ? Object.values(room.players) : [];
 
-    // Sort by score descending
     players.sort((a, b) => (b.score || 0) - (a.score || 0));
 
     players.forEach((p, idx) => {
@@ -1211,7 +1284,7 @@ function renderPlayerLeaderboard(room) {
         const isSelf = p.id === currentUser?.uid;
 
         const card = document.createElement("div");
-        card.className = "player-rank-card" +
+        card.className = "player-rank-item" +
             (isDrawer ? " is-drawer" : "") +
             (hasGuessed ? " has-guessed" : "") +
             (isSelf ? " is-self" : "");
@@ -1229,15 +1302,15 @@ function renderPlayerLeaderboard(room) {
         }
 
         card.innerHTML = `
-            <div class="player-card-left">
-                <span class="player-rank-num">#${idx + 1}</span>
-                <div class="player-avatar-small">${initial}</div>
-                <div class="player-card-info">
-                    <span class="player-card-name">${escapeHtml(p.name || "Artist")}${isSelf ? " (You)" : ""}</span>
-                    <span class="player-card-status ${statusClass}">${statusText}</span>
+            <div class="player-item-left">
+                <span class="player-rank-badge">#${idx + 1}</span>
+                <div class="player-avatar-dot">${initial}</div>
+                <div class="player-meta">
+                    <span class="player-name-text">${escapeHtml(p.name || "Artist")}${isSelf ? " (You)" : ""}</span>
+                    <span class="player-status-tag ${statusClass}">${statusText}</span>
                 </div>
             </div>
-            <span class="player-card-score">${p.score || 0}</span>
+            <span class="player-score-tag">${p.score || 0}</span>
         `;
 
         playersList.appendChild(card);
@@ -1277,9 +1350,8 @@ function levenshteinDistance(s1, s2) {
     for (let i = 0; i <= s1.length; i++) {
         let lastValue = i;
         for (let j = 0; j <= s2.length; j++) {
-            if (i === 0) {
-                costs[j] = j;
-            } else if (j > 0) {
+            if (i === 0) costs[j] = j;
+            else if (j > 0) {
                 let newValue = costs[j - 1];
                 if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
                     newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
@@ -1299,13 +1371,16 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-/* =========================================================
-   EXIT BUTTON
-========================================================= */
 if (exitButton) {
-    exitButton.addEventListener("click", () => {
-        if (confirm("Are you sure you want to leave the game?")) {
-            window.location.href = `slobby.html?room=${encodeURIComponent(currentRoomCode)}`;
+    exitButton.addEventListener("click", async () => {
+        if (confirm("Are you sure you want to leave the studio?")) {
+            localStorage.removeItem("chaosScribbleRoomCode");
+            if (currentRoomCode && currentUser) {
+                try {
+                    await remove(ref(database, `scribbleRooms/${currentRoomCode}/players/${currentUser.uid}`));
+                } catch (e) {}
+            }
+            window.location.href = "slobby.html";
         }
     });
 }

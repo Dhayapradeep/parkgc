@@ -131,6 +131,11 @@ async function checkSavedRoom() {
         const snapshot = await get(roomRef);
         if (snapshot.exists()) {
             const room = snapshot.val();
+            // If room is finished, clear storage and do not restore
+            if (room.state === "game_over" || room.turnState === "game_over") {
+                localStorage.removeItem(SAVED_ROOM_KEY);
+                return;
+            }
             if (room.players && room.players[currentUser.uid]) {
                 currentRoomCode = saved;
                 enterRoomView(saved);
@@ -308,8 +313,8 @@ function listenToRoom(code) {
 
         currentRoomData = snapshot.val();
 
-        // Redirect to game if started
-        if (currentRoomData.state === "in_game") {
+        // Redirect to game if active and not finished
+        if (currentRoomData.state === "in_game" && currentRoomData.turnState !== "game_over") {
             window.location.href = `scribble.html?room=${encodeURIComponent(code)}`;
             return;
         }
@@ -414,20 +419,32 @@ if (startGameButton) {
             const players = currentRoomData.players ? Object.values(currentRoomData.players) : [];
             const playerIds = players.map(p => p.id);
 
+            const WORD_SAMPLE = {
+                easy: ["apple", "banana", "cat", "dog", "sun", "moon", "star", "tree", "car", "boat", "fish", "clock", "cake", "duck", "cloud"],
+                medium: ["guitar", "rocket", "castle", "bridge", "camera", "spider", "monkey", "turtle", "robot", "alien", "ghost", "wizard", "dragon", "pizza"],
+                hard: ["rollercoaster", "ferris wheel", "labyrinth", "black hole", "supernova", "submarine", "time machine", "treasure chest", "kaleidoscope"]
+            };
+            const pickRandomWord = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            const c1 = pickRandomWord(WORD_SAMPLE.easy);
+            const c2 = pickRandomWord(WORD_SAMPLE.medium);
+            const c3 = pickRandomWord(WORD_SAMPLE.hard);
+
             // Setup initial game state
             const updates = {
                 state: "in_game",
                 startedAt: Date.now(),
                 turnIndex: 0,
                 currentRound: 1,
-                turnState: "choosing", // "choosing", "drawing", "turn_end", "game_over"
+                turnState: "choosing",
                 turnDrawerId: playerIds[0] || currentUser.uid,
                 playerOrder: playerIds,
+                wordChoices: [c1, c2, c3],
+                choiceDeadline: Date.now() + 15000,
                 strokes: null,
                 currentWord: null,
-                wordChoices: null,
                 wordHint: null,
-                guesses: null
+                guesses: null,
+                rewardsAwarded: false
             };
 
             await update(ref(database, `scribbleRooms/${currentRoomCode}`), updates);
