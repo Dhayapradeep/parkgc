@@ -45,7 +45,7 @@ const WHITE = 2;
  * you want a different reward.
  */
 
-const WINNER_CP_REWARD = 100;
+const WINNER_CP_REWARD = 500;
 
 
 /* =========================

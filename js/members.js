@@ -493,10 +493,10 @@ function getBadgeIcon(
             return "⭐";
 
         case "ELDER":
-            return "🛡️";
+            return "💎";
 
         case "NEWBIE":
-            return "🆕";
+            return "🎯";
 
         default:
             return "🏷️";

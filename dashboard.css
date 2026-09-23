@@ -454,6 +454,8 @@ main {
 
     font-weight: bold;
 
+    color: #d8ad4b;
+
 }
 
 
@@ -618,10 +620,10 @@ main {
 .leaderboard-card {
 
     border-color:
-        rgba(216, 173, 75, 0.3);
+        rgb(255, 179, 0);
 
     background:
-        rgba(216, 173, 75, 0.06);
+        rgba(224, 162, 15, 0.06);
 
 }
 
