@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Scribble Lobby | Abusement Park</title>
+    <link rel="stylesheet" href="slobby.css">
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+    <button id="backButton" class="back-button">
+        ← DASHBOARD
+    </button>
+</header>
+
+<main>
+
+    <!-- =========================
+         HERO
+    ========================== -->
+    <section class="hero">
+        <div class="scribble-icon">
+            🎨
+        </div>
+
+        <p class="small-title">
+            CHAOS MODE
+        </p>
+
+        <h1>
+            CHAOS SCRIBBLE
+        </h1>
+
+        <p class="subtitle">
+            Draw fast. Guess faster. Chaos on the canvas.
+        </p>
+    </section>
+
+    <!-- =========================
+         ROOM SETUP
+    ========================== -->
+    <section class="setup-card" id="setupCard">
+        <h2>
+            🎨 ENTER THE STUDIO
+        </h2>
+
+        <p>
+            Create a new room or join an existing drawing session.
+        </p>
+
+        <button id="createRoomButton" class="primary-button">
+            CREATE ROOM
+        </button>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <div class="join-area">
+            <input
+                type="text"
+                id="roomCodeInput"
+                placeholder="ENTER ROOM CODE"
+                maxlength="6"
+                autocomplete="off"
+            >
+
+            <button id="joinRoomButton" class="secondary-button">
+                JOIN ROOM
+            </button>
+        </div>
+
+        <p id="setupStatus" class="status-text"></p>
+    </section>
+
+    <!-- =========================
+         ROOM / WAITING LOBBY
+    ========================== -->
+    <section class="room-card hidden" id="roomCard">
+
+        <div class="room-header">
+            <div>
+                <p class="room-label">
+                    ROOM CODE
+                </p>
+                <strong id="roomCodeDisplay" class="room-code">
+                    ------
+                </strong>
+            </div>
+
+            <button id="copyRoomButton" class="copy-button">
+                📋 COPY CODE
+            </button>
+        </div>
+
+        <div class="room-status">
+            <span id="roomStatus">
+                WAITING FOR PLAYERS
+            </span>
+        </div>
+
+        <!-- =========================
+             HOST SETTINGS (HOST ONLY)
+        ========================== -->
+        <div id="settingsSection" class="settings-section hidden">
+            <h3>⚙️ ROOM SETTINGS</h3>
+
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label for="roundsSelect">ROUNDS</label>
+                    <select id="roundsSelect">
+                        <option value="2">2 Rounds</option>
+                        <option value="3" selected>3 Rounds (Standard)</option>
+                        <option value="5">5 Rounds</option>
+                        <option value="8">8 Rounds</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <label for="drawTimeSelect">DRAW TIME</label>
+                    <select id="drawTimeSelect">
+                        <option value="45">45 Seconds (Fast)</option>
+                        <option value="60" selected>60 Seconds (Standard)</option>
+                        <option value="80">80 Seconds (Chill)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================
+             PLAYERS LIST
+        ========================== -->
+        <div class="players-section">
+            <div class="section-heading">
+                <h2>
+                    👥 PLAYERS IN ROOM
+                </h2>
+                <span id="playerCount">
+                    0 / 12
+                </span>
+            </div>
+
+            <div id="playersList" class="players-list">
+                <div class="empty-player">
+                    Waiting for players to join...
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================
+             HOST CONTROLS
+        ========================== -->
+        <div id="hostControls" class="host-controls hidden">
+            <button id="startGameButton" class="primary-button">
+                🎨 START GAME
+            </button>
+
+            <p id="startHint">
+                Minimum 2 players recommended. Solo practice also available.
+            </p>
+        </div>
+
+        <p id="roomStatusText" class="room-info-text"></p>
+
+        <button id="leaveRoomButton" class="leave-button">
+            EXIT LOBBY
+        </button>
+
+    </section>
+
+</main>
+
+<script type="module" src="js/slobby.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Scribble | Abusement Park</title>
+    <link rel="stylesheet" href="scribble.css">
+</head>
+
+<body>
+
+<!-- =========================
+     TOP NAVIGATION BAR
+========================== -->
+<header>
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+    <!-- Center Status Bar -->
+    <div class="game-top-bar">
+        <div class="top-item round-info">
+            <span class="top-label">ROUND</span>
+            <strong id="roundDisplay">1 / 3</strong>
+        </div>
+
+        <div class="top-item timer-info" id="timerContainer">
+            <span class="top-label">TIME</span>
+            <strong id="timerDisplay">60</strong>
+        </div>
+
+        <div class="top-item word-info">
+            <span class="top-label" id="wordStatusLabel">WORD</span>
+            <div id="wordDisplay" class="word-display">
+                <span class="word-letters">_ _ _ _ _</span>
+                <span id="wordLengthHint" class="word-length">(5)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <span id="roomCodeDisplay" class="room-code-tag" title="Click to copy">
+            ------
+        </span>
+        <button id="exitButton" class="exit-button">
+            EXIT
+        </button>
+    </div>
+</header>
+
+<!-- =========================
+     MAIN GAME ARENA
+========================== -->
+<main class="game-arena">
+
+    <!-- LEFT: PLAYER LEADERBOARD -->
+    <aside class="sidebar-players">
+        <div class="sidebar-title">
+            <span>👥 LEADERBOARD</span>
+        </div>
+
+        <div id="playersList" class="players-ranked-list">
+            <!-- Dynamically populated players -->
+        </div>
+    </aside>
+
+    <!-- CENTER: CANVAS & DRAWING TOOLS -->
+    <section class="canvas-workspace">
+        
+        <div class="canvas-wrapper" id="canvasWrapper">
+            <!-- Main HTML5 Canvas -->
+            <canvas id="paintCanvas" width="800" height="520"></canvas>
+
+            <!-- WORD CHOICE MODAL (FOR DRAWER) -->
+            <div id="wordChoiceOverlay" class="canvas-overlay hidden">
+                <div class="choice-modal">
+                    <h3>CHOOSE A WORD TO DRAW</h3>
+                    <p class="choice-timer-hint">Time left: <span id="choiceCountdown">15</span>s</p>
+                    <div id="wordChoicesContainer" class="word-choices-grid">
+                        <!-- 3 Word options -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- WAITING FOR WORD MODAL (FOR GUESSERS) -->
+            <div id="waitingForWordOverlay" class="canvas-overlay hidden">
+                <div class="waiting-modal">
+                    <div class="modal-spinner">🎨</div>
+                    <h3 id="waitingDrawerText">Artist is choosing a word...</h3>
+                </div>
+            </div>
+
+            <!-- TURN RECAP OVERLAY -->
+            <div id="turnRecapOverlay" class="canvas-overlay hidden">
+                <div class="recap-modal">
+                    <p class="recap-title" id="recapTitle">ROUND OVER!</p>
+                    <p class="recap-sub">The word was:</p>
+                    <h2 id="recapWord" class="recap-word">ELEPHANT</h2>
+                    <div id="recapScoresList" class="recap-scores-list">
+                        <!-- Points gained this turn -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL GAME OVER PODIUM -->
+            <div id="gameOverOverlay" class="canvas-overlay hidden">
+                <div class="gameover-modal">
+                    <div class="trophy-icon">🏆</div>
+                    <h2>CHAOS SCRIBBLE CHAMPIONS</h2>
+                    <p class="gameover-subtitle">Chaos Points have been awarded to the victors!</p>
+
+                    <div id="podiumContainer" class="podium-row">
+                        <!-- 2nd, 1st, 3rd podium items -->
+                    </div>
+
+                    <div id="finalScoreboard" class="final-scoreboard">
+                        <!-- All players ranking -->
+                    </div>
+
+                    <div class="gameover-actions">
+                        <button id="returnLobbyButton" class="primary-action-btn">
+                            RETURN TO LOBBY
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRAWER TOOLBAR -->
+        <div id="drawingToolbar" class="drawing-toolbar disabled">
+
+            <!-- Tools -->
+            <div class="tool-group tools-buttons">
+                <button id="toolBrush" class="tool-btn active" title="Pen/Brush">
+                    ✏️
+                </button>
+                <button id="toolBucket" class="tool-btn" title="Fill Bucket">
+                    🪣
+                </button>
+                <button id="toolEraser" class="tool-btn" title="Eraser">
+                    🧽
+                </button>
+                <button id="toolUndo" class="tool-btn" title="Undo">
+                    ↩️
+                </button>
+                <button id="toolClear" class="tool-btn danger" title="Clear Canvas">
+                    🗑️
+                </button>
+            </div>
+
+            <!-- Brush Sizes -->
+            <div class="tool-group brush-sizes">
+                <button class="size-btn" data-size="3" title="Fine">
+                    <span class="dot size-s"></span>
+                </button>
+                <button class="size-btn active" data-size="7" title="Medium">
+                    <span class="dot size-m"></span>
+                </button>
+                <button class="size-btn" data-size="14" title="Thick">
+                    <span class="dot size-l"></span>
+                </button>
+                <button class="size-btn" data-size="28" title="Huge">
+                    <span class="dot size-xl"></span>
+                </button>
+            </div>
+
+            <!-- Active Color Indicator -->
+            <div class="active-color-wrap" title="Active Color">
+                <div id="activeColorPreview" class="color-preview" style="background-color: #000000;"></div>
+            </div>
+
+            <!-- Color Palette -->
+            <div class="tool-group palette-grid">
+                <button class="color-btn active" data-color="#000000" style="background-color: #000000;"></button>
+                <button class="color-btn" data-color="#4a4a4a" style="background-color: #4a4a4a;"></button>
+                <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff;"></button>
+                <button class="color-btn" data-color="#e53935" style="background-color: #e53935;"></button>
+                <button class="color-btn" data-color="#ff9800" style="background-color: #ff9800;"></button>
+                <button class="color-btn" data-color="#ffeb3b" style="background-color: #ffeb3b;"></button>
+                <button class="color-btn" data-color="#4caf50" style="background-color: #4caf50;"></button>
+                <button class="color-btn" data-color="#00bcd4" style="background-color: #00bcd4;"></button>
+                <button class="color-btn" data-color="#2196f3" style="background-color: #2196f3;"></button>
+                <button class="color-btn" data-color="#3f51b5" style="background-color: #3f51b5;"></button>
+                <button class="color-btn" data-color="#9c27b0" style="background-color: #9c27b0;"></button>
+                <button class="color-btn" data-color="#e91e63" style="background-color: #e91e63;"></button>
+                <button class="color-btn" data-color="#795548" style="background-color: #795548;"></button>
+                <button class="color-btn" data-color="#d8ad4b" style="background-color: #d8ad4b;"></button>
+                <button class="color-btn" data-color="#8bc34a" style="background-color: #8bc34a;"></button>
+                <button class="color-btn" data-color="#00e676" style="background-color: #00e676;"></button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RIGHT: GUESSES & CHAT -->
+    <aside class="sidebar-chat">
+        <div class="sidebar-title">
+            <span>💬 CHAT & GUESSES</span>
+        </div>
+
+        <!-- Chat Stream -->
+        <div id="chatMessages" class="chat-messages">
+            <div class="chat-entry system">
+                Welcome to Chaos Scribble! Guess the word as the artist draws.
+            </div>
+        </div>
+
+        <!-- Guess / Message Input -->
+        <form id="guessForm" class="guess-form">
+            <input
+                type="text"
+                id="guessInput"
+                placeholder="Type your guess here..."
+                maxlength="50"
+                autocomplete="off"
+            >
+            <button type="submit" id="sendGuessBtn" class="send-guess-btn">
+                GUESS
+            </button>
+        </form>
+
+        <p id="guessFeedback" class="guess-feedback"></p>
+    </aside>
+
+</main>
+
+<script type="module" src="js/scribble.js"></script>
+
+</body>
+</html>

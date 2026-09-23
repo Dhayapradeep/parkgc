@@ -70,6 +70,9 @@ const othelloButton =
 const chaosCodeButton =
     document.getElementById("chaosCodeButton");
 
+const scribbleButton =
+    document.getElementById("scribbleButton");
+
 const chaosGamblingButton =
     document.getElementById("chaosGamblingButton");
 
@@ -775,6 +778,21 @@ if (chaosCodeButton) {
 
             window.location.href =
                 "clobby.html";
+
+        }
+    );
+
+}
+
+
+if (scribbleButton) {
+
+    scribbleButton.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                "slobby.html";
 
         }
     );
