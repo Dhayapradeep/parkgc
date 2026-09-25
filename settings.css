@@ -1,9 +1,15 @@
+/* =========================================================
+   SETTINGS PAGE
+   Abusement Park Studio
+========================================================= */
+
+@import "./advanced-theme.css";
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 
 body {
     min-height: 100vh;
@@ -11,16 +17,18 @@ body {
     background:
         radial-gradient(
             circle at top,
-            rgba(216,173,75,0.08),
+            rgba(216, 173, 75, 0.08),
             transparent 35%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
     padding-bottom: 50px;
+
+    overflow-x: hidden;
 }
 
 
@@ -39,46 +47,80 @@ header {
 
     padding: 0 5%;
 
+    background: rgba(8, 8, 12, 0.85);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
     border-bottom: 1px solid
-        rgba(216,173,75,0.2);
+        var(--border-gold-subtle);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
 }
 
 
 .brand {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 15px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 2px;
+
+    text-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.3);
 }
 
 
 .back {
     padding: 8px 13px;
-    background: transparent;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
     color:
         rgba(255, 255, 255, 0.6);
+
     border: 1px solid
-        rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
+        var(--border-gold-subtle);
+
+    border-radius: 6px;
+
     font-size: 9px;
-    font-weight: bold;
+
+    font-weight: 700;
+
     letter-spacing: 1px;
+
     cursor: pointer;
+
     text-decoration: none;
-    transition: 0.2s;
+
+    transition: all var(--trans-smooth);
 }
 
 
 .back:hover {
-    color: #d8ad4b;
+    color: var(--gold-300);
+
+    border-color: var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.2);
 }
 
 
@@ -94,13 +136,13 @@ main {
 
 
 /* =========================
-   HEADING
+   PAGE HEADING
 ========================= */
 
 .page-heading {
     text-align: center;
 
-    padding: 40px 0 30px;
+    padding: 45px 0 32px;
 }
 
 
@@ -109,34 +151,52 @@ main {
 
     font-size: 32px;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(216, 173, 75, 0.3)
+        );
+
+    transition: transform var(--trans-smooth);
+}
+
+
+.settings-icon:hover {
+    transform: scale(1.08) rotate(5deg);
 }
 
 
 .page-heading p {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-size: 8px;
+    font-size: 9px;
+
+    font-weight: 700;
 
     letter-spacing: 4px;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
+
+    text-transform: uppercase;
 }
 
 
 .page-heading h1 {
-    color: #f3d487;
+    color: var(--gold-300);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 31px;
 
-    font-weight: 500;
+    font-weight: 700;
 
     letter-spacing: 3px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
 }
 
 
@@ -147,14 +207,21 @@ main {
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
-    margin: 13px auto;
+    margin: 15px auto;
 }
 
 
 .page-heading small {
-    color: #555;
+    color:
+        rgba(255, 255, 255, 0.32);
 
     font-size: 9px;
 
@@ -167,17 +234,68 @@ main {
 ========================= */
 
 .settings-card {
-    padding: 22px;
+    position: relative;
 
-    margin-bottom: 12px;
+    padding: 25px;
 
-    background:
-        rgba(255,255,255,0.025);
+    margin-bottom: 14px;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
     border: 1px solid
-        rgba(255,255,255,0.08);
+        var(--border-gold-subtle);
 
-    border-radius: 9px;
+    border-radius: 14px;
+
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+
+    transition: all var(--trans-smooth);
+}
+
+
+/* TOP GOLD LINE */
+
+.settings-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+
+    opacity: 0.7;
+}
+
+
+.settings-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        var(--border-gold-medium);
+
+    background:
+        rgba(28, 28, 38, 0.85);
+
+    box-shadow:
+        var(--shadow-card-gold);
 }
 
 
@@ -192,19 +310,36 @@ main {
 
     gap: 13px;
 
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 
 .card-icon {
     font-size: 22px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.3)
+        );
+
+    transition: transform var(--trans-smooth);
+}
+
+
+.settings-card:hover .card-icon {
+    transform: scale(1.08);
 }
 
 
 .card-heading h2 {
-    color: #eee;
+    color: var(--gold-300);
 
-    font-size: 12px;
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+
+    font-weight: 700;
 
     letter-spacing: 1.5px;
 
@@ -213,11 +348,12 @@ main {
 
 
 .card-heading p {
-    color: #666;
+    color:
+        rgba(255, 255, 255, 0.42);
 
     font-size: 10px;
 
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 
@@ -230,22 +366,44 @@ main {
 
     height: 110px;
 
-    margin: 0 auto 18px;
+    margin: 0 auto 20px;
 
     border-radius: 50%;
 
     overflow: hidden;
 
     border: 2px solid
-        rgba(216,173,75,0.35);
+        rgba(216, 173, 75, 0.4);
 
-    background: #101010;
+    background:
+        linear-gradient(
+            135deg,
+            #1c1c24,
+            #101014
+        );
 
     display: flex;
 
     align-items: center;
 
     justify-content: center;
+
+    box-shadow:
+        0 0 20px
+        rgba(216, 173, 75, 0.08);
+
+    transition: all var(--trans-smooth);
+}
+
+
+.profile-preview:hover {
+    border-color: var(--gold-400);
+
+    box-shadow:
+        0 0 25px
+        rgba(216, 173, 75, 0.2);
+
+    transform: scale(1.03);
 }
 
 
@@ -262,6 +420,12 @@ main {
 
 .default-avatar {
     font-size: 45px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.2)
+        );
 }
 
 
@@ -272,15 +436,17 @@ main {
 label {
     display: block;
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 9px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 2px;
 
     margin-bottom: 8px;
+
+    text-transform: uppercase;
 }
 
 
@@ -294,39 +460,53 @@ input[type="text"] {
     padding: 13px;
 
     background:
-        rgba(255,255,255,0.04);
+        rgba(255, 255, 255, 0.04);
 
     color: white;
 
     border: 1px solid
-        rgba(216,173,75,0.35);
+        var(--border-gold-subtle);
 
-    border-radius: 5px;
+    border-radius: 7px;
 
     outline: none;
+
+    font-family: var(--font-body);
 
     font-size: 13px;
 
     margin-bottom: 12px;
+
+    transition: all var(--trans-smooth);
+}
+
+
+input[type="text"]:hover {
+    border-color:
+        rgba(216, 173, 75, 0.35);
 }
 
 
 input[type="text"]:focus {
-    border-color: #d8ad4b;
+    border-color: var(--gold-400);
+
+    background:
+        rgba(255, 255, 255, 0.07);
 
     box-shadow:
-        0 0 12px
-        rgba(216,173,75,0.1);
+        0 0 14px
+        rgba(216, 173, 75, 0.18);
 }
 
 
 input::placeholder {
-    color: #444;
+    color:
+        rgba(255, 255, 255, 0.25);
 }
 
 
 /* =========================
-   BUTTONS
+   PRIMARY BUTTON
 ========================= */
 
 .primary-button {
@@ -336,34 +516,53 @@ input::placeholder {
 
     margin-top: 5px;
 
-    background: #d8ad4b;
+    background: var(--gold-gradient);
 
-    color: #050505;
+    color: #08080c;
 
     border: none;
 
-    border-radius: 5px;
+    border-radius: 7px;
 
     font-size: 10px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 1.5px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition: all var(--trans-smooth);
+
+    box-shadow:
+        0 4px 18px
+        rgba(216, 173, 75, 0.3);
+
+    position: relative;
+
+    overflow: hidden;
 }
 
 
 .primary-button:hover {
-    background: #f3d487;
+    transform: translateY(-2px);
+
+    filter: brightness(1.05);
 
     box-shadow:
-        0 0 18px
-        rgba(216,173,75,0.2);
+        0 6px 24px
+        rgba(216, 173, 75, 0.5);
 }
 
+
+.primary-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
 
 .delete-button {
     width: 100%;
@@ -372,30 +571,42 @@ input::placeholder {
 
     margin-top: 8px;
 
-    background: transparent;
+    background:
+        rgba(255, 82, 82, 0.06);
 
-    color: #c96a6a;
+    color: #d97979;
 
     border: 1px solid
-        rgba(201,106,106,0.3);
+        rgba(255, 82, 82, 0.25);
 
-    border-radius: 5px;
+    border-radius: 7px;
 
     font-size: 10px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 1.5px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition: all var(--trans-smooth);
 }
 
 
 .delete-button:hover {
     background:
-        rgba(201,106,106,0.08);
+        rgba(255, 82, 82, 0.14);
+
+    border-color:
+        rgba(255, 82, 82, 0.55);
+
+    color: #ff8a8a;
+
+    box-shadow:
+        0 0 15px
+        rgba(255, 82, 82, 0.15);
+
+    transform: translateY(-1px);
 }
 
 
@@ -408,16 +619,18 @@ input::placeholder {
 
     margin-top: 10px;
 
-    color: #d8ad4b;
+    color: var(--gold-300);
 
     text-align: center;
 
     font-size: 9px;
+
+    letter-spacing: 0.5px;
 }
 
 
 /* =========================
-   BACK
+   DASHBOARD LINK
 ========================= */
 
 .dashboard-link {
@@ -427,18 +640,25 @@ input::placeholder {
 
     margin-top: 25px;
 
-    color: darkgray;
+    color:
+        rgba(255, 255, 255, 0.35);
 
     text-decoration: none;
 
     font-size: 10px;
 
     letter-spacing: 1.5px;
+
+    transition: all var(--trans-smooth);
 }
 
 
 .dashboard-link:hover {
-    color: #d8ad4b;
+    color: var(--gold-400);
+
+    text-shadow:
+        0 0 10px
+        rgba(216, 173, 75, 0.25);
 }
 
 
@@ -448,7 +668,14 @@ input::placeholder {
 
 @media (max-width: 600px) {
 
+    body {
+        padding-bottom: 35px;
+    }
+
+
     header {
+        height: 56px;
+
         padding: 0 16px;
     }
 
@@ -460,13 +687,247 @@ input::placeholder {
     }
 
 
+    .back {
+        padding: 7px 10px;
+
+        font-size: 8px;
+    }
+
+
     main {
         width: 92%;
     }
 
 
-    .settings-card {
-        padding: 18px;
+    .page-heading {
+        padding: 38px 0 28px;
     }
 
+
+    .settings-icon {
+        font-size: 29px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .page-heading p {
+        font-size: 8px;
+
+        letter-spacing: 3px;
+    }
+
+
+    .page-heading h1 {
+        font-size: 27px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .line {
+        width: 50px;
+
+        margin: 13px auto;
+    }
+
+
+    .page-heading small {
+        font-size: 8px;
+    }
+
+
+    .settings-card {
+        padding: 20px 18px;
+
+        border-radius: 12px;
+    }
+
+
+    .card-heading {
+        gap: 11px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .card-icon {
+        font-size: 20px;
+    }
+
+
+    .card-heading h2 {
+        font-size: 12px;
+
+        letter-spacing: 1.2px;
+    }
+
+
+    .card-heading p {
+        font-size: 9px;
+    }
+
+
+    .profile-preview {
+        width: 100px;
+
+        height: 100px;
+    }
+
+
+    .default-avatar {
+        font-size: 40px;
+    }
+
+
+    label {
+        font-size: 8px;
+
+        letter-spacing: 1.8px;
+    }
+
+
+    input[type="text"] {
+        padding: 12px;
+
+        font-size: 12px;
+    }
+
+
+    .primary-button,
+    .delete-button {
+        padding: 12px;
+    }
+
+
+    .dashboard-link {
+        margin-top: 22px;
+
+        font-size: 9px;
+    }
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+    header {
+        padding: 0 13px;
+    }
+
+
+    .brand {
+        font-size: 10px;
+
+        letter-spacing: 1px;
+
+        white-space: nowrap;
+    }
+
+
+    .back {
+        padding: 6px 8px;
+
+        font-size: 7px;
+    }
+
+
+    main {
+        width: calc(100% - 26px);
+    }
+
+
+    .page-heading {
+        padding: 32px 0 23px;
+    }
+
+
+    .page-heading h1 {
+        font-size: 23px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .page-heading p {
+        font-size: 7px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .page-heading small {
+        font-size: 8px;
+    }
+
+
+    .settings-card {
+        padding: 18px 14px;
+
+        border-radius: 11px;
+    }
+
+
+    .card-heading {
+        margin-bottom: 16px;
+    }
+
+
+    .card-icon {
+        font-size: 19px;
+    }
+
+
+    .card-heading h2 {
+        font-size: 11px;
+    }
+
+
+    .card-heading p {
+        font-size: 9px;
+
+        line-height: 1.5;
+    }
+
+
+    .profile-preview {
+        width: 90px;
+
+        height: 90px;
+    }
+
+
+    .default-avatar {
+        font-size: 36px;
+    }
+
+
+    input[type="text"] {
+        padding: 11px;
+
+        font-size: 11px;
+    }
+
+
+    .primary-button,
+    .delete-button {
+        padding: 11px;
+
+        font-size: 9px;
+    }
+
+
+    .message {
+        font-size: 8px;
+    }
+
+
+    .dashboard-link {
+        font-size: 8px;
+
+        letter-spacing: 1px;
+    }
 }

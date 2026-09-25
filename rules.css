@@ -1,3 +1,10 @@
+/* =========================================================
+   RULES PAGE
+   Abusement Park Studio
+========================================================= */
+
+@import "./advanced-theme.css";
+
 * {
     margin: 0;
     padding: 0;
@@ -8,6 +15,11 @@ a {
     text-decoration: none;
 }
 
+
+/* =========================
+   BODY
+========================= */
+
 body {
     min-height: 100vh;
 
@@ -17,11 +29,11 @@ body {
             rgba(216, 173, 75, 0.08),
             transparent 35%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: #fff;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
     overflow-x: hidden;
 }
@@ -42,46 +54,81 @@ header {
 
     padding: 0 5%;
 
+    background:
+        rgba(8, 8, 12, 0.85);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
     border-bottom: 1px solid
-        rgba(216, 173, 75, 0.2);
+        var(--border-gold-subtle);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
 }
 
 
 .brand {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 15px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 2px;
+
+    text-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.3);
 }
 
 
 .back {
     padding: 8px 13px;
-    background: transparent;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
     color:
         rgba(255, 255, 255, 0.6);
+
     border: 1px solid
-        rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
+        var(--border-gold-subtle);
+
+    border-radius: 6px;
+
     font-size: 9px;
-    font-weight: bold;
+
+    font-weight: 700;
+
     letter-spacing: 1px;
+
     cursor: pointer;
+
     text-decoration: none;
-    transition: 0.2s;
+
+    transition: all var(--trans-smooth);
 }
 
 
 .back:hover {
-    color: #d8ad4b;
+    color: var(--gold-300);
+
+    border-color: var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.2);
 }
 
 
@@ -122,33 +169,54 @@ main {
     font-size: 38px;
 
     margin-bottom: 12px;
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(216, 173, 75, 0.3)
+        );
+
+    transition:
+        transform var(--trans-smooth);
+}
+
+
+.rules-icon:hover {
+    transform:
+        scale(1.08)
+        rotate(3deg);
 }
 
 
 .rules-heading p {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 9px;
+
+    font-weight: 700;
 
     letter-spacing: 4px;
 
     margin-bottom: 8px;
+
+    text-transform: uppercase;
 }
 
 
 .rules-heading h1 {
-    color: #f3d487;
+    color: var(--gold-300);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 36px;
 
-    font-weight: 500;
+    font-weight: 700;
 
     letter-spacing: 3px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
 }
 
 
@@ -159,7 +227,13 @@ main {
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
     margin: 15px auto 0;
 }
@@ -178,7 +252,13 @@ main {
 }
 
 
+/* =========================
+   RULE CARD
+========================= */
+
 .rule {
+    position: relative;
+
     display: flex;
 
     align-items: flex-start;
@@ -187,47 +267,89 @@ main {
 
     padding: 19px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.045),
-            rgba(255, 255, 255, 0.012)
-        );
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     border: 1px solid
-        rgba(255, 255, 255, 0.08);
+        var(--border-gold-subtle);
 
-    border-radius: 9px;
+    border-radius: 12px;
 
-    transition: 0.2s;
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+
+    transition: all var(--trans-smooth);
+}
+
+
+/* TOP GOLD ACCENT */
+
+.rule::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 12%;
+
+    right: 12%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(243, 212, 135, 0.4),
+            transparent
+        );
 }
 
 
 .rule:hover {
     border-color:
-        rgba(216, 173, 75, 0.35);
+        var(--border-gold-medium);
 
-    transform: translateY(-1px);
+    background:
+        rgba(28, 28, 38, 0.85);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        var(--shadow-card-gold);
 }
 
+
+/* =========================
+   NUMBER
+========================= */
 
 .number {
     min-width: 34px;
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 13px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     padding-top: 1px;
+
+    text-shadow:
+        0 0 10px
+        rgba(216, 173, 75, 0.3);
 }
 
+
+/* =========================
+   RULE CONTENT
+========================= */
 
 .rule-content {
     flex: 1;
@@ -235,11 +357,13 @@ main {
 
 
 .rule-content h3 {
-    color: #eee;
+    color: var(--gold-300);
+
+    font-family: var(--font-heading);
 
     font-size: 12px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 1.3px;
 
@@ -248,11 +372,12 @@ main {
 
 
 .rule-content p {
-    color: #777;
+    color:
+        rgba(255, 255, 255, 0.48);
 
     font-size: 11px;
 
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 
@@ -261,6 +386,8 @@ main {
 ========================= */
 
 .suspension {
+    position: relative;
+
     display: flex;
 
     align-items: center;
@@ -272,37 +399,98 @@ main {
     padding: 17px 19px;
 
     background:
-        rgba(216, 173, 75, 0.07);
+        linear-gradient(
+            135deg,
+            rgba(216, 173, 75, 0.10),
+            rgba(216, 173, 75, 0.035)
+        );
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     border: 1px solid
         rgba(216, 173, 75, 0.28);
 
-    border-radius: 9px;
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.2);
+
+    overflow: hidden;
+
+    transition: all var(--trans-smooth);
+}
+
+
+.suspension::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
+
+
+.suspension:hover {
+    border-color:
+        var(--border-gold-medium);
+
+    background:
+        rgba(216, 173, 75, 0.12);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        var(--shadow-card-gold);
 }
 
 
 .suspension-icon {
     font-size: 24px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.25)
+        );
 }
 
 
 .suspension h3 {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 11px;
 
     letter-spacing: 1.5px;
 
     margin-bottom: 5px;
+
+    font-weight: 700;
 }
 
 
 .suspension p {
-    color: #888;
+    color:
+        rgba(255, 255, 255, 0.48);
 
     font-size: 10px;
 
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 
@@ -323,21 +511,23 @@ main {
 
 
 .rules-footer span {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 10px;
 
     letter-spacing: 3px;
+
+    text-shadow:
+        0 0 10px
+        rgba(216, 173, 75, 0.2);
 }
 
 
 .rules-footer p {
-    color: #444;
+    color:
+        rgba(255, 255, 255, 0.22);
 
     font-size: 8px;
 
@@ -348,7 +538,8 @@ main {
 
 
 /* =========================
-   MOBILE — 412 × 915
+   MOBILE
+   412 × 915
 ========================= */
 
 @media (max-width: 600px) {
@@ -364,6 +555,13 @@ main {
         font-size: 11px;
 
         letter-spacing: 1.3px;
+    }
+
+
+    .back {
+        padding: 7px 10px;
+
+        font-size: 8px;
     }
 
 
@@ -399,6 +597,8 @@ main {
 
 
     .line {
+        width: 55px;
+
         margin-top: 12px;
     }
 
@@ -412,6 +612,8 @@ main {
         gap: 12px;
 
         padding: 15px;
+
+        border-radius: 10px;
     }
 
 
@@ -434,7 +636,7 @@ main {
     .rule-content p {
         font-size: 10px;
 
-        line-height: 1.55;
+        line-height: 1.6;
     }
 
 
@@ -442,6 +644,8 @@ main {
         gap: 12px;
 
         padding: 15px;
+
+        border-radius: 10px;
     }
 
 
@@ -462,6 +666,147 @@ main {
 
     .rules-footer {
         margin-top: 28px;
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+    header {
+        padding: 0 13px;
+    }
+
+
+    .brand {
+        font-size: 10px;
+
+        letter-spacing: 1px;
+
+        white-space: nowrap;
+    }
+
+
+    .back {
+        padding: 6px 8px;
+
+        font-size: 7px;
+    }
+
+
+    main {
+        padding:
+            27px 13px 40px;
+    }
+
+
+    .rules-heading {
+        margin-bottom: 22px;
+    }
+
+
+    .rules-icon {
+        font-size: 29px;
+    }
+
+
+    .rules-heading p {
+        font-size: 7px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .rules-heading h1 {
+        font-size: 24px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .line {
+        width: 50px;
+
+        margin-top: 11px;
+    }
+
+
+    .rule {
+        gap: 10px;
+
+        padding: 13px;
+
+        border-radius: 9px;
+    }
+
+
+    .number {
+        min-width: 24px;
+
+        font-size: 10px;
+    }
+
+
+    .rule-content h3 {
+        font-size: 9.5px;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    .rule-content p {
+        font-size: 9px;
+
+        line-height: 1.65;
+    }
+
+
+    .suspension {
+        gap: 10px;
+
+        padding: 13px;
+    }
+
+
+    .suspension-icon {
+        font-size: 19px;
+    }
+
+
+    .suspension h3 {
+        font-size: 9px;
+
+        letter-spacing: 1px;
+    }
+
+
+    .suspension p {
+        font-size: 8.5px;
+
+        line-height: 1.55;
+    }
+
+
+    .rules-footer {
+        margin-top: 24px;
+
+        padding-top: 17px;
+    }
+
+
+    .rules-footer span {
+        font-size: 9px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .rules-footer p {
+        font-size: 7px;
     }
 
 }

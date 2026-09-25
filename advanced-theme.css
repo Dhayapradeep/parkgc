@@ -116,6 +116,7 @@ body {
 h1.gold-title,
 .brand-gold {
     background: var(--gold-gradient-bright);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 20px rgba(216, 173, 75, 0.25);

@@ -1,26 +1,48 @@
+/* =========================================================
+   ADMIN MEMBERS - ADVANCED THEME
+   Abusement Park Studio
+========================================================= */
+
+@import "./advanced-theme.css";
+
+
+/* =========================
+   RESET
+========================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+a {
+    text-decoration: none;
+}
+
+
+/* =========================
+   BODY
+========================= */
 
 body {
     min-height: 100vh;
 
     background:
         radial-gradient(
-            circle at 50% 30%,
-            rgba(216,173,75,0.08),
+            circle at 50% 20%,
+            rgba(216, 173, 75, 0.10),
             transparent 35%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
-    padding-bottom: 50px;
+    padding-bottom: 60px;
+
+    overflow-x: hidden;
 }
 
 
@@ -39,46 +61,84 @@ header {
 
     align-items: center;
 
-    border-bottom: 1px solid
-        rgba(255,255,255,0.06);
+    background:
+        rgba(8, 8, 12, 0.82);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border-bottom:
+        1px solid
+        var(--border-gold-subtle);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
 }
 
 
 .brand {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
     font-size: 18px;
 
     letter-spacing: 3px;
 
-    font-weight: bold;
+    font-weight: 700;
+
+    text-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.3);
 }
 
 
 .back {
     padding: 8px 13px;
-    background: transparent;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
     color:
         rgba(255, 255, 255, 0.6);
-    border: 1px solid
-        rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 6px;
+
     font-size: 9px;
-    font-weight: bold;
+
+    font-weight: 700;
+
     letter-spacing: 1px;
+
     cursor: pointer;
+
     text-decoration: none;
-    transition: 0.2s;
+
+    transition:
+        all var(--trans-smooth);
 }
 
 
 .back:hover {
-    color: #d8ad4b;
+    color: var(--gold-300);
+
+    border-color: var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 0 14px
+        rgba(216, 173, 75, 0.2);
 }
 
 
@@ -105,41 +165,46 @@ main {
 
 
 .small-title {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 10px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 4px;
 
     margin-bottom: 12px;
+
+    text-transform: uppercase;
 }
 
 
 .page-header h1 {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
-    color: #f3d487;
+    color: var(--gold-300);
 
     font-size: 38px;
 
-    font-weight: 500;
+    font-weight: 700;
 
     letter-spacing: 4px;
 
     margin-bottom: 12px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
 }
 
 
 .description {
     color:
-        rgba(255,255,255,0.4);
+        rgba(255, 255, 255, 0.4);
 
     font-size: 12px;
+
+    line-height: 1.6;
 }
 
 
@@ -153,51 +218,132 @@ main {
 
 
 .summary-card {
+    position: relative;
+
     display: flex;
 
     align-items: center;
 
     gap: 18px;
 
-    padding: 20px;
+    padding: 22px;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+
+.summary-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
 
     background:
-        rgba(255,255,255,0.035);
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
 
-    border: 1px solid
-        rgba(255,255,255,0.08);
 
-    border-radius: 9px;
+.summary-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        var(--border-gold-medium);
+
+    box-shadow:
+        var(--shadow-card-gold);
 }
 
 
 .summary-icon {
-    font-size: 28px;
+    width: 50px;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    color: var(--gold-300);
+
+    font-size: 26px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.25)
+        );
 }
 
 
 .summary-card strong {
     display: block;
 
-    color: #f3d487;
+    color: var(--gold-300);
 
-    font-family: Georgia, serif;
+    font-family: var(--font-heading);
 
-    font-size: 25px;
+    font-size: 27px;
 
-    font-weight: 500;
+    font-weight: 700;
+
+    text-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.2);
 }
 
 
 .summary-card p {
     color:
-        rgba(255,255,255,0.35);
+        rgba(255, 255, 255, 0.35);
 
     font-size: 9px;
 
     letter-spacing: 1.5px;
 
     margin-top: 4px;
+
+    text-transform: uppercase;
 }
 
 
@@ -225,12 +371,17 @@ main {
     font-size: 13px;
 
     letter-spacing: 2px;
+
+    color:
+        rgba(255, 255, 255, 0.75);
+
+    text-transform: uppercase;
 }
 
 
 .section-heading span {
     color:
-        rgba(255,255,255,0.3);
+        rgba(255, 255, 255, 0.3);
 
     font-size: 9px;
 
@@ -252,7 +403,13 @@ main {
 }
 
 
+/* =========================
+   MEMBER CARD
+========================= */
+
 .member-card {
+    position: relative;
+
     display: flex;
 
     align-items: center;
@@ -261,24 +418,60 @@ main {
 
     padding: 18px;
 
+    background: var(--bg-card);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 12px;
+
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+
+.member-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 12%;
+
+    right: 12%;
+
+    height: 1px;
+
     background:
-        rgba(255,255,255,0.035);
-
-    border: 1px solid
-        rgba(255,255,255,0.08);
-
-    border-radius: 9px;
-
-    transition: 0.2s;
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(243, 212, 135, 0.25),
+            transparent
+        );
 }
 
 
 .member-card:hover {
+    transform: translateY(-3px);
+
     border-color:
-        rgba(216,173,75,0.35);
+        var(--border-gold-medium);
 
     background:
-        rgba(216,173,75,0.035);
+        rgba(28, 28, 38, 0.85);
+
+    box-shadow:
+        var(--shadow-card-gold);
 }
 
 
@@ -302,18 +495,26 @@ main {
     border-radius: 50%;
 
     background:
-        rgba(216,173,75,0.08);
+        rgba(216, 173, 75, 0.08);
 
-    border: 1px solid
-        rgba(216,173,75,0.25);
+    border:
+        1px solid
+        rgba(216, 173, 75, 0.3);
 
-    color: #d8ad4b;
+    color: var(--gold-300);
 
     font-size: 18px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     overflow: hidden;
+
+    box-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.08);
+
+    transition:
+        all var(--trans-smooth);
 }
 
 
@@ -334,19 +535,18 @@ main {
 
 .avatar.has-pfp {
     cursor: pointer;
-
-    transition: 0.2s;
 }
 
 
 .avatar.has-pfp:hover {
-    transform: scale(1.06);
+    transform: scale(1.07);
 
-    border-color: #d8ad4b;
+    border-color:
+        var(--gold-400);
 
     box-shadow:
-        0 0 15px
-        rgba(216,173,75,0.2);
+        0 0 18px
+        rgba(216, 173, 75, 0.25);
 }
 
 
@@ -365,23 +565,31 @@ main {
     display: block;
 
     color:
-        rgba(255,255,255,0.9);
+        rgba(255, 255, 255, 0.9);
 
     font-size: 13px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     margin-bottom: 5px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
 .member-role {
     color:
-        rgba(255,255,255,0.35);
+        rgba(255, 255, 255, 0.35);
 
     font-size: 9px;
 
     letter-spacing: 1px;
+
+    text-transform: uppercase;
 }
 
 
@@ -390,15 +598,28 @@ main {
 ========================= */
 
 .member-badge {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 9px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 1px;
 
     text-align: right;
+
+    padding: 5px 9px;
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 5px;
+
+    white-space: nowrap;
 }
 
 
@@ -415,11 +636,20 @@ main {
     text-align: center;
 
     color:
-        rgba(255,255,255,0.3);
+        rgba(255, 255, 255, 0.3);
 
     font-size: 11px;
 
     letter-spacing: 1px;
+
+    background:
+        rgba(255, 255, 255, 0.02);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 12px;
 }
 
 
@@ -443,9 +673,10 @@ main {
     padding: 20px;
 
     background:
-        rgba(0,0,0,0.88);
+        rgba(0, 0, 0, 0.88);
 
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 
@@ -459,34 +690,75 @@ main {
 
     width: min(400px, 90vw);
 
+    padding: 25px;
+
     text-align: center;
+
+    background:
+        rgba(18, 18, 25, 0.82);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 18px;
+
+    box-shadow:
+        var(--shadow-card-gold);
+}
+
+
+.pfp-modal-content::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 20%;
+
+    right: 20%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 }
 
 
 .pfp-modal-content img {
-    width: min(350px, 80vw);
+    width: min(350px, 75vw);
 
-    height: min(350px, 80vw);
+    height: min(350px, 75vw);
 
     object-fit: cover;
 
     border-radius: 50%;
 
-    border: 2px solid
-        rgba(216,173,75,0.5);
+    border:
+        2px solid
+        rgba(216, 173, 75, 0.5);
 
     box-shadow:
         0 0 40px
-        rgba(216,173,75,0.15);
+        rgba(216, 173, 75, 0.18);
 }
 
 
 .close-pfp {
     position: absolute;
 
-    top: -15px;
+    top: 12px;
 
-    right: 0;
+    right: 12px;
 
     width: 35px;
 
@@ -494,38 +766,58 @@ main {
 
     border-radius: 50%;
 
-    background: #111;
+    background:
+        rgba(255, 255, 255, 0.04);
 
-    color: #aaa;
+    color:
+        rgba(255, 255, 255, 0.6);
 
-    border: 1px solid
-        rgba(255,255,255,0.15);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
 
     font-size: 16px;
 
     cursor: pointer;
 
     z-index: 2;
+
+    transition:
+        all var(--trans-smooth);
 }
 
 
 .close-pfp:hover {
-    color: #d8ad4b;
+    color: var(--gold-300);
 
-    border-color: #d8ad4b;
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    box-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.2);
 }
 
 
 .pfp-modal-name {
-    margin-top: 15px;
+    margin-top: 18px;
 
-    color: #f3d487;
+    color: var(--gold-300);
 
-    font-family: Georgia, serif;
+    font-family: var(--font-heading);
 
     font-size: 18px;
 
+    font-weight: 700;
+
     letter-spacing: 1px;
+
+    text-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.25);
 }
 
 
@@ -547,18 +839,61 @@ main {
     }
 
 
+    .back {
+        padding: 7px 10px;
+
+        font-size: 8px;
+    }
+
+
     main {
         width: 92%;
     }
 
 
     .page-header {
-        padding-top: 40px;
+        padding:
+            40px 0 30px;
     }
 
 
     .page-header h1 {
         font-size: 30px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .small-title {
+        font-size: 9px;
+
+        letter-spacing: 3px;
+    }
+
+
+    .description {
+        font-size: 11px;
+    }
+
+
+    .summary-card {
+        padding: 17px;
+
+        gap: 13px;
+    }
+
+
+    .summary-icon {
+        width: 44px;
+
+        height: 44px;
+
+        font-size: 22px;
+    }
+
+
+    .summary-card strong {
+        font-size: 23px;
     }
 
 
@@ -578,37 +913,155 @@ main {
         width: 43px;
 
         height: 43px;
+
+        font-size: 16px;
+    }
+
+
+    .member-name {
+        font-size: 12px;
+    }
+
+
+    .member-role {
+        font-size: 8px;
     }
 
 
     .member-badge {
         font-size: 8px;
+
+        padding: 4px 7px;
+    }
+
+
+    .pfp-modal-content {
+        width: 92vw;
+
+        padding: 20px;
     }
 
 }
 
 
+/* =========================
+   SMALL PHONES
+========================= */
+
 @media (max-width: 400px) {
 
+    header {
+        padding: 16px 13px;
+    }
+
+
     .brand {
-        font-size: 11px;
+        font-size: 10px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .back {
+        padding: 6px 8px;
+
+        font-size: 7px;
+    }
+
+
+    main {
+        width: calc(100% - 26px);
+    }
+
+
+    .page-header {
+        padding:
+            34px 0 25px;
     }
 
 
     .page-header h1 {
-        font-size: 27px;
+        font-size: 26px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .small-title {
+        font-size: 8px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .description {
+        font-size: 10px;
+    }
+
+
+    .summary-card {
+        padding: 15px;
+    }
+
+
+    .summary-icon {
+        width: 40px;
+
+        height: 40px;
+
+        font-size: 20px;
+    }
+
+
+    .summary-card strong {
+        font-size: 21px;
+    }
+
+
+    .summary-card p {
+        font-size: 8px;
     }
 
 
     .member-card {
-        padding: 14px;
+        padding: 13px;
+
+        gap: 10px;
+    }
+
+
+    .avatar {
+        width: 40px;
+
+        height: 40px;
+    }
+
+
+    .member-name {
+        font-size: 11px;
+    }
+
+
+    .member-role {
+        font-size: 7.5px;
     }
 
 
     .member-badge {
-        max-width: 80px;
+        max-width: 75px;
+
+        font-size: 7px;
 
         line-height: 1.3;
+
+        white-space: normal;
+    }
+
+
+    .pfp-modal-content img {
+        width: 72vw;
+
+        height: 72vw;
     }
 
 }

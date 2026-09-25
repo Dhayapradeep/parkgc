@@ -1,9 +1,15 @@
+@import "./advanced-theme.css";
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
+/* =================================
+   BODY
+================================= */
 
 body {
     min-height: 100vh;
@@ -14,11 +20,11 @@ body {
             rgba(216, 173, 75, 0.09),
             transparent 35%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
     display: flex;
 
@@ -32,9 +38,9 @@ body {
 }
 
 
-/* =========================
+/* =================================
    BACKGROUND LOGO
-========================= */
+================================= */
 
 .background-logo {
     position: fixed;
@@ -58,12 +64,14 @@ body {
     filter: blur(3px);
 
     pointer-events: none;
+
+    z-index: 0;
 }
 
 
-/* =========================
+/* =================================
    CONTAINER
-========================= */
+================================= */
 
 .unauthorized-container {
     position: relative;
@@ -78,9 +86,9 @@ body {
 }
 
 
-/* =========================
+/* =================================
    LOCK
-========================= */
+================================= */
 
 .lock {
     font-size: 55px;
@@ -92,19 +100,39 @@ body {
             0 0 15px
             rgba(216, 173, 75, 0.15)
         );
+
+    transition:
+        transform var(--trans-smooth),
+        filter var(--trans-smooth);
+}
+
+.lock:hover {
+    transform: scale(1.06);
+
+    filter:
+        drop-shadow(
+            0 0 20px
+            rgba(216, 173, 75, 0.25)
+        );
 }
 
 
-/* =========================
+/* =================================
    DIVIDER
-========================= */
+================================= */
 
 .divider {
     width: 70px;
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
     margin: 0 auto 22px;
 
@@ -114,12 +142,12 @@ body {
 }
 
 
-/* =========================
+/* =================================
    PRIVATE LABEL
-========================= */
+================================= */
 
 .private {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 10px;
 
@@ -128,20 +156,19 @@ body {
     letter-spacing: 4px;
 
     margin-bottom: 18px;
+
+    text-transform: uppercase;
 }
 
 
-/* =========================
+/* =================================
    HEADING
-========================= */
+================================= */
 
 h1 {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
-    color: #f3d487;
+    color: var(--gold-300);
 
     font-size: 34px;
 
@@ -150,12 +177,16 @@ h1 {
     letter-spacing: 3px;
 
     margin-bottom: 18px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.25);
 }
 
 
-/* =========================
+/* =================================
    MESSAGE
-========================= */
+================================= */
 
 .message {
     color:
@@ -169,6 +200,10 @@ h1 {
 }
 
 
+/* =================================
+   SUB MESSAGE
+================================= */
+
 .sub-message {
     color:
         rgba(255, 255, 255, 0.3);
@@ -181,25 +216,29 @@ h1 {
 }
 
 
-/* =========================
+/* =================================
    BACK BUTTON
-========================= */
+================================= */
 
 .back-button {
     display: inline-block;
 
     padding: 13px 20px;
 
-    background: transparent;
+    background:
+        rgba(216, 173, 75, 0.03);
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    border: 1px solid
-        rgba(216, 173, 75, 0.45);
+    border:
+        1px solid
+        var(--border-gold-medium);
 
     border-radius: 4px;
 
     text-decoration: none;
+
+    font-family: var(--font-body);
 
     font-size: 10px;
 
@@ -207,61 +246,146 @@ h1 {
 
     letter-spacing: 1.5px;
 
-    transition: 0.25s;
-}
+    cursor: pointer;
 
+    transition:
+        all var(--trans-smooth);
+}
 
 .back-button:hover {
     background:
         rgba(216, 173, 75, 0.08);
 
-    border-color: #d8ad4b;
+    border-color:
+        var(--gold-400);
+
+    color:
+        var(--gold-300);
 
     box-shadow:
         0 0 15px
         rgba(216, 173, 75, 0.12);
+
+    transform:
+        translateY(-2px);
+}
+
+.back-button:active {
+    transform:
+        translateY(0);
 }
 
 
-/* =========================
+/* =================================
    MOBILE
-========================= */
+================================= */
 
 @media (max-width: 412px) {
+
+    body {
+        padding: 16px;
+    }
+
+    .background-logo {
+        width: 600px;
+        height: 600px;
+        opacity: 0.014;
+    }
 
     .unauthorized-container {
         padding: 25px 15px;
     }
 
-
     .lock {
         font-size: 48px;
-
         margin-bottom: 18px;
     }
 
+    .divider {
+        width: 60px;
+        margin-bottom: 20px;
+    }
+
+    .private {
+        font-size: 9px;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+    }
 
     h1 {
         font-size: 28px;
-
         letter-spacing: 2px;
+        line-height: 1.25;
     }
-
 
     .message {
         font-size: 14px;
+        line-height: 1.65;
     }
-
 
     .sub-message {
         font-size: 10px;
+        line-height: 1.6;
+        margin-bottom: 27px;
     }
-
 
     .back-button {
         width: 100%;
-
         padding: 14px;
     }
+}
 
+
+/* =================================
+   VERY SMALL PHONES
+================================= */
+
+@media (max-width: 360px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .unauthorized-container {
+        padding: 20px 10px;
+    }
+
+    .background-logo {
+        width: 500px;
+        height: 500px;
+    }
+
+    .lock {
+        font-size: 43px;
+        margin-bottom: 16px;
+    }
+
+    .divider {
+        width: 50px;
+        margin-bottom: 17px;
+    }
+
+    .private {
+        font-size: 8px;
+        letter-spacing: 2.5px;
+    }
+
+    h1 {
+        font-size: 25px;
+        letter-spacing: 1.5px;
+    }
+
+    .message {
+        font-size: 13px;
+    }
+
+    .sub-message {
+        font-size: 9.5px;
+        margin-bottom: 24px;
+    }
+
+    .back-button {
+        font-size: 9px;
+        padding: 13px;
+    }
 }

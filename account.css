@@ -1,9 +1,10 @@
+@import "./advanced-theme.css";
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 
 body {
     min-height: 100vh;
@@ -11,24 +12,28 @@ body {
     background:
         radial-gradient(
             circle at 50% 45%,
-            rgba(216, 173, 75, 0.09),
+            rgba(216, 173, 75, 0.08),
             transparent 35%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     overflow-x: hidden;
+
+    padding: 20px;
 }
 
 
-/* Background logo */
+/* =========================
+   BACKGROUND LOGO
+========================= */
 
 .background-logo {
     position: fixed;
@@ -51,10 +56,14 @@ body {
     filter: blur(3px);
 
     pointer-events: none;
+
+    z-index: 0;
 }
 
 
-/* Main container */
+/* =========================
+   MAIN CONTAINER
+========================= */
 
 .account-container {
     position: relative;
@@ -63,13 +72,48 @@ body {
 
     width: min(500px, 90%);
 
+    padding: 30px;
+
     text-align: center;
 
-    padding: 25px;
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid var(--border-gold-subtle);
+
+    border-radius: 16px;
+
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+}
+
+.account-container::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 }
 
 
-/* Logo */
+/* =========================
+   LOGO
+========================= */
 
 .logo {
     width: 190px;
@@ -77,17 +121,31 @@ body {
     max-width: 70%;
 
     margin-bottom: 20px;
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(216, 173, 75, 0.12)
+        );
 }
 
 
-/* Divider */
+/* =========================
+   DIVIDER
+========================= */
 
 .divider {
     width: 70px;
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
     margin: 0 auto 20px;
 
@@ -97,10 +155,12 @@ body {
 }
 
 
-/* Private label */
+/* =========================
+   PRIVATE LABEL
+========================= */
 
 .private {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 10px;
 
@@ -112,41 +172,48 @@ body {
 }
 
 
-/* Heading */
+/* =========================
+   HEADING
+========================= */
 
 h1 {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    font-family: var(--font-heading);
 
-    color: #f3d487;
+    color: var(--gold-300);
 
     font-size: 30px;
 
-    font-weight: 500;
+    font-weight: 700;
 
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 
     margin-bottom: 12px;
+
+    text-shadow:
+        0 0 20px
+        rgba(216, 173, 75, 0.3);
 }
 
 
-/* Description */
+/* =========================
+   DESCRIPTION
+========================= */
 
 .description {
     color:
-        rgba(255, 255, 255, 0.55);
+        rgba(255, 255, 255, 0.5);
 
-    font-size: 14px;
+    font-size: 13px;
 
-    line-height: 1.6;
+    line-height: 1.7;
 
     margin-bottom: 28px;
 }
 
 
-/* Form */
+/* =========================
+   FORM
+========================= */
 
 form {
     width: 100%;
@@ -159,57 +226,72 @@ form {
 }
 
 
-/* Labels */
+/* =========================
+   LABELS
+========================= */
 
 label {
     display: block;
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: bold;
 
     letter-spacing: 2px;
 
-    margin-bottom: 8px;
-
     margin-top: 18px;
+
+    margin-bottom: 8px;
 }
 
 
-/* Inputs */
+/* =========================
+   INPUTS
+========================= */
 
 input {
     width: 100%;
 
     padding: 14px;
 
-    background: rgba(255, 255, 255, 0.04);
+    background:
+        rgba(255, 255, 255, 0.035);
 
-    color: white;
+    color: #ffffff;
 
     border: 1px solid
-        rgba(216, 173, 75, 0.4);
+        var(--border-gold-subtle);
 
-    border-radius: 4px;
+    border-radius: 8px;
 
     outline: none;
 
-    font-size: 14px;
+    font-family: var(--font-body);
 
-    transition: 0.3s;
+    font-size: 13px;
+
+    transition:
+        all var(--trans-smooth);
 }
-
 
 input::placeholder {
     color:
         rgba(255, 255, 255, 0.25);
 }
 
+input:hover {
+    border-color:
+        var(--border-gold-medium);
+}
 
 input:focus {
-    border-color: #d8ad4b;
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.05);
 
     box-shadow:
         0 0 15px
@@ -217,7 +299,9 @@ input:focus {
 }
 
 
-/* Create button */
+/* =========================
+   CREATE BUTTON
+========================= */
 
 button {
     width: 100%;
@@ -226,49 +310,69 @@ button {
 
     margin-top: 25px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-400),
+            var(--gold-300)
+        );
 
     color: #050505;
 
     border: none;
 
-    border-radius: 4px;
+    border-radius: 8px;
 
-    font-size: 12px;
+    font-family: var(--font-body);
 
-    font-weight: bold;
+    font-size: 11px;
+
+    font-weight: 700;
 
     letter-spacing: 2px;
 
     cursor: pointer;
 
-    transition: 0.3s;
+    transition:
+        all var(--trans-smooth);
 }
 
-
 button:hover {
-    background: #f3d487;
+    transform: translateY(-2px);
+
+    background:
+        var(--gold-300);
 
     box-shadow:
         0 0 20px
         rgba(216, 173, 75, 0.3);
 }
 
+button:active {
+    transform: translateY(0);
+}
 
-/* Message */
+
+/* =========================
+   MESSAGE
+========================= */
 
 #message {
     min-height: 20px;
 
     margin-top: 15px;
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-size: 13px;
+    font-size: 12px;
+
+    line-height: 1.5;
 }
 
 
-/* Security note */
+/* =========================
+   SECURITY NOTE
+========================= */
 
 .note {
     max-width: 350px;
@@ -284,7 +388,9 @@ button:hover {
 }
 
 
-/* Back */
+/* =========================
+   BACK
+========================= */
 
 .back {
     display: inline-block;
@@ -300,30 +406,38 @@ button:hover {
 
     letter-spacing: 2px;
 
-    transition: 0.3s;
+    transition:
+        all var(--trans-smooth);
 }
-
 
 .back:hover {
-    color: #d8ad4b;
+    color: var(--gold-400);
+
+    text-shadow:
+        0 0 10px
+        rgba(216, 173, 75, 0.25);
 }
 
 
-/* Mobile */
+/* =========================
+   MOBILE
+========================= */
 
-@media (max-width: 412px) {
+@media (max-width: 700px) {
 
     body {
         padding: 15px;
     }
 
-
     .account-container {
         width: 100%;
 
-        padding: 15px;
-    }
+        max-width: 500px;
 
+        padding: 25px 20px;
+
+        border-radius: 14px;
+    }
 
     .logo {
         width: 170px;
@@ -331,21 +445,220 @@ button:hover {
         margin-bottom: 16px;
     }
 
-
     h1 {
         font-size: 26px;
-    }
 
+        letter-spacing: 2px;
+    }
 
     .description {
-        font-size: 13px;
+        font-size: 12px;
 
-        margin-bottom: 20px;
+        margin-bottom: 22px;
     }
-
 
     form {
         max-width: 330px;
     }
 
+    input {
+        padding: 13px;
+
+        font-size: 13px;
+    }
+
+    button {
+        padding: 13px;
+    }
+}
+
+
+/* =========================
+   SAMSUNG GALAXY A55
+   360 × 800 TARGET
+========================= */
+
+@media (max-width: 360px) {
+
+    body {
+        min-height: 100vh;
+
+        padding: 12px 10px;
+
+        align-items: center;
+    }
+
+    .background-logo {
+        width: 500px;
+        height: 500px;
+
+        opacity: 0.015;
+    }
+
+    .account-container {
+        width: 100%;
+
+        max-width: 340px;
+
+        padding: 22px 16px;
+
+        border-radius: 13px;
+    }
+
+    .logo {
+        width: 145px;
+
+        max-width: 65%;
+
+        margin-bottom: 13px;
+    }
+
+    .divider {
+        width: 50px;
+
+        margin-bottom: 15px;
+    }
+
+    .private {
+        font-size: 8px;
+
+        letter-spacing: 2.2px;
+
+        margin-bottom: 13px;
+    }
+
+    h1 {
+        font-size: 22px;
+
+        letter-spacing: 1.5px;
+
+        line-height: 1.25;
+
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 10.5px;
+
+        line-height: 1.6;
+
+        margin-bottom: 18px;
+    }
+
+    form {
+        width: 100%;
+
+        max-width: none;
+    }
+
+    label {
+        font-size: 8px;
+
+        letter-spacing: 1.5px;
+
+        margin-top: 14px;
+
+        margin-bottom: 6px;
+    }
+
+    input {
+        padding: 11px 12px;
+
+        font-size: 12px;
+
+        border-radius: 7px;
+    }
+
+    button {
+        padding: 12px;
+
+        margin-top: 19px;
+
+        font-size: 10px;
+
+        letter-spacing: 1.5px;
+
+        border-radius: 7px;
+    }
+
+    #message {
+        font-size: 10px;
+
+        margin-top: 11px;
+    }
+
+    .note {
+        margin-top: 16px;
+
+        font-size: 8px;
+
+        line-height: 1.5;
+    }
+
+    .back {
+        margin-top: 15px;
+
+        font-size: 8px;
+
+        letter-spacing: 1.5px;
+    }
+}
+
+
+/* =========================
+   VERY SMALL HEIGHT
+========================= */
+
+@media (max-width: 360px) and (max-height: 700px) {
+
+    .account-container {
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
+
+    .logo {
+        width: 125px;
+
+        margin-bottom: 9px;
+    }
+
+    .divider {
+        margin-bottom: 11px;
+    }
+
+    .private {
+        margin-bottom: 9px;
+    }
+
+    h1 {
+        font-size: 20px;
+
+        margin-bottom: 7px;
+    }
+
+    .description {
+        margin-bottom: 12px;
+    }
+
+    label {
+        margin-top: 10px;
+    }
+
+    input {
+        padding: 9px 11px;
+    }
+
+    button {
+        margin-top: 14px;
+
+        padding: 10px;
+    }
+
+    .note {
+        margin-top: 11px;
+    }
+
+    .back {
+        margin-top: 10px;
+    }
 }

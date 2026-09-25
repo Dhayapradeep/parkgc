@@ -1,3 +1,16 @@
+/* =========================================================
+   ABUSEMENT PARK STUDIO
+   LOGIN / MEMBER ACCESS
+   ADVANCED THEME
+========================================================= */
+
+@import "./advanced-theme.css";
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -11,18 +24,22 @@ body {
     background:
         radial-gradient(
             circle at 50% 40%,
-            rgba(216, 173, 75, 0.09),
+            rgba(216, 173, 75, 0.12),
             transparent 38%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #ffffff;
 
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
 
     overflow-x: hidden;
 }
 
+
+/* =========================================================
+   MAIN
+========================================================= */
 
 main {
     min-height: 100vh;
@@ -37,6 +54,10 @@ main {
 }
 
 
+/* =========================================================
+   LOGIN BOX
+========================================================= */
+
 .login-box {
     width: 100%;
 
@@ -47,87 +68,153 @@ main {
     padding: 35px 28px;
 
     background:
-        rgba(255, 255, 255, 0.025);
+        var(--bg-card);
 
-    border: 1px solid
-        rgba(216, 173, 75, 0.2);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    border-radius: 12px;
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 14px;
 
     box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.5);
+        var(--shadow-card);
+
+    position: relative;
+
+    overflow: hidden;
 }
 
 
-.logo {
-    color: #d8ad4b;
+/* Top gold accent */
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+.login-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    color: var(--gold-400);
+
+    font-family: var(--font-heading);
 
     font-size: 21px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 3px;
+
+    text-shadow:
+        0 0 14px
+        rgba(216, 173, 75, 0.3);
 }
 
 
+/* =========================================================
+   TAGLINE
+========================================================= */
+
 .tagline {
-    color: #555;
+    color:
+        rgba(255, 255, 255, 0.32);
 
     font-size: 8px;
 
     letter-spacing: 2px;
 
     margin-top: 8px;
+
+    text-transform: uppercase;
 }
 
+
+/* =========================================================
+   DIVIDER
+========================================================= */
 
 .divider {
     width: 55px;
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
     margin: 22px auto;
 }
 
 
-h1 {
-    color: #f3d487;
+/* =========================================================
+   TITLE
+========================================================= */
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+h1 {
+    color: var(--gold-300);
+
+    font-family: var(--font-heading);
 
     font-size: 25px;
 
     font-weight: 500;
 
     letter-spacing: 2px;
+
+    text-shadow:
+        0 0 18px
+        rgba(216, 173, 75, 0.25);
 }
 
 
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
 .subtitle {
-    color: #666;
+    color:
+        rgba(255, 255, 255, 0.4);
 
     font-size: 11px;
 
     margin-top: 7px;
 
     margin-bottom: 28px;
+
+    line-height: 1.5;
 }
 
 
-/* =========================
+/* =========================================================
    FORM
-========================= */
+========================================================= */
 
 form {
     text-align: left;
@@ -142,50 +229,80 @@ form {
 .field label {
     display: block;
 
-    color: #888;
+    color:
+        rgba(216, 173, 75, 0.85);
 
     font-size: 9px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 1.5px;
 
     margin-bottom: 7px;
+
+    text-transform: uppercase;
 }
 
+
+/* =========================================================
+   INPUT
+========================================================= */
 
 .field input {
     width: 100%;
 
     padding: 13px 12px;
 
-    background: #090909;
+    background:
+        rgba(8, 8, 12, 0.75);
 
-    color: white;
+    color: #ffffff;
 
-    border: 1px solid
-        rgba(255, 255, 255, 0.1);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     outline: none;
 
+    font-family: var(--font-body);
+
     font-size: 12px;
 
-    transition: 0.2s;
+    transition:
+        all var(--trans-smooth);
+}
+
+
+.field input:hover {
+    border-color:
+        rgba(216, 173, 75, 0.2);
 }
 
 
 .field input:focus {
     border-color:
-        rgba(216, 173, 75, 0.7);
+        var(--gold-400);
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    box-shadow:
+        0 0 14px
+        rgba(216, 173, 75, 0.18);
 }
 
 
 .field input::placeholder {
-    color: #444;
+    color:
+        rgba(255, 255, 255, 0.22);
 }
 
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
 
 form button {
     width: 100%;
@@ -194,81 +311,173 @@ form button {
 
     padding: 14px;
 
-    background: #d8ad4b;
+    background:
+        var(--gold-gradient);
 
-    color: #050505;
+    color: #08080c;
 
     border: none;
 
-    border-radius: 6px;
+    border-radius: 8px;
 
     font-size: 10px;
 
-    font-weight: bold;
+    font-weight: 700;
 
     letter-spacing: 2px;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    transition:
+        all var(--trans-smooth);
+
+    box-shadow:
+        0 4px 18px
+        rgba(216, 173, 75, 0.3);
 }
 
 
 form button:hover {
-    background: #f3d487;
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.05);
+
+    box-shadow:
+        0 6px 24px
+        rgba(216, 173, 75, 0.5);
 }
 
+
+form button:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 #message {
     min-height: 18px;
 
     margin-top: 12px;
 
-    color: #d8ad4b;
+    color: var(--gold-300);
 
     font-size: 10px;
 
     text-align: center;
+
+    line-height: 1.4;
 }
 
 
-/* =========================
+/* =========================================================
    INVITATION
-========================= */
+========================================================= */
 
 .invitation {
     margin-top: 25px;
 
     padding-top: 20px;
 
-    border-top: 1px solid
-        rgba(255, 255, 255, 0.06);
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    text-align: center;
 }
 
 
 .invitation span {
-    color: #555;
+    color:
+        rgba(255, 255, 255, 0.32);
 
-    font-size: 8px;
+    font-size: 9px;
+
+    font-weight: 700;
 
     letter-spacing: 2px;
+
+    text-transform: uppercase;
 }
 
 
 .invitation p {
-    color: #444;
+    color:
+        rgba(255, 255, 255, 0.38);
 
-    font-size: 9px;
+    font-size: 10px;
 
     line-height: 1.5;
 
-    margin-top: 6px;
+    margin: 7px 0 13px;
 }
 
 
-/* =========================
+/* =========================================================
+   INVITATION BUTTON
+========================================================= */
+
+#invitationButton {
+    width: 100%;
+
+    padding: 12px;
+
+    background:
+        rgba(216, 173, 75, 0.04);
+
+    color: var(--gold-300);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+
+#invitationButton:hover {
+    background:
+        rgba(216, 173, 75, 0.1);
+
+    border-color:
+        var(--gold-400);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.15);
+
+    transform:
+        translateY(-1px);
+}
+
+
+#invitationButton:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 600px) {
 
@@ -280,7 +489,7 @@ form button:hover {
     .login-box {
         padding: 30px 22px;
 
-        border-radius: 10px;
+        border-radius: 12px;
     }
 
 
@@ -293,6 +502,8 @@ form button:hover {
 
     h1 {
         font-size: 23px;
+
+        letter-spacing: 1.5px;
     }
 
 
@@ -300,76 +511,44 @@ form button:hover {
         margin-bottom: 24px;
     }
 
-}
 
-/* =========================
-   NEW MEMBER / INVITATION
-========================= */
+    .field input {
+        padding: 12px;
+    }
 
-.invitation {
-    margin-top: 25px;
 
-    padding-top: 20px;
+    form button {
+        padding: 13px;
+    }
 
-    border-top: 1px solid
-        rgba(255, 255, 255, 0.06);
-
-    text-align: center;
 }
 
 
-.invitation span {
-    color: #555;
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
 
-    font-size: 9px;
+@media (max-width: 380px) {
 
-    font-weight: bold;
-
-    letter-spacing: 2px;
-}
-
-
-.invitation p {
-    color:
-        rgba(255, 255, 255, 0.35);
-
-    font-size: 10px;
-
-    line-height: 1.5;
-
-    margin: 7px 0 13px;
-}
+    .login-box {
+        padding: 26px 18px;
+    }
 
 
-#invitationButton {
-    width: 100%;
+    .logo {
+        font-size: 16px;
 
-    padding: 12px;
-
-    background: transparent;
-
-    color: #d8ad4b;
-
-    border: 1px solid
-        rgba(216, 173, 75, 0.4);
-
-    border-radius: 4px;
-
-    font-size: 9px;
-
-    font-weight: bold;
-
-    letter-spacing: 1.5px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
+        letter-spacing: 1.5px;
+    }
 
 
-#invitationButton:hover {
-    background:
-        rgba(216, 173, 75, 0.08);
+    h1 {
+        font-size: 21px;
+    }
 
-    border-color: #d8ad4b;
+
+    .tagline {
+        font-size: 7px;
+    }
+
 }

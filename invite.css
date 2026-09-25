@@ -1,33 +1,39 @@
+@import "./advanced-theme.css";
+
+
+/* =========================
+   RESET
+========================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 body {
     min-height: 100vh;
 
     background:
         radial-gradient(
-            circle at 50% 45%,
-            rgba(216, 173, 75, 0.09),
-            transparent 35%
+            circle at 50% 25%,
+            rgba(216, 173, 75, 0.10),
+            transparent 32%
         ),
-        #050505;
+        var(--bg-void);
 
-    color: white;
+    color: #e5e5e7;
 
-    font-family: Arial, sans-serif;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: var(--font-body);
 
     overflow-x: hidden;
 }
 
 
-/* Background */
+/* =========================
+   BACKGROUND LOGO
+========================= */
 
 .background-logo {
     position: fixed;
@@ -50,25 +56,43 @@ body {
     filter: blur(3px);
 
     pointer-events: none;
+
+    z-index: 0;
 }
 
 
-/* Main container */
+/* =========================
+   INVITATION CONTAINER
+========================= */
 
 .invite-container {
     position: relative;
 
     z-index: 2;
 
-    width: min(500px, 90%);
+    width: min(560px, 92%);
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding: 45px 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
 
     text-align: center;
-
-    padding: 30px 25px;
 }
 
 
-/* Logo */
+/* =========================
+   LOGO
+========================= */
 
 .logo {
     width: 210px;
@@ -82,30 +106,55 @@ body {
             0 0 12px
             rgba(218, 170, 60, 0.12)
         );
+
+    transition:
+        filter var(--trans-smooth),
+        transform var(--trans-smooth);
 }
 
 
-/* Divider */
+.logo:hover {
+    transform: scale(1.02);
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(216, 173, 75, 0.25)
+        );
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
 
 .divider {
     width: 70px;
 
     height: 1px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
 
     margin: 0 auto 22px;
 
     box-shadow:
         0 0 8px
-        rgba(216, 173, 75, 0.4);
+        rgba(216, 173, 75, 0.35);
 }
 
 
-/* Private */
+/* =========================
+   PRIVATE LABEL
+========================= */
 
 .private {
-    color: #d8ad4b;
+    color: var(--gold-400);
 
     font-size: 10px;
 
@@ -113,65 +162,121 @@ body {
 
     letter-spacing: 4px;
 
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 
-/* Heading */
+/* =========================
+   HEADING
+========================= */
 
 h1 {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    color: var(--gold-300);
 
-    color: #f3d487;
+    font-family: var(--font-heading);
 
-    font-size: 34px;
+    font-size: 36px;
 
-    font-weight: 500;
+    font-weight: 700;
 
     letter-spacing: 3px;
 
+    line-height: 1.25;
+
     margin-bottom: 15px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
 }
 
 
-/* Description */
+/* =========================
+   DESCRIPTION
+========================= */
 
 .description {
-    max-width: 420px;
+    max-width: 430px;
 
     margin: 0 auto 30px;
 
     color:
-        rgba(255, 255, 255, 0.58);
+        rgba(255, 255, 255, 0.50);
 
-    font-size: 15px;
+    font-size: 13px;
 
-    line-height: 1.7;
+    line-height: 1.75;
 }
 
 
-/* Form */
+/* =========================
+   FORM
+========================= */
 
 .form {
+    position: relative;
+
     width: 100%;
 
-    max-width: 360px;
+    max-width: 380px;
 
     margin: auto;
+
+    padding: 26px;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow-card);
+
+    overflow: hidden;
+
+    transition: all var(--trans-smooth);
 }
 
 
-/* Label */
+/* Gold top highlight */
+
+.form::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(243, 212, 135, 0.35),
+            transparent
+        );
+}
+
+
+/* =========================
+   LABEL
+========================= */
 
 label {
     display: block;
 
-    color: #d8ad4b;
+    color: var(--gold-400);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: bold;
 
@@ -181,41 +286,60 @@ label {
 }
 
 
-/* Input */
+/* =========================
+   INPUT
+========================= */
 
 input {
     width: 100%;
 
-    padding: 15px;
+    padding: 14px 13px;
 
-    background: rgba(255, 255, 255, 0.04);
+    background:
+        rgba(255, 255, 255, 0.035);
 
-    color: white;
+    color: #fff;
 
-    border: 1px solid
-        rgba(216, 173, 75, 0.45);
+    border:
+        1px solid
+        var(--border-gold-subtle);
 
-    border-radius: 4px;
+    border-radius: 6px;
 
     outline: none;
 
     text-align: center;
 
-    font-size: 16px;
+    font-family: var(--font-body);
+
+    font-size: 14px;
 
     letter-spacing: 3px;
 
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 
-    transition: 0.3s;
+    transition: all var(--trans-smooth);
 }
+
 
 input::placeholder {
-    color: rgba(255, 255, 255, 0.25);
+    color:
+        rgba(255, 255, 255, 0.25);
 }
 
+
+input:hover {
+    border-color:
+        var(--border-gold-medium);
+}
+
+
 input:focus {
-    border-color: #d8ad4b;
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.04);
 
     box-shadow:
         0 0 15px
@@ -223,22 +347,31 @@ input:focus {
 }
 
 
-/* Verify button */
+/* =========================
+   VERIFY BUTTON
+========================= */
 
 button {
     width: 100%;
 
     padding: 14px;
 
-    background: #d8ad4b;
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-400),
+            var(--gold-300)
+        );
 
-    color: #050505;
+    color: var(--bg-void);
 
     border: none;
 
-    border-radius: 4px;
+    border-radius: 6px;
 
-    font-size: 12px;
+    font-family: var(--font-body);
+
+    font-size: 10px;
 
     font-weight: bold;
 
@@ -246,40 +379,53 @@ button {
 
     cursor: pointer;
 
-    transition: 0.3s;
+    transition: all var(--trans-smooth);
 }
+
 
 button:hover {
-    background: #f3d487;
+    transform: translateY(-2px);
 
     box-shadow:
-        0 0 20px
-        rgba(216, 173, 75, 0.3);
+        var(--shadow-card-gold);
 }
 
 
-/* Message */
+button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
 
 #message {
     min-height: 20px;
 
-    margin-top: 15px;
+    margin-top: 14px;
 
-    font-size: 13px;
+    color: var(--gold-400);
 
-    color: #d8ad4b;
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-align: center;
 }
 
 
-/* Contact */
+/* =========================
+   CONTACT
+========================= */
 
 .contact {
     margin-top: 25px;
 
     color:
-        rgba(255, 255, 255, 0.3);
+        rgba(255, 255, 255, 0.30);
 
-    font-size: 11px;
+    font-size: 10px;
 
     line-height: 1.7;
 
@@ -287,45 +433,76 @@ button:hover {
 }
 
 
-/* Back */
+/* =========================
+   BACK LINK
+========================= */
 
 .back {
     display: inline-block;
 
-    margin-top: 22px;
+    margin-top: 20px;
+
+    padding: 7px 11px;
+
+    background: transparent;
 
     color:
-        rgba(255, 255, 255, 0.4);
+        rgba(255, 255, 255, 0.45);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 4px;
 
     text-decoration: none;
 
-    font-size: 11px;
+    font-size: 9px;
 
-    letter-spacing: 2px;
+    font-weight: bold;
 
-    transition: 0.3s;
+    letter-spacing: 1px;
+
+    transition: all var(--trans-smooth);
 }
+
 
 .back:hover {
-    color: #d8ad4b;
+    color: var(--gold-400);
+
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.06);
 }
 
 
-/* Mobile */
+/* =========================
+   MOBILE
+========================= */
 
-@media (max-width: 412px) {
+@media (max-width: 700px) {
 
     .invite-container {
-        width: 100%;
+        width: 92%;
 
-        padding: 20px 15px;
+        padding: 35px 15px;
     }
+
+
+    .background-logo {
+        width: 650px;
+        height: 650px;
+    }
+
 
     .logo {
         width: 190px;
 
-        margin-bottom: 18px;
+        margin-bottom: 20px;
     }
+
 
     .private {
         font-size: 9px;
@@ -333,24 +510,191 @@ button:hover {
         letter-spacing: 3px;
     }
 
+
     h1 {
-        font-size: 28px;
+        font-size: 29px;
 
         letter-spacing: 2px;
     }
 
+
     .description {
-        font-size: 14px;
+        font-size: 12px;
+
+        line-height: 1.7;
 
         margin-bottom: 25px;
     }
 
+
     .form {
-        max-width: 330px;
+        max-width: 360px;
+
+        padding: 23px 20px;
+
+        border-radius: 12px;
     }
+
 
     input {
-        padding: 14px;
+        padding: 13px;
+
+        font-size: 13px;
     }
 
+
+    button {
+        padding: 13px;
+    }
+}
+
+
+/* =========================
+   SAMSUNG GALAXY A55
+========================= */
+
+@media (max-width: 360px) {
+
+    .invite-container {
+        width: 100%;
+
+        padding: 30px 16px;
+    }
+
+
+    .background-logo {
+        width: 500px;
+        height: 500px;
+    }
+
+
+    .logo {
+        width: 175px;
+
+        margin-bottom: 17px;
+    }
+
+
+    .private {
+        font-size: 8px;
+
+        letter-spacing: 2.5px;
+
+        margin-bottom: 13px;
+    }
+
+
+    h1 {
+        font-size: 25px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .description {
+        font-size: 10.5px;
+
+        line-height: 1.7;
+
+        padding: 0 5px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .form {
+        padding: 20px 16px;
+
+        border-radius: 11px;
+    }
+
+
+    label {
+        font-size: 8px;
+
+        letter-spacing: 2px;
+    }
+
+
+    input {
+        padding: 12px;
+
+        font-size: 12px;
+    }
+
+
+    button {
+        padding: 12px;
+
+        font-size: 9px;
+    }
+
+
+    .contact {
+        font-size: 9px;
+
+        margin-top: 20px;
+    }
+
+
+    .back {
+        margin-top: 17px;
+
+        font-size: 8px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 380px) {
+
+    .invite-container {
+        padding: 25px 13px;
+    }
+
+
+    .logo {
+        width: 165px;
+    }
+
+
+    .private {
+        font-size: 7px;
+
+        letter-spacing: 2px;
+    }
+
+
+    h1 {
+        font-size: 22px;
+
+        letter-spacing: 1.2px;
+    }
+
+
+    .description {
+        font-size: 10px;
+
+        line-height: 1.65;
+    }
+
+
+    .form {
+        padding: 19px 13px;
+
+        border-radius: 10px;
+    }
+
+
+    .contact {
+        font-size: 8.5px;
+    }
+
+
+    .back {
+        font-size: 7px;
+    }
 }

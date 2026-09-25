@@ -1,34 +1,17 @@
+@import "./advanced-theme.css";
+
 * {
-
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
-
 }
 
-
 body {
-
     min-height: 100vh;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(216, 173, 75, 0.08),
-            transparent 35%
-        ),
-
-        #050505;
-
-    color: white;
-
-    font-family: Arial, sans-serif;
-
+    background-color: var(--bg-void);
+    color: #e5e5e7;
+    font-family: var(--font-body);
     padding-bottom: 50px;
-
 }
 
 
@@ -208,213 +191,137 @@ main {
 
 
 .welcome h1 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    color: #f3d487;
-
+    font-family: var(--font-heading);
+    color: var(--gold-300);
     font-size: 38px;
-
-    font-weight: 500;
-
+    font-weight: 700;
     letter-spacing: 4px;
-
-    margin-bottom: 15px;
-
+    margin-bottom: 12px;
+    text-shadow: 0 0 24px rgba(216, 173, 75, 0.35);
 }
-
 
 .status {
-
     display: flex;
-
     justify-content: center;
-
 }
-
 
 .member-title {
-
-    color: #d8ad4b;
-
+    color: var(--gold-400);
     font-size: 10px;
-
-    letter-spacing: 1px;
-
-    padding: 7px 13px;
-
-    border: 1px solid
-        rgba(216, 173, 75, 0.3);
-
+    letter-spacing: 2px;
+    font-weight: 700;
+    padding: 7px 16px;
+    background: rgba(216, 173, 75, 0.08);
+    border: 1px solid var(--border-gold-subtle);
     border-radius: 20px;
-
+    text-transform: uppercase;
 }
-
-
 
 /* =========================
    STREAK BUTTON
 ========================= */
-
 .streak-button {
-
     width: fit-content;
-
     justify-self: start;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 5px;
-
-    padding: 12px 15px;
-
-    background:
-        rgba(216, 173, 75, 0.06);
-
-    border: 1px solid
-        rgba(216, 173, 75, 0.4);
-
-    border-radius: 10px;
-
-    color: #f3d487;
-
+    padding: 12px 18px;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 12px;
+    color: var(--gold-300);
     cursor: pointer;
-
-    transition: 0.25s;
-
+    transition: all var(--trans-smooth);
+    box-shadow: var(--shadow-card);
 }
-
 
 .streak-button:hover {
-
-    transform:
-        translateY(-2px);
-
-    background:
-        rgba(216, 173, 75, 0.12);
-
-    border-color: #d8ad4b;
-
+    transform: translateY(-2px);
+    background: rgba(216, 173, 75, 0.12);
+    border-color: var(--gold-400);
+    box-shadow: 0 0 15px rgba(216, 173, 75, 0.25);
 }
-
 
 .streak-icon {
-
-    font-size: 18px;
-
+    font-size: 20px;
 }
 
-
 .streak-text {
-
-    font-size: 8px;
-
-    font-weight: bold;
-
+    font-size: 9px;
+    font-weight: 700;
     letter-spacing: 1px;
-
 }
 
 /* =========================
    STREAK CLAIM STATUS
 ========================= */
-
 .streak-button:disabled {
-
     opacity: 0.55;
-
     cursor: not-allowed;
-
 }
-
 
 .streak-button.streak-claimed {
-
-    border-color:
-        rgba(255, 255, 255, 0.12);
-
-    color:
-        rgba(255, 255, 255, 0.5);
-
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.45);
 }
-
-
 
 /* =========================
    CHAOS POINTS
 ========================= */
-
 .chaos-points {
-
     justify-self: end;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 3px;
-
-    min-width: 150px;
-
-    padding: 11px 15px;
-
-    background:
-        rgba(216, 173, 75, 0.06);
-
-    border: 1px solid
-        rgba(216, 173, 75, 0.35);
-
-    border-radius: 10px;
-
+    min-width: 155px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, rgba(216, 173, 75, 0.12) 0%, rgba(18, 18, 26, 0.8) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(216, 173, 75, 0.15);
+    position: relative;
+    overflow: hidden;
 }
 
+.chaos-points::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-400), transparent);
+}
 
 .chaos-label {
-
-    color:
-        rgba(255, 255, 255, 0.45);
-
+    color: rgba(255, 255, 255, 0.45);
     font-size: 8px;
-
     letter-spacing: 1.5px;
-
+    font-weight: 700;
+    text-transform: uppercase;
 }
-
 
 .chaos-points strong {
-
-    color: #f3d487;
-
-    font-size: 21px;
-
+    color: var(--gold-300);
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 700;
     line-height: 1;
-
+    text-shadow: 0 0 12px rgba(216, 173, 75, 0.4);
 }
 
-
 .chaos-cp {
-
-    color: #d8ad4b;
-
-    font-size: 8px;
-
-    font-weight: bold;
-
+    color: var(--gold-400);
+    font-size: 9px;
+    font-weight: 700;
     letter-spacing: 1px;
-
 }
 
 
@@ -531,185 +438,112 @@ main {
     padding: 25px;
 
     display: flex;
-
     align-items: center;
-
     gap: 20px;
-
-    background:
-        rgba(255, 255, 255, 0.035);
-
-    border: 1px solid
-        rgba(255, 255, 255, 0.1);
-
-    border-radius: 12px;
-
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 14px;
     cursor: pointer;
-
-    transition: 0.25s;
-
+    transition: all var(--trans-smooth);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
 }
 
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(243, 212, 135, 0.35), transparent);
+}
 
 .game-card:hover {
-
-    transform:
-        translateY(-3px);
-
-    border-color:
-        rgba(216, 173, 75, 0.45);
-
-    background:
-        rgba(216, 173, 75, 0.04);
-
+    transform: translateY(-4px);
+    border-color: var(--border-gold-medium);
+    background: rgba(28, 28, 38, 0.85);
+    box-shadow: var(--shadow-card-gold);
 }
-
 
 .game-icon {
-
-    font-size: 35px;
-
+    font-size: 38px;
     min-width: 55px;
-
     text-align: center;
-
+    filter: drop-shadow(0 0 10px rgba(216, 173, 75, 0.3));
+    transition: transform var(--trans-smooth);
 }
 
+.game-card:hover .game-icon {
+    transform: scale(1.12);
+}
 
 .game-card h3 {
-
-    font-size: 14px;
-
+    font-size: 15px;
     letter-spacing: 1.5px;
-
-    margin-bottom: 8px;
-
+    margin-bottom: 6px;
+    color: #ffffff;
+    font-family: var(--font-heading);
 }
-
 
 .game-card p {
-
-    color:
-        rgba(255, 255, 255, 0.45);
-
-    font-size: 11px;
-
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
     line-height: 1.5;
-
-    margin-bottom: 12px;
-
+    margin-bottom: 10px;
 }
-
 
 .game-card small {
-
-    color: #d8ad4b;
-
-    font-size: 9px;
-
+    color: var(--gold-400);
+    font-size: 10px;
     letter-spacing: 1px;
-
+    font-weight: 700;
 }
-
-
 
 /* =========================
    HALL OF SHAME (LEADERBOARD SECTION)
 ========================= */
-
 .leaderboard-section {
-
     margin-top: 35px;
-
 }
-
 
 .leaderboard-banner {
-
     width: 100%;
-
-    min-height: 105px;
-
-    background:
-        radial-gradient(
-            ellipse at 15% 50%,
-            rgba(216, 173, 75, 0.14),
-            transparent 70%
-        ),
-        #0d0d0d;
-
-    border: 1px solid
-        rgba(216, 173, 75, 0.4);
-
-    border-radius: 10px;
-
-    padding: 22px 28px;
-
+    min-height: 110px;
+    background: linear-gradient(135deg, rgba(216, 173, 75, 0.12) 0%, rgba(14, 14, 20, 0.85) 100%);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 14px;
+    padding: 24px 30px;
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     gap: 20px;
-
     cursor: pointer;
-
-    transition: all 0.25s ease;
-
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.5);
-
+    transition: all var(--trans-smooth);
+    box-shadow: var(--shadow-card);
     position: relative;
-
     overflow: hidden;
-
 }
-
 
 .leaderboard-banner::before {
-
     content: "";
-
     position: absolute;
-
     top: 0;
-
     left: 0;
-
     right: 0;
-
-    height: 2px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            #d8ad4b,
-            transparent
-        );
-
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-400), transparent);
 }
 
-
 .leaderboard-banner:hover {
-
-    transform:
-        translateY(-2px);
-
-    border-color: #d8ad4b;
-
-    box-shadow:
-        0 8px 30px rgba(216, 173, 75, 0.25);
-
-    background:
-        radial-gradient(
-            ellipse at 20% 50%,
-            rgba(216, 173, 75, 0.2),
-            transparent 70%
-        ),
-        #111111;
-
+    transform: translateY(-3px);
+    border-color: var(--gold-400);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(216, 173, 75, 0.25);
+    background: linear-gradient(135deg, rgba(216, 173, 75, 0.18) 0%, rgba(20, 20, 30, 0.9) 100%);
 }
 
 
@@ -953,6 +787,336 @@ main {
 }
 
 
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+
+    header {
+
+        padding: 18px 4%;
+
+    }
+
+
+    .brand {
+
+        font-size: 13px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .user-menu {
+
+        gap: 6px;
+
+    }
+
+
+    .logout-button {
+
+        padding: 6px 8px;
+
+        font-size: 8px;
+
+    }
+
+
+    main {
+
+        width: 92%;
+
+    }
+
+
+    /* WELCOME */
+
+    .welcome {
+
+        padding:
+            35px 0
+            30px;
+
+    }
+
+
+    .welcome-row {
+
+        grid-template-columns:
+            1fr
+            1.6fr
+            1fr;
+
+        gap: 8px;
+
+    }
+
+
+    .welcome h1 {
+
+        font-size: 24px;
+
+        letter-spacing: 1px;
+
+    }
+
+
+    .small-title {
+
+        font-size: 8px;
+
+        letter-spacing: 2px;
+
+    }
+
+
+    .member-title {
+
+        font-size: 8px;
+
+        padding: 6px 9px;
+
+    }
+
+
+    .streak-button {
+
+        min-width: 72px;
+        margin-left: 20px;
+        padding: 9px 7px;
+
+    }
+
+
+    .streak-icon {
+
+        font-size: 16px;
+
+    }
+
+
+    .streak-text {
+
+        font-size: 7px;
+
+        letter-spacing: 0.5px;
+
+    }
+
+
+    .chaos-points {
+
+        min-width: 65px;
+        margin-right: 20px;
+        padding: 8px 7px;
+
+    }
+
+
+    .chaos-points strong {
+
+        font-size: 17px;
+
+    }
+
+
+    .chaos-label,
+    .chaos-cp {
+
+        font-size: 7px;
+
+    }
+
+
+    /* CHAOS MODES */
+
+    .game-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .game-card {
+
+        min-height: 125px;
+
+        padding: 18px;
+
+        gap: 15px;
+
+    }
+
+
+    .game-icon {
+
+        font-size: 30px;
+
+        min-width: 45px;
+
+    }
+
+
+    /* HALL OF SHAME (MOBILE) */
+
+    .leaderboard-banner {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 18px;
+
+        gap: 16px;
+
+    }
+
+
+    .leaderboard-banner-left {
+
+        gap: 14px;
+
+        align-items: flex-start;
+
+        width: 100%;
+
+    }
+
+
+    .leaderboard-banner-icon {
+
+        font-size: 32px;
+
+        min-width: 40px;
+
+    }
+
+
+    .leaderboard-banner-content h3 {
+
+        font-size: 14px;
+
+    }
+
+
+    .leaderboard-banner-content p {
+
+        font-size: 11px;
+
+    }
+
+
+    .leaderboard-banner-cta {
+
+        width: 100%;
+
+        justify-content: center;
+
+        padding: 10px;
+
+        font-size: 10px;
+
+    }
+
+
+    /* COMMUNITY */
+
+    .community {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .community-card:last-child {
+
+        grid-column:
+            span 2;
+
+    }
+
+}
+
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 420px) {
+
+
+    .brand {
+
+        font-size: 11px;
+
+    }
+
+
+    .user-menu span:nth-child(2) {
+
+        display: none;
+
+    }
+
+
+    .welcome-row {
+
+        grid-template-columns:
+            0.9fr
+            1.5fr
+            0.9fr;
+
+        gap: 4px;
+
+    }
+
+
+    .welcome h1 {
+
+        font-size: 21px;
+
+    }
+
+
+    .streak-button {
+
+        min-width: 62px;
+
+        padding: 8px 4px;
+
+    }
+
+
+    .streak-text {
+
+        font-size: 6px;
+
+    }
+
+
+    .chaos-points {
+
+        min-width: 58px;
+
+        padding: 8px 4px;
+
+    }
+
+
+    .chaos-points strong {
+
+        font-size: 15px;
+
+    }
+
+}
 
 /* =========================
    MOBILE
