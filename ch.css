@@ -1,3 +1,5 @@
+@import "./advanced-theme.css";
+
 * {
     margin: 0;
     padding: 0;
@@ -10,15 +12,9 @@ a {
 
 body {
     min-height: 100vh;
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(216, 173, 75, 0.08),
-            transparent 35%
-        ),
-        #050505;
-    color: #fff;
-    font-family: Arial, sans-serif;
+    background-color: var(--bg-void);
+    color: #e5e5e7;
+    font-family: var(--font-body);
     overflow-x: hidden;
 }
 
@@ -32,12 +28,12 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 5%;
-    border-bottom: 1px solid rgba(216, 173, 75, 0.2);
+    border-bottom: 1px solid var(--border-gold-subtle);
 }
 
 .brand {
-    color: #d8ad4b;
-    font-family: Georgia, "Times New Roman", serif;
+    color: var(--gold-400);
+    font-family: var(--font-heading);
     font-size: 15px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -57,8 +53,8 @@ header {
 }
 
 .back-button:hover {
-    color: #d8ad4b;
-    border-color: rgba(216, 173, 75, 0.35);
+    color: var(--gold-400);
+    border-color: var(--border-gold-medium);
 }
 
 .user-info {
@@ -112,15 +108,15 @@ main {
 }
 
 .small-title {
-    color: #d8ad4b;
+    color: var(--gold-500);
     font-size: 9px;
     letter-spacing: 4px;
     margin-bottom: 8px;
 }
 
 .hub-header h1 {
-    color: #f3d487;
-    font-family: Georgia, "Times New Roman", serif;
+    color: var(--gold-300);
+    font-family: var(--font-heading);
     font-size: 36px;
     font-weight: 500;
     letter-spacing: 3px;
@@ -139,7 +135,7 @@ main {
     display: block;
     width: 65px;
     height: 1px;
-    background: #d8ad4b;
+    background: var(--gold-gradient);
     margin-top: 16px;
 }
 
@@ -159,20 +155,19 @@ main {
 
 .hub-card {
     padding: 20px;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.045),
-            rgba(255, 255, 255, 0.012)
-        );
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-gold-subtle);
     border-radius: 9px;
-    transition: 0.2s;
+    box-shadow: var(--shadow-card);
+    transition: transform var(--trans-smooth), border-color var(--trans-smooth), box-shadow var(--trans-smooth);
 }
 
 .hub-card:hover {
-    border-color: rgba(216, 173, 75, 0.35);
+    border-color: var(--border-gold-medium);
     transform: translateY(-1px);
+    box-shadow: var(--shadow-card-gold);
 }
 
 /* =========================
@@ -200,7 +195,7 @@ main {
 }
 
 .card-type {
-    color: #d8ad4b;
+    color: var(--gold-500);
     font-size: 8px;
     font-weight: bold;
     letter-spacing: 2px;
@@ -208,7 +203,7 @@ main {
 }
 
 .card-title {
-    color: #eee;
+    color: #e5e5e7;
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 1.2px;
@@ -241,8 +236,8 @@ main {
 }
 
 .gift-reward {
-    color: #f3d487;
-    font-family: Georgia, "Times New Roman", serif;
+    color: var(--gold-400);
+    font-family: var(--font-heading);
     font-size: 16px;
     letter-spacing: 1px;
 }
@@ -256,19 +251,19 @@ main {
 .claim-button {
     padding: 10px 16px;
     background: rgba(216, 173, 75, 0.1);
-    color: #d8ad4b;
-    border: 1px solid rgba(216, 173, 75, 0.4);
-    border-radius: 5px;
+    color: var(--gold-400);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 8px;
     font-size: 9px;
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all var(--trans-smooth);
 }
 
 .claim-button:hover {
-    background: #d8ad4b;
-    color: #050505;
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 }
 
 .claim-button:disabled {
@@ -306,14 +301,14 @@ main {
 }
 
 .poll-option:hover {
-    color: #eee;
-    border-color: rgba(216, 173, 75, 0.35);
+    color: #e5e5e7;
+    border-color: var(--border-gold-medium);
     background: rgba(216, 173, 75, 0.05);
 }
 
 .poll-option.selected {
-    color: #f3d487;
-    border-color: rgba(216, 173, 75, 0.6);
+    color: var(--gold-400);
+    border-color: var(--border-gold-bright);
     background: rgba(216, 173, 75, 0.08);
 }
 
@@ -326,7 +321,7 @@ main {
 }
 
 .poll-votes {
-    color: #d8ad4b;
+    color: var(--gold-500);
     font-size: 9px;
     white-space: nowrap;
 }
@@ -340,18 +335,18 @@ main {
     margin-top: 18px;
     padding: 10px 17px;
     background: rgba(216, 173, 75, 0.1);
-    color: #d8ad4b;
-    border: 1px solid rgba(216, 173, 75, 0.4);
-    border-radius: 5px;
+    color: var(--gold-400);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 8px;
     font-size: 9px;
     font-weight: bold;
     letter-spacing: 1px;
-    transition: 0.2s;
+    transition: all var(--trans-smooth);
 }
 
 .gc-button:hover {
-    background: #d8ad4b;
-    color: #050505;
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 }
 
 /* =========================
@@ -393,7 +388,9 @@ main {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.82);
+    background: rgba(5, 5, 8, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 1000;
 }
 
@@ -407,14 +404,10 @@ main {
     position: relative;
     text-align: center;
     padding: 38px 28px;
-    background:
-        linear-gradient(
-            135deg,
-            #151515,
-            #090909
-        );
-    border: 1px solid rgba(216, 173, 75, 0.3);
-    border-radius: 10px;
+    background: linear-gradient(145deg, #111117 0%, #08080c 100%);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card-gold);
 }
 
 .close-modal {
@@ -430,7 +423,7 @@ main {
 }
 
 .close-modal:hover {
-    color: #d8ad4b;
+    color: var(--gold-500);
 }
 
 .modal-icon {
@@ -439,8 +432,8 @@ main {
 }
 
 .modal-box h2 {
-    color: #f3d487;
-    font-family: Georgia, "Times New Roman", serif;
+    color: var(--gold-300);
+    font-family: var(--font-heading);
     font-size: 22px;
     font-weight: 500;
     letter-spacing: 1.5px;
@@ -457,19 +450,19 @@ main {
     margin-top: 22px;
     padding: 10px 25px;
     background: rgba(216, 173, 75, 0.1);
-    color: #d8ad4b;
-    border: 1px solid rgba(216, 173, 75, 0.4);
-    border-radius: 5px;
+    color: var(--gold-400);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 8px;
     font-size: 9px;
     font-weight: bold;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all var(--trans-smooth);
 }
 
 .modal-button:hover {
-    background: #d8ad4b;
-    color: #050505;
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 }
 
 /* =========================
