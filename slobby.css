@@ -562,3 +562,564 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================
+   MOBILE VIEW — 360 x 800
+   Optimized specifically for small mobile screens
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    /* =========================
+       GLOBAL MOBILE
+       ========================= */
+
+    html,
+    body {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    body {
+        padding-bottom: 30px;
+    }
+
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    header {
+        width: 100%;
+        min-height: 58px;
+        padding: 12px 14px;
+
+        gap: 10px;
+    }
+
+    .brand {
+        font-size: 13px;
+        letter-spacing: 2px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .back-button {
+        flex-shrink: 0;
+
+        padding: 7px 10px;
+
+        font-size: 9px;
+        letter-spacing: 0.8px;
+    }
+
+
+    /* =========================
+       MAIN CONTAINER
+       ========================= */
+
+    main {
+        width: 100%;
+        max-width: 100%;
+
+        margin: 0;
+        padding: 24px 12px 20px;
+
+        gap: 20px;
+    }
+
+
+    /* =========================
+       HERO
+       ========================= */
+
+    .hero {
+        width: 100%;
+        padding: 0 4px;
+    }
+
+    .scribble-icon {
+        font-size: 42px;
+        margin-bottom: 8px;
+    }
+
+    .small-title {
+        font-size: 9px;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    h1 {
+        font-size: 25px;
+        line-height: 1.15;
+
+        letter-spacing: 2px;
+        margin-bottom: 7px;
+    }
+
+    .subtitle {
+        max-width: 310px;
+        margin: 0 auto;
+
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+
+    /* =========================
+       CARDS
+       ========================= */
+
+    .setup-card,
+    .room-card {
+        width: 100%;
+
+        padding: 22px 16px;
+
+        border-radius: 12px;
+
+        gap: 16px;
+    }
+
+    .setup-card h2 {
+        font-size: 17px;
+        letter-spacing: 1px;
+
+        text-align: center;
+    }
+
+    .setup-card p {
+        font-size: 12px;
+        line-height: 1.45;
+
+        max-width: 280px;
+    }
+
+
+    /* =========================
+       BUTTONS
+       ========================= */
+
+    .primary-button {
+        width: 100%;
+        max-width: none;
+
+        min-height: 44px;
+
+        padding: 12px 16px;
+
+        font-size: 11px;
+        letter-spacing: 1.5px;
+    }
+
+    .secondary-button {
+        min-height: 42px;
+
+        padding: 10px 14px;
+
+        font-size: 11px;
+    }
+
+
+    /* =========================
+       DIVIDER
+       ========================= */
+
+    .divider {
+        width: 100%;
+        max-width: none;
+
+        font-size: 9px;
+        letter-spacing: 1.5px;
+    }
+
+    .divider span {
+        padding: 0 10px;
+    }
+
+
+    /* =========================
+       JOIN AREA
+       ========================= */
+
+    .join-area {
+        width: 100%;
+        max-width: none;
+
+        gap: 7px;
+    }
+
+    .join-area input {
+        min-width: 0;
+        width: 100%;
+
+        padding: 11px 8px;
+
+        font-size: 13px;
+        letter-spacing: 2px;
+    }
+
+    .join-area .secondary-button {
+        flex-shrink: 0;
+
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+
+    /* =========================
+       STATUS
+       ========================= */
+
+    .status-text {
+        width: 100%;
+
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+
+    /* =========================
+       ROOM HEADER
+       ========================= */
+
+    .room-header {
+        width: 100%;
+
+        padding-bottom: 14px;
+
+        gap: 10px;
+    }
+
+    .room-label {
+        font-size: 8px;
+        letter-spacing: 1.5px;
+    }
+
+    .room-code {
+        font-size: 20px;
+        letter-spacing: 3px;
+
+        word-break: break-all;
+    }
+
+    .copy-button {
+        flex-shrink: 0;
+
+        padding: 7px 10px;
+
+        font-size: 9px;
+        letter-spacing: 0.7px;
+    }
+
+
+    /* =========================
+       ROOM STATUS
+       ========================= */
+
+    .room-status {
+        width: 100%;
+
+        padding: 8px 10px;
+
+        font-size: 9px;
+        letter-spacing: 1px;
+
+        line-height: 1.4;
+    }
+
+
+    /* =========================
+       ROOM SETTINGS
+       ========================= */
+
+    .settings-section {
+        width: 100%;
+
+        padding: 13px;
+
+        border-radius: 9px;
+    }
+
+    .settings-section h3 {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+
+        margin-bottom: 10px;
+    }
+
+    .settings-grid {
+        width: 100%;
+
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .setting-item {
+        width: 100%;
+        gap: 5px;
+    }
+
+    .setting-item label {
+        font-size: 8px;
+        letter-spacing: 0.8px;
+    }
+
+    .setting-item select {
+        width: 100%;
+
+        min-height: 40px;
+
+        padding: 9px;
+
+        font-size: 11px;
+    }
+
+
+    /* =========================
+       PLAYERS SECTION
+       ========================= */
+
+    .players-section {
+        width: 100%;
+    }
+
+    .section-heading {
+        width: 100%;
+
+        margin-bottom: 9px;
+    }
+
+    .section-heading h2 {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    #playerCount {
+        font-size: 10px;
+    }
+
+    .players-list {
+        width: 100%;
+
+        max-height: 190px;
+
+        gap: 7px;
+
+        padding-right: 2px;
+    }
+
+
+    /* =========================
+       PLAYER ITEM
+       ========================= */
+
+    .player-item {
+        width: 100%;
+
+        min-height: 48px;
+
+        padding: 8px 10px;
+
+        gap: 8px;
+    }
+
+    .player-name-wrap {
+        min-width: 0;
+
+        gap: 8px;
+
+        font-size: 11px;
+    }
+
+    .player-name-wrap span {
+        min-width: 0;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .player-avatar {
+        width: 27px;
+        height: 27px;
+
+        flex-shrink: 0;
+
+        font-size: 10px;
+    }
+
+    .player-badges {
+        flex-shrink: 0;
+
+        gap: 4px;
+    }
+
+    .badge-host,
+    .badge-you {
+        padding: 3px 5px;
+
+        font-size: 7px;
+        letter-spacing: 0.5px;
+    }
+
+    .empty-player {
+        padding: 16px 10px;
+
+        font-size: 11px;
+    }
+
+
+    /* =========================
+       HOST CONTROLS
+       ========================= */
+
+    .host-controls {
+        width: 100%;
+
+        gap: 8px;
+    }
+
+    #startHint {
+        width: 100%;
+
+        font-size: 9px;
+        line-height: 1.4;
+    }
+
+    .room-info-text {
+        width: 100%;
+
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .leave-button {
+        min-height: 38px;
+
+        padding: 8px 14px;
+
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+   360px AND BELOW
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    header {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .brand {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+    }
+
+    .back-button {
+        padding: 6px 8px;
+        font-size: 8px;
+    }
+
+    main {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 20px;
+    }
+
+    h1 {
+        font-size: 23px;
+        letter-spacing: 1.5px;
+    }
+
+    .scribble-icon {
+        font-size: 38px;
+    }
+
+    .setup-card,
+    .room-card {
+        padding: 19px 13px;
+    }
+
+    .setup-card h2 {
+        font-size: 16px;
+    }
+
+    .join-area {
+        gap: 5px;
+    }
+
+    .join-area input {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+    }
+
+    .join-area .secondary-button {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .room-code {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+
+    .copy-button {
+        padding: 6px 8px;
+        font-size: 8px;
+    }
+
+    .settings-section {
+        padding: 11px;
+    }
+
+    .player-item {
+        padding: 7px 8px;
+    }
+
+    .player-name-wrap {
+        font-size: 10px;
+    }
+
+    .badge-host,
+    .badge-you {
+        font-size: 6px;
+        padding: 3px 4px;
+    }
+}
+
+
+/* =========================================================
+   TOUCH DEVICE OPTIMIZATION
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .primary-button,
+    .secondary-button,
+    .back-button,
+    .copy-button,
+    .leave-button,
+    select,
+    input {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover,
+    .back-button:hover,
+    .copy-button:hover,
+    .leave-button:hover,
+    .player-item:hover {
+        transform: none;
+    }
+}
