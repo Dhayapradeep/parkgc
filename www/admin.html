@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Panel | Abusement Park</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+    <a href="dashboard.html" class="back">
+        ← DASHBOARD
+    </a>
+
+</header>
+
+
+<main>
+
+    <section class="admin-page">
+
+        <div class="admin-heading">
+
+            <span class="crown">
+                👑
+            </span>
+
+            <p>
+                ABUSEMENT PARK
+            </p>
+
+            <h1>
+                ADMIN PANEL
+            </h1>
+
+            <span class="line"></span>
+
+            <small>
+                Administrator controls
+            </small>
+
+        </div>
+
+
+        <!-- =========================
+             INVITATIONS
+        ========================= -->
+
+        <section class="admin-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span class="card-icon">
+                        🎟️
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            INVITATIONS
+                        </h2>
+
+                        <p>
+                            Create a private invitation for a GC member.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="generateInvite"
+                class="generate-button">
+
+                GENERATE INVITATION
+
+            </button>
+
+
+            <div
+                id="inviteResult"
+                class="invite-result">
+
+                <p>
+                    Your generated invitation will appear here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             MEMBERS
+        ========================= -->
+
+        <section class="admin-card">
+
+            <div class="card-heading">
+
+                <div>
+
+                    <span class="card-icon">
+                        👥
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            MEMBERS
+                        </h2>
+
+                        <p>
+                            Manage member badges and access.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="admembers.html"
+                class="admin-section-button">
+
+                <span>
+                    👥
+                </span>
+
+                <div>
+
+                    <strong>
+                        MANAGE MEMBERS
+                    </strong>
+
+                    <small>
+                        View, assign badges and kick members
+                    </small>
+
+                </div>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+     COMMUNITY HUB
+========================= -->
+
+<section class="admin-card">
+
+    <div class="card-heading">
+
+        <div>
+
+            <span class="card-icon">
+                📬
+            </span>
+
+            <div>
+
+                <h2>
+                    COMMUNITY HUB
+                </h2>
+
+                <p>
+                    Manage updates, gift drops, polls and group chat invitations.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="acommunity.html"
+        class="admin-section-button"
+    >
+
+        <span>
+            📬
+        </span>
+
+
+        <div>
+
+            <strong>
+                MANAGE COMMUNITY HUB
+            </strong>
+
+            <small>
+                Create updates, gifts, polls and GC invitations
+            </small>
+
+        </div>
+
+
+        <span class="arrow">
+            →
+        </span>
+
+    </a>
+
+</section>
+
+</main>
+
+
+<script
+    type="module"
+    src="js/admin.js">
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Community Hub | Abusement Park</title>
+
+    <link
+        rel="stylesheet"
+        href="ch.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <a
+        href="dashboard.html"
+        class="back-button"
+    >
+
+        ← BACK
+
+    </a>
+
+
+</header>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+
+    <!-- =========================
+         HUB HEADING
+    ========================== -->
+
+    <section class="hub-header">
+
+
+        <div class="hub-icon">
+
+            📬
+
+        </div>
+
+
+        <p class="small-title">
+
+            COMMUNITY UPDATES
+
+        </p>
+
+
+        <h1>
+
+            COMMUNITY HUB
+
+        </h1>
+
+
+        <p class="hub-description">
+
+            Updates, gift drops, polls and group chat invites.
+
+        </p>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         COMMUNITY FEED
+    ========================== -->
+
+    <section
+        class="hub-feed"
+        id="hubFeed"
+    >
+
+
+        <!-- Posts will be loaded here -->
+
+        <div class="loading-card">
+
+            <div class="loading-icon">
+
+                📬
+
+            </div>
+
+
+            <p>
+
+                Loading Community Hub...
+
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     GIFT CLAIM MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="giftModal"
+>
+
+
+    <div class="modal-box">
+
+
+        <button
+            class="close-modal"
+            id="closeGiftModal"
+        >
+
+            ✕
+
+        </button>
+
+
+        <div class="modal-icon">
+
+            🎁
+
+        </div>
+
+
+        <h2>
+
+            GIFT CLAIMED!
+
+        </h2>
+
+
+        <p id="giftModalMessage">
+
+            Your reward has been added.
+
+        </p>
+
+
+        <button
+            class="modal-button"
+            id="giftModalButton"
+        >
+
+            AWESOME!
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script
+    type="module"
+    src="js/ch.js"
+></script>
+
+
+</body>
+
+</html>

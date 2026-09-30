@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Othello | Abusement Park</title>
+
+    <link
+        rel="stylesheet"
+        href="ogame.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+        ABUSEMENT PARK
+    </div>
+
+
+    <div class="header-right">
+
+        <span class="room-label">
+            ROOM
+        </span>
+
+        <span
+            id="roomCodeDisplay"
+            class="room-code"
+        >
+            ------
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- =========================
+         GAME TITLE
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="game-icon">
+            🍥
+        </div>
+
+        <p class="small-title">
+            CHAOS BOARD
+        </p>
+
+        <h1>
+            OTHELLO
+        </h1>
+
+        <p class="subtitle">
+            Place. Surround. Flip. Control the board.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================
+         PLAYERS
+    ========================== -->
+
+    <section class="players">
+
+
+        <!-- BLACK -->
+
+        <div
+            id="blackPlayerPanel"
+            class="player-panel"
+        >
+
+            <div class="player-disc black-disc">
+                ⚫
+            </div>
+
+            <div class="player-info">
+
+                <span class="player-color">
+                    BLACK
+                </span>
+
+                <strong id="blackPlayerName">
+                    Waiting...
+                </strong>
+
+            </div>
+
+            <div
+                id="blackScore"
+                class="score"
+            >
+                2
+            </div>
+
+        </div>
+
+
+
+        <!-- TURN -->
+
+        <div class="turn-area">
+
+            <span class="turn-label">
+                CURRENT TURN
+            </span>
+
+            <strong
+                id="turnText"
+                class="turn-text"
+            >
+                WAITING
+            </strong>
+
+        </div>
+
+
+
+        <!-- WHITE -->
+
+        <div
+            id="whitePlayerPanel"
+            class="player-panel"
+        >
+
+            <div class="player-disc white-disc">
+                ⚪
+            </div>
+
+            <div class="player-info">
+
+                <span class="player-color">
+                    WHITE
+                </span>
+
+                <strong id="whitePlayerName">
+                    Waiting...
+                </strong>
+
+            </div>
+
+            <div
+                id="whiteScore"
+                class="score"
+            >
+                2
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         GAME STATUS
+    ========================== -->
+
+    <section
+        id="gameStatus"
+        class="game-status"
+    >
+        CONNECTING TO GAME...
+    </section>
+
+
+
+    <!-- =========================
+         BOARD
+    ========================== -->
+
+    <section class="board-wrapper">
+
+        <div
+            id="board"
+            class="board"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CONTROLS
+    ========================== -->
+
+    <section class="controls">
+
+        <button
+            id="passButton"
+            class="control-button"
+            disabled
+        >
+            PASS TURN
+        </button>
+
+
+        <button
+            id="restartButton"
+            class="control-button hidden"
+        >
+            PLAY AGAIN
+        </button>
+
+
+        <button
+            id="dashboardButton"
+            class="control-button secondary"
+        >
+            DASHBOARD
+        </button>
+
+
+        <button
+            id="leaveButton"
+            class="leave-button"
+        >
+            LEAVE GAME
+        </button>
+
+    </section>
+
+
+
+    <!-- =========================
+         RESULT
+    ========================== -->
+
+    <section
+        id="resultCard"
+        class="result-card hidden"
+    >
+
+        <p class="result-small">
+            GAME OVER
+        </p>
+
+        <h2 id="resultTitle">
+            BLACK WINS
+        </h2>
+
+        <p
+            id="resultMessage"
+            class="result-message"
+        >
+            Black controlled more discs.
+        </p>
+
+
+
+        <div class="final-scores">
+
+            <div class="final-score-box">
+
+                <span>
+                    ⚫ BLACK
+                </span>
+
+                <strong id="finalBlackScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="final-score-box">
+
+                <span>
+                    ⚪ WHITE
+                </span>
+
+                <strong id="finalWhiteScore">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            id="rewardMessage"
+            class="reward-message"
+        >
+            🏆 WINNER +100 CHAOS POINTS
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================
+         OPPONENT LEFT
+    ========================== -->
+
+    <section
+        id="opponentLeftCard"
+        class="result-card opponent-left hidden"
+    >
+
+        <p class="result-small">
+            GAME ENDED
+        </p>
+
+        <h2>
+            OPPONENT LEFT
+        </h2>
+
+        <p
+            id="opponentLeftMessage"
+            class="result-message"
+        >
+            Your opponent left the game.
+        </p>
+
+
+        <button
+            id="opponentLeftDashboardButton"
+            class="control-button secondary"
+        >
+            RETURN TO DASHBOARD
+        </button>
+
+    </section>
+
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/ogame.js"
+></script>
+
+
+</body>
+
+</html>

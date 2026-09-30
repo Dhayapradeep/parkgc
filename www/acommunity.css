@@ -1,0 +1,1015 @@
+@import "./advanced-theme.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(216, 173, 75, 0.08),
+            transparent 35%
+        ),
+        var(--bg-void);
+
+    color: #e5e5e7;
+
+    font-family: var(--font-body);
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    width: 100%;
+
+    padding: 22px 5%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+.brand {
+    color: #d8ad4b;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+}
+
+.back {
+    padding: 7px 11px;
+
+    background: transparent;
+
+    color:
+        rgba(255, 255, 255, 0.5);
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.15);
+
+    border-radius: 4px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all var(--trans-smooth);
+}
+
+.back:hover {
+    color: #d8ad4b;
+
+    border-color: #d8ad4b;
+
+    background:
+        rgba(216, 173, 75, 0.06);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: 100%;
+
+    padding: 45px 20px 60px;
+}
+
+.acommunity-page {
+    width: 100%;
+
+    max-width: 800px;
+
+    margin: auto;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.acommunity-heading {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+.heading-icon {
+    display: block;
+
+    font-size: 38px;
+
+    margin-bottom: 10px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.3)
+        );
+}
+
+.acommunity-heading p {
+    color: #d8ad4b;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 9px;
+}
+
+.acommunity-heading h1 {
+    color: var(--gold-300);
+
+    font-family: var(--font-heading);
+
+    font-size: 38px;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
+}
+
+.line {
+    display: block;
+
+    width: 60px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+
+    margin: 15px auto;
+}
+
+.acommunity-heading small {
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.hub-actions {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.hub-action {
+    width: 100%;
+
+    min-height: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    padding: 18px;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+
+    color: #fff;
+
+    border: 1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 12px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow-card);
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+.hub-action::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(243, 212, 135, 0.3),
+            transparent
+        );
+}
+
+.hub-action:hover {
+    background:
+        rgba(28, 28, 38, 0.85);
+
+    border-color:
+        var(--border-gold-medium);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        var(--shadow-card-gold);
+}
+
+.hub-action.active {
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    box-shadow:
+        0 0 20px
+        rgba(216, 173, 75, 0.12);
+}
+
+.action-icon {
+    min-width: 38px;
+
+    font-size: 28px;
+
+    text-align: center;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(216, 173, 75, 0.25)
+        );
+
+    transition:
+        transform var(--trans-smooth);
+}
+
+.hub-action:hover .action-icon {
+    transform: scale(1.1);
+}
+
+.hub-action div {
+    flex: 1;
+}
+
+.hub-action strong {
+    display: block;
+
+    color: #fff;
+
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 5px;
+}
+
+.hub-action small {
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+.arrow {
+    color: var(--gold-400);
+
+    font-size: 20px;
+
+    font-weight: normal;
+
+    transition:
+        transform var(--trans-smooth);
+}
+
+.hub-action:hover .arrow {
+    transform: translateX(4px);
+}
+
+
+/* =========================
+   FORM CARDS
+========================= */
+
+.hub-form-card {
+    display: none;
+
+    padding: 22px;
+
+    margin-bottom: 14px;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 14px;
+
+    box-shadow: var(--shadow-card);
+
+    position: relative;
+}
+
+.hub-form-card.active {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.hub-form-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(243, 212, 135, 0.3),
+            transparent
+        );
+}
+
+
+/* =========================
+   FORM HEADING
+========================= */
+
+.form-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 6px;
+}
+
+.form-heading > span {
+    min-width: 35px;
+
+    font-size: 26px;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(216, 173, 75, 0.25)
+        );
+}
+
+.form-heading div {
+    flex: 1;
+}
+
+.form-heading h2 {
+    color: #fff;
+
+    font-family: var(--font-heading);
+
+    font-size: 13px;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 6px;
+}
+
+.form-heading p {
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+.hub-form-card input,
+.hub-form-card textarea {
+    width: 100%;
+
+    padding: 13px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color: #eee;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.1);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-family: var(--font-body);
+
+    font-size: 11px;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+.hub-form-card input::placeholder,
+.hub-form-card textarea::placeholder {
+    color:
+        rgba(255, 255, 255, 0.25);
+}
+
+.hub-form-card input:hover,
+.hub-form-card textarea:hover {
+    border-color:
+        var(--border-gold-medium);
+}
+
+.hub-form-card input:focus,
+.hub-form-card textarea:focus {
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.04);
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.1);
+}
+
+.hub-form-card textarea {
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+}
+
+
+/* =========================
+   POLL
+========================= */
+
+.poll-options {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.poll-option-row {
+    width: 100%;
+}
+
+.add-option-button {
+    width: 100%;
+
+    padding: 11px;
+
+    background: transparent;
+
+    color: var(--gold-400);
+
+    border: 1px dashed
+        rgba(216, 173, 75, 0.35);
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+.add-option-button:hover {
+    background:
+        rgba(216, 173, 75, 0.06);
+
+    border-color:
+        var(--gold-400);
+
+    box-shadow:
+        0 0 12px
+        rgba(216, 173, 75, 0.08);
+}
+
+
+/* =========================
+   PUBLISH BUTTON
+========================= */
+
+.publish-button {
+    width: 100%;
+
+    padding: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-400),
+            var(--gold-300)
+        );
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+.publish-button:hover {
+    background: var(--gold-300);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 20px
+        rgba(216, 173, 75, 0.25);
+}
+
+.publish-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+.status-message {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    text-align: center;
+
+    color: var(--gold-400);
+
+    background:
+        rgba(216, 173, 75, 0.06);
+
+    border: 1px solid
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 8px;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.status-message.show {
+    display: block;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 18px 4%;
+    }
+
+    .brand {
+        font-size: 13px;
+
+        letter-spacing: 2px;
+    }
+
+    .back {
+        padding: 6px 9px;
+
+        font-size: 8px;
+    }
+
+    main {
+        padding: 35px 15px 45px;
+    }
+
+    .acommunity-heading {
+        margin-bottom: 25px;
+    }
+
+    .heading-icon {
+        font-size: 32px;
+    }
+
+    .acommunity-heading p {
+        font-size: 8px;
+
+        letter-spacing: 3px;
+    }
+
+    .acommunity-heading h1 {
+        font-size: 28px;
+
+        letter-spacing: 2px;
+    }
+
+    .hub-action {
+        padding: 15px;
+
+        gap: 12px;
+
+        min-height: 70px;
+    }
+
+    .action-icon {
+        min-width: 34px;
+
+        font-size: 23px;
+    }
+
+    .hub-action strong {
+        font-size: 11px;
+    }
+
+    .hub-action small {
+        font-size: 9px;
+    }
+
+    .hub-form-card {
+        padding: 18px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================
+   SAMSUNG GALAXY A55
+   360 × 800 TARGET
+========================= */
+
+@media (max-width: 360px) {
+
+    header {
+        padding: 16px 12px;
+    }
+
+    .brand {
+        font-size: 11px;
+
+        letter-spacing: 1.5px;
+    }
+
+    .back {
+        padding: 6px 8px;
+
+        font-size: 7px;
+
+        letter-spacing: 0.8px;
+    }
+
+    main {
+        padding: 28px 10px 40px;
+    }
+
+    .acommunity-page {
+        width: 100%;
+    }
+
+    .acommunity-heading {
+        margin-bottom: 20px;
+    }
+
+    .heading-icon {
+        font-size: 29px;
+
+        margin-bottom: 7px;
+    }
+
+    .acommunity-heading p {
+        font-size: 7px;
+
+        letter-spacing: 2.5px;
+
+        margin-bottom: 6px;
+    }
+
+    .acommunity-heading h1 {
+        font-size: 23px;
+
+        letter-spacing: 1.5px;
+
+        line-height: 1.25;
+    }
+
+    .line {
+        width: 48px;
+
+        margin: 11px auto;
+    }
+
+    .acommunity-heading small {
+        font-size: 8px;
+
+        letter-spacing: 0.7px;
+    }
+
+
+    /* ACTIONS */
+
+    .hub-actions {
+        gap: 9px;
+
+        margin-bottom: 11px;
+    }
+
+    .hub-action {
+        min-height: 64px;
+
+        padding: 12px;
+
+        gap: 10px;
+
+        border-radius: 10px;
+    }
+
+    .action-icon {
+        min-width: 30px;
+
+        font-size: 21px;
+    }
+
+    .hub-action strong {
+        font-size: 9px;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 3px;
+    }
+
+    .hub-action small {
+        font-size: 7.5px;
+
+        line-height: 1.4;
+    }
+
+    .arrow {
+        font-size: 17px;
+    }
+
+
+    /* FORM */
+
+    .hub-form-card {
+        padding: 14px;
+
+        margin-bottom: 10px;
+
+        border-radius: 11px;
+
+        gap: 9px;
+    }
+
+    .form-heading {
+        gap: 10px;
+
+        margin-bottom: 3px;
+    }
+
+    .form-heading > span {
+        min-width: 28px;
+
+        font-size: 22px;
+    }
+
+    .form-heading h2 {
+        font-size: 10px;
+
+        letter-spacing: 1px;
+
+        margin-bottom: 4px;
+    }
+
+    .form-heading p {
+        font-size: 8px;
+
+        line-height: 1.4;
+    }
+
+
+    /* INPUTS */
+
+    .hub-form-card input,
+    .hub-form-card textarea {
+        padding: 10px;
+
+        font-size: 9px;
+
+        border-radius: 6px;
+    }
+
+    .hub-form-card textarea {
+        min-height: 75px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+    }
+
+
+    /* POLL */
+
+    .poll-options {
+        gap: 6px;
+    }
+
+    .add-option-button {
+        padding: 9px;
+
+        font-size: 8px;
+    }
+
+
+    /* PUBLISH */
+
+    .publish-button {
+        padding: 11px;
+
+        font-size: 9px;
+
+        letter-spacing: 1.5px;
+
+        border-radius: 7px;
+    }
+
+
+    /* STATUS */
+
+    .status-message {
+        margin-top: 11px;
+
+        padding: 10px;
+
+        font-size: 8px;
+
+        letter-spacing: 0.8px;
+    }
+}
+
+
+/* =========================
+   VERY SMALL HEIGHT
+========================= */
+
+@media (max-width: 360px) and (max-height: 700px) {
+
+    main {
+        padding-top: 20px;
+    }
+
+    .acommunity-heading {
+        margin-bottom: 15px;
+    }
+
+    .heading-icon {
+        font-size: 25px;
+
+        margin-bottom: 5px;
+    }
+
+    .acommunity-heading h1 {
+        font-size: 21px;
+    }
+
+    .hub-actions {
+        gap: 7px;
+    }
+
+    .hub-action {
+        min-height: 58px;
+
+        padding: 10px;
+    }
+
+    .hub-form-card {
+        padding: 12px;
+    }
+
+    .hub-form-card textarea {
+        min-height: 60px;
+    }
+}

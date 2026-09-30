@@ -1,0 +1,391 @@
+@import "./advanced-theme.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =================================
+   BODY
+================================= */
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(216, 173, 75, 0.09),
+            transparent 35%
+        ),
+        var(--bg-void);
+
+    color: #e5e5e7;
+
+    font-family: var(--font-body);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+    overflow: hidden;
+}
+
+
+/* =================================
+   BACKGROUND LOGO
+================================= */
+
+.background-logo {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: 850px;
+    height: 850px;
+
+    transform:
+        translate(-50%, -50%);
+
+    background:
+        url("images/abparklogo.jpeg")
+        center / contain
+        no-repeat;
+
+    opacity: 0.018;
+
+    filter: blur(3px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* =================================
+   CONTAINER
+================================= */
+
+.unauthorized-container {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(450px, 100%);
+
+    text-align: center;
+
+    padding: 35px 25px;
+}
+
+
+/* =================================
+   LOCK
+================================= */
+
+.lock {
+    font-size: 55px;
+
+    margin-bottom: 22px;
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(216, 173, 75, 0.15)
+        );
+
+    transition:
+        transform var(--trans-smooth),
+        filter var(--trans-smooth);
+}
+
+.lock:hover {
+    transform: scale(1.06);
+
+    filter:
+        drop-shadow(
+            0 0 20px
+            rgba(216, 173, 75, 0.25)
+        );
+}
+
+
+/* =================================
+   DIVIDER
+================================= */
+
+.divider {
+    width: 70px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+
+    margin: 0 auto 22px;
+
+    box-shadow:
+        0 0 8px
+        rgba(216, 173, 75, 0.4);
+}
+
+
+/* =================================
+   PRIVATE LABEL
+================================= */
+
+.private {
+    color: var(--gold-400);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 18px;
+
+    text-transform: uppercase;
+}
+
+
+/* =================================
+   HEADING
+================================= */
+
+h1 {
+    font-family: var(--font-heading);
+
+    color: var(--gold-300);
+
+    font-size: 34px;
+
+    font-weight: 500;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 18px;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.25);
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message {
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    margin-bottom: 8px;
+}
+
+
+/* =================================
+   SUB MESSAGE
+================================= */
+
+.sub-message {
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+
+/* =================================
+   BACK BUTTON
+================================= */
+
+.back-button {
+    display: inline-block;
+
+    padding: 13px 20px;
+
+    background:
+        rgba(216, 173, 75, 0.03);
+
+    color: var(--gold-400);
+
+    border:
+        1px solid
+        var(--border-gold-medium);
+
+    border-radius: 4px;
+
+    text-decoration: none;
+
+    font-family: var(--font-body);
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+.back-button:hover {
+    background:
+        rgba(216, 173, 75, 0.08);
+
+    border-color:
+        var(--gold-400);
+
+    color:
+        var(--gold-300);
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.12);
+
+    transform:
+        translateY(-2px);
+}
+
+.back-button:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 412px) {
+
+    body {
+        padding: 16px;
+    }
+
+    .background-logo {
+        width: 600px;
+        height: 600px;
+        opacity: 0.014;
+    }
+
+    .unauthorized-container {
+        padding: 25px 15px;
+    }
+
+    .lock {
+        font-size: 48px;
+        margin-bottom: 18px;
+    }
+
+    .divider {
+        width: 60px;
+        margin-bottom: 20px;
+    }
+
+    .private {
+        font-size: 9px;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+    }
+
+    h1 {
+        font-size: 28px;
+        letter-spacing: 2px;
+        line-height: 1.25;
+    }
+
+    .message {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .sub-message {
+        font-size: 10px;
+        line-height: 1.6;
+        margin-bottom: 27px;
+    }
+
+    .back-button {
+        width: 100%;
+        padding: 14px;
+    }
+}
+
+
+/* =================================
+   VERY SMALL PHONES
+================================= */
+
+@media (max-width: 360px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .unauthorized-container {
+        padding: 20px 10px;
+    }
+
+    .background-logo {
+        width: 500px;
+        height: 500px;
+    }
+
+    .lock {
+        font-size: 43px;
+        margin-bottom: 16px;
+    }
+
+    .divider {
+        width: 50px;
+        margin-bottom: 17px;
+    }
+
+    .private {
+        font-size: 8px;
+        letter-spacing: 2.5px;
+    }
+
+    h1 {
+        font-size: 25px;
+        letter-spacing: 1.5px;
+    }
+
+    .message {
+        font-size: 13px;
+    }
+
+    .sub-message {
+        font-size: 9.5px;
+        margin-bottom: 24px;
+    }
+
+    .back-button {
+        font-size: 9px;
+        padding: 13px;
+    }
+}

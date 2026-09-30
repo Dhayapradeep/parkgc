@@ -1,0 +1,3298 @@
+/* ================================================================
+   AB PARK — ADVANCED GOLD / OBSIDIAN THEME
+   Transformed from the uploaded stylesheet
+   Desktop + 360 × 800 Mobile Optimized
+   ================================================================ */
+
+
+/* ================================================================
+   RESET
+   ================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ================================================================
+   ROOT THEME
+   ================================================================ */
+
+:root {
+
+    /* GOLD SYSTEM */
+    --gold-100: #fff9e6;
+    --gold-200: #ffedb8;
+    --gold-300: #f8df99;
+    --gold-400: #f3d487;
+    --gold-500: #d8ad4b;
+    --gold-600: #b98b2f;
+    --gold-700: #8b661b;
+    --gold-800: #5d430f;
+
+    /* GOLD GRADIENTS */
+
+    --gold-gradient:
+        linear-gradient(
+            135deg,
+            #fff7dc 0%,
+            #f3d487 35%,
+            #d8ad4b 70%,
+            #9c741e 100%
+        );
+
+    --gold-gradient-soft:
+        linear-gradient(
+            135deg,
+            rgba(243, 212, 135, 0.16),
+            rgba(216, 173, 75, 0.035)
+        );
+
+    --gold-gradient-dark:
+        linear-gradient(
+            135deg,
+            #29200e,
+            #0e0d09
+        );
+
+
+    /* BACKGROUND */
+
+    --black-void: #040406;
+    --black-deep: #07070a;
+    --black-dark: #0b0b0f;
+    --black-surface: #101016;
+    --black-card: #131319;
+
+
+    /* TEXT */
+
+    --text-primary: #f1f1f2;
+    --text-secondary: rgba(255, 255, 255, 0.72);
+    --text-muted: rgba(255, 255, 255, 0.43);
+    --text-dim: rgba(255, 255, 255, 0.25);
+
+
+    /* BORDERS */
+
+    --border-white:
+        rgba(255, 255, 255, 0.07);
+
+    --border-white-medium:
+        rgba(255, 255, 255, 0.12);
+
+    --border-gold:
+        rgba(216, 173, 75, 0.22);
+
+    --border-gold-medium:
+        rgba(216, 173, 75, 0.42);
+
+    --border-gold-bright:
+        rgba(243, 212, 135, 0.75);
+
+
+    /* GLOW */
+
+    --gold-glow-small:
+        0 0 12px rgba(216, 173, 75, 0.22);
+
+    --gold-glow-medium:
+        0 0 22px rgba(216, 173, 75, 0.30);
+
+    --gold-glow-large:
+        0 0 40px rgba(216, 173, 75, 0.42);
+
+
+    /* SHADOWS */
+
+    --card-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.65),
+        0 0 1px rgba(255, 255, 255, 0.08);
+
+    --gold-card-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.75),
+        0 0 28px rgba(216, 173, 75, 0.10);
+
+
+    /* FONTS */
+
+    --font-heading:
+        "Cinzel",
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    --font-body:
+        "Outfit",
+        Arial,
+        sans-serif;
+
+    --font-mono:
+        "JetBrains Mono",
+        "Courier New",
+        monospace;
+
+
+    /* TRANSITIONS */
+
+    --transition-fast:
+        0.15s ease;
+
+    --transition:
+        0.25s ease;
+
+    --transition-smooth:
+        0.35s cubic-bezier(
+            0.4,
+            0,
+            0.2,
+            1
+        );
+}
+
+
+/* ================================================================
+   BODY
+   ================================================================ */
+
+html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+}
+
+body {
+
+    min-height: 100vh;
+
+    color: var(--text-primary);
+
+    font-family: var(--font-body);
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(216, 173, 75, 0.12),
+            transparent 38%
+        ),
+
+        radial-gradient(
+            circle at 5% 45%,
+            rgba(216, 173, 75, 0.045),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 95% 70%,
+            rgba(216, 173, 75, 0.04),
+            transparent 30%
+        ),
+
+        var(--black-void);
+
+    padding-bottom: 60px;
+
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #07070a;
+}
+
+::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(216, 173, 75, 0.25);
+
+    border-radius: 10px;
+
+    border:
+        1px solid rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background:
+        var(--gold-500);
+
+    box-shadow:
+        var(--gold-glow-small);
+}
+
+
+/* ================================================================
+   HEADER
+   ================================================================ */
+
+header {
+
+    width: 100%;
+
+    padding: 18px 5%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    background:
+        rgba(7, 7, 10, 0.82);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    border-bottom:
+        1px solid var(--border-gold);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ================================================================
+   BRAND
+   ================================================================ */
+
+.brand {
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        18px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        3px;
+
+    text-shadow:
+        0 0 15px rgba(216, 173, 75, 0.28);
+
+    white-space:
+        nowrap;
+}
+
+
+/* ================================================================
+   HEADER RIGHT
+   ================================================================ */
+
+.header-right {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    min-width:
+        0;
+}
+
+
+/* ================================================================
+   ROOM CODE
+   ================================================================ */
+
+.room-code {
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        10px;
+
+    letter-spacing:
+        2px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+}
+
+
+/* ================================================================
+   EXIT BUTTON
+   ================================================================ */
+
+.exit-button {
+
+    padding:
+        8px 12px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    color:
+        rgba(255, 255, 255, 0.58);
+
+    border-radius:
+        6px;
+
+    font-family:
+        var(--font-body);
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+    text-transform:
+        uppercase;
+
+    cursor:
+        pointer;
+
+    transition:
+        all var(--transition);
+}
+
+.exit-button:hover {
+
+    border-color:
+        rgba(255, 90, 90, 0.65);
+
+    color:
+        #ff8b8b;
+
+    background:
+        rgba(255, 82, 82, 0.06);
+
+    box-shadow:
+        0 0 15px rgba(255, 82, 82, 0.10);
+}
+
+
+/* ================================================================
+   MAIN
+   ================================================================ */
+
+main {
+
+    width:
+        min(760px, 92%);
+
+    margin:
+        0 auto;
+
+    position:
+        relative;
+}
+
+
+/* ================================================================
+   GAME HEADER
+   ================================================================ */
+
+.game-header {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1.1fr 1fr;
+
+    gap:
+        10px;
+
+    padding:
+        25px 0 15px;
+}
+
+
+/* ================================================================
+   TOP STAT BOXES
+   ================================================================ */
+
+.round-box,
+.timer-box,
+.score-box {
+
+    padding:
+        14px 10px;
+
+    text-align:
+        center;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border:
+        1px solid var(--border-white);
+
+    border-radius:
+        9px;
+
+    backdrop-filter:
+        blur(10px);
+
+    transition:
+        all var(--transition);
+}
+
+.round-box:hover,
+.score-box:hover {
+
+    border-color:
+        var(--border-gold);
+
+    background:
+        rgba(216, 173, 75, 0.035);
+
+    box-shadow:
+        0 0 18px rgba(216, 173, 75, 0.06);
+}
+
+
+/* ================================================================
+   TIMER
+   ================================================================ */
+
+.timer-box {
+
+    border-color:
+        var(--border-gold-medium);
+
+    background:
+        rgba(216, 173, 75, 0.055);
+
+    box-shadow:
+        var(--gold-glow-small);
+}
+
+.timer-box:hover {
+
+    border-color:
+        var(--border-gold-bright);
+
+    box-shadow:
+        var(--gold-glow-medium);
+}
+
+
+/* ================================================================
+   LABEL
+   ================================================================ */
+
+.label {
+
+    display:
+        block;
+
+    color:
+        var(--text-dim);
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+    margin-bottom:
+        6px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ================================================================
+   STAT VALUES
+   ================================================================ */
+
+.round-box strong,
+.timer-box strong,
+.score-box strong {
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        18px;
+
+    font-weight:
+        600;
+
+    text-shadow:
+        0 0 12px rgba(216, 173, 75, 0.18);
+}
+
+
+.timer-box strong {
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        20px;
+}
+
+
+/* ================================================================
+   COMMON CARDS
+   ================================================================ */
+
+.clues-card,
+.answer-card,
+.standings-card {
+
+    padding:
+        24px;
+
+    margin-bottom:
+        15px;
+
+    background:
+        rgba(15, 15, 20, 0.72);
+
+    border:
+        1px solid var(--border-white);
+
+    border-radius:
+        13px;
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        var(--card-shadow);
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+}
+
+.clues-card::before,
+.answer-card::before,
+.standings-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        15%;
+
+    right:
+        15%;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(216, 173, 75, 0.45),
+            transparent
+        );
+
+    opacity:
+        0.5;
+}
+
+
+/* ================================================================
+   SECTION LABEL
+   ================================================================ */
+
+.section-label {
+
+    color:
+        var(--gold-400);
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+    margin-bottom:
+        6px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ================================================================
+   DESCRIPTION
+   ================================================================ */
+
+.small-description {
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+}
+
+
+/* ================================================================
+   CARD HEADING
+   ================================================================ */
+
+.card-heading {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        flex-start;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        16px;
+}
+
+
+/* ================================================================
+   CLUE COUNTER
+   ================================================================ */
+
+.clue-counter {
+
+    color:
+        var(--gold-500);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+    white-space:
+        nowrap;
+}
+
+
+/* ================================================================
+   CLUES
+   ================================================================ */
+
+.clues-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+}
+
+
+/* ================================================================
+   CLUE ITEMS
+   ================================================================ */
+
+.locked-clue,
+.clue {
+
+    padding:
+        13px;
+
+    border-radius:
+        8px;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+
+    transition:
+        all var(--transition);
+}
+
+
+.locked-clue {
+
+    border:
+        1px solid rgba(255, 255, 255, 0.045);
+
+    background:
+        rgba(255, 255, 255, 0.018);
+
+    color:
+        rgba(255, 255, 255, 0.22);
+}
+
+
+.clue {
+
+    border:
+        1px solid rgba(216, 173, 75, 0.18);
+
+    background:
+        rgba(216, 173, 75, 0.045);
+
+    box-shadow:
+        inset 0 0 20px rgba(216, 173, 75, 0.018);
+}
+
+.clue:hover {
+
+    border-color:
+        rgba(216, 173, 75, 0.35);
+
+    background:
+        rgba(216, 173, 75, 0.065);
+
+    transform:
+        translateX(2px);
+}
+
+
+/* ================================================================
+   CLUE NUMBER
+   ================================================================ */
+
+.clue-number {
+
+    color:
+        var(--gold-500);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+    margin-bottom:
+        6px;
+}
+
+
+/* ================================================================
+   CLUE GUESS
+   ================================================================ */
+
+.clue-guess {
+
+    color:
+        var(--gold-300);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        4px;
+
+    margin-bottom:
+        7px;
+
+    text-shadow:
+        0 0 10px rgba(216, 173, 75, 0.15);
+}
+
+
+/* ================================================================
+   CLUE TEXT
+   ================================================================ */
+
+.clue-text {
+
+    color:
+        var(--text-secondary);
+
+    line-height:
+        1.55;
+}
+
+
+/* ================================================================
+   ANSWER CARD
+   ================================================================ */
+
+.answer-card {
+
+    text-align:
+        center;
+}
+
+
+/* ================================================================
+   ANSWER SLOTS
+   ================================================================ */
+
+.answer-slots {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    margin:
+        20px 0 15px;
+
+    flex-wrap:
+        wrap;
+}
+
+
+/* ================================================================
+   DIGIT INPUT
+   ================================================================ */
+
+.digit-input {
+
+    width:
+        55px;
+
+    height:
+        58px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.13);
+
+    border-radius:
+        8px;
+
+    outline:
+        none;
+
+    color:
+        var(--gold-300);
+
+    text-align:
+        center;
+
+    font-size:
+        22px;
+
+    font-family:
+        var(--font-mono);
+
+    font-weight:
+        700;
+
+    transition:
+        all var(--transition);
+}
+
+.digit-input:focus {
+
+    border-color:
+        var(--gold-500);
+
+    background:
+        rgba(216, 173, 75, 0.065);
+
+    box-shadow:
+        0 0 16px rgba(216, 173, 75, 0.12);
+
+    transform:
+        translateY(-2px);
+}
+
+.digit-input:disabled {
+
+    opacity:
+        0.35;
+
+    cursor:
+        not-allowed;
+}
+
+
+/* ================================================================
+   SUBMIT BUTTON
+   ================================================================ */
+
+.submit-button {
+
+    width:
+        min(380px, 100%);
+
+    padding:
+        14px;
+
+    background:
+        var(--gold-gradient-soft);
+
+    border:
+        1px solid var(--gold-500);
+
+    border-radius:
+        7px;
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-body);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+    cursor:
+        pointer;
+
+    transition:
+        all var(--transition);
+}
+
+.submit-button:hover {
+
+    background:
+        rgba(216, 173, 75, 0.18);
+
+    border-color:
+        var(--gold-400);
+
+    box-shadow:
+        var(--gold-glow-medium);
+
+    transform:
+        translateY(-1px);
+}
+
+.submit-button:active {
+
+    transform:
+        scale(0.98);
+}
+
+.submit-button:disabled {
+
+    opacity:
+        0.35;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* ================================================================
+   ANSWER STATUS
+   ================================================================ */
+
+.answer-status {
+
+    min-height:
+        18px;
+
+    margin-top:
+        10px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        500;
+}
+
+.answer-status.correct {
+
+    color:
+        #83d391;
+
+    text-shadow:
+        0 0 10px rgba(131, 211, 145, 0.2);
+}
+
+.answer-status.wrong {
+
+    color:
+        #ff8585;
+
+    text-shadow:
+        0 0 10px rgba(255, 133, 133, 0.18);
+}
+
+
+/* ================================================================
+   STANDINGS
+   ================================================================ */
+
+.standings-list {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+}
+
+
+/* ================================================================
+   STANDING
+   ================================================================ */
+
+.standing {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    padding:
+        11px 13px;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius:
+        7px;
+
+    transition:
+        all var(--transition);
+}
+
+.standing:hover {
+
+    background:
+        rgba(216, 173, 75, 0.045);
+
+    border-color:
+        rgba(216, 173, 75, 0.18);
+}
+
+
+/* ================================================================
+   STANDING LEFT
+   ================================================================ */
+
+.standing-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    min-width:
+        0;
+}
+
+
+/* ================================================================
+   RANK
+   ================================================================ */
+
+.rank {
+
+    width:
+        20px;
+
+    flex-shrink:
+        0;
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        10px;
+
+    text-align:
+        center;
+}
+
+
+/* ================================================================
+   PLAYER NAME
+   ================================================================ */
+
+.standing-name {
+
+    min-width:
+        0;
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size:
+        10px;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+
+/* ================================================================
+   YOU LABEL
+   ================================================================ */
+
+.standing-you {
+
+    color:
+        var(--gold-500);
+
+    font-size:
+        7px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+
+    margin-left:
+        5px;
+}
+
+
+/* ================================================================
+   SCORE
+   ================================================================ */
+
+.standing-score {
+
+    flex-shrink:
+        0;
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+}
+
+
+/* ================================================================
+   EMPTY STANDING
+   ================================================================ */
+
+.empty-standing {
+
+    padding:
+        16px;
+
+    color:
+        var(--text-dim);
+
+    text-align:
+        center;
+
+    font-size:
+        10px;
+}
+
+
+/* ================================================================
+   OVERLAY
+   ================================================================ */
+
+.overlay {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        500;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    background:
+        rgba(3, 3, 5, 0.90);
+
+    backdrop-filter:
+        blur(10px);
+
+    -webkit-backdrop-filter:
+        blur(10px);
+}
+
+
+/* ================================================================
+   HIDDEN
+   ================================================================ */
+
+.hidden {
+
+    display:
+        none !important;
+}
+
+
+/* ================================================================
+   OVERLAY CARD
+   ================================================================ */
+
+.overlay-card {
+
+    width:
+        min(520px, 100%);
+
+    max-height:
+        90vh;
+
+    overflow-y:
+        auto;
+
+    padding:
+        30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #14141a,
+            #08080c
+        );
+
+    border:
+        1px solid var(--border-gold-medium);
+
+    border-radius:
+        15px;
+
+    text-align:
+        center;
+
+    box-shadow:
+        var(--gold-card-shadow);
+
+    position:
+        relative;
+
+    animation:
+        overlayIn 0.3s ease-out;
+}
+
+.overlay-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        20%;
+
+    right:
+        20%;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
+
+
+/* ================================================================
+   OVERLAY ICON
+   ================================================================ */
+
+.overlay-icon {
+
+    font-size:
+        38px;
+
+    margin-bottom:
+        12px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(216, 173, 75, 0.25)
+        );
+}
+
+
+/* ================================================================
+   OVERLAY SMALL TITLE
+   ================================================================ */
+
+.overlay-small {
+
+    color:
+        var(--gold-500);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        3px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ================================================================
+   OVERLAY HEADING
+   ================================================================ */
+
+.overlay-card h2 {
+
+    margin-top:
+        9px;
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        25px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        2px;
+
+    text-shadow:
+        0 0 15px rgba(216, 173, 75, 0.16);
+}
+
+
+/* ================================================================
+   ROUND RESULT LIST
+   ================================================================ */
+
+.round-result-list {
+
+    margin:
+        22px 0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        6px;
+}
+
+
+/* ================================================================
+   ROUND RESULT
+   ================================================================ */
+
+.round-result {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        10px 12px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.045);
+
+    border-radius:
+        6px;
+
+    color:
+        rgba(255, 255, 255, 0.65);
+
+    font-size:
+        9px;
+}
+
+.round-result strong {
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-mono);
+}
+
+
+/* ================================================================
+   NEXT ROUND
+   ================================================================ */
+
+.next-round-text {
+
+    margin-top:
+        12px;
+
+    color:
+        var(--text-dim);
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ================================================================
+   BREAK COUNTDOWN
+   ================================================================ */
+
+.break-countdown {
+
+    display:
+        block;
+
+    margin-top:
+        6px;
+
+    color:
+        var(--gold-400);
+
+    font-size:
+        28px;
+
+    font-family:
+        var(--font-mono);
+
+    font-weight:
+        700;
+
+    text-shadow:
+        0 0 15px rgba(216, 173, 75, 0.25);
+}
+
+
+/* ================================================================
+   FINAL RESULTS
+   ================================================================ */
+
+.final-results {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        100;
+
+    overflow-y:
+        auto;
+
+    padding:
+        30px 15px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(216, 173, 75, 0.13),
+            transparent 35%
+        ),
+
+        var(--black-void);
+
+    backdrop-filter:
+        blur(5px);
+}
+
+
+/* ================================================================
+   FINAL CARD
+   ================================================================ */
+
+.final-card {
+
+    width:
+        min(620px, 100%);
+
+    margin:
+        20px auto;
+
+    padding:
+        32px;
+
+    background:
+        rgba(15, 15, 20, 0.78);
+
+    border:
+        1px solid var(--border-gold);
+
+    border-radius:
+        15px;
+
+    text-align:
+        center;
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    box-shadow:
+        var(--gold-card-shadow);
+
+    position:
+        relative;
+}
+
+.final-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        20%;
+
+    right:
+        20%;
+
+    height:
+        1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
+
+
+/* ================================================================
+   FINAL ICON
+   ================================================================ */
+
+.final-icon {
+
+    font-size:
+        50px;
+
+    margin-bottom:
+        12px;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(216, 173, 75, 0.25)
+        );
+}
+
+
+/* ================================================================
+   FINAL HEADING
+   ================================================================ */
+
+.final-card h1 {
+
+    margin-top:
+        8px;
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        32px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        3px;
+
+    text-shadow:
+        0 0 18px rgba(216, 173, 75, 0.18);
+}
+
+
+/* ================================================================
+   WINNER DISPLAY
+   ================================================================ */
+
+.winner-display {
+
+    margin:
+        25px 0;
+
+    padding:
+        19px;
+
+    background:
+        rgba(216, 173, 75, 0.06);
+
+    border:
+        1px solid rgba(216, 173, 75, 0.18);
+
+    border-radius:
+        9px;
+
+    box-shadow:
+        inset 0 0 20px rgba(216, 173, 75, 0.025);
+}
+
+
+/* ================================================================
+   WINNER TITLE
+   ================================================================ */
+
+.winner-title {
+
+    color:
+        var(--text-dim);
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        3px;
+
+    margin-bottom:
+        8px;
+
+    text-transform:
+        uppercase;
+}
+
+
+/* ================================================================
+   WINNER NAME
+   ================================================================ */
+
+.winner-name {
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-heading);
+
+    font-size:
+        22px;
+
+    font-weight:
+        700;
+
+    text-shadow:
+        0 0 15px rgba(216, 173, 75, 0.22);
+}
+
+
+/* ================================================================
+   WINNER SCORE
+   ================================================================ */
+
+.winner-score {
+
+    margin-top:
+        5px;
+
+    color:
+        var(--text-muted);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        10px;
+}
+
+
+/* ================================================================
+   FINAL LEADERBOARD
+   ================================================================ */
+
+.final-leaderboard {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+}
+
+
+/* ================================================================
+   FINAL PLAYER
+   ================================================================ */
+
+.final-player {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    padding:
+        13px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.055);
+
+    border-radius:
+        7px;
+
+    transition:
+        all var(--transition);
+}
+
+.final-player:hover {
+
+    background:
+        rgba(216, 173, 75, 0.05);
+
+    border-color:
+        rgba(216, 173, 75, 0.2);
+}
+
+
+/* ================================================================
+   FINAL PLAYER LEFT
+   ================================================================ */
+
+.final-player-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    min-width:
+        0;
+}
+
+
+/* ================================================================
+   FINAL RANK
+   ================================================================ */
+
+.final-rank {
+
+    width:
+        25px;
+
+    flex-shrink:
+        0;
+
+    color:
+        var(--gold-500);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+}
+
+
+/* ================================================================
+   FINAL NAME
+   ================================================================ */
+
+.final-name {
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size:
+        10px;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+}
+
+
+/* ================================================================
+   FINAL SCORE
+   ================================================================ */
+
+.final-score {
+
+    flex-shrink:
+        0;
+
+    color:
+        var(--gold-400);
+
+    font-family:
+        var(--font-mono);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+}
+
+
+/* ================================================================
+   REWARD
+   ================================================================ */
+
+.reward {
+
+    color:
+        #87d690;
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    margin-left:
+        6px;
+}
+
+
+/* ================================================================
+   FINAL ACTIONS
+   ================================================================ */
+
+.final-actions {
+
+    margin-top:
+        25px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        8px;
+}
+
+
+/* ================================================================
+   FINAL BUTTONS
+   ================================================================ */
+
+.primary-final-button,
+.secondary-final-button {
+
+    width:
+        100%;
+
+    padding:
+        13px;
+
+    border-radius:
+        7px;
+
+    font-family:
+        var(--font-body);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+
+    text-transform:
+        uppercase;
+
+    cursor:
+        pointer;
+
+    transition:
+        all var(--transition);
+}
+
+
+/* ================================================================
+   PRIMARY FINAL
+   ================================================================ */
+
+.primary-final-button {
+
+    background:
+        var(--gold-gradient-soft);
+
+    border:
+        1px solid var(--gold-500);
+
+    color:
+        var(--gold-400);
+}
+
+.primary-final-button:hover {
+
+    background:
+        rgba(216, 173, 75, 0.18);
+
+    border-color:
+        var(--gold-400);
+
+    box-shadow:
+        var(--gold-glow-medium);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ================================================================
+   SECONDARY FINAL
+   ================================================================ */
+
+.secondary-final-button {
+
+    background:
+        transparent;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    color:
+        rgba(255, 255, 255, 0.55);
+}
+
+.secondary-final-button:hover {
+
+    color:
+        var(--gold-400);
+
+    border-color:
+        var(--gold-500);
+
+    background:
+        rgba(216, 173, 75, 0.04);
+}
+
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+
+@keyframes overlayIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(12px)
+            scale(0.97);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+@keyframes goldPulse {
+
+    0% {
+        box-shadow:
+            0 0 0 0
+            rgba(216, 173, 75, 0.45);
+    }
+
+    70% {
+        box-shadow:
+            0 0 0 9px
+            rgba(216, 173, 75, 0);
+    }
+
+    100% {
+        box-shadow:
+            0 0 0 0
+            rgba(216, 173, 75, 0);
+    }
+}
+
+
+/* ================================================================
+   MOBILE — 360 × 800
+   ================================================================ */
+
+@media (max-width: 600px) {
+
+    html,
+    body {
+        width:
+            100%;
+
+        min-width:
+            0;
+
+        overflow-x:
+            hidden;
+    }
+
+
+    body {
+
+        padding-bottom:
+            20px;
+
+        background-attachment:
+            scroll;
+    }
+
+
+    /* ------------------------------------------------------------
+       HEADER
+       ------------------------------------------------------------ */
+
+    header {
+
+        min-height:
+            54px;
+
+        padding:
+            11px 10px;
+
+        gap:
+            7px;
+    }
+
+
+    .brand {
+
+        min-width:
+            0;
+
+        font-size:
+            10px;
+
+        letter-spacing:
+            1.4px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .header-right {
+
+        gap:
+            6px;
+
+        flex-shrink:
+            0;
+    }
+
+
+    .room-code {
+
+        max-width:
+            90px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        font-size:
+            7px;
+
+        letter-spacing:
+            1.2px;
+    }
+
+
+    .exit-button {
+
+        padding:
+            6px 8px;
+
+        font-size:
+            6.5px;
+
+        letter-spacing:
+            0.6px;
+
+        border-radius:
+            5px;
+    }
+
+
+    /* ------------------------------------------------------------
+       MAIN
+       ------------------------------------------------------------ */
+
+    main {
+
+        width:
+            calc(100% - 20px);
+
+        max-width:
+            100%;
+
+        margin:
+            0 auto;
+    }
+
+
+    /* ------------------------------------------------------------
+       GAME HEADER
+       ------------------------------------------------------------ */
+
+    .game-header {
+
+        width:
+            100%;
+
+        grid-template-columns:
+            1fr 1.15fr 1fr;
+
+        gap:
+            5px;
+
+        padding:
+            15px 0 10px;
+    }
+
+
+    .round-box,
+    .timer-box,
+    .score-box {
+
+        min-width:
+            0;
+
+        padding:
+            9px 3px;
+
+        border-radius:
+            7px;
+    }
+
+
+    .label {
+
+        font-size:
+            6px;
+
+        letter-spacing:
+            0.8px;
+
+        margin-bottom:
+            4px;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .round-box strong,
+    .timer-box strong,
+    .score-box strong {
+
+        font-size:
+            12px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .timer-box strong {
+
+        font-size:
+            18px;
+    }
+
+
+    /* ------------------------------------------------------------
+       CARDS
+       ------------------------------------------------------------ */
+
+    .clues-card,
+    .answer-card,
+    .standings-card {
+
+        width:
+            100%;
+
+        padding:
+            14px;
+
+        margin-bottom:
+            10px;
+
+        border-radius:
+            10px;
+    }
+
+
+    .section-label {
+
+        font-size:
+            9px;
+
+        letter-spacing:
+            1.3px;
+    }
+
+
+    .small-description {
+
+        font-size:
+            8px;
+
+        line-height:
+            1.45;
+    }
+
+
+    /* ------------------------------------------------------------
+       CARD HEADING
+       ------------------------------------------------------------ */
+
+    .card-heading {
+
+        margin-bottom:
+            11px;
+
+        gap:
+            6px;
+    }
+
+
+    .clue-counter {
+
+        font-size:
+            8px;
+
+        letter-spacing:
+            0.6px;
+    }
+
+
+    /* ------------------------------------------------------------
+       CLUES
+       ------------------------------------------------------------ */
+
+    .clues-list {
+
+        gap:
+            6px;
+    }
+
+
+    .locked-clue,
+    .clue {
+
+        padding:
+            10px;
+
+        border-radius:
+            7px;
+
+        font-size:
+            8px;
+
+        line-height:
+            1.45;
+    }
+
+
+    .clue-number {
+
+        font-size:
+            7px;
+
+        margin-bottom:
+            4px;
+    }
+
+
+    .clue-guess {
+
+        font-size:
+            11px;
+
+        letter-spacing:
+            2.5px;
+
+        margin-bottom:
+            5px;
+
+        word-break:
+            break-word;
+    }
+
+
+    .clue-text {
+
+        font-size:
+            8px;
+
+        line-height:
+            1.45;
+    }
+
+
+    /* ------------------------------------------------------------
+       ANSWER
+       ------------------------------------------------------------ */
+
+    .answer-card {
+
+        padding:
+            14px 10px;
+    }
+
+
+    .answer-slots {
+
+        gap:
+            5px;
+
+        margin:
+            15px 0 12px;
+    }
+
+
+    .digit-input {
+
+        width:
+            43px;
+
+        height:
+            49px;
+
+        border-radius:
+            7px;
+
+        font-size:
+            18px;
+    }
+
+
+    .submit-button {
+
+        width:
+            100%;
+
+        min-height:
+            41px;
+
+        padding:
+            10px;
+
+        font-size:
+            8px;
+
+        letter-spacing:
+            1.3px;
+    }
+
+
+    .answer-status {
+
+        min-height:
+            15px;
+
+        margin-top:
+            7px;
+
+        font-size:
+            8px;
+    }
+
+
+    /* ------------------------------------------------------------
+       STANDINGS
+       ------------------------------------------------------------ */
+
+    .standings-list {
+
+        gap:
+            5px;
+    }
+
+
+    .standing {
+
+        min-height:
+            37px;
+
+        padding:
+            8px 9px;
+
+        gap:
+            7px;
+
+        border-radius:
+            6px;
+    }
+
+
+    .standing-left {
+
+        min-width:
+            0;
+
+        gap:
+            7px;
+    }
+
+
+    .rank {
+
+        width:
+            18px;
+
+        font-size:
+            8px;
+    }
+
+
+    .standing-name {
+
+        font-size:
+            8px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .standing-you {
+
+        font-size:
+            6px;
+
+        margin-left:
+            3px;
+    }
+
+
+    .standing-score {
+
+        font-size:
+            8px;
+    }
+
+
+    .empty-standing {
+
+        padding:
+            11px;
+
+        font-size:
+            8px;
+    }
+
+
+    /* ------------------------------------------------------------
+       OVERLAY
+       ------------------------------------------------------------ */
+
+    .overlay {
+
+        padding:
+            10px;
+    }
+
+
+    .overlay-card {
+
+        width:
+            100%;
+
+        max-width:
+            335px;
+
+        max-height:
+            88vh;
+
+        padding:
+            21px 14px;
+
+        border-radius:
+            12px;
+    }
+
+
+    .overlay-icon {
+
+        font-size:
+            32px;
+
+        margin-bottom:
+            9px;
+    }
+
+
+    .overlay-small {
+
+        font-size:
+            7px;
+
+        letter-spacing:
+            2px;
+    }
+
+
+    .overlay-card h2 {
+
+        margin-top:
+            7px;
+
+        font-size:
+            21px;
+
+        line-height:
+            1.25;
+
+        letter-spacing:
+            1.2px;
+    }
+
+
+    /* ------------------------------------------------------------
+       ROUND RESULT
+       ------------------------------------------------------------ */
+
+    .round-result-list {
+
+        margin:
+            16px 0;
+
+        gap:
+            5px;
+    }
+
+
+    .round-result {
+
+        padding:
+            8px 9px;
+
+        font-size:
+            8px;
+    }
+
+
+    .next-round-text {
+
+        margin-top:
+            9px;
+
+        font-size:
+            7px;
+
+        letter-spacing:
+            1.3px;
+    }
+
+
+    .break-countdown {
+
+        font-size:
+            23px;
+    }
+
+
+    /* ------------------------------------------------------------
+       FINAL RESULTS
+       ------------------------------------------------------------ */
+
+    .final-results {
+
+        padding:
+            12px 9px;
+    }
+
+
+    .final-card {
+
+        width:
+            100%;
+
+        margin:
+            10px auto;
+
+        padding:
+            22px 13px;
+
+        border-radius:
+            12px;
+    }
+
+
+    .final-icon {
+
+        font-size:
+            42px;
+
+        margin-bottom:
+            9px;
+    }
+
+
+    .final-card h1 {
+
+        margin-top:
+            6px;
+
+        font-size:
+            23px;
+
+        line-height:
+            1.2;
+
+        letter-spacing:
+            1.5px;
+    }
+
+
+    /* ------------------------------------------------------------
+       WINNER
+       ------------------------------------------------------------ */
+
+    .winner-display {
+
+        margin:
+            17px 0;
+
+        padding:
+            14px;
+
+        border-radius:
+            8px;
+    }
+
+
+    .winner-title {
+
+        font-size:
+            7px;
+
+        letter-spacing:
+            2px;
+
+        margin-bottom:
+            6px;
+    }
+
+
+    .winner-name {
+
+        max-width:
+            100%;
+
+        font-size:
+            19px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .winner-score {
+
+        margin-top:
+            4px;
+
+        font-size:
+            8px;
+    }
+
+
+    /* ------------------------------------------------------------
+       FINAL LEADERBOARD
+       ------------------------------------------------------------ */
+
+    .final-leaderboard {
+
+        gap:
+            5px;
+    }
+
+
+    .final-player {
+
+        min-height:
+            38px;
+
+        padding:
+            9px 8px;
+
+        border-radius:
+            6px;
+    }
+
+
+    .final-player-left {
+
+        min-width:
+            0;
+
+        gap:
+            6px;
+    }
+
+
+    .final-rank {
+
+        width:
+            20px;
+
+        font-size:
+            9px;
+    }
+
+
+    .final-name {
+
+        min-width:
+            0;
+
+        font-size:
+            8px;
+
+        overflow:
+            hidden;
+
+        text-overflow:
+            ellipsis;
+
+        white-space:
+            nowrap;
+    }
+
+
+    .final-score {
+
+        font-size:
+            9px;
+    }
+
+
+    .reward {
+
+        font-size:
+            6px;
+
+        margin-left:
+            3px;
+    }
+
+
+    /* ------------------------------------------------------------
+       FINAL ACTIONS
+       ------------------------------------------------------------ */
+
+    .final-actions {
+
+        margin-top:
+            17px;
+
+        gap:
+            6px;
+    }
+
+
+    .primary-final-button,
+    .secondary-final-button {
+
+        min-height:
+            41px;
+
+        padding:
+            10px;
+
+        font-size:
+            7.5px;
+
+        letter-spacing:
+            1.2px;
+    }
+}
+
+
+/* ================================================================
+   EXTRA SMALL — 360PX AND BELOW
+   ================================================================ */
+
+@media (max-width: 360px) {
+
+    header {
+
+        padding-left:
+            8px;
+
+        padding-right:
+            8px;
+    }
+
+
+    .brand {
+
+        font-size:
+            9px;
+
+        letter-spacing:
+            1px;
+    }
+
+
+    .room-code {
+
+        max-width:
+            70px;
+
+        font-size:
+            6.5px;
+
+        letter-spacing:
+            0.8px;
+    }
+
+
+    .exit-button {
+
+        padding:
+            5px 7px;
+
+        font-size:
+            6px;
+    }
+
+
+    main {
+
+        width:
+            calc(100% - 16px);
+    }
+
+
+    .game-header {
+
+        gap:
+            4px;
+
+        padding-top:
+            13px;
+    }
+
+
+    .round-box,
+    .timer-box,
+    .score-box {
+
+        padding:
+            8px 2px;
+    }
+
+
+    .label {
+
+        font-size:
+            5.5px;
+
+        letter-spacing:
+            0.6px;
+    }
+
+
+    .round-box strong,
+    .timer-box strong,
+    .score-box strong {
+
+        font-size:
+            11px;
+    }
+
+
+    .timer-box strong {
+
+        font-size:
+            17px;
+    }
+
+
+    .clues-card,
+    .answer-card,
+    .standings-card {
+
+        padding:
+            12px 10px;
+    }
+
+
+    .digit-input {
+
+        width:
+            41px;
+
+        height:
+            47px;
+
+        font-size:
+            17px;
+    }
+
+
+    .overlay-card {
+
+        max-width:
+            330px;
+
+        padding:
+            19px 12px;
+    }
+
+
+    .final-card {
+
+        padding:
+            20px 11px;
+    }
+}
+
+
+/* ================================================================
+   360 × 800 HEIGHT OPTIMIZATION
+   ================================================================ */
+
+@media (max-width: 600px) and (max-height: 850px) {
+
+    body {
+
+        padding-bottom:
+            15px;
+    }
+
+
+    main {
+
+        padding-bottom:
+            5px;
+    }
+
+
+    .game-header {
+
+        padding-top:
+            12px;
+
+        padding-bottom:
+            8px;
+    }
+
+
+    .clues-card,
+    .answer-card,
+    .standings-card {
+
+        margin-bottom:
+            9px;
+    }
+
+
+    .clues-list {
+
+        gap:
+            5px;
+    }
+
+
+    .locked-clue,
+    .clue {
+
+        padding:
+            9px;
+    }
+
+
+    .answer-slots {
+
+        margin-top:
+            12px;
+
+        margin-bottom:
+            10px;
+    }
+
+
+    .digit-input {
+
+        height:
+            45px;
+    }
+}
+
+
+/* ================================================================
+   TOUCH DEVICE OPTIMIZATION
+   ================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+
+    .submit-button:hover,
+    .exit-button:hover,
+    .primary-final-button:hover,
+    .secondary-final-button:hover,
+    .standing:hover,
+    .clue:hover {
+
+        transform:
+            none;
+    }
+
+
+    button,
+    input {
+
+        -webkit-tap-highlight-color:
+            transparent;
+    }
+}

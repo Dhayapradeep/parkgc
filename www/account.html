@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Abusement Park</title>
+
+    <link rel="stylesheet" href="account.css">
+
+</head>
+
+<body>
+
+    <div class="background-logo"></div>
+
+    <main class="account-container">
+
+        <img
+            src="images/abparklogo.jpeg"
+            alt="Abusement Park"
+            class="logo"
+        >
+
+        <div class="divider"></div>
+
+        <p class="private">
+            INVITATION VERIFIED
+        </p>
+
+        <h1>WELCOME TO THE PARK</h1>
+
+        <p class="description">
+            Create your account to enter
+            Abusement Park.
+        </p>
+
+
+        <form id="accountForm">
+
+            <label for="username">
+                USERNAME
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Choose your username"
+                maxlength="20"
+                autocomplete="off"
+                required
+            >
+
+
+            <label for="password">
+                PASSWORD
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Create a password"
+                required
+            >
+
+
+            <label for="confirmPassword">
+                CONFIRM PASSWORD
+            </label>
+
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Enter your password again"
+                required
+            >
+
+
+            <button type="submit">
+                CREATE ACCOUNT
+            </button>
+
+        </form>
+
+
+        <p id="message"></p>
+
+        <p class="note">
+            Your account is private and can only be accessed
+            by approved members of Abusement Park.
+        </p>
+
+
+        <a href="invite.html" class="back">
+            ← BACK
+        </a>
+
+    </main>
+
+
+    <script type="module" src="js/account.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chaos Scribble | Results</title>
+
+    <link rel="stylesheet" href="advanced-theme.css">
+    <link rel="stylesheet" href="scribble-results.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            ABUSEMENT PARK
+        </div>
+
+        <div class="header-right">
+            <span id="roomCodeDisplay" class="room-code">
+                ------
+            </span>
+
+            <button id="exitButton" class="exit-button">
+                EXIT
+            </button>
+        </div>
+    </header>
+
+    <main class="results-main">
+
+        <section class="results-card">
+
+            <div class="trophy-icon">
+                🏆
+            </div>
+
+            <p class="section-label">
+                MATCH COMPLETE
+            </p>
+
+            <h1>
+                SCRIBBLE CHAMPIONS
+            </h1>
+
+            <p class="small-description">
+                Chaos Points have been deposited into your accounts!
+            </p>
+
+            <div
+                id="podiumContainer"
+                class="podium-row">
+            </div>
+
+            <div
+                id="finalScoreboard"
+                class="final-scoreboard">
+            </div>
+
+            <div class="gameover-actions">
+
+                <button
+                    id="viewLeaderboardBtn"
+                    class="primary-btn">
+                    🏆 VIEW HALL OF SHAME
+                </button>
+
+                <button
+                    id="returnLobbyButton"
+                    class="secondary-btn">
+                    🔄 PLAY AGAIN (REMATCH)
+                </button>
+
+                <button
+                    id="exitToNewRoomBtn"
+                    class="danger-btn">
+                    🚪 EXIT TO NEW ROOM
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="js/scribble-results.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Abusement Park</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="background-logo"></div>
+
+    <main class="welcome">
+
+        <img
+            src="images/abparklogo.jpeg"
+            alt="Abusement Park Logo"
+            class="logo"
+        >
+
+        <div class="divider"></div>
+
+        <p class="private">
+            🔒 PRIVATE COMMUNITY
+        </p>
+
+        <h1>
+            WELCOME TO<br>
+            ABUSEMENT PARK
+        </h1>
+
+        <p class="tagline">
+            Where the chaos never ends.
+        </p>
+
+        <button id="enterParkButton">
+            ENTER THE PARK
+        </button>
+
+        <p class="invite-text">
+            Members only
+        </p>
+
+    </main>
+
+
+    <script type="module">
+
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+
+        import {
+            app
+        } from "./firebase.js";
+
+
+        /* =========================
+           FIREBASE AUTH
+        ========================= */
+
+        const auth =
+            getAuth(app);
+
+
+        const enterButton =
+            document.getElementById(
+                "enterParkButton"
+            );
+
+
+        /* =========================
+           ENTER THE PARK
+        ========================= */
+
+        enterButton.addEventListener(
+            "click",
+            function () {
+
+                /*
+                    Check whether Firebase
+                    already has a logged-in
+                    user.
+                */
+
+                onAuthStateChanged(
+                    auth,
+                    function (user) {
+
+                        if (user) {
+
+                            /*
+                                Existing logged-in
+                                member.
+                            */
+
+                            window.location.href =
+                                "dashboard.html";
+
+                        }
+
+                        else {
+
+                            /*
+                                No active login.
+                                Go to login first.
+                            */
+
+                            window.location.href =
+                                "login.html";
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

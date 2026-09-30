@@ -1,0 +1,554 @@
+/* =========================================================
+   ABUSEMENT PARK STUDIO
+   LOGIN / MEMBER ACCESS
+   ADVANCED THEME
+========================================================= */
+
+@import "./advanced-theme.css";
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(216, 173, 75, 0.12),
+            transparent 38%
+        ),
+        var(--bg-void);
+
+    color: #ffffff;
+
+    font-family: var(--font-body);
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 25px 16px;
+}
+
+
+/* =========================================================
+   LOGIN BOX
+========================================================= */
+
+.login-box {
+    width: 100%;
+
+    max-width: 390px;
+
+    text-align: center;
+
+    padding: 35px 28px;
+
+    background:
+        var(--bg-card);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 14px;
+
+    box-shadow:
+        var(--shadow-card);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Top gold accent */
+
+.login-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 15%;
+
+    right: 15%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    color: var(--gold-400);
+
+    font-family: var(--font-heading);
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 14px
+        rgba(216, 173, 75, 0.3);
+}
+
+
+/* =========================================================
+   TAGLINE
+========================================================= */
+
+.tagline {
+    color:
+        rgba(255, 255, 255, 0.32);
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-top: 8px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider {
+    width: 55px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+
+    margin: 22px auto;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+h1 {
+    color: var(--gold-300);
+
+    font-family: var(--font-heading);
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 18px
+        rgba(216, 173, 75, 0.25);
+}
+
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
+
+.subtitle {
+    color:
+        rgba(255, 255, 255, 0.4);
+
+    font-size: 11px;
+
+    margin-top: 7px;
+
+    margin-bottom: 28px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+form {
+    text-align: left;
+}
+
+
+.field {
+    margin-bottom: 16px;
+}
+
+
+.field label {
+    display: block;
+
+    color:
+        rgba(216, 173, 75, 0.85);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 7px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.field input {
+    width: 100%;
+
+    padding: 13px 12px;
+
+    background:
+        rgba(8, 8, 12, 0.75);
+
+    color: #ffffff;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.09);
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-family: var(--font-body);
+
+    font-size: 12px;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+
+.field input:hover {
+    border-color:
+        rgba(216, 173, 75, 0.2);
+}
+
+
+.field input:focus {
+    border-color:
+        var(--gold-400);
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    box-shadow:
+        0 0 14px
+        rgba(216, 173, 75, 0.18);
+}
+
+
+.field input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.22);
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+form button {
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding: 14px;
+
+    background:
+        var(--gold-gradient);
+
+    color: #08080c;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+
+    box-shadow:
+        0 4px 18px
+        rgba(216, 173, 75, 0.3);
+}
+
+
+form button:hover {
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.05);
+
+    box-shadow:
+        0 6px 24px
+        rgba(216, 173, 75, 0.5);
+}
+
+
+form button:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+#message {
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color: var(--gold-300);
+
+    font-size: 10px;
+
+    text-align: center;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   INVITATION
+========================================================= */
+
+.invitation {
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.07);
+
+    text-align: center;
+}
+
+
+.invitation span {
+    color:
+        rgba(255, 255, 255, 0.32);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+.invitation p {
+    color:
+        rgba(255, 255, 255, 0.38);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    margin: 7px 0 13px;
+}
+
+
+/* =========================================================
+   INVITATION BUTTON
+========================================================= */
+
+#invitationButton {
+    width: 100%;
+
+    padding: 12px;
+
+    background:
+        rgba(216, 173, 75, 0.04);
+
+    color: var(--gold-300);
+
+    border:
+        1px solid
+        var(--border-gold-subtle);
+
+    border-radius: 7px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        all var(--trans-smooth);
+}
+
+
+#invitationButton:hover {
+    background:
+        rgba(216, 173, 75, 0.1);
+
+    border-color:
+        var(--gold-400);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 0 15px
+        rgba(216, 173, 75, 0.15);
+
+    transform:
+        translateY(-1px);
+}
+
+
+#invitationButton:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    main {
+        padding: 20px 15px;
+    }
+
+
+    .login-box {
+        padding: 30px 22px;
+
+        border-radius: 12px;
+    }
+
+
+    .logo {
+        font-size: 18px;
+
+        letter-spacing: 2px;
+    }
+
+
+    h1 {
+        font-size: 23px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .subtitle {
+        margin-bottom: 24px;
+    }
+
+
+    .field input {
+        padding: 12px;
+    }
+
+
+    form button {
+        padding: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .login-box {
+        padding: 26px 18px;
+    }
+
+
+    .logo {
+        font-size: 16px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    h1 {
+        font-size: 21px;
+    }
+
+
+    .tagline {
+        font-size: 7px;
+    }
+
+}

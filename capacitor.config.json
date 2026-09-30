@@ -1,0 +1,14 @@
+{
+  "appId": "com.dhayapradeep.parkgc",
+  "appName": "Abusement Park",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#08080c",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  }
+}

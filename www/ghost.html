@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ghost Mode</title>
+
+    <link
+        rel="stylesheet"
+        href="ghost.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="brand">
+
+        ABUSEMENT PARK
+
+    </div>
+
+
+    <button
+        id="leaveGameButton"
+        class="leave-button"
+    >
+
+        ← LEAVE
+
+    </button>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- GAME HERO -->
+
+    <section class="game-hero">
+
+        <div class="ghost-icon">
+
+            👻
+
+        </div>
+
+
+        <p class="small-title">
+
+            FIND THE LIAR
+
+        </p>
+
+
+        <h1>
+
+            GHOST MODE
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Someone among you is hiding.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- LOADING -->
+
+    <section
+        id="loadingCard"
+        class="loading-card"
+    >
+
+        <div class="loading-icon">
+
+            👻
+
+        </div>
+
+
+        <h2>
+
+            ENTERING THE DARKNESS...
+
+        </h2>
+
+
+        <p id="loadingText">
+
+            Preparing the game...
+
+        </p>
+
+    </section>
+
+
+
+    <!-- MAIN GAME -->
+
+    <div
+        id="gameContent"
+        class="hidden"
+    >
+
+
+        <!-- TIMER -->
+
+        <section class="timer-section">
+
+            <span>
+
+                TIME REMAINING
+
+            </span>
+
+
+            <div
+                id="gameTimer"
+                class="game-timer"
+            >
+
+                10:00
+
+            </div>
+
+
+            <p
+                id="gamePhase"
+            >
+
+                THE INVESTIGATION HAS BEGUN
+
+            </p>
+
+        </section>
+
+
+
+        <!-- ROLE -->
+
+        <section class="role-strip">
+
+            <div
+                id="roleIcon"
+                class="role-icon"
+            >
+
+                ❓
+
+            </div>
+
+
+            <div>
+
+                <span>
+
+                    YOUR SECRET ROLE
+
+                </span>
+
+
+                <strong
+                    id="roleName"
+                >
+
+                    LOADING...
+
+                </strong>
+
+
+                <p
+                    id="roleDescription"
+                >
+
+                    Your role is being assigned.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CLUES -->
+
+        <section class="clue-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-title">
+
+                        GHOST IDENTITY
+
+                    </p>
+
+
+                    <h2>
+
+                        🔎 CLUES
+
+                    </h2>
+
+                </div>
+
+
+                <span
+                    id="clueStatus"
+                    class="clue-status"
+                >
+
+                    WAITING
+
+                </span>
+
+            </div>
+
+
+            <p
+                id="clueText"
+                class="clue-text"
+            >
+
+                The Ghost is still hiding.
+
+            </p>
+
+
+            <div
+                id="letterReveal"
+                class="letter-reveal"
+            >
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- CHAT -->
+
+        <section class="chat-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-title">
+
+                        TRUST NO ONE
+
+                    </p>
+
+
+                    <h2>
+
+                        💬 DISCUSSION
+
+                    </h2>
+
+                </div>
+
+
+                <span
+                    id="playersAlive"
+                    class="player-count"
+                >
+
+                    0 PLAYERS
+
+                </span>
+
+            </div>
+
+
+
+            <div
+                id="chatMessages"
+                class="chat-messages"
+            >
+
+            </div>
+
+
+
+            <div class="chat-input-area">
+
+
+                <input
+                    type="text"
+                    id="chatInput"
+                    placeholder="Ask something..."
+                    maxlength="200"
+                >
+
+
+                <button
+                    id="sendButton"
+                >
+
+                    SEND
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- VOTING -->
+
+        <section
+            id="votingSection"
+            class="voting-section hidden"
+        >
+
+
+            <div class="voting-header">
+
+                <div>
+
+                    <p class="small-title">
+
+                        ONE VOTE. ONE CHANCE.
+
+                    </p>
+
+
+                    <h2>
+
+                        🗳️ WHO IS THE GHOST?
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <p class="voting-description">
+
+                Select the player you believe is the Ghost.
+                Your vote cannot be changed.
+
+            </p>
+
+
+            <div
+                id="votingPlayers"
+                class="voting-players"
+            >
+
+            </div>
+
+
+            <p
+                id="voteStatus"
+                class="vote-status"
+            >
+
+                Choose carefully.
+
+            </p>
+
+
+        </section>
+
+
+
+        <!-- WAITING -->
+
+        <section
+            id="waitingResults"
+            class="waiting-results hidden"
+        >
+
+            <div>
+
+                🗳️
+
+            </div>
+
+
+            <h2>
+
+                VOTE CAST
+
+            </h2>
+
+
+            <p>
+
+                Waiting for everyone else...
+
+            </p>
+
+
+            <span
+                id="votesProgress"
+            >
+
+                0 / 0 VOTES
+
+            </span>
+
+        </section>
+
+
+
+        <!-- RESULTS -->
+
+        <section
+            id="resultSection"
+            class="result-section hidden"
+        >
+
+
+            <div
+                id="resultIcon"
+                class="result-icon"
+            >
+
+                👻
+
+            </div>
+
+
+            <p
+                id="resultSmallTitle"
+                class="small-title"
+            >
+
+                GAME OVER
+
+            </p>
+
+
+            <h2
+                id="resultTitle"
+            >
+
+                THE TRUTH IS REVEALED
+
+            </h2>
+
+
+            <p
+                id="resultDescription"
+            >
+
+            </p>
+
+
+            <div class="reveal-card">
+
+                <span>
+
+                    THE GHOST WAS
+
+                </span>
+
+
+                <strong
+                    id="revealedGhost"
+                >
+
+                    ???
+
+                </strong>
+
+            </div>
+
+
+            <div class="reward-card">
+
+                <span>
+
+                    YOUR REWARD
+
+                </span>
+
+
+                <strong
+                    id="rewardAmount"
+                >
+
+                    0 CP
+
+                </strong>
+
+            </div>
+
+
+            <button
+                id="backToLobbyButton"
+                class="back-lobby-button"
+            >
+
+                👻 BACK TO LOBBY
+
+            </button>
+
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+
+
+<script
+    type="module"
+    src="js/ghost.js"
+></script>
+
+
+</body>
+
+</html>

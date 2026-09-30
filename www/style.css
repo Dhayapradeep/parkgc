@@ -1,0 +1,516 @@
+@import "./advanced-theme.css";
+
+
+/* =================================
+   RESET
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+
+/* =================================
+   BODY
+================================= */
+
+body {
+    min-height: 100vh;
+
+    font-family: var(--font-body);
+
+    color: #e5e5e7;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            rgba(212, 167, 55, 0.10),
+            transparent 35%
+        ),
+        var(--bg-void);
+}
+
+
+/* =================================
+   SUBTLE BACKGROUND
+================================= */
+
+.background-logo {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: 900px;
+    height: 900px;
+
+    transform: translate(-50%, -50%);
+
+    background:
+        url("images/logo.png")
+        center / contain
+        no-repeat;
+
+    opacity: 0.018;
+
+    filter: blur(3px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* =================================
+   MAIN CONTENT
+================================= */
+
+.welcome {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(760px, 90%);
+
+    text-align: center;
+
+    padding: 35px 20px;
+}
+
+
+/* =================================
+   LOGO
+================================= */
+
+.logo {
+    display: block;
+
+    width: 300px;
+
+    max-width: 72vw;
+
+    margin: 0 auto 28px;
+
+    filter:
+        drop-shadow(
+            0 0 12px
+            rgba(218, 170, 60, 0.12)
+        );
+
+    animation:
+        logoAppear 1.2s ease;
+
+    transition:
+        transform var(--trans-smooth),
+        filter var(--trans-smooth);
+}
+
+
+.logo:hover {
+    transform: scale(1.02);
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(216, 173, 75, 0.22)
+        );
+}
+
+
+/* =================================
+   GOLD LINE
+================================= */
+
+.divider {
+    width: 90px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold-400),
+            transparent
+        );
+
+    margin: 0 auto 24px;
+
+    box-shadow:
+        0 0 8px
+        rgba(216, 173, 75, 0.4);
+}
+
+
+/* =================================
+   PRIVATE LABEL
+================================= */
+
+.private {
+    color: var(--gold-400);
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 20px;
+
+    text-transform: uppercase;
+}
+
+
+/* =================================
+   WELCOME TITLE
+================================= */
+
+h1 {
+    font-family: var(--font-heading);
+
+    color: var(--gold-300);
+
+    font-size: 42px;
+
+    font-weight: 500;
+
+    letter-spacing: 4px;
+
+    line-height: 1.25;
+
+    margin-bottom: 16px;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 24px
+        rgba(216, 173, 75, 0.35);
+}
+
+
+/* =================================
+   TAGLINE
+================================= */
+
+.tagline {
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+    font-style: italic;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 38px;
+}
+
+
+/* =================================
+   ENTER BUTTON
+================================= */
+
+button {
+    position: relative;
+
+    padding: 15px 42px;
+
+    background:
+        rgba(216, 173, 75, 0.04);
+
+    color: var(--gold-300);
+
+    border:
+        1px solid
+        var(--gold-400);
+
+    border-radius: 4px;
+
+    font-family: var(--font-body);
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    cursor: pointer;
+
+    text-transform: uppercase;
+
+    transition:
+        background var(--trans-smooth),
+        color var(--trans-smooth),
+        box-shadow var(--trans-smooth),
+        transform var(--trans-smooth),
+        border-color var(--trans-smooth);
+
+    box-shadow:
+        0 0 0
+        rgba(216, 173, 75, 0);
+}
+
+
+button:hover {
+    background:
+        var(--gold-400);
+
+    color:
+        var(--bg-void);
+
+    border-color:
+        var(--gold-300);
+
+    box-shadow:
+        0 0 25px
+        rgba(216, 173, 75, 0.35);
+
+    transform:
+        translateY(-2px);
+}
+
+
+button:active {
+    transform:
+        translateY(0);
+}
+
+
+/* =================================
+   INVITATION TEXT
+================================= */
+
+.invite-text {
+    margin-top: 17px;
+
+    color:
+        rgba(255, 255, 255, 0.3);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =================================
+   LOGO ANIMATION
+================================= */
+
+@keyframes logoAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =================================
+   MOBILE
+   412 × 915
+================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        min-height: 100vh;
+
+        padding:
+            20px 14px;
+    }
+
+
+    .welcome {
+        width: 100%;
+
+        padding:
+            20px 10px;
+    }
+
+
+    .background-logo {
+        width: 650px;
+
+        height: 650px;
+
+        opacity: 0.014;
+    }
+
+
+    .logo {
+        width: 245px;
+
+        max-width: 72vw;
+
+        margin-bottom: 23px;
+    }
+
+
+    .divider {
+        width: 65px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .private {
+        font-size: 9px;
+
+        letter-spacing: 3px;
+
+        margin-bottom: 16px;
+    }
+
+
+    h1 {
+        font-size: 28px;
+
+        letter-spacing: 2px;
+
+        line-height: 1.25;
+
+        margin-bottom: 13px;
+    }
+
+
+    .tagline {
+        font-size: 15px;
+
+        margin-bottom: 32px;
+    }
+
+
+    button {
+        width: 230px;
+
+        max-width: 80vw;
+
+        padding:
+            14px 20px;
+
+        font-size: 12px;
+
+        letter-spacing: 2.5px;
+    }
+
+
+    .invite-text {
+        margin-top: 15px;
+
+        font-size: 10px;
+    }
+
+}
+
+
+/* =================================
+   VERY SMALL PHONES
+================================= */
+
+@media (max-width: 360px) {
+
+    body {
+        padding:
+            16px 12px;
+    }
+
+
+    .welcome {
+        padding:
+            18px 8px;
+    }
+
+
+    .background-logo {
+        width: 500px;
+
+        height: 500px;
+
+        opacity: 0.012;
+    }
+
+
+    .logo {
+        width: 210px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .divider {
+        width: 55px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .private {
+        font-size: 8px;
+
+        letter-spacing: 2.5px;
+
+        margin-bottom: 14px;
+    }
+
+
+    h1 {
+        font-size: 25px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .tagline {
+        font-size: 14px;
+
+        margin-bottom: 27px;
+    }
+
+
+    button {
+        width: 210px;
+
+        padding:
+            13px 18px;
+
+        font-size: 11px;
+    }
+
+
+    .invite-text {
+        font-size: 9px;
+
+        letter-spacing: 1.5px;
+    }
+
+}
