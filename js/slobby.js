@@ -408,52 +408,172 @@ if (drawTimeSelect) {
 /* =========================
    START GAME (HOST)
 ========================= */
+/* =========================
+   START GAME (HOST)
+========================= */
+
 if (startGameButton) {
+
     startGameButton.addEventListener("click", async () => {
-        if (!currentRoomCode || currentRoomData?.hostId !== currentUser?.uid) return;
+
+        if (
+            !currentRoomCode ||
+            currentRoomData?.hostId !== currentUser?.uid
+        ) {
+            return;
+        }
 
         startGameButton.disabled = true;
         startGameButton.textContent = "STARTING...";
 
         try {
-            const players = currentRoomData.players ? Object.values(currentRoomData.players) : [];
+
+            const players = currentRoomData.players
+                ? Object.values(currentRoomData.players)
+                : [];
+
+
+            // =========================
+            // MINIMUM PLAYER CHECK
+            // =========================
+
+            if (players.length < 2) {
+
+                startGameButton.disabled = false;
+                startGameButton.textContent = "🎨 START GAME";
+
+                showStatus(
+                    "At least 2 players are required to start the game."
+                );
+
+                return;
+            }
+
+
             const playerIds = players.map(p => p.id);
 
+
             const WORD_SAMPLE = {
-                easy: ["apple", "banana", "cat", "dog", "sun", "moon", "star", "tree", "car", "boat", "fish", "clock", "cake", "duck", "cloud"],
-                medium: ["guitar", "rocket", "castle", "bridge", "camera", "spider", "monkey", "turtle", "robot", "alien", "ghost", "wizard", "dragon", "pizza"],
-                hard: ["rollercoaster", "ferris wheel", "labyrinth", "black hole", "supernova", "submarine", "time machine", "treasure chest", "kaleidoscope"]
+
+                easy: [
+                    "apple",
+                    "banana",
+                    "cat",
+                    "dog",
+                    "sun",
+                    "moon",
+                    "star",
+                    "tree",
+                    "car",
+                    "boat",
+                    "fish",
+                    "clock",
+                    "cake",
+                    "duck",
+                    "cloud"
+                ],
+
+                medium: [
+                    "guitar",
+                    "rocket",
+                    "castle",
+                    "bridge",
+                    "camera",
+                    "spider",
+                    "monkey",
+                    "turtle",
+                    "robot",
+                    "alien",
+                    "ghost",
+                    "wizard",
+                    "dragon",
+                    "pizza"
+                ],
+
+                hard: [
+                    "rollercoaster",
+                    "ferris wheel",
+                    "labyrinth",
+                    "black hole",
+                    "supernova",
+                    "submarine",
+                    "time machine",
+                    "treasure chest",
+                    "kaleidoscope"
+                ]
             };
-            const pickRandomWord = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+
+            const pickRandomWord = (arr) =>
+                arr[Math.floor(Math.random() * arr.length)];
+
+
             const c1 = pickRandomWord(WORD_SAMPLE.easy);
             const c2 = pickRandomWord(WORD_SAMPLE.medium);
             const c3 = pickRandomWord(WORD_SAMPLE.hard);
 
-            // Setup initial game state
+
             const updates = {
+
                 state: "in_game",
+
                 startedAt: Date.now(),
+
                 turnIndex: 0,
+
                 currentRound: 1,
+
                 turnState: "choosing",
-                turnDrawerId: playerIds[0] || currentUser.uid,
+
+                turnDrawerId:
+                    playerIds[0] || currentUser.uid,
+
                 playerOrder: playerIds,
-                wordChoices: [c1, c2, c3],
-                choiceDeadline: Date.now() + 15000,
+
+                wordChoices: [
+                    c1,
+                    c2,
+                    c3
+                ],
+
+                choiceDeadline:
+                    Date.now() + 15000,
+
                 strokes: null,
+
                 currentWord: null,
+
                 wordHint: null,
+
                 guesses: null,
+
                 rewardsAwarded: false
             };
 
-            await update(ref(database, `scribbleRooms/${currentRoomCode}`), updates);
-            // Redirection will happen automatically in the listener
+
+            await update(
+                ref(
+                    database,
+                    `scribbleRooms/${currentRoomCode}`
+                ),
+                updates
+            );
+
         } catch (err) {
-            console.error("Error starting game:", err);
+
+            console.error(
+                "Error starting game:",
+                err
+            );
+
             startGameButton.disabled = false;
-            startGameButton.textContent = "🎨 START GAME";
-            alert("Could not start game. Please try again.");
+
+            startGameButton.textContent =
+                "🎨 START GAME";
+
+            alert(
+                "Could not start game. Please try again."
+            );
         }
     });
 }

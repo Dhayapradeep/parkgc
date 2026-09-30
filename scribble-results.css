@@ -1,18 +1,486 @@
 @import "./advanced-theme.css";
-*{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background-color:var(--bg-void);color:#e5e5e7;font-family:var(--font-body);display:flex;flex-direction:column;overflow-x:hidden}
-header{width:100%;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(8,8,12,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-gold-subtle);position:sticky;top:0;z-index:10}
-.brand{color:var(--gold-400);font-family:var(--font-heading);font-size:18px;letter-spacing:3px;font-weight:700;text-shadow:0 0 12px rgba(216,173,75,.3)}
-.header-right{display:flex;align-items:center;gap:12px}.room-code{background:rgba(216,173,75,.08);border:1px solid var(--border-gold-medium);border-radius:6px;padding:5px 12px;color:var(--gold-300);font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:2px}
-.exit-button{background:rgba(255,82,82,.08);border:1px solid rgba(255,82,82,.3);color:#ff7676;padding:6px 14px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer}
-.results-main{width:min(900px,calc(100% - 24px));margin:0 auto;flex:1;display:flex;align-items:center;justify-content:center;padding:28px 0 40px}
-.results-card{width:100%;max-width:760px;background:var(--bg-card);backdrop-filter:blur(16px);border:1px solid var(--border-gold-subtle);border-radius:14px;padding:28px;box-shadow:var(--shadow-card);text-align:center}
-.section-label{color:var(--gold-400);font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:5px;text-transform:uppercase}.results-card h1{font-size:28px;letter-spacing:3px;color:var(--gold-300);font-family:var(--font-heading);margin-bottom:6px}.small-description{color:rgba(255,255,255,.45);font-size:11px}
-.trophy-icon{font-size:52px;margin-bottom:8px;filter:drop-shadow(0 0 15px rgba(216,173,75,.5));animation:trophyGlow 2s infinite alternate}@keyframes trophyGlow{from{transform:scale(1)}to{transform:scale(1.08)}}
-.podium-row{display:flex;align-items:flex-end;justify-content:center;gap:14px;margin:26px auto 20px;max-width:520px}.podium-slot{display:flex;flex-direction:column;align-items:center;flex:1;max-width:150px;min-width:0}.podium-avatar{width:42px;height:42px;border-radius:50%;background:#181822;border:2px solid var(--border-gold-medium);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--gold-300);margin-bottom:7px}.podium-name{width:100%;max-width:120px;margin-bottom:7px;font-size:11px;font-weight:600;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.podium-pillar{width:100%;border-radius:8px 8px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:10px 4px 7px;gap:5px;border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 25px rgba(0,0,0,.7)}
-.rank-1 .podium-pillar{height:130px;background:linear-gradient(180deg,rgba(216,173,75,.4),rgba(20,16,8,.8));border-color:var(--gold-400)}.rank-2 .podium-pillar{height:100px;background:linear-gradient(180deg,rgba(180,185,200,.3),rgba(15,15,20,.8));border-color:rgba(200,205,220,.5)}.rank-3 .podium-pillar{height:80px;background:linear-gradient(180deg,rgba(205,127,50,.3),rgba(18,12,8,.8));border-color:rgba(205,127,50,.5)}
-.podium-medal{font-size:21px}.podium-pts{font-family:var(--font-mono);font-size:11px;font-weight:700;color:#eee}.podium-cp-badge{background:rgba(216,173,75,.2);border:1px solid var(--border-gold-medium);border-radius:4px;padding:2px 5px;font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--gold-300)}
-.final-scoreboard{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;background:rgba(0,0,0,.4);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.05);margin:0 auto 18px;width:min(100%,520px)}.score-row{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.04)}.score-row:last-child{border-bottom:0}.score-row strong{color:#f3d487;font-family:var(--font-mono)}
-.gameover-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.primary-btn,.secondary-btn,.danger-btn{border-radius:7px;padding:9px 13px;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.6px}.primary-btn{background:rgba(216,173,75,.18);color:var(--gold-300);border:1px solid var(--gold-400)}.secondary-btn{background:rgba(255,255,255,.05);color:#eee;border:1px solid rgba(255,255,255,.15)}.danger-btn{background:rgba(255,82,82,.08);color:#ff7676;border:1px solid rgba(255,82,82,.3)}button:disabled{opacity:.55;cursor:not-allowed}
-@media(max-width:600px){header{padding:12px 14px}.brand{font-size:13px;letter-spacing:2px}.header-right{gap:6px}.room-code{font-size:10px;padding:4px 7px;letter-spacing:1px}.exit-button{padding:6px 9px}.results-main{width:calc(100% - 16px);padding:16px 0 24px}.results-card{padding:20px 12px;border-radius:12px}.results-card h1{font-size:19px;letter-spacing:2px}.trophy-icon{font-size:42px}.podium-row{gap:7px;margin-top:20px}.podium-slot{max-width:105px}.podium-name{max-width:90px;font-size:10px}.podium-pillar{padding-left:2px;padding-right:2px}.rank-1 .podium-pillar{height:112px}.rank-2 .podium-pillar{height:86px}.rank-3 .podium-pillar{height:68px}.podium-pts{font-size:9px}.podium-cp-badge{font-size:7px}.gameover-actions{flex-direction:column;width:100%}.gameover-actions button{width:100%;min-height:40px}}
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--bg-void);
+    color: #e5e5e7;
+    font-family: var(--font-body);
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    width: 100%;
+    padding: 16px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(8, 8, 12, 0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-gold-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.brand {
+    color: var(--gold-400);
+    font-family: var(--font-heading);
+    font-size: 18px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-shadow: 0 0 12px rgba(216, 173, 75, 0.3);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.room-code {
+    background: rgba(216, 173, 75, 0.08);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 6px;
+    padding: 5px 12px;
+    color: var(--gold-300);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.exit-button {
+    background: rgba(255, 82, 82, 0.08);
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    color: #ff7676;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+
+/* =========================
+   RESULTS LAYOUT
+========================= */
+
+.results-main {
+    width: min(900px, calc(100% - 24px));
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 0 40px;
+}
+
+.results-card {
+    width: 100%;
+    max-width: 760px;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-gold-subtle);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+
+/* =========================
+   RESULTS HEADER
+========================= */
+
+.section-label {
+    color: var(--gold-400);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.results-card h1 {
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--gold-300);
+    font-family: var(--font-heading);
+    margin-bottom: 6px;
+}
+
+.small-description {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 11px;
+}
+
+.trophy-icon {
+    font-size: 52px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 15px rgba(216, 173, 75, 0.5));
+    animation: trophyGlow 2s infinite alternate;
+}
+
+@keyframes trophyGlow {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.08);
+    }
+}
+
+
+/* =========================
+   PODIUM
+========================= */
+
+.podium-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 14px;
+    margin: 26px auto 20px;
+    max-width: 520px;
+}
+
+.podium-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 150px;
+    min-width: 0;
+}
+
+.podium-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #181822;
+    border: 2px solid var(--border-gold-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--gold-300);
+    margin-bottom: 7px;
+}
+
+.podium-name {
+    width: 100%;
+    max-width: 120px;
+    margin-bottom: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #eee;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.podium-pillar {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 4px 7px;
+    gap: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+.rank-1 .podium-pillar {
+    height: 130px;
+    background: linear-gradient(
+        180deg,
+        rgba(216, 173, 75, 0.4),
+        rgba(20, 16, 8, 0.8)
+    );
+    border-color: var(--gold-400);
+}
+
+.rank-2 .podium-pillar {
+    height: 100px;
+    background: linear-gradient(
+        180deg,
+        rgba(180, 185, 200, 0.3),
+        rgba(15, 15, 20, 0.8)
+    );
+    border-color: rgba(200, 205, 220, 0.5);
+}
+
+.rank-3 .podium-pillar {
+    height: 80px;
+    background: linear-gradient(
+        180deg,
+        rgba(205, 127, 50, 0.3),
+        rgba(18, 12, 8, 0.8)
+    );
+    border-color: rgba(205, 127, 50, 0.5);
+}
+
+.podium-medal {
+    font-size: 21px;
+}
+
+.podium-pts {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #eee;
+}
+
+.podium-cp-badge {
+    background: rgba(216, 173, 75, 0.2);
+    border: 1px solid var(--border-gold-medium);
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--gold-300);
+}
+
+
+/* =========================
+   SCOREBOARD
+========================= */
+
+.final-scoreboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 0 auto 18px;
+    width: min(100%, 520px);
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.score-row:last-child {
+    border-bottom: 0;
+}
+
+.score-row strong {
+    color: #f3d487;
+    font-family: var(--font-mono);
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.gameover-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+    border-radius: 7px;
+    padding: 9px 13px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    transition: all 0.2s ease;
+}
+
+
+/* GOLD PRIMARY BUTTON */
+
+.primary-btn {
+    background: var(--gold-400);
+    color: #0b0b0f;
+    border: 1px solid var(--gold-400);
+    box-shadow: 0 0 12px rgba(216, 173, 75, 0.2);
+}
+
+.primary-btn:hover {
+    background: var(--gold-300);
+    border-color: var(--gold-300);
+    box-shadow:
+        0 0 18px rgba(216, 173, 75, 0.4),
+        0 5px 15px rgba(0, 0, 0, 0.35);
+    transform: translateY(-1px);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+
+/* SECONDARY BUTTON */
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+
+/* DANGER BUTTON */
+
+.danger-btn {
+    background: rgba(255, 82, 82, 0.08);
+    color: #ff7676;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+}
+
+.danger-btn:hover {
+    background: rgba(255, 82, 82, 0.15);
+    border-color: rgba(255, 82, 82, 0.5);
+}
+
+
+/* DISABLED BUTTON */
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   MOBILE — 360 × 800
+========================= */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 12px 14px;
+    }
+
+    .brand {
+        font-size: 13px;
+        letter-spacing: 2px;
+    }
+
+    .header-right {
+        gap: 6px;
+    }
+
+    .room-code {
+        font-size: 10px;
+        padding: 4px 7px;
+        letter-spacing: 1px;
+    }
+
+    .exit-button {
+        padding: 6px 9px;
+    }
+
+    .results-main {
+        width: calc(100% - 16px);
+        padding: 16px 0 24px;
+    }
+
+    .results-card {
+        padding: 20px 12px;
+        border-radius: 12px;
+    }
+
+    .results-card h1 {
+        font-size: 19px;
+        letter-spacing: 2px;
+    }
+
+    .trophy-icon {
+        font-size: 42px;
+    }
+
+    .podium-row {
+        gap: 7px;
+        margin-top: 20px;
+    }
+
+    .podium-slot {
+        max-width: 105px;
+    }
+
+    .podium-name {
+        max-width: 90px;
+        font-size: 10px;
+    }
+
+    .podium-pillar {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .rank-1 .podium-pillar {
+        height: 112px;
+    }
+
+    .rank-2 .podium-pillar {
+        height: 86px;
+    }
+
+    .rank-3 .podium-pillar {
+        height: 68px;
+    }
+
+    .podium-pts {
+        font-size: 9px;
+    }
+
+    .podium-cp-badge {
+        font-size: 7px;
+    }
+
+    .gameover-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .gameover-actions button {
+        width: 100%;
+        min-height: 40px;
+    }
+}
