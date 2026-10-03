@@ -668,12 +668,10 @@ onAuthStateChanged(auth, async (user) => {
 
 
 async function loadUserProfile() {
+
     try {
 
-        const userRef = ref(
-            database,
-            `users/${currentUser.uid}`
-        );
+        const userRef = ref(database, `users/${currentUser.uid}`);
 
         const snap = await get(userRef);
 
@@ -681,30 +679,16 @@ async function loadUserProfile() {
 
             const data = snap.val();
 
-            currentUsername =
-                data.username ||
-                data.displayName ||
-                currentUser.displayName ||
-                currentUser.email?.split("@")[0] ||
-                "Player";
+            currentUsername = data.username || data.displayName || "Artist";
 
-        } else {
-
-            currentUsername =
-                currentUser.displayName ||
-                currentUser.email?.split("@")[0] ||
-                "Player";
         }
 
     } catch (e) {
 
         console.error("Profile load error:", e);
 
-        currentUsername =
-            currentUser.displayName ||
-            currentUser.email?.split("@")[0] ||
-            "Player";
     }
+
 }
 
 
@@ -1177,12 +1161,9 @@ function renderChoosingView(room, isDrawer) {
 
         waitingForWordOverlay.classList.remove("hidden");
 
-        const drawerName =
-          room.players?.[room.turnDrawerId]?.name ||
-             "Player";
+        const drawerName = room.players?.[room.turnDrawerId]?.name || "Artist";
 
-           waitingDrawerText.textContent =
-         `${drawerName} is choosing a word...`;
+        waitingDrawerText.textContent = `${drawerName} is choosing a word...`;
 
     }
 
@@ -1308,10 +1289,7 @@ async function hostCommitWordSelection(word) {
 
 
 
-        const drawerName =
-    currentRoomData.players?.[currentRoomData.turnDrawerId]?.name ||
-    currentUsername ||
-    "Player";
+        const drawerName = currentRoomData.players?.[currentRoomData.turnDrawerId]?.name || "Artist";
 
         await broadcastSystemMessage(`${drawerName} is now drawing!`);
 
