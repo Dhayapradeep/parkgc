@@ -999,49 +999,61 @@ function renderRoomState(room) {
 
     // Input state
 
-    const myGuess = room.guesses?.[currentUser.uid];
+    // =========================================================
+// CHAT + GUESS INPUT
+// Everyone can chat.
+// Only eligible players can submit a guess.
+// =========================================================
+
+const myGuess = room.guesses?.[currentUser.uid];
+
+const gameIsActive =
+    room.state !== "game_over" &&
+    room.turnState !== "game_over";
+
+if (gameIsActive) {
+
+    guessInput.disabled = false;
+    sendGuessBtn.disabled = false;
 
     if (isDrawer) {
 
-        guessInput.disabled = true;
+        guessInput.placeholder = "Chat with everyone...";
 
-        sendGuessBtn.disabled = true;
-
-        guessInput.placeholder = "You are drawing! Don't spoil the word.";
-
-        guessFeedback.textContent = "🎨 You are the artist for this round.";
+        guessFeedback.textContent =
+            "🎨 You are drawing. You can still chat.";
 
     } else if (myGuess) {
 
-        guessInput.disabled = true;
+        guessInput.placeholder = "Chat with everyone...";
 
-        sendGuessBtn.disabled = true;
-
-        guessInput.placeholder = "You guessed the word! Spectating...";
-
-        guessFeedback.textContent = `✅ Correct! +${myGuess.points} points.`;
+        guessFeedback.textContent =
+            `✅ Correct! +${myGuess.points} points. You can still chat.`;
 
     } else if (room.turnState === "drawing") {
 
-        guessInput.disabled = false;
-
-        sendGuessBtn.disabled = false;
-
-        guessInput.placeholder = "Type your guess here...";
+        guessInput.placeholder =
+            "Type a guess or chat...";
 
         guessFeedback.textContent = "";
 
     } else {
 
-        guessInput.disabled = true;
-
-        sendGuessBtn.disabled = true;
-
-        guessInput.placeholder = "Waiting for next turn...";
+        guessInput.placeholder =
+            "Chat with everyone...";
 
         guessFeedback.textContent = "";
-
     }
+
+} else {
+
+    guessInput.disabled = true;
+    sendGuessBtn.disabled = true;
+
+    guessInput.placeholder = "Game over";
+
+    guessFeedback.textContent = "";
+}
 
 
 
@@ -1265,6 +1277,8 @@ async function hostCommitWordSelection(word) {
 
             hintRevealed1: null,
 
+            turnSkipped: false,
+
             hintRevealed2: null,
 
             guesses: null,
@@ -1396,83 +1410,89 @@ async function revealLetterHint(hintNum) {
 if (guessForm) {
 
     guessForm.addEventListener("submit", async (e) => {
-
         e.preventDefault();
 
-        const guess = guessInput.value.trim();
+        const message = guessInput.value.trim();
 
-        if (!guess || !currentRoomData || currentRoomData.turnState !== "drawing") return;
-
-
+        if (!message || !currentRoomData || !currentUser) {
+            return;
+        }
 
         guessInput.value = "";
 
+        const room = currentRoomData;
 
-
-        if (currentRoomData.turnDrawerId === currentUser.uid) {
-
-            showFeedback("You are drawing! You cannot guess.");
-
+        /*
+         * If we're not currently drawing, the input acts purely
+         * as chat.
+         */
+        if (room.turnState !== "drawing") {
+            await pushChatMessage(message);
             return;
-
         }
 
-
-
-        if (currentRoomData.guesses?.[currentUser.uid]) {
-
-            showFeedback("You already guessed correctly!");
-
+        /*
+         * DRAWER:
+         * Cannot guess, but CAN CHAT.
+         */
+        if (room.turnDrawerId === currentUser.uid) {
+            await pushChatMessage(message);
             return;
-
         }
 
+        /*
+         * PLAYER ALREADY GUESSED:
+         * Cannot guess again, but CAN CHAT.
+         */
+        if (room.guesses?.[currentUser.uid]) {
+            await pushChatMessage(message);
+            return;
+        }
 
+        const targetWord = (room.currentWord || "")
+            .toLowerCase()
+            .trim();
 
-        const targetWord = (currentRoomData.currentWord || "").toLowerCase().trim();
+        const cleanedGuess = message
+            .toLowerCase()
+            .trim();
 
-        const cleanedGuess = guess.toLowerCase().trim();
-
-
-
-        // 1. EXACT MATCH (with and without spaces for multi-word phrases)
-
+        /*
+         * EXACT MATCH
+         */
         const targetNoSpace = targetWord.replace(/\s+/g, "");
-
         const guessNoSpace = cleanedGuess.replace(/\s+/g, "");
 
-        if (cleanedGuess === targetWord || (targetNoSpace.length >= 3 && guessNoSpace === targetNoSpace)) {
-
+        if (
+            cleanedGuess === targetWord ||
+            (
+                targetNoSpace.length >= 3 &&
+                guessNoSpace === targetNoSpace
+            )
+        ) {
             await handleCorrectGuess();
-
             return;
-
         }
 
-
-
-        // 2. CLOSE GUESS (Levenshtein distance == 1)
-
-        if (levenshteinDistance(cleanedGuess, targetWord) === 1 && targetWord.length >= 4) {
-
+        /*
+         * CLOSE GUESS
+         */
+        if (
+            levenshteinDistance(cleanedGuess, targetWord) === 1 &&
+            targetWord.length >= 4
+        ) {
             addLocalChatMessage({
-
                 isClose: true,
-
-                text: `💡 "${escapeHtml(guess)}" is very close!`
-
+                text: `💡 "${escapeHtml(message)}" is very close!`
             });
 
             return;
-
         }
 
-
-
-        // 3. REGULAR CHAT MESSAGE
-
-        await pushChatMessage(guess);
-
+        /*
+         * NORMAL CHAT
+         */
+        await pushChatMessage(message);
     });
 
 }
@@ -1480,89 +1500,123 @@ if (guessForm) {
 
 
 async function handleCorrectGuess() {
+    if (!currentRoomCode || !currentUser || !currentRoomData) return;
 
-    playSuccessChime();
-
-
-
-    const endTime = currentRoomData.turnEndTime || (Date.now() + 60000);
-
-    const totalDuration = (currentRoomData.settings?.drawTime || 60) * 1000;
-
-    const remainingMs = Math.max(0, endTime - Date.now());
-
-    const scoreRatio = remainingMs / totalDuration;
-
-
-
-    const earnedPoints = Math.max(100, Math.round(scoreRatio * 500));
-
-    const drawerBonus = 75;
-
-
-
-    // 1. Record player guess
-
-    await update(ref(database, `scribbleRooms/${currentRoomCode}/guesses/${currentUser.uid}`), {
-
-        userId: currentUser.uid,
-
-        userName: currentUsername,
-
-        points: earnedPoints,
-
-        guessedAt: Date.now()
-
-    });
-
-
-
-    // 2. Add score to guesser
-
-    await runTransaction(ref(database, `scribbleRooms/${currentRoomCode}/players/${currentUser.uid}/score`), (current) => {
-
-        return (Number(current) || 0) + earnedPoints;
-
-    });
-
-
-
-    // 3. Add bonus to drawer
+    if (currentRoomData.turnState !== "drawing") return;
 
     const drawerId = currentRoomData.turnDrawerId;
 
-    if (drawerId) {
+    // The drawer can never be a guesser.
+    if (!drawerId || drawerId === currentUser.uid) return;
 
-        await runTransaction(ref(database, `scribbleRooms/${currentRoomCode}/players/${drawerId}/score`), (current) => {
+    playSuccessChime();
 
-            return (Number(current) || 0) + drawerBonus;
+    const guessesRef = ref(
+        database,
+        `scribbleRooms/${currentRoomCode}/guesses`
+    );
 
-        });
+    let earnedPoints = 0;
+    let guessOrder = 0;
 
+    /*
+     * IMPORTANT:
+     * The transaction decides who was first, second, third, etc.
+     * This prevents client/network timing from changing the score.
+     */
+    const transactionResult = await runTransaction(
+        guessesRef,
+        (currentGuesses) => {
+
+            const guesses =
+                currentGuesses &&
+                typeof currentGuesses === "object"
+                    ? { ...currentGuesses }
+                    : {};
+
+            // Already recorded — do nothing.
+            if (guesses[currentUser.uid]) {
+                return;
+            }
+
+            guessOrder = Object.keys(guesses).length + 1;
+
+            // 1st = 500
+            // 2nd = 400
+            // 3rd = 300
+            // 4th = 200
+            // 5th+ = 100
+            earnedPoints = Math.max(
+                100,
+                600 - (guessOrder * 100)
+            );
+
+            guesses[currentUser.uid] = {
+                userId: currentUser.uid,
+                userName: currentUsername,
+                points: earnedPoints,
+                guessOrder: guessOrder,
+                guessedAt: Date.now()
+            };
+
+            return guesses;
+        }
+    );
+
+    // Another request already recorded this player.
+    if (!transactionResult.committed) {
+        showFeedback("You already guessed the word!");
+        return;
     }
 
+    /*
+     * Add points to the guesser.
+     * runTransaction makes this safe even if multiple score
+     * updates happen at the same time.
+     */
+    await runTransaction(
+        ref(
+            database,
+            `scribbleRooms/${currentRoomCode}/players/${currentUser.uid}/score`
+        ),
+        (currentScore) => {
+            return (Number(currentScore) || 0) + earnedPoints;
+        }
+    );
 
+    /*
+     * Drawer receives +75 for every valid correct guess.
+     */
+    if (drawerId) {
+        await runTransaction(
+            ref(
+                database,
+                `scribbleRooms/${currentRoomCode}/players/${drawerId}/score`
+            ),
+            (currentScore) => {
+                return (Number(currentScore) || 0) + 75;
+            }
+        );
+    }
 
-    // 4. Send chat alert
+    /*
+     * Correct-answer chat notification.
+     */
+    await push(
+        ref(database, `scribbleRooms/${currentRoomCode}/chat`),
+        {
+            type: "correct",
+            userName: currentUsername,
+            points: earnedPoints,
+            guessOrder: guessOrder,
+            timestamp: Date.now()
+        }
+    );
 
-    await push(ref(database, `scribbleRooms/${currentRoomCode}/chat`), {
-
-        type: "correct",
-
-        userName: currentUsername,
-
-        points: earnedPoints,
-
-        timestamp: Date.now()
-
-    });
-
-
-
-    // 5. Check if all guessers have guessed
-
-    checkIfAllGuessed();
-
+    /*
+     * Check whether everyone except the drawer has guessed.
+     */
+    await checkIfAllGuessed();
 }
 
 
@@ -1607,6 +1661,60 @@ async function checkIfAllGuessed() {
 
 }
 
+async function skipUnchosenTurn() {
+
+    if (!currentRoomCode) return;
+
+    try {
+
+        const roomRef = ref(
+            database,
+            `scribbleRooms/${currentRoomCode}`
+        );
+
+        const snap = await get(roomRef);
+
+        if (!snap.exists()) return;
+
+        const room = snap.val();
+
+        // The drawer may have selected the word
+        // while the host timer was processing.
+        if (room.turnState !== "choosing") {
+            return;
+        }
+
+        // Extra safety check.
+        if (room.currentWord) {
+            return;
+        }
+
+        await update(roomRef, {
+
+            turnState: "turn_end",
+
+            turnEndReason:
+                "⏭️ No word was chosen — turn skipped!",
+
+            turnSkipped: true,
+
+            currentWord: null,
+            wordHint: null,
+
+            guesses: null,
+            strokes: null,
+
+            recapUntil: Date.now() + 4000
+        });
+
+    } catch (e) {
+
+        console.error(
+            "Failed to skip unchosen turn:",
+            e
+        );
+    }
+}
 
 
 /* =========================================================
@@ -1657,7 +1765,15 @@ function renderTurnEndView(room) {
 
     recapTitle.textContent = room.turnEndReason || "ROUND OVER!";
 
-    recapWord.textContent = (room.currentWord || "").toUpperCase();
+    if (room.turnSkipped) {
+
+    recapWord.textContent = "TURN SKIPPED";
+
+} else {
+
+    recapWord.textContent =
+        (room.currentWord || "").toUpperCase();
+}
 
 
 
@@ -1800,6 +1916,8 @@ async function advanceToNextTurn() {
         hintRevealed2: null,
 
         guesses: null,
+
+        turnSkipped: false,
 
         strokes: null,
 
