@@ -805,27 +805,27 @@ function startGameTicker() {
 
 
 
-            // If time expires and word not picked: Host auto-selects word 1!
+            // If drawer does not choose a word within 15 seconds,
+// skip their turn and move to the next player.
+if (remaining <= 0 && isHost && !isAdvancingTurn) {
+    isAdvancingTurn = true;
 
-            if (remaining <= 0 && isHost && !isAdvancingTurn) {
+    try {
+        const skippedDrawer =
+            room.players?.[room.turnDrawerId]?.name || "Player";
 
-                isAdvancingTurn = true;
+        await broadcastSystemMessage(
+            `⏭️ ${skippedDrawer} did not choose a word. Their turn was skipped.`
+        );
 
-                const rawChoices = room.wordChoices;
+        await advanceToNextTurn();
 
-                const choices = Array.isArray(rawChoices)
-
-                    ? rawChoices
-
-                    : (rawChoices && typeof rawChoices === "object" ? Object.values(rawChoices) : []);
-
-                const defaultWord = choices[0] || getRandomWord(WORD_BANK.easy);
-
-                await hostCommitWordSelection(defaultWord);
-
-                isAdvancingTurn = false;
-
-            }
+    } catch (e) {
+        console.error("Failed to skip inactive drawer:", e);
+    } finally {
+        isAdvancingTurn = false;
+    }
+}
 
         }
 
