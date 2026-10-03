@@ -55,6 +55,26 @@ const memberCountElement =
         "memberCount"
     );
 
+    const pfpModal =
+    document.getElementById(
+        "pfpModal"
+    );
+
+const pfpModalImage =
+    document.getElementById(
+        "pfpModalImage"
+    );
+
+const pfpModalName =
+    document.getElementById(
+        "pfpModalName"
+    );
+
+const closePfp =
+    document.getElementById(
+        "closePfp"
+    );
+
 
 /* =========================
    BACK TO DASHBOARD
@@ -171,22 +191,26 @@ function loadLeaderboard(
 
                         return {
 
-                            uid: uid,
+    uid: uid,
 
-                            username:
-                                user.username ||
-                                "Unknown",
+    username:
+        user.username ||
+        "Unknown",
 
-                            badge:
-                                user.badge ||
-                                "NEWBIE",
+    badge:
+        user.badge ||
+        "NEWBIE",
 
-                            chaosPoints:
-                                Number(
-                                    user.chaosPoints
-                                ) || 0
+    profilePicture:
+        user.profilePicture ||
+        null,
 
-                        };
+    chaosPoints:
+        Number(
+            user.chaosPoints
+        ) || 0
+
+};
 
                     }
                 );
@@ -381,59 +405,134 @@ function loadLeaderboard(
 
 
                     /* =========================
-                       CREATE CONTENT
-                    ========================= */
+   CREATE CONTENT
+========================= */
 
-                    item.innerHTML =
-                        `
-                        <div class="rank-number">
+item.innerHTML =
+    `
+    <div class="rank-number">
 
-                            ${rankDisplay}
+        ${rankDisplay}
 
-                        </div>
-
-
-                        <div class="player-info">
-
-                            <div class="player-name">
-
-                                ${user.username}
-
-                                ${
-                                    user.uid ===
-                                    currentUserId
-
-                                    ? " (YOU)"
-
-                                    : ""
-                                }
-
-                            </div>
+    </div>
 
 
-                            <div class="player-badge">
+    <div
+        class="player-avatar"
+        data-uid="${user.uid}"
+    >
 
-                                ${getBadgeDisplay(
-                                    user.badge
-                                )}
-
-                            </div>
-
-                        </div>
+    </div>
 
 
-                        <div class="player-points">
+    <div class="player-info">
 
-                            ${user.chaosPoints}
+        <div class="player-name">
 
-                            <span>
+            ${user.username}
 
-                                CHAOS POINTS
+            ${
+                user.uid ===
+                currentUserId
 
-                            </span>
+                ? " (YOU)"
 
-                        </div>
-                        `;
+                : ""
+            }
+
+        </div>
+
+
+        <div class="player-badge">
+
+            ${getBadgeDisplay(
+                user.badge
+            )}
+
+        </div>
+
+    </div>
+
+
+    <div class="player-points">
+
+        ${user.chaosPoints}
+
+        <span>
+
+            CHAOS POINTS
+
+        </span>
+
+    </div>
+    `;
+
+    /* =========================
+   PROFILE PICTURE
+========================= */
+
+const playerAvatar =
+    item.querySelector(
+        ".player-avatar"
+    );
+
+
+if (
+    playerAvatar &&
+    user.profilePicture
+) {
+
+    const image =
+        document.createElement(
+            "img"
+        );
+
+    image.src =
+        user.profilePicture;
+
+    image.alt =
+        `${user.username}'s profile picture`;
+
+
+    playerAvatar.appendChild(
+        image
+    );
+
+
+    playerAvatar.classList.add(
+        "has-pfp"
+    );
+
+
+    /* =========================
+       OPEN PFP PREVIEW
+    ========================= */
+
+    playerAvatar.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+            openPfpPreview(
+                user.profilePicture,
+                user.username
+            );
+
+        }
+    );
+
+}
+else if (playerAvatar) {
+
+    /* Default avatar */
+
+    playerAvatar.textContent =
+        user.username
+            .charAt(0)
+            .toUpperCase();
+
+}
 
 
                     leaderboardList.appendChild(
@@ -488,3 +587,102 @@ function getBadgeDisplay(
     }
 
 }
+
+/* =========================
+   OPEN PFP PREVIEW
+========================= */
+
+function openPfpPreview(
+    image,
+    username
+) {
+
+    if (!pfpModal) return;
+
+    pfpModalImage.src =
+        image;
+
+    pfpModalName.textContent =
+        username;
+
+    pfpModal.classList.add(
+        "active"
+    );
+}
+
+
+/* =========================
+   CLOSE PFP
+========================= */
+
+function closePfpPreview() {
+
+    if (!pfpModal) return;
+
+    pfpModal.classList.remove(
+        "active"
+    );
+
+    pfpModalImage.src =
+        "";
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+if (closePfp) {
+
+    closePfp.addEventListener(
+        "click",
+        closePfpPreview
+    );
+
+}
+
+
+/* =========================
+   CLICK OUTSIDE
+========================= */
+
+if (pfpModal) {
+
+    pfpModal.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                pfpModal
+            ) {
+
+                closePfpPreview();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================
+   ESCAPE KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closePfpPreview();
+
+        }
+
+    }
+);
