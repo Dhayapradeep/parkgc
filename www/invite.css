@@ -226,9 +226,9 @@ h1 {
 
     background: var(--bg-card);
 
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
 
-    -webkit-backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(6px);
 
     border:
         1px solid

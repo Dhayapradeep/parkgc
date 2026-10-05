@@ -251,8 +251,8 @@ header {
     background:
         rgba(8, 8, 12, 0.82);
 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
 
     border-bottom:
         1px solid var(--border-gold-subtle);
@@ -487,8 +487,8 @@ main {
     background:
         var(--bg-card);
 
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
     border:
         1px solid var(--border-gold-subtle);
@@ -632,8 +632,8 @@ main {
     background:
         var(--bg-card);
 
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
     border:
         1px solid var(--border-subtle);
@@ -790,7 +790,7 @@ main {
     background:
         var(--bg-card);
 
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
 
     border:
         1px solid var(--border-subtle);
@@ -995,7 +995,7 @@ main {
     background:
         var(--bg-card);
 
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
 
     border:
         1px solid var(--border-gold-subtle);

@@ -82,6 +82,8 @@ header {
 
     font-size: 15px;
 
+    margin-bottom: 1px;
+
     cursor: pointer;
 
 }
@@ -282,7 +284,7 @@ main {
     min-width: 155px;
     padding: 12px 18px;
     background: linear-gradient(135deg, rgba(216, 173, 75, 0.12) 0%, rgba(18, 18, 26, 0.8) 100%);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(6px);
     border: 1px solid var(--border-gold-medium);
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(216, 173, 75, 0.15);
@@ -307,6 +309,7 @@ main {
     font-weight: 700;
     text-transform: uppercase;
 }
+
 
 .chaos-points strong {
     color: var(--gold-300);
@@ -391,7 +394,7 @@ main {
 
     flex-wrap: wrap;
 
-    gap: 8px;
+    gap: 7px;
 
 }
 
@@ -403,13 +406,16 @@ main {
     
 
     border: 1px solid
-        #d8ad4b;
+        var(--border-gold-medium);
 
     border-radius: 4px;
 
-    color: smokywhite;
+    background: var(--gold-gradient);
+
+     color: var(--bg-void);
 
     font-size: 10px;
+    font-weight: 500;
 
 }
 
@@ -441,8 +447,8 @@ main {
     align-items: center;
     gap: 20px;
     background: var(--bg-card);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border: 1px solid var(--border-gold-subtle);
     border-radius: 14px;
     cursor: pointer;
@@ -514,7 +520,7 @@ main {
     width: 100%;
     min-height: 110px;
     background: linear-gradient(135deg, rgba(216, 173, 75, 0.12) 0%, rgba(14, 14, 20, 0.85) 100%);
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
     border: 1px solid var(--border-gold-medium);
     border-radius: 14px;
     padding: 24px 30px;
@@ -658,13 +664,13 @@ main {
 
     gap: 10px;
 
-    background:
-        rgba(216, 173, 75, 0.12);
 
     border: 1px solid
         rgba(216, 173, 75, 0.45);
 
-    color: #d8ad4b;
+     background: var(--gold-gradient);
+
+     color: var(--bg-void);
 
     padding: 10px 18px;
 
@@ -685,9 +691,9 @@ main {
 
 .leaderboard-banner:hover .leaderboard-banner-cta {
 
-    background: #d8ad4b;
+    background: var(--gold-gradient);
 
-    color: #050505;
+     color: var(--bg-void);
 
     box-shadow:
         0 0 15px rgba(216, 173, 75, 0.4);
@@ -783,6 +789,28 @@ main {
 
     transform:
         translateY(-2px);
+
+}
+
+#adminPanelButton {
+
+    background: var(--gold-gradient);
+
+    color: var(--bg-void);
+
+    padding: 8px 12px;
+
+    border-radius: 6px;
+
+    font-size: 20px;
+
+    letter-spacing: 1.5px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    transition: all 0.2s ease;
 
 }
 

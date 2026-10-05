@@ -29,7 +29,7 @@ header {
     justify-content: space-between;
     align-items: center;
     background: rgba(8, 8, 12, 0.85);
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--border-gold-subtle);
     position: sticky;
     top: 0;
@@ -131,7 +131,7 @@ main {
     padding: 24px 32px;
     margin-bottom: 35px;
     background: linear-gradient(135deg, rgba(216, 173, 75, 0.12) 0%, rgba(16, 16, 24, 0.8) 100%);
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
     border: 1px solid var(--border-gold-medium);
     border-radius: 14px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(216, 173, 75, 0.15);
@@ -231,7 +231,7 @@ main {
     gap: 18px;
     padding: 16px 22px;
     background: var(--bg-card);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(6px);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
     transition: all var(--trans-smooth);

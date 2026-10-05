@@ -40,22 +40,6 @@ const ROUND_DURATION = 15 * 1000;
 
 
 /* =========================
-   LOCAL STORAGE
-========================= */
-
-/*
-   This remembers the room the player
-   was connected to.
-
-   IMPORTANT:
-   This does NOT contain game data.
-   Firebase remains the source of truth.
-*/
-
-const SAVED_ROOM_KEY = "lastWordRoomCode";
-
-
-/* =========================
    ELEMENTS
 ========================= */
 
@@ -137,26 +121,21 @@ onAuthStateChanged(
                 "login.html";
 
             return;
-
         }
-
 
         currentUser = user;
 
-
         await loadUserProfile();
 
-
         /*
-           Check whether this user has
-           an existing Last Word room.
+            IMPORTANT:
 
-           This is especially useful if
-           the user accidentally leaves
-           and returns to the lobby.
+            We intentionally DO NOT check
+            localStorage for an old room.
+
+            Every time the player opens
+            Last Word, they start fresh.
         */
-
-        await checkSavedRoom();
 
     }
 );
@@ -176,16 +155,13 @@ async function loadUserProfile() {
                 `users/${currentUser.uid}`
             );
 
-
         const snapshot =
             await get(userRef);
-
 
         if (snapshot.exists()) {
 
             const data =
                 snapshot.val();
-
 
             currentUsername =
                 data.username ||
@@ -199,198 +175,6 @@ async function loadUserProfile() {
 
         console.error(
             "Unable to load user:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   CHECK SAVED ROOM
-========================= */
-
-async function checkSavedRoom() {
-
-    const savedRoomCode =
-        localStorage.getItem(
-            SAVED_ROOM_KEY
-        );
-
-
-    if (!savedRoomCode) {
-
-        return;
-
-    }
-
-
-    const roomCode =
-        savedRoomCode
-            .trim()
-            .toUpperCase();
-
-
-    try {
-
-        const roomRef =
-            ref(
-                database,
-                `lastWordRooms/${roomCode}`
-            );
-
-
-        const snapshot =
-            await get(roomRef);
-
-
-        /*
-           Saved room no longer exists.
-        */
-
-        if (!snapshot.exists()) {
-
-            localStorage.removeItem(
-                SAVED_ROOM_KEY
-            );
-
-            return;
-
-        }
-
-
-        const room =
-            snapshot.val();
-
-
-        const player =
-            room.players?.[
-                currentUser.uid
-            ];
-
-
-        /*
-           User is not part of this room.
-        */
-
-        if (!player) {
-
-            localStorage.removeItem(
-                SAVED_ROOM_KEY
-            );
-
-            return;
-
-        }
-
-
-        /*
-           GAME ALREADY FINISHED
-        */
-
-        if (
-            room.status ===
-            "finished"
-        ) {
-
-            localStorage.removeItem(
-                SAVED_ROOM_KEY
-            );
-
-            return;
-
-        }
-
-
-        /*
-           PLAYER WAS MARKED AS LEFT.
-
-           Restore them instead of creating
-           a new player record.
-
-           MOST IMPORTANT PART:
-           We only change leftGame.
-
-           We DO NOT reset score,
-           answers, rank, etc.
-        */
-
-        if (player.leftGame === true) {
-
-            const playerRef =
-                ref(
-                    database,
-                    `lastWordRooms/${roomCode}/players/${currentUser.uid}`
-                );
-
-
-            await update(
-                playerRef,
-                {
-                    leftGame: false
-                }
-            );
-
-        }
-
-
-        /*
-           Remember the room again.
-        */
-
-        localStorage.setItem(
-            SAVED_ROOM_KEY,
-            roomCode
-        );
-
-
-        currentRoomCode =
-            roomCode;
-
-
-        /*
-           If the game is already running,
-           go directly back to the game.
-
-           DO NOT create a new game.
-        */
-
-        if (
-            room.status === "playing" ||
-            room.status === "roundResult"
-        ) {
-
-            window.location.href =
-                `lw.html?room=${encodeURIComponent(roomCode)}`;
-
-            return;
-
-        }
-
-
-        /*
-           If the room is waiting,
-           restore the lobby.
-        */
-
-        setupCard.classList.add(
-            "hidden"
-        );
-
-        roomCard.classList.remove(
-            "hidden"
-        );
-
-
-        listenToRoom();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "CHECK SAVED ROOM ERROR:",
             error
         );
 
@@ -450,13 +234,11 @@ async function createRoom() {
             "PLEASE WAIT FOR LOGIN.";
 
         return;
-
     }
 
 
     createRoomButton.disabled =
         true;
-
 
     setupStatus.textContent =
         "CREATING ROOM...";
@@ -469,11 +251,14 @@ async function createRoom() {
         let exists = true;
 
 
+        /*
+            Generate a unique room code.
+        */
+
         while (exists) {
 
             roomCode =
                 generateRoomCode();
-
 
             const roomCheckRef =
                 ref(
@@ -481,12 +266,10 @@ async function createRoom() {
                     `lastWordRooms/${roomCode}`
                 );
 
-
             const snapshot =
                 await get(
                     roomCheckRef
                 );
-
 
             exists =
                 snapshot.exists();
@@ -500,10 +283,13 @@ async function createRoom() {
                 `lastWordRooms/${roomCode}`
             );
 
-
         const now =
             Date.now();
 
+
+        /*
+            Create the room.
+        */
 
         await set(
             roomRef,
@@ -598,13 +384,11 @@ async function createRoom() {
 
 
         /*
-           SAVE ROOM CODE LOCALLY
-        */
+            IMPORTANT:
 
-        localStorage.setItem(
-            SAVED_ROOM_KEY,
-            roomCode
-        );
+            We do NOT save the room code
+            in localStorage.
+        */
 
 
         setupCard.classList.add(
@@ -614,7 +398,6 @@ async function createRoom() {
         roomCard.classList.remove(
             "hidden"
         );
-
 
         listenToRoom();
 
@@ -627,10 +410,8 @@ async function createRoom() {
             error
         );
 
-
         setupStatus.textContent =
             "FAILED TO CREATE ROOM.";
-
 
         createRoomButton.disabled =
             false;
@@ -662,7 +443,6 @@ async function joinRoom() {
             "PLEASE WAIT FOR LOGIN.";
 
         return;
-
     }
 
 
@@ -678,13 +458,11 @@ async function joinRoom() {
             "ENTER A ROOM CODE.";
 
         return;
-
     }
 
 
     joinRoomButton.disabled =
         true;
-
 
     setupStatus.textContent =
         "JOINING ROOM...";
@@ -698,7 +476,6 @@ async function joinRoom() {
                 `lastWordRooms/${roomCode}`
             );
 
-
         const snapshot =
             await get(roomRef);
 
@@ -709,27 +486,25 @@ async function joinRoom() {
                 "ROOM DOES NOT EXIST.";
 
             return;
-
         }
 
 
         const room =
             snapshot.val();
 
-
         const players =
             room.players || {};
 
 
         /*
-           ==================================
-           EXISTING PLAYER REJOIN
-           ==================================
+            ==================================
+            EXISTING PLAYER
+            ==================================
 
-           If this user already has a player
-           record, DO NOT create a new one.
+            This only happens when the player
+            explicitly enters a room code.
 
-           Restore the existing player.
+            There is NO automatic restoration.
         */
 
         const existingPlayer =
@@ -741,7 +516,7 @@ async function joinRoom() {
         if (existingPlayer) {
 
             /*
-               GAME FINISHED
+                GAME FINISHED
             */
 
             if (
@@ -765,9 +540,9 @@ async function joinRoom() {
 
 
             /*
-               ONLY RESTORE CONNECTION.
-
-               NOTHING ELSE IS RESET.
+                The player deliberately entered
+                this room code, so allow them
+                back into the room.
             */
 
             await update(
@@ -782,15 +557,9 @@ async function joinRoom() {
                 roomCode;
 
 
-            localStorage.setItem(
-                SAVED_ROOM_KEY,
-                roomCode
-            );
-
-
             /*
-               If game already started,
-               continue existing game.
+                If the game is already running,
+                continue the existing game.
             */
 
             if (
@@ -807,7 +576,7 @@ async function joinRoom() {
 
 
             /*
-               Otherwise return to lobby.
+                Waiting lobby.
             */
 
             setupCard.classList.add(
@@ -818,7 +587,6 @@ async function joinRoom() {
                 "hidden"
             );
 
-
             listenToRoom();
 
             return;
@@ -827,9 +595,9 @@ async function joinRoom() {
 
 
         /*
-           ==================================
-           NEW PLAYER
-           ==================================
+            ==================================
+            NEW PLAYER
+            ==================================
         */
 
         if (
@@ -908,12 +676,6 @@ async function joinRoom() {
             roomCode;
 
 
-        localStorage.setItem(
-            SAVED_ROOM_KEY,
-            roomCode
-        );
-
-
         setupCard.classList.add(
             "hidden"
         );
@@ -921,7 +683,6 @@ async function joinRoom() {
         roomCard.classList.remove(
             "hidden"
         );
-
 
         listenToRoom();
 
@@ -933,7 +694,6 @@ async function joinRoom() {
             "JOIN ROOM ERROR:",
             error
         );
-
 
         setupStatus.textContent =
             "FAILED TO JOIN ROOM.";
@@ -962,7 +722,6 @@ function listenToRoom() {
     ) {
 
         return;
-
     }
 
 
@@ -981,18 +740,33 @@ function listenToRoom() {
         roomRef,
         function (snapshot) {
 
+            /*
+                Room has been deleted.
+            */
+
             if (!snapshot.exists()) {
 
-                localStorage.removeItem(
-                    SAVED_ROOM_KEY
-                );
+                currentRoomData =
+                    null;
 
+                currentRoomCode =
+                    null;
+
+                roomListenerStarted =
+                    false;
 
                 roomStatusText.textContent =
                     "ROOM NO LONGER EXISTS.";
 
-                return;
+                setupCard.classList.remove(
+                    "hidden"
+                );
 
+                roomCard.classList.add(
+                    "hidden"
+                );
+
+                return;
             }
 
 
@@ -1001,8 +775,8 @@ function listenToRoom() {
 
 
             /*
-               Make sure this player still
-               exists in the room.
+                Make sure this player still
+                exists in the room.
             */
 
             const player =
@@ -1013,8 +787,24 @@ function listenToRoom() {
 
             if (!player) {
 
-                return;
+                currentRoomCode =
+                    null;
 
+                currentRoomData =
+                    null;
+
+                roomListenerStarted =
+                    false;
+
+                setupCard.classList.remove(
+                    "hidden"
+                );
+
+                roomCard.classList.add(
+                    "hidden"
+                );
+
+                return;
             }
 
 
@@ -1024,15 +814,14 @@ function listenToRoom() {
 
 
             /*
-               BOTH HOST AND PLAYERS
-               GO TO THE EXISTING GAME.
-
-               No game creation happens here.
+                If the game has started,
+                go to the game page.
             */
 
             if (
                 currentRoomData.status ===
                 "playing" ||
+
                 currentRoomData.status ===
                 "roundResult"
             ) {
@@ -1059,8 +848,8 @@ function renderRoom(room) {
 
 
     /*
-       Don't show players who intentionally
-       left temporarily.
+        Hide players who are marked
+        as having left.
     */
 
     const playerEntries =
@@ -1117,7 +906,6 @@ function renderRoom(room) {
                     "div"
                 );
 
-
             playerElement.className =
                 "player";
 
@@ -1147,14 +935,11 @@ function renderRoom(room) {
                         "span"
                     );
 
-
                 hostBadge.className =
                     "host-badge";
 
-
                 hostBadge.textContent =
                     "👑 HOST";
-
 
                 playerElement.appendChild(
                     hostBadge
@@ -1172,7 +957,7 @@ function renderRoom(room) {
 
 
     /*
-       HOST CONTROLS
+        HOST CONTROLS
     */
 
     if (
@@ -1213,7 +998,6 @@ function renderRoom(room) {
             startGameButton.disabled =
                 true;
 
-
             startGameButton.textContent =
                 `📝 NEED ${needed} MORE PLAYER${needed === 1 ? "" : "S"}`;
 
@@ -1223,7 +1007,6 @@ function renderRoom(room) {
 
             startGameButton.disabled =
                 false;
-
 
             startGameButton.textContent =
                 "📝 START GAME";
@@ -1266,7 +1049,6 @@ async function startGame() {
     ) {
 
         return;
-
     }
 
 
@@ -1276,14 +1058,12 @@ async function startGame() {
     ) {
 
         return;
-
     }
 
 
     /*
-       IMPORTANT:
-       Never start another game if one
-       is already in progress.
+        Never start another game if
+        one is already in progress.
     */
 
     if (
@@ -1292,7 +1072,6 @@ async function startGame() {
     ) {
 
         return;
-
     }
 
 
@@ -1302,6 +1081,7 @@ async function startGame() {
 
     const playerIds =
         Object.entries(players)
+
             .filter(
                 function ([, player]) {
 
@@ -1309,6 +1089,7 @@ async function startGame() {
 
                 }
             )
+
             .map(
                 function ([uid]) {
 
@@ -1344,7 +1125,6 @@ async function startGame() {
     startGameButton.disabled =
         true;
 
-
     roomStatusText.textContent =
         "STARTING GAME...";
 
@@ -1352,7 +1132,7 @@ async function startGame() {
     try {
 
         /*
-           RANDOMLY PICK 30 QUESTIONS
+            RANDOMLY PICK 30 QUESTIONS
         */
 
         const shuffled =
@@ -1377,11 +1157,8 @@ async function startGame() {
             function (uid) {
 
                 /*
-                   Reset scores ONLY HERE.
-
-                   This function is used when
-                   starting a brand-new game
-                   from the waiting lobby.
+                    Reset game data only when
+                    starting a brand-new game.
                 */
 
                 updates[
@@ -1429,8 +1206,8 @@ async function startGame() {
 
 
         /*
-           EVERYTHING IS SAVED BEFORE
-           PLAYERS ENTER THE GAME.
+            Save everything before
+            the game starts.
         */
 
         await update(
@@ -1490,10 +1267,8 @@ async function startGame() {
             error
         );
 
-
         roomStatusText.textContent =
             "FAILED TO START GAME.";
-
 
         startGameButton.disabled =
             false;
@@ -1579,16 +1354,16 @@ async function leaveRoom() {
         !currentRoomCode
     ) {
 
-        localStorage.removeItem(
-            SAVED_ROOM_KEY
-        );
+        currentRoomCode =
+            null;
 
+        currentRoomData =
+            null;
 
         window.location.href =
             "dashboard.html";
 
         return;
-
     }
 
 
@@ -1601,16 +1376,24 @@ async function leaveRoom() {
             );
 
 
+        const playerRef =
+            ref(
+                database,
+                `lastWordRooms/${currentRoomCode}/players/${currentUser.uid}`
+            );
+
+
         const snapshot =
             await get(roomRef);
 
 
         if (!snapshot.exists()) {
 
-            localStorage.removeItem(
-                SAVED_ROOM_KEY
-            );
+            currentRoomCode =
+                null;
 
+            currentRoomData =
+                null;
 
             window.location.href =
                 "dashboard.html";
@@ -1624,63 +1407,18 @@ async function leaveRoom() {
             snapshot.val();
 
 
-        const playerRef =
-            ref(
-                database,
-                `lastWordRooms/${currentRoomCode}/players/${currentUser.uid}`
-            );
-
-
         /*
-           =====================================
-           GAME ALREADY STARTED
-           =====================================
+            =====================================
+            WAITING LOBBY
+            =====================================
 
-           DO NOT DELETE PLAYER DATA.
-
-           This preserves:
-           - score
-           - answers
-           - rank
-           - reward
-           - host identity
+            If the game has NOT started,
+            completely remove the player.
         */
 
         if (
-            room.status === "playing" ||
-            room.status === "roundResult"
+            room.status === "waiting"
         ) {
-
-            await update(
-                playerRef,
-                {
-                    leftGame: true
-                }
-            );
-
-
-            /*
-               Keep room code in localStorage.
-
-               This allows the player to return
-               to the same game.
-            */
-
-            localStorage.setItem(
-                SAVED_ROOM_KEY,
-                currentRoomCode
-            );
-
-        }
-
-        else {
-
-            /*
-               WAITING ROOM
-
-               Here it is safe to actually
-               remove the player.
-            */
 
             await remove(
                 playerRef
@@ -1688,8 +1426,7 @@ async function leaveRoom() {
 
 
             /*
-               If the room becomes empty,
-               remove the room.
+                Check whether anyone remains.
             */
 
             const updatedSnapshot =
@@ -1701,16 +1438,18 @@ async function leaveRoom() {
                 const updatedRoom =
                     updatedSnapshot.val();
 
-
                 const updatedPlayers =
-                    updatedRoom.players ||
-                    {};
+                    updatedRoom.players || {};
 
+
+                /*
+                    If nobody remains,
+                    delete the entire room.
+                */
 
                 if (
-                    Object.keys(
-                        updatedPlayers
-                    ).length === 0
+                    Object.keys(updatedPlayers)
+                        .length === 0
                 ) {
 
                     await remove(
@@ -1721,17 +1460,105 @@ async function leaveRoom() {
 
             }
 
+        }
 
-            localStorage.removeItem(
-                SAVED_ROOM_KEY
+
+        /*
+            =====================================
+            GAME ALREADY STARTED
+            =====================================
+
+            Preserve the player's game data,
+            but mark them as having left.
+
+            IMPORTANT:
+
+            We DO NOT save the room code.
+
+            Therefore, opening Last Word again
+            will NOT automatically restore them.
+        */
+
+        else if (
+            room.status === "playing" ||
+            room.status === "roundResult"
+        ) {
+
+            await update(
+                playerRef,
+                {
+                    leftGame: true
+                }
             );
 
         }
 
 
+        /*
+            =====================================
+            FINISHED GAME
+            =====================================
+        */
+
+        else if (
+            room.status === "finished"
+        ) {
+
+            await remove(
+                playerRef
+            );
+
+
+            const updatedSnapshot =
+                await get(roomRef);
+
+
+            if (updatedSnapshot.exists()) {
+
+                const updatedRoom =
+                    updatedSnapshot.val();
+
+                const updatedPlayers =
+                    updatedRoom.players || {};
+
+
+                if (
+                    Object.keys(updatedPlayers)
+                        .length === 0
+                ) {
+
+                    await remove(
+                        roomRef
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /*
+            Clear current session state.
+        */
+
         currentRoomCode =
             null;
 
+        currentRoomData =
+            null;
+
+        roomListenerStarted =
+            false;
+
+
+        /*
+            NO LOCAL STORAGE.
+
+            The player will NOT be returned
+            to this room when they open
+            Last Word again.
+        */
 
         window.location.href =
             "dashboard.html";

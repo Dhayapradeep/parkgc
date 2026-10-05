@@ -83,7 +83,6 @@ body {
         radial-gradient(circle at 50% 0%, rgba(216, 173, 75, 0.12) 0%, transparent 45%),
         radial-gradient(circle at 10% 40%, rgba(216, 173, 75, 0.04) 0%, transparent 30%),
         radial-gradient(circle at 90% 70%, rgba(216, 173, 75, 0.05) 0%, transparent 35%);
-    background-attachment: fixed;
 }
 
 /* Luxury Custom Scrollbar */
@@ -126,8 +125,8 @@ h1.gold-title,
 .glass-card,
 .game-card {
     background: var(--bg-card);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border: 1px solid var(--border-gold-subtle);
     border-radius: 14px;
     box-shadow: var(--shadow-card);
@@ -287,8 +286,8 @@ h1.gold-title,
 
 header {
     background: rgba(8, 8, 12, 0.82) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-bottom: 1px solid var(--border-gold-subtle) !important;
     position: sticky;
     top: 0;
