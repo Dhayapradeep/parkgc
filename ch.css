@@ -250,8 +250,8 @@ main {
 
 .claim-button {
     padding: 10px 16px;
-    background: rgba(216, 173, 75, 0.1);
-    color: var(--gold-400);
+     background: var(--gold-gradient);
+    color: var(--bg-void);
     border: 1px solid var(--border-gold-medium);
     border-radius: 8px;
     font-size: 9px;
@@ -334,8 +334,8 @@ main {
     display: inline-block;
     margin-top: 18px;
     padding: 10px 17px;
-    background: rgba(216, 173, 75, 0.1);
-    color: var(--gold-400);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
     border: 1px solid var(--border-gold-medium);
     border-radius: 8px;
     font-size: 9px;

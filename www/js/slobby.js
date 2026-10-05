@@ -113,12 +113,30 @@ async function loadUserProfile() {
     try {
         const userRef = ref(database, `users/${currentUser.uid}`);
         const snapshot = await get(userRef);
+
         if (snapshot.exists()) {
             const data = snapshot.val();
-            currentUsername = data.username || data.displayName || "Artist";
+
+            currentUsername =
+                data.username ||
+                data.displayName ||
+                currentUser.displayName ||
+                currentUser.email?.split("@")[0] ||
+                "Player";
+        } else {
+            currentUsername =
+                currentUser.displayName ||
+                currentUser.email?.split("@")[0] ||
+                "Player";
         }
+
     } catch (err) {
         console.error("Failed to load user profile:", err);
+
+        currentUsername =
+            currentUser.displayName ||
+            currentUser.email?.split("@")[0] ||
+            "Player";
     }
 }
 
@@ -137,11 +155,22 @@ async function checkSavedRoom() {
                 return;
             }
             if (room.players && room.players[currentUser.uid]) {
-                currentRoomCode = saved;
-                enterRoomView(saved);
-                listenToRoom(saved);
-                return;
-            }
+
+    // Keep the player's room name synchronized
+    await update(
+        ref(database, `scribbleRooms/${saved}/players/${currentUser.uid}`),
+        {
+            name: currentUsername
+        }
+    );
+
+    currentRoomCode = saved;
+
+    enterRoomView(saved);
+    listenToRoom(saved);
+
+    return;
+}
         }
         localStorage.removeItem(SAVED_ROOM_KEY);
     } catch (err) {

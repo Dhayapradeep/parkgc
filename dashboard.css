@@ -82,6 +82,8 @@ header {
 
     font-size: 15px;
 
+    margin-bottom: 1px;
+
     cursor: pointer;
 
 }
@@ -308,6 +310,7 @@ main {
     text-transform: uppercase;
 }
 
+
 .chaos-points strong {
     color: var(--gold-300);
     font-family: var(--font-mono);
@@ -391,7 +394,7 @@ main {
 
     flex-wrap: wrap;
 
-    gap: 8px;
+    gap: 7px;
 
 }
 
@@ -403,13 +406,16 @@ main {
     
 
     border: 1px solid
-        #d8ad4b;
+        var(--border-gold-medium);
 
     border-radius: 4px;
 
-    color: smokywhite;
+    background: var(--gold-gradient);
+
+     color: var(--bg-void);
 
     font-size: 10px;
+    font-weight: 500;
 
 }
 
@@ -658,13 +664,13 @@ main {
 
     gap: 10px;
 
-    background:
-        rgba(216, 173, 75, 0.12);
 
     border: 1px solid
         rgba(216, 173, 75, 0.45);
 
-    color: #d8ad4b;
+     background: var(--gold-gradient);
+
+     color: var(--bg-void);
 
     padding: 10px 18px;
 
@@ -685,9 +691,9 @@ main {
 
 .leaderboard-banner:hover .leaderboard-banner-cta {
 
-    background: #d8ad4b;
+    background: var(--gold-gradient);
 
-    color: #050505;
+     color: var(--bg-void);
 
     box-shadow:
         0 0 15px rgba(216, 173, 75, 0.4);
@@ -783,6 +789,28 @@ main {
 
     transform:
         translateY(-2px);
+
+}
+
+#adminPanelButton {
+
+    background: var(--gold-gradient);
+
+    color: var(--bg-void);
+
+    padding: 8px 12px;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    transition: all 0.2s ease;
 
 }
 
