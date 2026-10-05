@@ -513,10 +513,8 @@ main {
 
     border-radius: 7px;
 
-    background:
-        rgba(216, 173, 75, 0.12);
-
-    color: var(--gold-300);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
     font-size: 11px;
 
@@ -532,8 +530,8 @@ main {
 
 
 .roll-button:hover {
-    background:
-        rgba(216, 173, 75, 0.2);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
     border-color:
         var(--gold-300);

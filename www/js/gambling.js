@@ -393,7 +393,7 @@ const outcomes = [
     {
         title: "DOUBLE CHAOS",
         description:
-            "Your Chaos Points doubled!",
+            "Pranav ran out of cigarettes. Your Chaos Points doubled!",
         type: "double",
         icon: "👑",
         weight: 4
@@ -417,7 +417,7 @@ const outcomes = [
     {
         title: "TRIPLE CHAOS",
         description:
-            "Your Chaos Points tripled!",
+            "Ayesha left GC for 999th time. Your Chaos Points tripled!",
         type: "triple",
         icon: "🔥",
         weight: 1
