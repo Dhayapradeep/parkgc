@@ -427,10 +427,9 @@ form button:active {
 
     padding: 12px;
 
-    background:
-        rgba(216, 173, 75, 0.04);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
-    color: var(--gold-300);
 
     border:
         1px solid
@@ -452,13 +451,13 @@ form button:active {
 
 
 #invitationButton:hover {
-    background:
-        rgba(216, 173, 75, 0.1);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
+
 
     border-color:
         var(--gold-400);
 
-    color: #ffffff;
 
     box-shadow:
         0 0 15px

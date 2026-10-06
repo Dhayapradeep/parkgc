@@ -356,14 +356,9 @@ button {
 
     padding: 14px;
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-400),
-            var(--gold-300)
-        );
-
+    background: var(--gold-gradient);
     color: var(--bg-void);
+
 
     border: none;
 

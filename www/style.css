@@ -235,10 +235,9 @@ button {
 
     padding: 15px 42px;
 
-    background:
-        rgba(216, 173, 75, 0.04);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
-    color: var(--gold-300);
 
     border:
         1px solid
@@ -272,11 +271,9 @@ button {
 
 
 button:hover {
-    background:
-        var(--gold-400);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
-    color:
-        var(--bg-void);
 
     border-color:
         var(--gold-300);

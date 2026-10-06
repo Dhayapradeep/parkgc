@@ -225,10 +225,9 @@ h1 {
 
     padding: 13px 20px;
 
-    background:
-        rgba(216, 173, 75, 0.03);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
 
-    color: var(--gold-400);
 
     border:
         1px solid
@@ -253,14 +252,13 @@ h1 {
 }
 
 .back-button:hover {
-    background:
-        rgba(216, 173, 75, 0.08);
+    background: var(--gold-gradient);
+    color: var(--bg-void);
+
 
     border-color:
         var(--gold-400);
 
-    color:
-        var(--gold-300);
 
     box-shadow:
         0 0 15px
