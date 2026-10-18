@@ -1107,18 +1107,20 @@ const isKnownAnswer = validAnswers.includes(answer);
 /* AI VALIDATION FOR NEW ANSWERS */
 
 if (!isKnownAnswer) {
-    const response = await fetch("https://abusement-park.netlify.app/.netlify/functions/validate-answer", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                category: question.category,
-                requiredLetter: question.letter,
-                playerAnswer: answer
-            })
-        }
-    );
+    const response = await fetch(
+    "https://abusement-park.netlify.app/.netlify/functions/validate-answer",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            category: question.category,
+            requiredLetter: question.letter,
+            playerAnswer: answer
+        })
+    }
+);
 
     if (!response.ok) {
         throw new Error("AI validation unavailable");
