@@ -1075,38 +1075,17 @@ async function submitAnswer() {
     }
 
 
-    /*
-       CHECK PREDEFINED ANSWERS
-    */
+    
+/* CHECK PREDEFINED ANSWERS */
 
-    const validAnswers =
-        (
-            question.answers ||
-            []
-        )
-        .map(
-            function (item) {
+const validAnswers = (
+    question.answers || []
+).map(function (item) {
+    return String(item).trim().toLowerCase();
+});
 
-                return String(
-                    item
-                ).toLowerCase();
+const isKnownAnswer = validAnswers.includes(answer);
 
-            }
-        );
-
-
-    if (
-        !validAnswers.includes(
-            answer
-        )
-    ) {
-
-        answerStatus.textContent =
-            "INVALID ANSWER.";
-
-        return;
-
-    }
 
 
     submitAnswerButton.disabled =
@@ -1117,11 +1096,47 @@ async function submitAnswer() {
         true;
 
 
-    answerStatus.textContent =
-        "CHECKING ANSWER...";
+    answerStatus.textContent = isKnownAnswer
+    ? "CHECKING ANSWER..."
+    : "CHECKING WITH AI...";
 
 
     try {
+
+        
+/* AI VALIDATION FOR NEW ANSWERS */
+
+if (!isKnownAnswer) {
+    const response = await fetch(
+        "/.netlify/functions/validate-answer",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                category: question.category,
+                requiredLetter: question.letter,
+                playerAnswer: answer
+            })
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("AI validation unavailable");
+    }
+
+    const validation = await response.json();
+
+    if (validation.correct !== true) {
+        answerInput.disabled = false;
+        submitAnswerButton.disabled = false;
+
+        answerStatus.textContent = "INVALID ANSWER.";
+        return;
+    }
+}
+
 
         const roomRef =
             ref(
