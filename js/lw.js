@@ -1107,9 +1107,7 @@ const isKnownAnswer = validAnswers.includes(answer);
 /* AI VALIDATION FOR NEW ANSWERS */
 
 if (!isKnownAnswer) {
-    const response = await fetch(
-        "/.netlify/functions/validate-answer",
-        {
+    const response = await fetch("https://abusement-park.netlify.app/.netlify/functions/validate-answer", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
